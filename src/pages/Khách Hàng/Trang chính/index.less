@@ -1,0 +1,123 @@
+.main-page-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--bg-main, #f0f2f5);
+  color: var(--ink, #333);
+  transition: background-color 0.3s, color 0.3s;
+
+  &.theme-dark {
+    /* Global dark overrides */
+    --bg-main: #141414;
+    --bg-elev: #1f1f1f;
+    --bg-soft: #2a2a2a;
+    --bg-mute: #333333;
+    --line: #303030;
+    --line-strong: #404040;
+    --ink: #f0f0f0;
+    --ink-2: #d0d0d0;
+    --ink-3: #999999;
+    --ink-4: #777777;
+    --accent: #32a852;
+    --accent-soft: rgba(50, 168, 82, 0.15);
+    --accent-soft-ink: #32a852;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.4);
+
+    /* Menu Page Variables Override */
+    .employee-menu-container {
+      --bg: #141414;
+      --bg-elev: #1f1f1f;
+      --bg-soft: #2a2a2a;
+      --bg-mute: #333333;
+      --line: #303030;
+      --line-strong: #404040;
+      --ink: #f0f0f0;
+      --ink-2: #d0d0d0;
+      --ink-3: #999999;
+      --ink-4: #777777;
+    }
+
+    /* Sidebar and Topbar */
+    .sidebar {
+      background: var(--bg-elev);
+      border-right-color: var(--line);
+      .brand-name { color: var(--accent); }
+      .brand-sub { color: var(--ink-3); }
+      .role-switcher { background: var(--bg-soft); border-color: var(--line); button { color: var(--ink-3); } button.active { background: var(--bg-elev); color: var(--accent); } }
+      .nav-label { color: var(--ink-4); }
+      .nav-item { color: var(--ink-2); &:hover { background: var(--bg-soft); color: var(--accent); } &.active { background: var(--accent-soft); color: var(--accent); } }
+      .user-pill { background: var(--bg-soft); border-color: var(--line); .name { color: var(--ink); } .role { color: var(--ink-3); } }
+      .logout-btn { color: var(--ink-3); }
+    }
+    .topbar {
+      background: var(--bg-elev);
+      border-bottom-color: var(--line);
+      .search { background: var(--bg-soft); border-color: var(--line); input { color: var(--ink); } }
+      .icon-btn { color: var(--ink-2); &:hover { background: var(--bg-soft); color: var(--ink); } }
+      .btn-secondary { background: var(--bg-soft); color: var(--ink); border-color: var(--line); }
+    }
+
+    /* Orders Page overrides */
+    .history-page-container {
+      background: var(--bg-main);
+      .page-title { color: var(--ink); }
+      .page-subtitle { color: var(--ink-3); }
+      .order-card {
+        background: var(--bg-elev);
+        border-color: var(--line);
+        &:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+        .card-main { border-bottom-color: var(--line); }
+        .order-id { background: var(--bg-soft); color: var(--ink-3); }
+        .pickup-time { color: var(--ink-3); strong { color: var(--ink); } }
+        .item-preview { background: var(--bg-soft); border-color: var(--line); color: var(--ink-2); }
+        .total-label { color: var(--ink-4); }
+        .total-value { color: var(--ink); .unit { color: var(--ink-4); } }
+        .payment-method { background: var(--bg-soft); color: var(--ink-2); }
+        .card-actions { background: var(--bg-soft); border-top-color: var(--line); }
+        .order-note { background: #2b2b1a; border-top-color: #555533; color: #d4b106; }
+        .tracker-step {
+          &::before { background: var(--line); }
+          .dot { background: var(--bg-elev); border-color: var(--line); color: var(--ink-4); }
+          &.active .dot { background: var(--bg-elev); box-shadow: 0 0 0 4px var(--accent-soft); }
+          .label { color: var(--ink-4); }
+          &.done .label, &.active .label { color: var(--ink); }
+        }
+      }
+      .seg-radio {
+        background: var(--bg-soft);
+        button { color: var(--ink-3); }
+        button.active { background: var(--bg-elev); color: var(--accent); }
+      }
+      .status-chip {
+        background: var(--bg-soft); color: var(--ink-2);
+        &.green { background: rgba(47, 143, 78, 0.2); color: #32a852; }
+        &.warn { background: rgba(196, 121, 0, 0.2); color: #f59f00; }
+        &.err { background: rgba(201, 42, 42, 0.2); color: #fa5252; }
+        &.info { background: rgba(26, 110, 181, 0.2); color: #339af0; }
+      }
+      .empty-state {
+        h4 { color: var(--ink-2); }
+        span { color: var(--ink-4); }
+      }
+    }
+  }
+
+  .content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    
+    &.scroll-locked {
+      overflow-y: hidden !important; /* Khóa cuộn trang nền hoàn toàn */
+    }
+
+    .content-body {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+  }
+}

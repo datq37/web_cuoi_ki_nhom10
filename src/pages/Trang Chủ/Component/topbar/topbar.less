@@ -1,0 +1,81 @@
+.topbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  height: 80px;
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+
+    .brand-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+
+      .topbar-logo {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .brand-name {
+          font-size: 22px;
+          font-weight: 800;
+          color: #1a5c40;
+          line-height: 1.1;
+          letter-spacing: -0.5px;
+          font-family: 'Inter', 'Roboto', sans-serif;
+        }
+
+        .brand-slogan {
+          font-size: 11px;
+          font-weight: 600;
+          color: #8c8c8c;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          font-family: 'Inter', 'Roboto', sans-serif;
+        }
+      }
+    }
+  }
+
+  .topbar-right {
+    display: flex;
+    gap: 16px;
+
+    .btn-login {
+      color: #2D6A4F;
+      font-weight: 600;
+      border-radius: 24px;
+
+      &:hover {
+        color: #1b4332 !important;
+        background-color: rgba(45, 106, 79, 0.1) !important;
+      }
+    }
+
+    .btn-register {
+      background-color: #2D6A4F;
+      border-color: #2D6A4F;
+      font-weight: 600;
+      border-radius: 24px;
+
+      &:hover {
+        background-color: #1b4332 !important;
+        border-color: #1b4332 !important;
+      }
+    }
+  }
+}

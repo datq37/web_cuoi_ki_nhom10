@@ -31,7 +31,7 @@
 
   .home-hero-discount {
     position: absolute;
-    top: 22%;
+    top: 18%;
     right: 1.8%;
     z-index: 2;
     width: 148px;
@@ -342,6 +342,7 @@
     border: 1px solid #edf0ed;
     border-radius: 17px;
     box-shadow: 0 10px 25px rgba(21, 50, 34, 0.05);
+    cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
@@ -444,7 +445,7 @@
     font-weight: 900;
   }
 
-  .food-bottom button {
+  .food-bottom > button {
     width: 38px;
     height: 38px;
     display: grid;
@@ -452,6 +453,35 @@
     color: #fff;
     background: #197236;
     border-radius: 50%;
+  }
+
+  .food-qty {
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px;
+    color: #176f32;
+    background: #e8f6e4;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 900;
+  }
+
+  .food-qty span {
+    min-width: 16px;
+    text-align: center;
+  }
+
+  .food-qty button {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    color: #176f32;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(21, 50, 34, 0.1);
   }
 
   .order-steps-wrap {
@@ -809,7 +839,7 @@
     }
 
     .home-hero-discount {
-      top: 35%;
+      top: 31%;
       right: 4%;
       width: 92px;
       height: 92px;

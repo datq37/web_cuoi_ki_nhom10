@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useModel } from 'umi';
 import {
   ArrowRight,
   ClipboardCheck,
   Heart,
+  Minus,
   Plus,
   Soup,
   Star,
@@ -19,6 +20,9 @@ import chaySalad from '@/assets/Khách Hàng/Trang chủ/chay_salad_no_text.png'
 import shipperScooter from '@/assets/Khách Hàng/Trang chủ/shipper_scooter.png';
 import handPhoneOrder from '@/assets/Khách Hàng/Trang chủ/hand_phone_order.png';
 import paymentPhone from '@/assets/Khách Hàng/Trang chủ/payment_phone.png';
+import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
+import type { Dish } from '@/services/Khách hàng/Thực đơn/typing';
+import DishDetailModal from '@/pages/Khách Hàng/Thucdon/component/DishDetailModal';
 import './index.less';
 
 interface StatCardProps {
@@ -36,12 +40,13 @@ interface CategoryCardProps {
 }
 
 interface FoodCardProps {
+  dish: Dish;
   img: string;
-  name: string;
-  desc: string;
-  kcal: string;
-  rate: string;
-  price: string;
+  qty: number;
+  onAdd: () => void;
+  onInc: () => void;
+  onDec: () => void;
+  onClick: () => void;
   hot?: boolean;
 }
 
@@ -54,8 +59,28 @@ interface StepCardProps {
   desc: string;
 }
 
+const getDishImage = (dish: Dish) => {
+  if (dish.cat === 'noodle') return bunPho;
+  if (dish.cat === 'drink') return doUong;
+  if (dish.cat === 'snack') return anNhe;
+  if (dish.cat === 'veg') return chaySalad;
+  return comPhan;
+};
+
 const CustomerHome: React.FC = () => {
   const { setPage } = useModel('Khách Hàng.global');
+  const { cart, addToCart, incCart, decCart } = useModel('Khách Hàng.Thực đơn.index');
+  const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
+
+  const bestSellingDishes = useMemo(
+    () => [...SEED_MENU].sort((a, b) => b.sold - a.sold).slice(0, 3),
+    [],
+  );
+
+  const cartQty = (id: string) => {
+    const item = cart.find((c: any) => c.id === id);
+    return item ? item.qty : 0;
+  };
 
   return (
     <div className="customer-home-page">
@@ -102,33 +127,21 @@ const CustomerHome: React.FC = () => {
             <CategoryCard img={chaySalad} title="Chay / Salad" />
           </div>
 
-          <SectionTitle title="Món bán chạy hôm nay" onViewAll={() => setPage('menu')} className="spaced" />
+          <SectionTitle title="Món bán chạy hôm nay" className="spaced" />
           <div className="food-grid">
-            <FoodCard
-              hot
-              img={comPhan}
-              name="Cơm chiên Dương Châu"
-              desc="Cơm chiên trứng, lạp xưởng, đậu Hà Lan, cà rốt"
-              kcal="650 kcal"
-              rate="4.6"
-              price="40.000đ"
-            />
-            <FoodCard
-              img={bunPho}
-              name="Phở bò truyền thống"
-              desc="Phở bò mềm, nước dùng đậm đà thơm ngon"
-              kcal="520 kcal"
-              rate="4.7"
-              price="38.000đ"
-            />
-            <FoodCard
-              img={anNhe}
-              name="Cơm gà nướng mật ong"
-              desc="Gà nướng mật ong, cơm trắng, rau củ, dưa leo"
-              kcal="630 kcal"
-              rate="4.6"
-              price="42.000đ"
-            />
+            {bestSellingDishes.map((dish) => (
+              <FoodCard
+                key={dish.id}
+                dish={dish}
+                img={getDishImage(dish)}
+                hot={dish.tags.includes('hot')}
+                qty={cartQty(dish.id)}
+                onAdd={() => addToCart(dish)}
+                onInc={() => incCart(dish.id)}
+                onDec={() => decCart(dish.id)}
+                onClick={() => setSelectedDish(dish)}
+              />
+            ))}
           </div>
 
           <div className="order-steps-wrap">
@@ -197,14 +210,25 @@ const CustomerHome: React.FC = () => {
           </div>
         </aside>
       </div>
+
+      {selectedDish && (
+        <DishDetailModal
+          dish={selectedDish}
+          qty={cartQty(selectedDish.id)}
+          onClose={() => setSelectedDish(null)}
+          onAdd={() => addToCart(selectedDish)}
+          onInc={() => incCart(selectedDish.id)}
+          onDec={() => decCart(selectedDish.id)}
+        />
+      )}
     </div>
   );
 };
 
-const SectionTitle: React.FC<{ title: string; onViewAll: () => void; className?: string }> = ({ title, onViewAll, className }) => (
+const SectionTitle: React.FC<{ title: string; onViewAll?: () => void; className?: string }> = ({ title, onViewAll, className }) => (
   <div className={`section-title-row ${className || ''}`}>
     <h2>{title}</h2>
-    <button onClick={onViewAll}>Xem tất cả</button>
+    {onViewAll && <button onClick={onViewAll}>Xem tất cả</button>}
   </div>
 );
 
@@ -228,33 +252,45 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ img, title }) => (
   </button>
 );
 
-const FoodCard: React.FC<FoodCardProps> = ({ img, name, desc, kcal, rate, price, hot }) => (
-  <div className="home-food-card">
+const FoodCard: React.FC<FoodCardProps> = ({ dish, img, qty, onAdd, onInc, onDec, onClick, hot }) => (
+  <div className="home-food-card" onClick={onClick}>
     <div className="food-image-wrap">
-      <img src={img} alt={name} />
+      <img src={img} alt={dish.name} />
       {hot && <div className="hot-badge">HOT</div>}
-      <button className="heart-btn" aria-label="Yêu thích">
+      <button className="heart-btn" aria-label="Yêu thích" onClick={(e) => e.stopPropagation()}>
         <Heart size={18} />
       </button>
     </div>
     <div className="food-content">
-      <h3>{name}</h3>
-      <p>{desc}</p>
+      <h3>{dish.name}</h3>
+      <p>{dish.desc}</p>
       <div className="food-meta">
         <span>
           <Timer size={14} />
-          {kcal}
+          {dish.kcal} kcal
         </span>
         <span className="rating">
           <Star size={15} fill="currentColor" />
-          {rate}
+          {dish.rating.toFixed(1)}
         </span>
       </div>
       <div className="food-bottom">
-        <strong>{price}</strong>
-        <button aria-label="Thêm món">
-          <Plus size={20} />
-        </button>
+        <strong>{dish.price.toLocaleString('vi-VN')}đ</strong>
+        {qty === 0 ? (
+          <button aria-label="Thêm món" onClick={(e) => { e.stopPropagation(); onAdd(); }}>
+            <Plus size={20} />
+          </button>
+        ) : (
+          <div className="food-qty" onClick={(e) => e.stopPropagation()}>
+            <button aria-label="Giảm món" onClick={onDec}>
+              <Minus size={15} />
+            </button>
+            <span>{qty}</span>
+            <button aria-label="Tăng món" onClick={onInc}>
+              <Plus size={15} />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   </div>

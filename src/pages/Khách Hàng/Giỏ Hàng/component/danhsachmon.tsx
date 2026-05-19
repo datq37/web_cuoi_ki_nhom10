@@ -1,7 +1,12 @@
 import React from 'react';
-import { PlusOutlined, MinusOutlined, ShoppingOutlined } from '@ant-design/icons';
+import { Clock3, Minus, Plus, ShoppingCart } from 'lucide-react';
 import { useModel } from 'umi';
 import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
+import comPhan from '@/assets/Khách Hàng/Trang chủ/com_phan_no_text.png';
+import bunPho from '@/assets/Khách Hàng/Trang chủ/bun_pho_no_text.png';
+import doUong from '@/assets/Khách Hàng/Trang chủ/do_uong_no_text.png';
+import anNhe from '@/assets/Khách Hàng/Trang chủ/an_nhe_no_text.png';
+import chaySalad from '@/assets/Khách Hàng/Trang chủ/chay_salad_no_text.png';
 import './danhsachmon.less';
 
 
@@ -10,6 +15,14 @@ const formatVND = (amount: number) =>
 
 
 const getDish = (id: string) => SEED_MENU.find(d => d.id === id);
+
+const getDishImage = (cat?: string) => {
+    if (cat === 'noodle') return bunPho;
+    if (cat === 'drink') return doUong;
+    if (cat === 'snack') return anNhe;
+    if (cat === 'veg') return chaySalad;
+    return comPhan;
+};
 
 
 const DanhSachMon: React.FC = () => {
@@ -21,7 +34,7 @@ const DanhSachMon: React.FC = () => {
             <div className="cart-empty">
                 <div>
                     <div className="cart-empty-icon">
-                        <ShoppingOutlined />
+                        <ShoppingCart size={34} />
                     </div>
                     <div className="cart-empty-title">Giỏ đang trống</div>
                     <div className="cart-empty-sub">Hãy chọn món bạn thích từ thực đơn</div>
@@ -37,18 +50,22 @@ const DanhSachMon: React.FC = () => {
 
                 return (
                     <div className="cart-item" key={it.id}>
-                        {/* Ảnh / emoji đại diện món */}
-                        <div className="cart-item-thumb">
-                            {dish?.emoji || '🍽️'}
-                        </div>
+                        <img
+                            className="cart-item-thumb"
+                            src={getDishImage(dish?.cat)}
+                            alt={it.name}
+                        />
 
                         {/* Thông tin tên và giá */}
                         <div className="cart-item-info">
                             <p className="info-name">{it.name}</p>
-                            <p className="info-meta">
-                                {formatVND(it.price)} đ
-                                {dish?.prep ? ` · ${dish.prep}p chuẩn bị` : ''}
-                            </p>
+                            <p className="info-price">{formatVND(it.price)}đ</p>
+                            {dish?.prep && (
+                                <p className="info-meta">
+                                    <Clock3 size={18} />
+                                    {dish.prep}p chuẩn bị
+                                </p>
+                            )}
                         </div>
 
                         {/* Bộ điều chỉnh số lượng */}
@@ -58,7 +75,7 @@ const DanhSachMon: React.FC = () => {
                                 onClick={() => decCart(it.id)}
                                 aria-label="Giảm số lượng"
                             >
-                                <MinusOutlined style={{ fontSize: 11 }} />
+                                <Minus size={20} />
                             </button>
                             <span className="qty-num">{it.qty}</span>
                             <button
@@ -66,7 +83,7 @@ const DanhSachMon: React.FC = () => {
                                 onClick={() => incCart(it.id)}
                                 aria-label="Tăng số lượng"
                             >
-                                <PlusOutlined style={{ fontSize: 11 }} />
+                                <Plus size={20} />
                             </button>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
-import { CheckOutlined, LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Check, CircleAlert, LoaderCircle } from 'lucide-react';
 import { useModel } from 'umi';
-import { Voucher } from '@/services/Khách hàng/Giỏ hàng/Cart Option/typing';
+import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/Cart Option/typing';
 import '../cartfooter.less';
 
 // ─── Hằng số phụ phí phục vụ ─────────────────────────────────────────────────
@@ -76,7 +76,7 @@ const CartFooter: React.FC<CartFooterProps> = ({
                         </span>
                         {voucherNotMet ? (
                             <span className="price-value warn">
-                                <ExclamationCircleOutlined />
+                                <CircleAlert size={15} />
                                 &nbsp;Chưa đủ {fmtVND(selectedVoucher.minOrder!)}
                             </span>
                         ) : (
@@ -105,12 +105,12 @@ const CartFooter: React.FC<CartFooterProps> = ({
             >
                 {isLoading ? (
                     <>
-                        <LoadingOutlined spin />
+                        <LoaderCircle className="spin-icon" size={24} />
                         <span>Đang xử lý...</span>
                     </>
                 ) : (
                     <>
-                        <CheckOutlined />
+                        <Check size={32} />
                         <span>{isEmpty ? 'Giỏ hàng trống' : `Xác nhận · ${fmtVND(total)}`}</span>
                     </>
                 )}

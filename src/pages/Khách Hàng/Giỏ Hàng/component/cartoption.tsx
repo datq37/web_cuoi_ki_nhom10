@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
-    ClockCircleOutlined,
-    EditOutlined,
     TagOutlined,
-    CheckCircleFilled,
-    RightOutlined,
-    ThunderboltOutlined,
 } from '@ant-design/icons';
+import { CheckCircle, ChevronRight, Clock3, PencilLine, Tag, TicketPercent, Zap } from 'lucide-react';
 import { Modal } from 'antd';
 import { useModel } from 'umi';
-import { CartOptionProps, SEED_VOUCHERS } from '@/services/Khách hàng/Giỏ hàng/Cart Option/typing';
+import type { CartOptionProps } from '@/services/Khách hàng/Giỏ hàng/Cart Option/typing';
+import { SEED_VOUCHERS } from '@/services/Khách hàng/Giỏ hàng/Cart Option/typing';
 import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
 import '../cartoption.less';
 
@@ -77,12 +74,14 @@ const CartOption: React.FC<CartOptionProps> = ({
             {/* 1. Giờ nhận món — chỉ đọc, do hệ thống tính */}
             <div className="option-section">
                 <div className="section-header">
-                    <ClockCircleOutlined />
+                    <Clock3 size={25} />
                     <span>Giờ nhận món (dự kiến)</span>
                 </div>
                 <div className="pickup-time-display">
                     <div className="pickup-time-value">
-                        <ThunderboltOutlined className="pickup-icon" />
+                        <div className="pickup-icon-wrap">
+                            <Zap size={36} className="pickup-icon" fill="currentColor" />
+                        </div>
                         <span className="pickup-hhmm">{pickup.timeStr}</span>
                     </div>
                     {pickup.prepMin > 0 && (
@@ -90,31 +89,28 @@ const CartOption: React.FC<CartOptionProps> = ({
                             Khoảng {pickup.prepMin} phút kể từ lúc đặt
                         </span>
                     )}
+                    <div className="pickup-leaf" aria-hidden="true">❧</div>
                 </div>
             </div>
 
             {/* 2. Voucher */}
             <div className="option-section">
                 <div className="section-header">
-                    <TagOutlined />
+                    <Tag size={25} />
                     <span>Voucher giảm giá</span>
                 </div>
                 <div
-                    className={`voucher-selector ${selectedVoucher ? 'has-value' : ''} ${cart.length === 0 ? 'disabled' : ''}`}
-                    onClick={() => {
-                        if (cart.length > 0) {
-                            setIsVoucherModalOpen(true);
-                        }
-                    }}
-                    style={cart.length === 0 ? { opacity: 0.6, cursor: 'not-allowed' } : {}}
+                    className={`voucher-selector ${selectedVoucher ? 'has-value' : ''}`}
+                    onClick={() => setIsVoucherModalOpen(true)}
                 >
                     {cart.length === 0 ? (
                         <div className="placeholder">
-                            <span>Thêm món để chọn Voucher</span>
+                            <TicketPercent size={34} />
+                            <span>Chọn Voucher</span>
                         </div>
                     ) : selectedVoucher ? (
                         <div className="selected-info">
-                            <CheckCircleFilled className="success-icon" />
+                            <CheckCircle size={28} className="success-icon" />
                             <div className="text">
                                 <strong>{selectedVoucher.code}</strong>
                                 <span>- Đã áp dụng giảm {selectedVoucher.discount.toLocaleString()}đ</span>
@@ -122,26 +118,30 @@ const CartOption: React.FC<CartOptionProps> = ({
                         </div>
                     ) : (
                         <div className="placeholder">
+                            <TicketPercent size={34} />
                             <span>Chọn Voucher</span>
                         </div>
                     )}
-                    <RightOutlined className="arrow" />
+                    <ChevronRight size={28} className="arrow" />
                 </div>
             </div>
 
             {/* 3. Ghi chú */}
             <div className="option-section">
                 <div className="section-header">
-                    <EditOutlined />
+                    <PencilLine size={25} />
                     <span>Ghi chú cho bếp</span>
                 </div>
-                <textarea
-                    className="note-textarea"
-                    placeholder="Vd: Ít cay, không hành, thêm cơm..."
-                    value={note}
-                    onChange={(e) => onChangeNote(e.target.value)}
-                    rows={2}
-                />
+                <div className="note-wrap">
+                    <textarea
+                        className="note-textarea"
+                        placeholder="Ví dụ: Ít cay, không hành, thêm cơm..."
+                        value={note}
+                        onChange={(e) => onChangeNote(e.target.value)}
+                        rows={2}
+                    />
+                    <div className="note-leaf" aria-hidden="true">❧</div>
+                </div>
             </div>
 
             {/* Modal danh sách Voucher giống thiết kế */}
@@ -153,7 +153,7 @@ const CartOption: React.FC<CartOptionProps> = ({
                 width={450}
                 className="voucher-modal-custom"
                 style={{ top: 40 }}
-                getContainer={() => document.querySelector('.main-page-container') as HTMLElement || document.body}
+                getContainer={() => document.body}
             >
                 <div className="vm-header">
                     <button className="vm-back" onClick={() => setIsVoucherModalOpen(false)}>

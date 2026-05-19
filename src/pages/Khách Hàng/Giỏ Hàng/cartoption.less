@@ -3,63 +3,101 @@
 .cart-options-container {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 10px 0;
+    gap: 18px;
+    padding: 0;
 }
 
 .option-section {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 9px;
 
     .section-header {
         display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 13px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--ink-3);
+        gap: 12px;
+        color: #111827;
+        font-size: 17px;
+        font-weight: 750;
+        line-height: 1.15;
+        text-transform: none;
+        letter-spacing: 0;
         
+        svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+            color: #21743b;
+            flex-shrink: 0;
+        }
+
         span {
-            margin-top: 1px;
+            margin-top: 0;
         }
     }
 }
 
 // ─── Hiển thị giờ nhận tự động ───────────────────────────────────────────────
 .pickup-time-display {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 14px 16px;
-    background: var(--bg-soft, #f5f5f5);
-    border-radius: var(--radius-md, 10px);
-    border: 1.5px solid var(--line, #e5e7eb);
+    min-height: 72px;
+    padding: 10px 18px;
+    overflow: hidden;
+    background: linear-gradient(90deg, #f3fbf2, #fff);
+    border: 1px solid #d6e8d1;
+    border-radius: 24px;
 
     .pickup-time-value {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 14px;
+        padding-right: 16px;
+        border-right: 1px solid #d9ded9;
 
-        .pickup-icon {
-            font-size: 18px;
-            color: var(--accent, #2D6A4F);
+        .pickup-icon-wrap {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            color: #5fc646;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(31, 41, 55, 0.14);
+
+            svg {
+                width: 25px;
+                height: 25px;
+            }
         }
 
         .pickup-hhmm {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--ink, #111);
-            letter-spacing: -0.5px;
+            color: #21743b;
+            font-size: 31px;
+            font-weight: 750;
+            line-height: 1;
+            letter-spacing: 0;
         }
     }
 
     .pickup-note {
-        font-size: 11px;
-        color: var(--ink-3, #888);
+        max-width: 150px;
+        margin-left: 16px;
+        color: #374151;
+        font-size: 13px;
         font-weight: 500;
+        line-height: 1.35;
+    }
+
+    .pickup-leaf {
+        position: absolute;
+        right: 14px;
+        bottom: 6px;
+        color: #d8edcf;
+        font-size: 32px;
+        line-height: 1;
+        pointer-events: none;
     }
 }
 
@@ -68,27 +106,38 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 16px;
-    background: var(--bg-soft);
-    border-radius: var(--radius-md);
+    min-height: 58px;
+    padding: 0 18px;
+    background: #fff;
+    border-radius: 18px;
     cursor: pointer;
-    border: 1.5px dashed var(--line);
+    border: 2px dashed #aacfa6;
     transition: all 0.2s;
 
     &:hover {
-        background: var(--bg-mute);
-        border-color: var(--line-strong);
+        background: #f3fbf2;
+        border-color: #7dbd78;
     }
 
     &.has-value {
-        background: var(--accent-soft);
-        border: 1.5px solid var(--accent);
-        border-style: solid;
+        background: #f3fbf2;
+        border: 2px solid #21743b;
     }
 
     .placeholder {
-        font-size: 13px;
-        color: var(--ink-3);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #6b7280;
+        font-size: 14px;
+
+        svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 2;
+            color: #75a878;
+            flex-shrink: 0;
+        }
     }
 
     .selected-info {
@@ -97,8 +146,8 @@
         gap: 10px;
 
         .success-icon {
-            color: var(--accent);
-            font-size: 18px;
+            color: #21743b;
+            flex-shrink: 0;
         }
 
         .text {
@@ -106,38 +155,102 @@
             flex-direction: column;
             
             strong {
+                color: #21743b;
                 font-size: 14px;
-                color: var(--accent-soft-ink);
             }
             span {
+                color: #53705c;
                 font-size: 11px;
-                color: var(--accent-soft-ink);
-                opacity: 0.8;
             }
         }
     }
 
     .arrow {
-        font-size: 12px;
-        color: var(--ink-4);
+        color: #4b5563;
+        flex-shrink: 0;
     }
 }
 
 // ─── Ghi chú ────────────────────────────────────────────────────────────────
-.note-textarea {
-    width: 100%;
-    padding: 12px;
-    border-radius: var(--radius-md);
-    border: 1.5px solid var(--line);
-    background: var(--bg-elev);
-    font-size: 13px;
-    outline: none;
-    transition: all 0.2s;
-    resize: none;
+.note-wrap {
+    position: relative;
 
-    &:focus {
-        border-color: var(--accent);
-        box-shadow: 0 0 0 3px var(--accent-soft);
+    .note-textarea {
+        width: 100%;
+        height: 72px;
+        padding: 13px 16px;
+        color: #111827;
+        background: #fff;
+        border: 1px solid #dfe4e6;
+        border-radius: 18px;
+        outline: none;
+        resize: none;
+        font-size: 14px;
+        line-height: 1.45;
+        transition: border-color 0.2s, box-shadow 0.2s;
+
+        &::placeholder {
+            color: #8a919b;
+        }
+
+        &:focus {
+            border-color: #21743b;
+            box-shadow: 0 0 0 4px rgba(33, 116, 59, 0.12);
+        }
+    }
+
+    .note-leaf {
+        position: absolute;
+        right: 16px;
+        bottom: 6px;
+        color: #d8edcf;
+        font-size: 30px;
+        line-height: 1;
+        pointer-events: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .cart-options-container {
+        gap: 24px;
+    }
+
+    .option-section .section-header {
+        gap: 10px;
+        font-size: 21px;
+    }
+
+    .pickup-time-display {
+        min-height: 82px;
+        padding: 12px 18px;
+    }
+
+    .pickup-time-display .pickup-time-value {
+        gap: 14px;
+        padding-right: 14px;
+    }
+
+    .pickup-time-display .pickup-time-value .pickup-icon-wrap {
+        width: 54px;
+        height: 54px;
+    }
+
+    .pickup-time-display .pickup-time-value .pickup-hhmm {
+        font-size: 38px;
+    }
+
+    .pickup-time-display .pickup-note {
+        margin-left: 14px;
+        font-size: 16px;
+    }
+
+    .voucher-selector {
+        min-height: 66px;
+        padding: 0 20px;
+    }
+
+    .voucher-selector .placeholder {
+        font-size: 18px;
     }
 }
 
@@ -175,7 +288,10 @@
             place-items: center;
             color: var(--accent);
             cursor: pointer;
-            svg { width: 24px; height: 24px; }
+            svg {
+                width: 24px;
+                height: 24px;
+            }
         }
         
         h2 {
@@ -218,8 +334,15 @@
         
         &.disabled {
             cursor: not-allowed;
-            .vmt-left { filter: grayscale(1); opacity: 0.6; }
-            .vmt-right { opacity: 0.5; }
+
+            .vmt-left {
+                filter: grayscale(1);
+                opacity: 0.6;
+            }
+
+            .vmt-right {
+                opacity: 0.5;
+            }
         }
 
         .vmt-left {
@@ -243,8 +366,13 @@
                 background: var(--bg-soft, #f5f5f5);
                 border-radius: 50%;
             }
-            &::before { top: -6px; }
-            &::after { bottom: -6px; }
+            &::before {
+                top: -6px;
+            }
+
+            &::after {
+                bottom: -6px;
+            }
 
             .vmt-icon {
                 display: flex;
@@ -252,7 +380,10 @@
                 align-items: center;
                 font-size: 10px;
                 text-align: center;
-                span { max-width: 60px; line-height: 1.2; }
+                span {
+                    max-width: 60px;
+                    line-height: 1.2;
+                }
             }
         }
 
@@ -271,8 +402,19 @@
             flex: 1;
             padding-right: 12px;
             
-            h4 { margin: 0; font-size: 14px; color: var(--ink, #333); line-height: 1.3; font-weight: 500; }
-            p { margin: 0; font-size: 12px; color: var(--ink-3, #999); }
+            h4 {
+                margin: 0;
+                color: var(--ink, #333);
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 1.3;
+            }
+
+            p {
+                margin: 0;
+                color: var(--ink-3, #999);
+                font-size: 12px;
+            }
         }
 
         .vmt-meta {
@@ -292,7 +434,12 @@
             .date {
                 font-size: 10px;
                 color: #bfbfbf;
-                a { color: #1890ff; text-decoration: none; margin-left: 4px; }
+
+                a {
+                    margin-left: 4px;
+                    color: #1890ff;
+                    text-decoration: none;
+                }
             }
         }
 

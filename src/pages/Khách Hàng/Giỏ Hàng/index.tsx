@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { CloseOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { ArrowLeft, ShoppingCart, X } from 'lucide-react';
 import { useModel } from 'umi';
 import DanhSachMon from './component/danhsachmon';
 import CartOption from './component/cartoption';
 import ThanhToan from './component/thanhtoan';
 import CartFooter from './component/cartfooter';
-import { Voucher } from '@/services/Khách hàng/Giỏ hàng/Cart Option/typing';
+import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/Cart Option/typing';
 import './index.less';
 
 const GioHang: React.FC = () => {
@@ -101,8 +101,19 @@ const GioHang: React.FC = () => {
             <aside className={`cart-drawer ${cartOpen ? 'open' : ''}`} aria-label="Giỏ hàng">
                 {/* Header */}
                 <div className="cart-drawer-header">
+                    <button
+                        className="cart-back-btn"
+                        onClick={() => {
+                            setCartOpen(false);
+                            setPage('menu');
+                        }}
+                        aria-label="Quay lại thực đơn"
+                    >
+                        <ArrowLeft size={28} />
+                    </button>
+
                     <div className="cart-drawer-title">
-                        <ShoppingCartOutlined />
+                        <ShoppingCart size={34} strokeWidth={2.4} />
                         <span>Giỏ hàng</span>
                         {cartQty > 0 && (
                             <span className="cart-badge">{cartQty}</span>
@@ -114,7 +125,7 @@ const GioHang: React.FC = () => {
                         onClick={() => setCartOpen(false)}
                         aria-label="Đóng giỏ hàng"
                     >
-                        <CloseOutlined />
+                        <X size={30} />
                     </button>
                 </div>
 

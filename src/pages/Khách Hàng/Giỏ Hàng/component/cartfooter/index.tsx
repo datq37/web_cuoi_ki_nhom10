@@ -1,22 +1,12 @@
 import React from 'react';
 import { Check, CircleAlert, LoaderCircle } from 'lucide-react';
-import { useModel } from 'umi';
-import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/Cart Option/typing';
+import type { CartFooterProps } from '@/services/Khách hàng/Giỏ hàng/cartfooter/typing';
+import { SERVICE_FEE_LABEL } from '@/services/Khách hàng/Giỏ hàng/cartfooter';
+import { useCartFooterModel } from '@/models/Khách Hàng/Giỏ hàng/cartfooter';
 import './index.less';
-
-// ─── Hằng số phụ phí phục vụ ─────────────────────────────────────────────────
-const SERVICE_FEE_RATE = 0.05; // 5% phụ phí phục vụ
-const SERVICE_FEE_LABEL = 'Phụ phí phục vụ (5%)';
 
 // ─── Helper format tiền VND ───────────────────────────────────────────────────
 const fmtVND = (n: number) => n.toLocaleString('vi-VN') + 'đ';
-
-// ─── Props ────────────────────────────────────────────────────────────────────
-export interface CartFooterProps {
-    selectedVoucher?: Voucher;
-    onConfirm: () => void;
-    isLoading?: boolean;
-}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 const CartFooter: React.FC<CartFooterProps> = ({
@@ -24,32 +14,14 @@ const CartFooter: React.FC<CartFooterProps> = ({
     onConfirm,
     isLoading = false,
 }) => {
-    // Lấy giỏ hàng từ model
-    const { cart } = useModel('Khách Hàng.Thực đơn.index');
-
-    // ── Tính toán giá ──────────────────────────────────────────────────────────
-    const subtotal: number = cart.reduce(
-        (sum: number, item: any) => sum + item.price * item.qty,
-        0,
-    );
-
-    const serviceFee = Math.round(subtotal * SERVICE_FEE_RATE);
-
-    const discount = (() => {
-        if (!selectedVoucher) return 0;
-        if (selectedVoucher.minOrder && subtotal < selectedVoucher.minOrder) return 0;
-        return selectedVoucher.discount;
-    })();
-
-    const total = Math.max(0, subtotal + serviceFee - discount);
-
-    const isEmpty = cart.length === 0;
-
-    // Kiểm tra voucher không đủ điều kiện
-    const voucherNotMet =
-        !!selectedVoucher &&
-        !!selectedVoucher.minOrder &&
-        subtotal < selectedVoucher.minOrder;
+    const {
+        subtotal,
+        serviceFee,
+        discount,
+        total,
+        isEmpty,
+        voucherNotMet,
+    } = useCartFooterModel(selectedVoucher);
 
     return (
         <div className="cart-footer">

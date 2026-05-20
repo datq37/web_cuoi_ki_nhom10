@@ -1,39 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     TagOutlined,
 } from '@ant-design/icons';
 import { CheckCircle, ChevronRight, Clock3, PencilLine, Tag, TicketPercent, Zap } from 'lucide-react';
 import { Modal } from 'antd';
 import { useModel } from 'umi';
-import type { CartOptionProps } from '@/services/Khách hàng/Giỏ hàng/Cart Option/typing';
-import { SEED_VOUCHERS } from '@/services/Khách hàng/Giỏ hàng/Cart Option/typing';
-import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
+import type { CartOptionProps } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
+import { useCartOptionModel } from '@/models/Khách Hàng/Giỏ hàng/cartoption';
 import './index.less';
-
-// ─── Tính giờ nhận tự động ────────────────────────────────────────────────────
-// Logic: giờ hiện tại + prep_time_tối_đa_trong_giỏ + 5 phút buffer
-const BUFFER_MIN = 5;
-
-function calcPickupTime(cart: any[]): { timeStr: string; prepMin: number } {
-    if (cart.length === 0) return { timeStr: '--:--', prepMin: 0 };
-
-    const maxPrep = cart.reduce((max: number, item: any) => {
-        const dish = SEED_MENU.find(d => d.id === item.id);
-        return Math.max(max, dish?.prep ?? 0);
-    }, 0);
-
-    const totalMin = maxPrep + BUFFER_MIN;
-    const ready = new Date(Date.now() + totalMin * 60 * 1000);
-
-    const timeStr = ready.toLocaleTimeString('vi-VN', {
-        hour: '2-digit',
-        minute: '2-digit',
-    });
-
-    return { timeStr, prepMin: totalMin };
-}
-
-// ─── Component ────────────────────────────────────────────────────────────────
 const CartOption: React.FC<CartOptionProps> = ({
     note,
     onChangeNote,
@@ -44,30 +18,21 @@ const CartOption: React.FC<CartOptionProps> = ({
     const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
     const { cart } = useModel('Khách Hàng.Thực đơn.index');
 
-    const [pickup, setPickup] = useState(() => calcPickupTime(cart));
-
-    useEffect(() => {
-        setPickup(calcPickupTime(cart));
-        const timer = setInterval(() => setPickup(calcPickupTime(cart)), 60000);
-        return () => clearInterval(timer);
-    }, [cart]);
-
-    const availableVouchers = SEED_VOUCHERS.filter(v => !v.minOrder || subtotal >= v.minOrder);
-    const unavailableVouchers = SEED_VOUCHERS.filter(v => v.minOrder && subtotal < v.minOrder);
-
-    const [tempSelectedId, setTempSelectedId] = useState<string | undefined>(selectedVoucher?.id);
-
-    useEffect(() => {
-        if (isVoucherModalOpen) {
-            setTempSelectedId(selectedVoucher?.id);
-        }
-    }, [isVoucherModalOpen, selectedVoucher]);
-
-    const confirmSelection = () => {
-        const v = SEED_VOUCHERS.find(x => x.id === tempSelectedId);
-        onSelectVoucher(v);
-        setIsVoucherModalOpen(false);
-    };
+    const {
+        pickup,
+        availableVouchers,
+        unavailableVouchers,
+        tempSelectedId,
+        setTempSelectedId,
+        confirmSelection,
+    } = useCartOptionModel(
+        cart,
+        subtotal,
+        selectedVoucher,
+        onSelectVoucher,
+        isVoucherModalOpen,
+        setIsVoucherModalOpen
+    );
 
     return (
         <div className="cart-options-container">
@@ -157,7 +122,7 @@ const CartOption: React.FC<CartOptionProps> = ({
             >
                 <div className="vm-header">
                     <button className="vm-back" onClick={() => setIsVoucherModalOpen(false)}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
                     </button>
                     <h2>Chọn Voucher</h2>
                 </div>
@@ -167,8 +132,8 @@ const CartOption: React.FC<CartOptionProps> = ({
                         <div className="vm-section">
                             <h3 className="vm-section-title">Voucher khả dụng</h3>
                             {availableVouchers.map(v => (
-                                <div 
-                                    key={v.id} 
+                                <div
+                                    key={v.id}
                                     className={`vm-ticket ${tempSelectedId === v.id ? 'selected' : ''}`}
                                     onClick={() => setTempSelectedId(v.id)}
                                 >
@@ -223,7 +188,7 @@ const CartOption: React.FC<CartOptionProps> = ({
                                         </div>
                                     </div>
                                     <div className="vmt-warning">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
                                         <span>Chưa đạt giá trị đơn hàng tối thiểu</span>
                                     </div>
                                 </div>

@@ -1,34 +1,10 @@
 import React from 'react';
 import { Clock3, Minus, Plus, ShoppingCart } from 'lucide-react';
 import { useModel } from 'umi';
-import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
-import comPhan from '@/assets/Khách Hàng/Trang chủ/com_phan_no_text.png';
-import bunPho from '@/assets/Khách Hàng/Trang chủ/bun_pho_no_text.png';
-import doUong from '@/assets/Khách Hàng/Trang chủ/do_uong_no_text.png';
-import anNhe from '@/assets/Khách Hàng/Trang chủ/an_nhe_no_text.png';
-import chaySalad from '@/assets/Khách Hàng/Trang chủ/chay_salad_no_text.png';
+import { formatVND, getDish, getDishImage } from '@/models/Khách Hàng/Giỏ hàng/danhsachmon';
 import './index.less';
-
-
-const formatVND = (amount: number) =>
-    amount.toLocaleString('vi-VN');
-
-
-const getDish = (id: string) => SEED_MENU.find(d => d.id === id);
-
-const getDishImage = (cat?: string) => {
-    if (cat === 'noodle') return bunPho;
-    if (cat === 'drink') return doUong;
-    if (cat === 'snack') return anNhe;
-    if (cat === 'veg') return chaySalad;
-    return comPhan;
-};
-
-
 const DanhSachMon: React.FC = () => {
     const { cart, incCart, decCart } = useModel('Khách Hàng.Thực đơn.index');
-
-
     if (cart.length === 0) {
         return (
             <div className="cart-empty">
@@ -42,7 +18,6 @@ const DanhSachMon: React.FC = () => {
             </div>
         );
     }
-
     return (
         <div className="cart-items-list">
             {cart.map((it: any) => {
@@ -55,8 +30,6 @@ const DanhSachMon: React.FC = () => {
                             src={getDishImage(dish?.cat)}
                             alt={it.name}
                         />
-
-                        {/* Thông tin tên và giá */}
                         <div className="cart-item-info">
                             <p className="info-name">{it.name}</p>
                             <p className="info-price">{formatVND(it.price)}đ</p>
@@ -67,8 +40,6 @@ const DanhSachMon: React.FC = () => {
                                 </p>
                             )}
                         </div>
-
-                        {/* Bộ điều chỉnh số lượng */}
                         <div className="cart-item-qty">
                             <button
                                 className="qty-btn"

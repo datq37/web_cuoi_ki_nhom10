@@ -1,0 +1,68 @@
+import { useState, useEffect } from 'react';
+import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
+import { SEED_VOUCHERS, BUFFER_MIN } from '@/services/Khách hàng/Giỏ hàng/cartoption';
+import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
+
+//  Tính giờ nhận tự động
+export function calcPickupTime(cart: any[]): { timeStr: string; prepMin: number } {
+    if (cart.length === 0) return { timeStr: '--:--', prepMin: 0 };
+
+    const maxPrep = cart.reduce((max: number, item: any) => {
+        const dish = SEED_MENU.find(d => d.id === item.id);
+        return Math.max(max, dish?.prep ?? 0);
+    }, 0);
+
+    const totalMin = maxPrep + BUFFER_MIN;
+    const ready = new Date(Date.now() + totalMin * 60 * 1000);
+
+    const timeStr = ready.toLocaleTimeString('vi-VN', {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+
+    return { timeStr, prepMin: totalMin };
+}
+
+// Custom Hook quản lý State của CartOption 
+export function useCartOptionModel(
+    cart: any[],
+    subtotal: number,
+    selectedVoucher: Voucher | undefined,
+    onSelectVoucher: (v: Voucher | undefined) => void,
+    isVoucherModalOpen: boolean,
+    setIsVoucherModalOpen: (open: boolean) => void
+) {
+    const [pickup, setPickup] = useState(() => calcPickupTime(cart));
+
+    useEffect(() => {
+        setPickup(calcPickupTime(cart));
+        const timer = setInterval(() => setPickup(calcPickupTime(cart)), 60000);
+        return () => clearInterval(timer);
+    }, [cart]);
+
+    const availableVouchers = SEED_VOUCHERS.filter(v => !v.minOrder || subtotal >= v.minOrder);
+    const unavailableVouchers = SEED_VOUCHERS.filter(v => v.minOrder && subtotal < v.minOrder);
+
+    const [tempSelectedId, setTempSelectedId] = useState<string | undefined>(selectedVoucher?.id);
+
+    useEffect(() => {
+        if (isVoucherModalOpen) {
+            setTempSelectedId(selectedVoucher?.id);
+        }
+    }, [isVoucherModalOpen, selectedVoucher]);
+
+    const confirmSelection = () => {
+        const v = SEED_VOUCHERS.find(x => x.id === tempSelectedId);
+        onSelectVoucher(v);
+        setIsVoucherModalOpen(false);
+    };
+
+    return {
+        pickup,
+        availableVouchers,
+        unavailableVouchers,
+        tempSelectedId,
+        setTempSelectedId,
+        confirmSelection,
+    };
+}

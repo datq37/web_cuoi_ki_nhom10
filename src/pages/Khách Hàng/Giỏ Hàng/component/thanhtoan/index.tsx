@@ -1,12 +1,8 @@
 import React from 'react';
-import { Check, CreditCard, QrCode, Wallet } from 'lucide-react';
-import type { ThanhToanProps } from '@/services/Khách hàng/Giỏ hàng/Thanh toán/typing';
+import { Check, CreditCard } from 'lucide-react';
+import type { ThanhToanProps } from '@/services/Khách hàng/Giỏ hàng/thanhtoan/typing';
+import { PAYMENT_METHODS } from '@/services/Khách hàng/Giỏ hàng/thanhtoan';
 import './index.less';
-
-const PAYMENT_METHODS = [
-    { key: 'cash', label: 'Tiền mặt', icon: <Wallet size={38} /> },
-    { key: 'qr', label: 'QR / Bank', icon: <QrCode size={38} /> },
-];
 
 const ThanhToan: React.FC<ThanhToanProps> = ({ payment, onSelect }) => {
     return (

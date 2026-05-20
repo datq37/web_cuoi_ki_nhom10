@@ -1,17 +1,14 @@
 import { useState, useEffect } from 'react';
-
 // ─── Kiểu dữ liệu ────────────────────────────────────────────────────────────
 export interface TimeSlot {
   time: string;
   label: string;
 }
-
 // ─── Hàm tính toán danh sách giờ nhận món (+20p) ─────────────────────────────
 const generateTimeSlots = (): TimeSlot[] => {
   const slots = [];
   const now = new Date();
   now.setMinutes(now.getMinutes() + 20); // Cộng thêm 20 phút chuẩn bị
-
   // Làm tròn lên mốc 15 phút gần nhất
   const remainder = now.getMinutes() % 15;
   if (remainder !== 0) {
@@ -43,10 +40,10 @@ export default function useCartOptionModel() {
     const timer = setInterval(() => {
       const newSlots = generateTimeSlots();
       setTimeSlots(newSlots);
-      
+
       // Nếu giờ hiện tại đã qua mốc đang chọn, tự động nhảy sang mốc sớm nhất mới
       if (pickupTime && !newSlots.find(s => s.time === pickupTime)) {
-         setPickupTime(newSlots[0].time);
+        setPickupTime(newSlots[0].time);
       }
     }, 60000);
     return () => clearInterval(timer);

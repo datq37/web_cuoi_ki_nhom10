@@ -1,13 +1,31 @@
 import React, { useState } from 'react';
 import {
-    TagOutlined,
-} from '@ant-design/icons';
-import { CheckCircle, ChevronRight, Clock3, PencilLine, Tag, TicketPercent, Zap } from 'lucide-react';
+    ArrowLeft,
+    CalendarDays,
+    CheckCircle,
+    CheckCircle2,
+    ChevronRight,
+    Circle,
+    Clock3,
+    PencilLine,
+    Tag,
+    TicketPercent,
+    Timer,
+    X,
+    Zap,
+} from 'lucide-react';
 import { Modal } from 'antd';
 import { useModel } from 'umi';
 import type { CartOptionProps } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
 import { useCartOptionModel } from '@/models/Khách Hàng/Giỏ hàng/cartoption';
+import voucherBanner from '@/assets/Khách Hàng/Vourcher/bannervourcher.png';
 import './index.less';
+
+const formatCondition = (minOrder?: number) => {
+    if (!minOrder) return 'Mọi đơn hàng';
+    return `Đơn từ ${minOrder / 1000}k`;
+};
+
 const CartOption: React.FC<CartOptionProps> = ({
     note,
     onChangeNote,
@@ -109,56 +127,87 @@ const CartOption: React.FC<CartOptionProps> = ({
                 </div>
             </div>
 
-            {/* Modal danh sách Voucher giống thiết kế */}
+            {/* Modal danh sách Voucher */}
             <Modal
                 title={false}
                 visible={isVoucherModalOpen}
                 onCancel={() => setIsVoucherModalOpen(false)}
                 footer={null}
-                width={450}
+                width={520}
                 className="voucher-modal-custom"
-                style={{ top: 40 }}
+                centered
                 getContainer={() => document.body}
+                closable={false}
             >
                 <div className="vm-header">
                     <button className="vm-back" onClick={() => setIsVoucherModalOpen(false)}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                        <ArrowLeft size={21} />
                     </button>
                     <h2>Chọn Voucher</h2>
+                    <button className="vm-close" onClick={() => setIsVoucherModalOpen(false)}>
+                        <X size={21} />
+                    </button>
                 </div>
 
                 <div className="vm-body">
+                    <div className="vm-banner">
+                        <img src={voucherBanner} alt="Voucher khả dụng" />
+                    </div>
+
                     {availableVouchers.length > 0 && (
                         <div className="vm-section">
-                            <h3 className="vm-section-title">Voucher khả dụng</h3>
+                            <div className="vm-section-head">
+                                <h3 className="vm-section-title">Danh sách voucher</h3>
+                                <span>{availableVouchers.length} khả dụng</span>
+                            </div>
                             {availableVouchers.map(v => (
-                                <div
+                                <button
                                     key={v.id}
-                                    className={`vm-ticket ${tempSelectedId === v.id ? 'selected' : ''}`}
+                                    type="button"
+                                    className={`vm-ticket vm-ticket-${v.theme || 'green'} ${tempSelectedId === v.id ? 'selected' : ''}`}
                                     onClick={() => setTempSelectedId(v.id)}
                                 >
                                     <div className="vmt-left">
+                                        <div className="vmt-left-mark" aria-hidden="true" />
                                         <div className="vmt-icon">
-                                            <TagOutlined style={{ fontSize: 24, marginBottom: 4 }} />
-                                            <span>Mã giảm giá</span>
+                                            {v.theme === 'orange' ? (
+                                                <Timer size={22} />
+                                            ) : (
+                                                <Tag size={22} />
+                                            )}
+                                            <strong>{v.valueLabel || `${v.discount.toLocaleString()}đ`}</strong>
+                                            <span>{v.typeLabel || 'GIẢM GIÁ'}</span>
                                         </div>
                                     </div>
                                     <div className="vmt-right">
                                         <div className="vmt-info">
                                             <h4>{v.desc}</h4>
-                                            {v.minOrder ? <p>Đơn từ {v.minOrder / 1000}k</p> : <p>Mọi đơn hàng</p>}
-                                            <div className="vmt-meta">
-                                                <span className="badge">Ưu đãi có hạn</span>
-                                                <span className="date">HSD: 31.05.2026 <a>Điều kiện</a></span>
+                                            <p>{formatCondition(v.minOrder)}</p>
+                                            <div className="vmt-tags">
+                                                <span className="badge">
+                                                    <Timer size={11} />
+                                                    {v.badge || 'Ưu đãi có hạn'}
+                                                </span>
+                                                <span className="code">{v.code}</span>
+                                            </div>
+                                            <div className="vmt-date">
+                                                <span>
+                                                    <CalendarDays size={11} />
+                                                    HSD: {v.expire || '31.05.2026'}
+                                                </span>
+                                                <i />
+                                                <a>Điều kiện</a>
                                             </div>
                                         </div>
                                         <div className="vmt-radio">
-                                            <div className="radio-circle">
-                                                {tempSelectedId === v.id && <div className="radio-dot" />}
-                                            </div>
+                                            {tempSelectedId === v.id ? (
+                                                <CheckCircle2 size={20} />
+                                            ) : (
+                                                <Circle size={20} />
+                                            )}
                                         </div>
                                     </div>
-                                </div>
+                                </button>
                             ))}
                         </div>
                     )}
@@ -167,28 +216,40 @@ const CartOption: React.FC<CartOptionProps> = ({
                         <div className="vm-section">
                             <h3 className="vm-section-title">Voucher không khả dụng</h3>
                             {unavailableVouchers.map(v => (
-                                <div key={v.id} className="vm-ticket disabled">
+                                <div key={v.id} className={`vm-ticket vm-ticket-${v.theme || 'green'} disabled`}>
                                     <div className="vmt-left">
+                                        <div className="vmt-left-mark" aria-hidden="true" />
                                         <div className="vmt-icon">
-                                            <TagOutlined style={{ fontSize: 24, marginBottom: 4 }} />
-                                            <span>Mã giảm giá</span>
+                                            <Tag size={22} />
+                                            <strong>{v.valueLabel || `${v.discount.toLocaleString()}đ`}</strong>
+                                            <span>{v.typeLabel || 'GIẢM GIÁ'}</span>
                                         </div>
                                     </div>
                                     <div className="vmt-right">
                                         <div className="vmt-info">
                                             <h4>{v.desc}</h4>
-                                            <p>Đơn từ {v.minOrder! / 1000}k</p>
-                                            <div className="vmt-meta">
-                                                <span className="badge">Ưu đãi có hạn</span>
-                                                <span className="date">HSD: 31.05.2026 <a>Điều kiện</a></span>
+                                            <p>{formatCondition(v.minOrder)}</p>
+                                            <div className="vmt-tags">
+                                                <span className="badge">
+                                                    <Timer size={11} />
+                                                    {v.badge || 'Ưu đãi có hạn'}
+                                                </span>
+                                                <span className="code">{v.code}</span>
+                                            </div>
+                                            <div className="vmt-date">
+                                                <span>
+                                                    <CalendarDays size={11} />
+                                                    HSD: {v.expire || '31.05.2026'}
+                                                </span>
+                                                <i />
+                                                <a>Điều kiện</a>
                                             </div>
                                         </div>
                                         <div className="vmt-radio">
-                                            <div className="radio-circle" />
+                                            <Circle size={20} />
                                         </div>
                                     </div>
                                     <div className="vmt-warning">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
                                         <span>Chưa đạt giá trị đơn hàng tối thiểu</span>
                                     </div>
                                 </div>
@@ -198,7 +259,14 @@ const CartOption: React.FC<CartOptionProps> = ({
                 </div>
 
                 <div className="vm-footer">
-                    <button className="vm-ok-btn" onClick={confirmSelection}>OK</button>
+                    <button className="vm-ok-btn" onClick={confirmSelection}>
+                        <TicketPercent size={18} />
+                        Áp dụng Voucher
+                    </button>
+                    <p>
+                        <CheckCircle2 size={12} />
+                        Voucher chỉ áp dụng 1 lần cho mỗi đơn hàng
+                    </p>
                 </div>
             </Modal>
         </div>

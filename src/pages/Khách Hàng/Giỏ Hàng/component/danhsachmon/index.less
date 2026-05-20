@@ -1,27 +1,27 @@
 .cart-items-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .cart-item {
     display: grid;
-    grid-template-columns: 86px minmax(0, 1fr) auto;
+    grid-template-columns: 68px minmax(0, 1fr) auto;
     align-items: center;
-    gap: 12px;
-    min-height: 98px;
-    padding: 10px;
+    gap: 9px;
+    min-height: 78px;
+    padding: 8px;
     background: #fff;
     border: 1px solid #e2e7e3;
-    border-radius: 26px;
-    box-shadow: 0 8px 22px rgba(31, 41, 55, 0.04);
+    border-radius: 18px;
+    box-shadow: 0 6px 16px rgba(31, 41, 55, 0.04);
 }
 
 .cart-item-thumb {
-    width: 86px;
-    height: 76px;
+    width: 68px;
+    height: 62px;
     object-fit: cover;
-    border-radius: 14px;
+    border-radius: 11px;
     background: #f4f7f2;
 }
 
@@ -31,15 +31,15 @@
     .info-name {
         margin: 0;
         color: #141820;
-        font-size: 15px;
+        font-size: 13px;
         font-weight: 750;
         line-height: 1.18;
     }
 
     .info-price {
-        margin: 8px 0 0;
+        margin: 6px 0 0;
         color: #21743b;
-        font-size: 19px;
+        font-size: 16px;
         font-weight: 800;
         line-height: 1;
     }
@@ -47,15 +47,15 @@
     .info-meta {
         display: flex;
         align-items: center;
-        gap: 6px;
-        margin: 8px 0 0;
+        gap: 5px;
+        margin: 6px 0 0;
         color: #626b76;
-        font-size: 12px;
+        font-size: 10px;
         line-height: 1.2;
 
         svg {
-            width: 15px;
-            height: 15px;
+            width: 12px;
+            height: 12px;
             color: #f58a14;
             flex-shrink: 0;
         }
@@ -63,17 +63,17 @@
 }
 
 .cart-item-qty {
-    height: 42px;
+    height: 34px;
     display: inline-flex;
     align-items: center;
     overflow: hidden;
     border: 1px solid #b9d5bd;
-    border-radius: 20px;
+    border-radius: 16px;
     background: #fbfffa;
 
     .qty-btn,
     .qty-num {
-        width: 38px;
+        width: 31px;
         height: 100%;
         display: grid;
         place-items: center;
@@ -91,8 +91,8 @@
         }
 
         svg {
-            width: 16px;
-            height: 16px;
+            width: 13px;
+            height: 13px;
             stroke-width: 2;
         }
     }
@@ -101,26 +101,26 @@
         border-right: 1px solid #d6e6d7;
         border-left: 1px solid #d6e6d7;
         color: #111827;
-        font-size: 16px;
+        font-size: 13px;
         font-weight: 750;
         font-variant-numeric: tabular-nums;
     }
 }
 
 .cart-empty {
-    min-height: 260px;
+    min-height: 200px;
     display: grid;
     place-items: center;
     text-align: center;
     color: #6b7280;
-    font-size: 14px;
+    font-size: 12px;
 
     .cart-empty-icon {
-        width: 80px;
-        height: 80px;
+        width: 62px;
+        height: 62px;
         display: grid;
         place-items: center;
-        margin: 0 auto 16px;
+        margin: 0 auto 12px;
         color: #21743b;
         background: #f2f8f2;
         border-radius: 50%;
@@ -129,53 +129,53 @@
     .cart-empty-title {
         margin-bottom: 5px;
         color: #111827;
-        font-size: 18px;
+        font-size: 15px;
         font-weight: 900;
     }
 
     .cart-empty-sub {
         color: #6b7280;
-        font-size: 14px;
+        font-size: 12px;
     }
 }
 
 @media (max-width: 576px) {
     .cart-item {
-        grid-template-columns: 88px minmax(0, 1fr);
-        gap: 12px;
-        padding: 12px;
+        grid-template-columns: 64px minmax(0, 1fr) auto;
+        gap: 8px;
+        padding: 8px;
     }
 
     .cart-item-thumb {
-        width: 88px;
-        height: 78px;
+        width: 64px;
+        height: 58px;
     }
 
     .cart-item-info .info-name {
-        font-size: 16px;
-    }
-
-    .cart-item-info .info-price {
-        font-size: 21px;
-    }
-
-    .cart-item-info .info-meta {
         font-size: 13px;
     }
 
+    .cart-item-info .info-price {
+        font-size: 16px;
+    }
+
+    .cart-item-info .info-meta {
+        font-size: 10px;
+    }
+
     .cart-item-qty {
-        grid-column: 2;
+        grid-column: auto;
         justify-self: start;
-        height: 42px;
-        margin-top: -4px;
+        height: 32px;
+        margin-top: 0;
 
         .qty-btn,
         .qty-num {
-            width: 42px;
+            width: 29px;
         }
 
         .qty-num {
-            font-size: 18px;
+            font-size: 13px;
         }
     }
 }

@@ -35,6 +35,7 @@ const CartOption: React.FC<CartOptionProps> = ({
 }) => {
     const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
     const { cart } = useModel('Khách Hàng.Thực đơn.index');
+    const { theme } = useModel('Khách Hàng.global');
 
     const {
         pickup,
@@ -134,7 +135,7 @@ const CartOption: React.FC<CartOptionProps> = ({
                 onCancel={() => setIsVoucherModalOpen(false)}
                 footer={null}
                 width={520}
-                className="voucher-modal-custom"
+                className={`voucher-modal-custom theme-${theme}`}
                 centered
                 getContainer={() => document.body}
                 closable={false}

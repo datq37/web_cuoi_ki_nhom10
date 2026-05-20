@@ -931,3 +931,197 @@
         }
     }
 }
+
+.voucher-modal-custom.theme-dark {
+    --vm-bg: #141414;
+    --vm-elev: #1f1f1f;
+    --vm-soft: #2a2a2a;
+    --vm-mute: #333;
+    --vm-line: #303030;
+    --vm-line-strong: #404040;
+    --vm-ink: #f0f0f0;
+    --vm-ink-2: #d0d0d0;
+    --vm-ink-3: #999;
+    --vm-ink-4: #777;
+    --vm-accent: #32a852;
+    --vm-accent-soft: rgba(50, 168, 82, 0.15);
+
+    .ant-modal-content {
+        background: var(--vm-elev);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.58);
+    }
+
+    .vm-header {
+        background: var(--vm-elev);
+        border-bottom: 1px solid var(--vm-line);
+
+        .vm-back {
+            color: var(--vm-accent);
+
+            &:hover {
+                background: var(--vm-accent-soft);
+            }
+        }
+
+        .vm-close {
+            color: var(--vm-ink-3);
+
+            &:hover {
+                color: var(--vm-ink);
+                background: var(--vm-soft);
+            }
+        }
+
+        h2 {
+            color: var(--vm-ink);
+        }
+    }
+
+    .vm-body,
+    .vm-footer {
+        background: var(--vm-bg);
+    }
+
+    .vm-body::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .vm-body::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .vm-body::-webkit-scrollbar-thumb {
+        background: var(--vm-line-strong);
+        border-radius: 4px;
+    }
+
+    .vm-banner {
+        background: #0f8a48;
+
+        &::before,
+        &::after {
+            background: var(--vm-bg);
+        }
+    }
+
+    .vm-section-title {
+        color: var(--vm-ink);
+    }
+
+    .vm-section-head span {
+        color: var(--vm-accent);
+        background: var(--vm-accent-soft);
+    }
+
+    .vm-ticket {
+        background: var(--vm-elev);
+        border-color: var(--vm-line);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.32);
+
+        &:hover {
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.42);
+        }
+
+        &.selected {
+            border-color: var(--vm-accent);
+            box-shadow: 0 0 0 1px rgba(50, 168, 82, 0.18), 0 10px 22px rgba(0, 0, 0, 0.42);
+        }
+
+        &.disabled {
+            opacity: 0.62;
+        }
+
+        .vmt-left {
+            &::before,
+            &::after {
+                background: var(--vm-elev);
+            }
+
+            &::after {
+                box-shadow: 0 -27px 0 var(--vm-elev), 0 27px 0 var(--vm-elev);
+            }
+        }
+
+        .vmt-right {
+            border-left-color: var(--vm-accent);
+
+            &::before,
+            &::after {
+                background: var(--vm-elev);
+                box-shadow: 0 0 8px rgba(0, 0, 0, 0.32);
+            }
+        }
+
+        .vmt-info {
+            h4 {
+                color: var(--vm-ink);
+            }
+
+            p {
+                color: var(--vm-ink-3);
+            }
+        }
+
+        .vmt-tags {
+            .badge {
+                color: #ffb15f;
+                background: rgba(240, 107, 26, 0.13);
+                border-color: rgba(255, 177, 95, 0.34);
+
+                svg {
+                    color: #ffb15f;
+                    fill: #ffb15f;
+                }
+            }
+
+            .code {
+                color: var(--vm-ink-2);
+                background: var(--vm-soft);
+                border-color: var(--vm-line-strong);
+            }
+        }
+
+        .vmt-date {
+            color: var(--vm-ink-4);
+
+            i {
+                background: var(--vm-line-strong);
+            }
+
+            a {
+                color: var(--vm-accent);
+            }
+        }
+
+        .vmt-radio {
+            color: var(--vm-ink-4);
+        }
+
+        &.selected .vmt-radio {
+            color: var(--vm-accent);
+
+            svg {
+                fill: var(--vm-accent-soft);
+            }
+        }
+
+        .vmt-warning {
+            color: #ff8a8a;
+            background: rgba(217, 75, 75, 0.12);
+            border-top-color: rgba(255, 138, 138, 0.26);
+        }
+    }
+
+    .vm-footer {
+        border-top: 1px solid var(--vm-line);
+
+        p {
+            color: var(--vm-ink-3);
+
+            svg {
+                color: var(--vm-accent);
+                fill: var(--vm-accent-soft);
+            }
+        }
+    }
+}

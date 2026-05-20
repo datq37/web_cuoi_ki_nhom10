@@ -1,26 +1,28 @@
 import React from 'react';
 import {
-    AppstoreOutlined,
-    CoffeeOutlined,
-    ShopOutlined,
-    ContainerOutlined,
-    HeartOutlined,
-    FireOutlined,
-    RestOutlined,
-    SearchOutlined,
-} from '@ant-design/icons';
+    Beef,
+    Coffee,
+    Flame,
+    Grid2X2,
+    Heart,
+    Package,
+    Search,
+    Soup,
+    Utensils,
+    X,
+} from 'lucide-react';
 import { MENU_CATEGORIES } from '@/services/Khách hàng/Thực đơn';
 import { useModel } from 'umi';
 
-// Bảng ánh xạ tên icon sang component Ant Design tương ứng
+// Bảng ánh xạ tên icon sang component lucide tương ứng
 const IconMap: Record<string, React.ReactNode> = {
-    AppstoreOutlined: <AppstoreOutlined />,
-    CoffeeOutlined: <CoffeeOutlined />,
-    ShopOutlined: <ShopOutlined />,
-    ContainerOutlined: <ContainerOutlined />,
-    HeartOutlined: <HeartOutlined />,
-    FireOutlined: <FireOutlined />,
-    RestOutlined: <RestOutlined />,
+    AppstoreOutlined: <Grid2X2 size={15} />,
+    CoffeeOutlined: <Beef size={15} />,
+    ShopOutlined: <Soup size={15} />,
+    ContainerOutlined: <Package size={15} />,
+    HeartOutlined: <Heart size={15} />,
+    FireOutlined: <Flame size={15} />,
+    RestOutlined: <Coffee size={15} />,
 };
 
 // ─── Thanh tìm kiếm và lọc theo danh mục món ăn ─────────────────────────────
@@ -37,7 +39,7 @@ const CategoryBar: React.FC = () => {
         <div className="filter-section">
             {/* Ô tìm kiếm theo tên món */}
             <div className="search-box">
-                <SearchOutlined className="search-icon" />
+                <Search className="search-icon" size={18} />
                 <input
                     type="text"
                     className="search-input"
@@ -50,7 +52,7 @@ const CategoryBar: React.FC = () => {
                         className="search-clear"
                         onClick={() => setSearchQuery('')}
                     >
-                        ×
+                        <X size={14} />
                     </button>
                 )}
             </div>
@@ -63,7 +65,7 @@ const CategoryBar: React.FC = () => {
                         className={`cat-chip ${activeCategory === cat.id ? 'active' : ''}`}
                         onClick={() => setActiveCategory(cat.id)}
                     >
-                        {IconMap[cat.icon]}
+                        {IconMap[cat.icon] || <Utensils size={15} />}
                         {cat.name}
                         <span className="count">{categoryCounts[cat.id] || 0}</span>
                     </button>

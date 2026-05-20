@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useModel } from 'umi';
+import { CalendarDays, CheckCircle2, ChevronRight } from 'lucide-react';
 import { EmployeeMenuProps } from '@/services/Khách hàng/Thực đơn/typing';
 import MenuHero from './component/hero';
 import DayTabs from './component/datetabs';
@@ -35,9 +36,25 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
                     <h1 className="page-title">Thực đơn hôm nay</h1>
                     <p className="page-subtitle">Chọn món, đặt trước - không cần xếp hàng.</p>
                 </div>
+                <div className="preorder-card">
+                    <div className="preorder-icon">
+                        <CheckCircle2 size={24} />
+                    </div>
+                    <div>
+                        <strong>Đặt trước dễ dàng</strong>
+                        <span>Tiết kiệm thời gian chờ đợi</span>
+                    </div>
+                    <ChevronRight size={18} />
+                </div>
             </div>
             <MenuHero orders={ordersToday} totalDishes={filteredMenu.length} />
-            <DayTabs selected={day} onSelect={setDay} />
+            <div className="schedule-row">
+                <DayTabs selected={day} onSelect={setDay} />
+                <button className="week-button">
+                    <CalendarDays size={16} />
+                    Lịch tuần
+                </button>
+            </div>
             <CategoryBar />
             <div className="menu-grid">
                 {filteredMenu.map((d: any) => (
@@ -71,4 +88,3 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
 };
 
 export default EmployeeMenu;
-

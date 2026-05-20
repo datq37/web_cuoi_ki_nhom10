@@ -49,14 +49,6 @@ const Topbar: React.FC = () => {
                     <BellOutlined style={{ fontSize: '16px' }} />
                     {unreadCount > 0 && <span className="dot" />}
                 </button>
-
-                {cartCount !== undefined && (
-                    <button className="btn btn-secondary cart-btn" onClick={() => setCartOpen(true)}>
-                        <ShoppingCartOutlined style={{ fontSize: '14px' }} />
-                        Giỏ
-                        {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-                    </button>
-                )}
             </div>
         </header>
     );

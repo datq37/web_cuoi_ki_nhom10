@@ -294,3 +294,44 @@
     height: 200px; /* Taller dynamic food image space for premium single-column layout */
   }
 }
+
+/* DARK MODE OVERRIDES */
+.main-page-container.theme-dark {
+  .section-title-row h2 { color: var(--ink); }
+  .section-title-row button { color: var(--accent); }
+  
+  .category-card {
+    background: var(--bg-elev);
+    border-color: var(--line);
+    box-shadow: none;
+  }
+  
+  .home-food-card {
+    background: var(--bg-elev);
+    border-color: var(--line);
+    box-shadow: none;
+    
+    .food-content h3 { color: var(--ink); }
+    .food-content p { color: var(--ink-3); }
+    .food-meta { color: var(--ink-4); }
+    
+    .food-bottom strong { color: var(--accent); }
+    .food-bottom > button { background: var(--accent); }
+    
+    &:hover { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); }
+  }
+  
+  .heart-btn {
+    background: rgba(31, 31, 31, 0.86);
+    color: var(--ink-3);
+    
+    &:hover { color: var(--danger); background: var(--bg-elev); }
+  }
+  
+  .food-qty {
+    background: var(--bg-soft);
+    color: var(--accent);
+    
+    button { background: var(--bg-elev); color: var(--ink); }
+  }
+}

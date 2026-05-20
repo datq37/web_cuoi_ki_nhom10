@@ -91,11 +91,11 @@ const Sidebar: React.FC = () => {
       <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-top">
           <div className="brand">
-            <img src="/logo.webp" alt="Logo" className="brand-logo" />
-            <div className="brand-text">
-              <div className="brand-name">Căng tin</div>
-              <div className="brand-sub">Doanh nghiệp</div>
-            </div>
+            <img 
+              src="/logo.webp" 
+              alt="Logo" 
+              style={{ width: '100%', maxHeight: '46px', objectFit: 'contain', objectPosition: 'left center' }} 
+            />
           </div>
 
           <button className="role-card" onClick={closeSidebar}>

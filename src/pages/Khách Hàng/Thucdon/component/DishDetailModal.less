@@ -378,3 +378,66 @@
         }
     }
 }
+
+/* DARK MODE OVERRIDES */
+.main-page-container.theme-dark {
+    .ddm-sheet {
+        background: var(--bg-main, #141414);
+        box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .ddm-hero {
+        background: linear-gradient(135deg, rgba(47, 143, 78, 0.3) 0%, rgba(47, 143, 78, 0.15) 100%);
+    }
+
+    .ddm-close {
+        background: rgba(0, 0, 0, 0.4);
+        color: var(--ink);
+        &:hover { background: rgba(0, 0, 0, 0.7); }
+    }
+
+    .ddm-name { color: var(--ink); }
+    
+    .ddm-meta span {
+        background: var(--bg-elev);
+        color: var(--ink-3);
+    }
+
+    .ddm-desc { color: var(--ink-2); }
+
+    .ddm-section-label { color: var(--ink); }
+
+    .ddm-divider { background: var(--line); }
+
+    .ddm-review-avatar {
+        background: var(--bg-elev);
+        border-color: var(--line);
+    }
+
+    .ddm-review-author { color: var(--ink); }
+
+    .ddm-review-comment {
+        background: var(--bg-elev);
+        color: var(--ink-2);
+        border-left-color: var(--accent);
+    }
+
+    .ddm-footer {
+        background: var(--bg-elev);
+        border-top-color: var(--line);
+        box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .ddm-price { color: var(--ink); }
+    
+    .ddm-qty-control {
+        background: var(--bg-soft);
+        color: var(--accent);
+        
+        button {
+            background: var(--bg-elev);
+            color: var(--ink);
+            &:hover { background: var(--accent); color: #fff; }
+        }
+    }
+}

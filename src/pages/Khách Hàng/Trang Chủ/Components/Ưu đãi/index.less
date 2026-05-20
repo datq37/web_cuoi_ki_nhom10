@@ -287,3 +287,45 @@
     }
   }
 }
+
+/* DARK MODE OVERRIDES */
+.main-page-container.theme-dark {
+  .daily-offer-card {
+    background: var(--bg-elev);
+    border-color: var(--line);
+    box-shadow: none;
+    
+    .offer-head h3 { color: var(--accent); }
+    .offer-head span { color: var(--ink-2); }
+    
+    .offer-name { color: var(--ink); }
+    .offer-note { color: var(--ink-3); }
+    
+    .countdown {
+      color: var(--ink-2);
+      b { background: var(--bg-soft); color: var(--ink); }
+    }
+  }
+
+  .combo-card {
+    background: var(--bg-elev);
+    border-color: var(--line);
+    box-shadow: none;
+  }
+
+  .combo-header h3 { color: #f59f00; }
+  .combo-header button { color: #f59f00; }
+
+  .combo-box {
+    background: var(--bg-soft);
+    border-color: var(--line);
+  }
+
+  .combo-info-row p { color: var(--ink); }
+  .combo-info-row strong { color: #f59f00; }
+
+  .combo-item {
+    background: var(--bg-elev);
+    border-color: var(--line);
+  }
+}

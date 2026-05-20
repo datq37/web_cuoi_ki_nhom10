@@ -5,7 +5,6 @@ import bunPho from '@/assets/Khách Hàng/Trang chủ/bun_pho_no_text.png';
 import doUong from '@/assets/Khách Hàng/Trang chủ/do_uong_no_text.png';
 import anNhe from '@/assets/Khách Hàng/Trang chủ/an_nhe_no_text.png';
 import chaySalad from '@/assets/Khách Hàng/Trang chủ/chay_salad_no_text.png';
-import type { Dish } from '@/services/Khách hàng/Thực đơn/typing';
 import type { CategoryCardProps, FoodCardProps, MenuAndBestSellersProps } from '@/services/Khách hàng/Trang Chủ/typing';
 import './index.less';
 

@@ -13,7 +13,7 @@
     width: calc(100% + 20px);
     height: calc(100% + 20px);
     object-fit: cover;
-    object-position: center center;
+    object-position: right center; /* Align illustration to the right */
   }
 
   .home-hero-discount {
@@ -217,4 +217,78 @@
 .tone-lime {
   color: #26743c;
   background: #edf8d9;
+}
+
+/* RESPONSIVE MEDIA QUERIES */
+
+@media (max-width: 1100px) {
+  .home-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 760px) {
+  .home-hero {
+    height: auto;
+    min-height: 380px;
+    border-radius: 20px;
+
+    .home-hero-img {
+      object-position: 82% center; /* Keep main food illustration visible on mobile */
+    }
+
+    .home-hero-content {
+      width: 100%;
+      height: 100%;
+      padding: 34px 24px;
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      border-radius: 20px;
+    }
+
+    .home-hero-discount {
+      top: 24px;
+      right: 24px;
+      width: 90px;
+      height: 90px;
+
+      span {
+        font-size: 12px;
+      }
+
+      strong {
+        font-size: 24px;
+      }
+    }
+
+    h1 {
+      font-size: 32px;
+    }
+
+    .home-kicker {
+      font-size: 22px;
+    }
+
+    .home-desc {
+      font-size: 14px;
+    }
+
+    .home-actions {
+      flex-direction: column;
+      width: 100%;
+      gap: 10px;
+    }
+
+    .btn-primary-home,
+    .btn-outline-home {
+      width: 100%;
+    }
+  }
+
+  .home-stats {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }

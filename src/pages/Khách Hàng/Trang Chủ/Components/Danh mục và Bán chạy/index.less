@@ -38,7 +38,7 @@
 
 .category-card {
   position: relative;
-  height: 120px;
+  height: 110px; /* Use highly optimized default height */
   display: block;
   overflow: hidden;
   background: #fff;
@@ -47,7 +47,6 @@
   box-shadow: 0 10px 24px rgba(75, 48, 18, 0.04);
   transition: transform 0.24s ease, box-shadow 0.24s ease;
   width: 100%;
-  border: 1px solid #eef0ee;
   cursor: pointer;
 
   &:hover {
@@ -251,5 +250,47 @@
     border: none;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(21, 50, 34, 0.1);
+  }
+}
+
+/* RESPONSIVE MEDIA QUERIES */
+
+@media (max-width: 1100px) {
+  .category-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .food-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 760px) {
+  .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .category-card {
+    height: auto;
+    aspect-ratio: 1.6; /* Prevents vertical stretching and cropping */
+    
+    span {
+      font-size: 13px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+    }
+  }
+
+  .food-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .food-image-wrap {
+    height: 200px; /* Taller dynamic food image space for premium single-column layout */
   }
 }

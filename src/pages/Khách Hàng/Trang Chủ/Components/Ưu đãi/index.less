@@ -246,3 +246,44 @@
   border: none;
   cursor: pointer;
 }
+
+/* RESPONSIVE MEDIA QUERIES */
+
+@media (max-width: 1280px) {
+  .home-main-right {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  .home-main-right {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .daily-offer-card {
+    & > img {
+      width: 200px;
+      height: 140px;
+      right: -50px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .daily-offer-card {
+    & > img {
+      opacity: 0.18;
+      right: -20px;
+    }
+    
+    .offer-discount {
+      font-size: 25px;
+    }
+  }
+}

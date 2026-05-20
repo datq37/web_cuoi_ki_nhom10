@@ -29,7 +29,7 @@
   border-radius: 17px;
   box-shadow: 0 10px 24px rgba(21, 50, 34, 0.04);
 
-  & > img,
+  &>img,
   .step-icon {
     width: 54px;
     height: 54px;
@@ -37,7 +37,7 @@
     border-radius: 14px;
   }
 
-  & > img {
+  &>img {
     object-fit: cover;
 
     &.img-contain {
@@ -47,7 +47,8 @@
     }
   }
 
-  p, span {
+  p,
+  span {
     margin: 0;
   }
 
@@ -84,4 +85,11 @@
   font-weight: 900;
   background: #197236;
   border-radius: 50%;
+}
+
+@media (max-width: 1100px) {
+  .order-steps {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }

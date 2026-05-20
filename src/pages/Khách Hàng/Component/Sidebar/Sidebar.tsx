@@ -13,7 +13,7 @@ import {
   Utensils,
 } from 'lucide-react';
 import './Sidebar.less';
-import { defaultUser } from '@/services/Khách hàng/Sidebar';
+import { defaultUser } from '@/services/Khách hàng/Component/Sidebar';
 import { useModel, history } from 'umi';
 
 const Sidebar: React.FC = () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Timer } from 'lucide-react';
-import bannerHome from '@/assets/Khách Hàng/Trang chủ/banner trang chủ.png';
+import bannerHome from '@/assets/Khách Hàng/Trang chủ/banner trang chủ.png';
 import comPhan from '@/assets/Khách Hàng/Trang chủ/com_phan_no_text.png';
 import bunPho from '@/assets/Khách Hàng/Trang chủ/bun_pho_no_text.png';
 import doUong from '@/assets/Khách Hàng/Trang chủ/do_uong_no_text.png';

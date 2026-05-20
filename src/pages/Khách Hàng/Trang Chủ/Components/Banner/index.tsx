@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, Soup, TicketPercent, ClipboardCheck } from 'lucide-react';
-import bannerHome from '@/assets/Khách Hàng/Trang chủ/banner trang chủ.png';
+import bannerHome from '@/assets/Khách Hàng/Trang chủ/banner trang chủ.png';
 import shipperScooter from '@/assets/Khách Hàng/Trang chủ/shipper_scooter.png';
 import { StatCardTone } from '@/services/Khách hàng/Trang Chủ/typing';
 import type { StatCardProps, BannerProps } from '@/services/Khách hàng/Trang Chủ/typing';

@@ -7,7 +7,7 @@ import bunPho from '@/assets/Khách Hàng/Trang chủ/bun_pho_no_text.png';
 import doUong from '@/assets/Khách Hàng/Trang chủ/do_uong_no_text.png';
 import anNhe from '@/assets/Khách Hàng/Trang chủ/an_nhe_no_text.png';
 import chaySalad from '@/assets/Khách Hàng/Trang chủ/chay_salad_no_text.png';
-import './danhsachmon.less';
+import './index.less';
 
 
 const formatVND = (amount: number) =>

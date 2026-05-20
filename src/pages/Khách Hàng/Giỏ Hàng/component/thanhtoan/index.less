@@ -115,3 +115,40 @@
         font-size: 17px;
     }
 }
+
+// ─── DARK MODE OVERRIDES ──────────────────────────────────────────────────────
+.main-page-container.theme-dark {
+    .section-label {
+        color: var(--ink);
+    }
+
+    .pay-opt {
+        background: var(--bg-elev);
+        border-color: var(--line);
+        color: var(--ink);
+
+        .pay-icon {
+            color: var(--ink-3);
+        }
+
+        .pay-label {
+            color: var(--ink);
+        }
+
+        &:hover:not(.active) {
+            border-color: var(--accent);
+            background: var(--bg-soft);
+        }
+
+        &.active {
+            color: var(--accent);
+            background: var(--accent-soft);
+            border-color: var(--accent);
+            box-shadow: none;
+
+            .pay-icon {
+                color: var(--accent);
+            }
+        }
+    }
+}

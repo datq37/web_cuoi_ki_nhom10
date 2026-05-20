@@ -171,3 +171,62 @@
         font-size: 21px;
     }
 }
+
+// ─── DARK MODE OVERRIDES ──────────────────────────────────────────────────────
+.main-page-container.theme-dark {
+    .price-breakdown {
+        background: var(--bg-soft);
+        border-color: var(--line);
+    }
+
+    .price-label {
+        color: var(--ink-2);
+    }
+
+    .price-value {
+        color: var(--ink);
+
+        &.fee {
+            color: var(--ink);
+        }
+
+        &.discount {
+            color: var(--accent);
+        }
+
+        &.warn {
+            color: #d97706; // Keep orange for warning
+        }
+    }
+
+    .voucher-badge {
+        color: var(--accent);
+        background: var(--accent-soft);
+    }
+
+    .price-divider {
+        background: repeating-linear-gradient(
+            90deg,
+            var(--line-strong) 0,
+            var(--line-strong) 7px,
+            transparent 7px,
+            transparent 13px
+        );
+    }
+
+    .total-label {
+        color: var(--ink);
+    }
+
+    .total-value {
+        color: var(--accent);
+    }
+
+    .confirm-btn {
+        &.disabled,
+        &:disabled {
+            color: var(--ink-4);
+            background: var(--bg-mute);
+        }
+    }
+}

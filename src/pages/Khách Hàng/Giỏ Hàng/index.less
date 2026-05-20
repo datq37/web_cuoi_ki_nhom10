@@ -208,3 +208,43 @@
         padding: 0 16px 18px;
     }
 }
+
+// ─── DARK MODE OVERRIDES ──────────────────────────────────────────────────────
+.main-page-container.theme-dark {
+    .cart-drawer {
+        background: var(--bg-main);
+        border-left-color: var(--line);
+        box-shadow: -8px 0 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .cart-drawer-header {
+        background: var(--bg-elev);
+        border-bottom-color: var(--line);
+    }
+
+    .cart-drawer-title {
+        color: var(--ink);
+    }
+
+    .cart-back-btn,
+    .cart-close-btn {
+        background: var(--bg-soft);
+        border-color: var(--line);
+        color: var(--ink-2);
+
+        &:hover {
+            background: var(--bg-mute);
+            border-color: var(--line-strong);
+            color: var(--ink);
+        }
+    }
+
+    .cart-drawer-body::-webkit-scrollbar-thumb {
+        background: var(--line-strong);
+    }
+
+    .cart-drawer-footer {
+        background: var(--bg-elev);
+        box-shadow: 0 -10px 18px rgba(0, 0, 0, 0.3);
+    }
+}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Check, CircleAlert, LoaderCircle } from 'lucide-react';
 import { useModel } from 'umi';
 import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/Cart Option/typing';
-import '../cartfooter.less';
+import './index.less';
 
 // ─── Hằng số phụ phí phục vụ ─────────────────────────────────────────────────
 const SERVICE_FEE_RATE = 0.05; // 5% phụ phí phục vụ

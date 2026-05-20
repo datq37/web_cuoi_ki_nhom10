@@ -179,3 +179,61 @@
         }
     }
 }
+
+// ─── DARK MODE OVERRIDES ──────────────────────────────────────────────────────
+.main-page-container.theme-dark {
+    .cart-item {
+        background: var(--bg-elev);
+        border-color: var(--line);
+        box-shadow: none;
+    }
+
+    .cart-item-thumb {
+        background: var(--bg-soft);
+    }
+
+    .cart-item-info {
+        .info-name {
+            color: var(--ink);
+        }
+        .info-price {
+            color: var(--accent);
+        }
+        .info-meta {
+            color: var(--ink-3);
+        }
+    }
+
+    .cart-item-qty {
+        background: var(--bg-soft);
+        border-color: var(--line);
+
+        .qty-btn {
+            color: var(--ink-2);
+            &:hover {
+                background: var(--bg-elev);
+                color: var(--ink);
+            }
+        }
+        .qty-num {
+            color: var(--ink);
+            border-left-color: var(--line);
+            border-right-color: var(--line);
+        }
+    }
+
+    .cart-empty {
+        color: var(--ink-3);
+
+        .cart-empty-icon {
+            background: var(--bg-soft);
+            color: var(--accent);
+        }
+        .cart-empty-title {
+            color: var(--ink);
+        }
+        .cart-empty-sub {
+            color: var(--ink-3);
+        }
+    }
+}

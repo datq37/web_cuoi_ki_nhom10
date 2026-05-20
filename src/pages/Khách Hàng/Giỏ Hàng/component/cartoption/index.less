@@ -501,3 +501,86 @@
         }
     }
 }
+
+// ─── DARK MODE OVERRIDES ──────────────────────────────────────────────────────
+.main-page-container.theme-dark {
+    .option-section .section-header {
+        color: var(--ink);
+    }
+
+    .pickup-time-display {
+        background: var(--bg-soft);
+        border-color: var(--line);
+
+        .pickup-time-value {
+            border-right-color: var(--line);
+            
+            .pickup-icon-wrap {
+                background: var(--bg-elev);
+                box-shadow: none;
+            }
+
+            .pickup-hhmm {
+                color: var(--accent);
+            }
+        }
+
+        .pickup-note {
+            color: var(--ink-2);
+        }
+        
+        .pickup-leaf {
+            color: var(--line);
+        }
+    }
+
+    .voucher-selector {
+        background: var(--bg-elev);
+        border-color: var(--line-strong);
+
+        &:hover {
+            background: var(--bg-soft);
+            border-color: var(--accent);
+        }
+
+        &.has-value {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+        }
+
+        .placeholder {
+            color: var(--ink-3);
+            svg { color: var(--ink-3); }
+        }
+
+        .selected-info {
+            .text strong { color: var(--accent); }
+            .text span { color: var(--ink-2); }
+        }
+
+        .arrow {
+            color: var(--ink-3);
+        }
+    }
+
+    .note-wrap {
+        .note-textarea {
+            background: var(--bg-elev);
+            border-color: var(--line);
+            color: var(--ink);
+
+            &::placeholder {
+                color: var(--ink-4);
+            }
+
+            &:focus {
+                border-color: var(--accent);
+                box-shadow: 0 0 0 4px var(--accent-soft);
+            }
+        }
+        
+        .note-leaf {
+            color: var(--line);
+        }
+    }
+}

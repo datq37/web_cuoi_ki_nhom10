@@ -1,7 +1,7 @@
 import React from 'react';
 import { Check, CreditCard, QrCode, Wallet } from 'lucide-react';
 import type { ThanhToanProps } from '@/services/Khách hàng/Giỏ hàng/Thanh toán/typing';
-import './thanhtoan.less';
+import './index.less';
 
 const PAYMENT_METHODS = [
     { key: 'cash', label: 'Tiền mặt', icon: <Wallet size={38} /> },

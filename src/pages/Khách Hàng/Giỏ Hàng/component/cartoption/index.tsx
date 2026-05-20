@@ -8,7 +8,7 @@ import { useModel } from 'umi';
 import type { CartOptionProps } from '@/services/Khách hàng/Giỏ hàng/Cart Option/typing';
 import { SEED_VOUCHERS } from '@/services/Khách hàng/Giỏ hàng/Cart Option/typing';
 import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
-import '../cartoption.less';
+import './index.less';
 
 // ─── Tính giờ nhận tự động ────────────────────────────────────────────────────
 // Logic: giờ hiện tại + prep_time_tối_đa_trong_giỏ + 5 phút buffer

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useModel } from 'umi';
 import { CalendarDays, CheckCircle2, ChevronRight } from 'lucide-react';
 import { EmployeeMenuProps } from '@/services/Khách hàng/Thực đơn/typing';
-import MenuHero from './component/hero';
-import DayTabs from './component/datetabs';
-import CategoryBar from './component/thanhlocdanhsach';
-import DishCard from './component/themonan';
+import MenuHero from './component/Hero';
+import DayTabs from './component/DateTabs';
+import CategoryBar from './component/CategoryBar';
+import DishCard from './component/DishCard';
 import DishDetailModal from './component/DishDetailModal';
 import './index.less';
 

@@ -6,7 +6,7 @@ import {
     Star,
     Zap,
 } from 'lucide-react';
-import { DishCardProps } from '@/services/Khách hàng/Thực đơn/component/themonan';
+import type { DishCardProps } from '@/services/Khách hàng/Thực đơn/DishCard/typing';
 import riceImg from '@/assets/Khách Hàng/Trang chủ/com_phan_no_text.png';
 import noodleImg from '@/assets/Khách Hàng/Trang chủ/bun_pho_no_text.png';
 import saladImg from '@/assets/Khách Hàng/Trang chủ/chay_salad_no_text.png';

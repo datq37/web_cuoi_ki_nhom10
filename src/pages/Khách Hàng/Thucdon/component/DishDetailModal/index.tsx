@@ -9,28 +9,19 @@ import {
     ShoppingCartOutlined,
     FireOutlined,
 } from '@ant-design/icons';
-import { Dish } from '@/services/Khách hàng/Thực đơn/typing';
+import type { DishDetailModalProps } from '@/services/Khách hàng/Thực đơn/DishDetailModal/typing';
+import { getReviewsByDish } from '@/models/Khách Hàng/Thực đơn/DishDetailModal';
 import { useModel } from 'umi';
-import './DishDetailModal.less';
-
-interface Props {
-    dish: Dish;
-    qty: number;
-    onClose: () => void;
-    onAdd: () => void;
-    onInc: () => void;
-    onDec: () => void;
-    isFuture?: boolean;
-}
+import './index.less';
 
 const renderStars = (count: number) =>
     [1, 2, 3, 4, 5].map((s) => (
         <StarFilled key={s} style={{ color: s <= count ? '#f59e0b' : '#e5e7eb', fontSize: 13 }} />
     ));
 
-const DishDetailModal: React.FC<Props> = ({ dish, qty, onClose, onAdd, onInc, onDec, isFuture }) => {
+const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, onAdd, onInc, onDec, isFuture }) => {
     const { reviews: globalReviews } = useModel('Khách Hàng.Thực đơn.index');
-    const reviews = globalReviews.filter((r) => r.dishId === dish.id);
+    const reviews = getReviewsByDish(globalReviews, dish.id);
 
     const handleBackdrop = (e: React.MouseEvent) => {
         if (e.target === e.currentTarget) onClose();

@@ -1,12 +1,4 @@
-export interface Review {
-    id: string;
-    dishId: string;
-    author: string;
-    avatar: string; // emoji avatar
-    rating: number;
-    comment: string;
-    date: string;
-}
+import type { Review } from './typing';
 
 export const SEED_REVIEWS: Review[] = [
     {
@@ -80,3 +72,5 @@ export const SEED_REVIEWS: Review[] = [
         date: '17/05/2026',
     },
 ];
+
+export type { DishDetailModalProps, Review } from './typing';

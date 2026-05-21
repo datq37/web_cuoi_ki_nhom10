@@ -6,10 +6,10 @@ import { getPageBackground } from '../themeBackground';
 import useTaiKhoanModel from '@/models/Khách Hàng/Tài Khoản';
 
 // ── Components con ──────────────────────────────────────────────────────────
-import PhanHero from './component/Phần Hero';
-import ThanhBen from './component/Thanh Bên';
-import BieuMau from './component/Biểu Mẫu';
-import MeoGiaoHang from './component/Mẹo Giao Hàng';
+import PhanHero    from './Component/Phần Hero';
+import ThanhTrai  from './Component/Thanh Trái';
+import BieuMau    from './Component/Biểu Mẫu';
+import PhanChan   from './Component/Phần Chân';
 
 import './index.less';
 
@@ -36,7 +36,7 @@ const TaiKhoan: React.FC = () => {
             <PhanHero />
 
             <div className="profile-layout">
-                <ThanhBen
+                <ThanhTrai
                     currentUser={currentUser}
                     avatarUrl={avatarUrl}
                     isAvatarImage={isAvatarImage}
@@ -49,7 +49,7 @@ const TaiKhoan: React.FC = () => {
                 />
             </div>
 
-            <MeoGiaoHang />
+            <PhanChan />
         </div>
     );
 };

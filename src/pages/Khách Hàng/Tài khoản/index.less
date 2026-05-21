@@ -505,11 +505,13 @@
 
         img {
             position: absolute;
-            right: 20px;
-            bottom: -4px;
-            width: 80px;
+            right: 14px;
+            bottom: 4px;
+            width: 56px;
             height: 56px;
-            object-fit: contain;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 50%;
         }
     }
 }
@@ -519,61 +521,224 @@
         color: var(--ink);
         background-color: var(--bg-main);
 
-        .hero-title-row h1,
-        .profile-sidebar h2,
-        .avatar-upload-block strong,
-        .form-section-title h3,
-        .profile-form .ant-form-item-label > label,
-        .profile-form .ant-input,
-        .profile-form .ant-select-selection-item {
+        // ── Hero ─────────────────────────────────────────────
+        .hero-title-row h1 {
             color: var(--ink);
         }
 
-        .hero-title-row p,
-        .user-dept,
-        .avatar-upload-block span,
-        .delivery-tip p {
+        .hero-title-row p {
             color: var(--ink-3);
         }
 
-        .profile-card,
-        .id-card {
-            background: rgba(31, 31, 31, 0.92);
-            border-color: var(--line);
+        .hero-icon {
+            color: var(--accent);
+            background: rgba(50, 168, 82, 0.14);
             box-shadow: none;
         }
 
-        .profile-sidebar::before {
-            background: linear-gradient(145deg, rgba(50, 90, 48, 0.35), rgba(31, 31, 31, 0.1));
+        .hero-card-illustration {
+            background: radial-gradient(circle at 42% 58%, rgba(50, 168, 82, 0.1), rgba(30, 40, 30, 0.6) 57%, transparent 58%);
         }
 
-        .camera-badge,
-        .upload-btn,
-        .profile-form .ant-input-affix-wrapper,
-        .profile-form .ant-select-selector {
+        .id-card {
+            background: #1e2a1e;
+            border-color: #303030;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+
+            .clip {
+                background: var(--accent);
+            }
+
+            .id-avatar {
+                color: var(--accent);
+                background: rgba(50, 168, 82, 0.18);
+            }
+
+            i {
+                background: #333;
+            }
+        }
+
+        .plant-pot {
+            background: #2a6b3e;
+        }
+
+        // ── Cards (sidebar + content) ─────────────────────────
+        .profile-card {
+            background: rgba(22, 22, 22, 0.92);
+            border-color: var(--line);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(8px);
+        }
+
+        // ── Sidebar ───────────────────────────────────────────
+        .profile-sidebar::before {
+            background: linear-gradient(145deg, rgba(50, 90, 48, 0.3), rgba(22, 22, 22, 0.05));
+        }
+
+        .profile-sidebar h2 {
+            color: var(--ink);
+        }
+
+        .user-dept {
+            color: var(--ink-3);
+        }
+
+        .profile-avatar {
+            background: linear-gradient(145deg, #1e5c32, #0f3d20);
+            border-color: rgba(50, 168, 82, 0.2);
+        }
+
+        .camera-badge {
+            color: var(--ink-2);
+            background: var(--bg-soft);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .avatar-upload-block {
+            strong {
+                color: var(--ink);
+            }
+
+            span {
+                color: var(--ink-3);
+            }
+        }
+
+        .upload-btn {
+            color: var(--accent);
             background: var(--bg-soft);
             border-color: var(--line) !important;
+
+            &:hover,
+            &:focus {
+                color: #32a852;
+                border-color: var(--accent) !important;
+            }
         }
 
-        .privacy-note,
-        .form-section-title span {
+        .privacy-note {
             color: var(--accent);
-            background: rgba(50, 168, 82, 0.12);
-            border-color: rgba(50, 168, 82, 0.22);
+            background: rgba(50, 168, 82, 0.1);
+            border-color: rgba(50, 168, 82, 0.2);
+
+            .anticon {
+                background: rgba(50, 168, 82, 0.15);
+            }
+
+            span {
+                color: var(--ink-2);
+            }
         }
 
-        .form-section-title,
+        // ── Form content ──────────────────────────────────────
+        .form-section-title {
+            border-color: var(--line);
+
+            span {
+                color: var(--accent);
+                background: rgba(50, 168, 82, 0.13);
+            }
+
+            h3 {
+                color: var(--ink);
+            }
+        }
+
         .form-divider {
             border-color: var(--line);
         }
 
+        .profile-form {
+            .ant-form-item-label > label {
+                color: var(--ink-2);
+            }
+
+            .ant-form-item-required::before {
+                color: #f87171 !important;
+            }
+
+            // Inputs & selects background / border
+            .ant-input-affix-wrapper,
+            .ant-select-selector {
+                color: var(--ink) !important;
+                background: var(--bg-soft) !important;
+                border-color: var(--line) !important;
+            }
+
+            // Input text
+            .ant-input {
+                color: var(--ink) !important;
+                background: transparent !important;
+
+                &::placeholder {
+                    color: var(--ink-4) !important;
+                }
+            }
+
+            // Select text & placeholder
+            .ant-select-selection-item {
+                color: var(--ink) !important;
+            }
+
+            .ant-select-selection-placeholder {
+                color: var(--ink-4) !important;
+            }
+
+            // Prefix icon
+            .ant-input-prefix {
+                color: var(--ink-3);
+            }
+
+            // Focus state
+            .ant-input-affix-wrapper:focus,
+            .ant-input-affix-wrapper-focused,
+            .ant-select-focused .ant-select-selector {
+                border-color: var(--accent) !important;
+                box-shadow: 0 0 0 2px rgba(50, 168, 82, 0.15) !important;
+            }
+
+            // Validation error message
+            .ant-form-item-explain-error {
+                color: #f87171;
+            }
+
+            // Validation error border
+            .ant-form-item-has-error {
+                .ant-input-affix-wrapper,
+                .ant-select-selector {
+                    border-color: #f87171 !important;
+                }
+            }
+        }
+
+        // ── Save button ───────────────────────────────────────
+        .btn-save {
+            background: linear-gradient(135deg, #1e8040, #145c2c);
+            box-shadow: 0 4px 14px rgba(50, 168, 82, 0.25);
+
+            &:hover,
+            &:focus {
+                background: linear-gradient(135deg, #22914a, #185e30);
+            }
+        }
+
+        // ── Delivery tip ──────────────────────────────────────
         .delivery-tip {
-            background: rgba(49, 43, 28, 0.62);
-            border-color: rgba(166, 128, 42, 0.22);
+            background: rgba(40, 34, 20, 0.75);
+            border-color: rgba(166, 128, 42, 0.2);
             box-shadow: none;
+
+            .tip-icon {
+                background: rgba(166, 128, 42, 0.18);
+            }
 
             h3 {
                 color: var(--ink);
+            }
+
+            p {
+                color: var(--ink-3);
             }
         }
     }

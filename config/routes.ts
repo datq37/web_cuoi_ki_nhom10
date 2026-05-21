@@ -16,19 +16,53 @@ export default [
 		],
 	},
 
-	///////////////////////////////////
-	// DEFAULT MENU
-	{
-		path: '/dashboard',
-		name: 'Dashboard',
-		component: './TrangChu',
-		icon: 'HomeOutlined',
-	},
-
+	// Redirect gốc về trang quản trị
 	{
 		path: '/',
-		redirect: '/dashboard',
+		redirect: '/quan-tri/tong-quan',
 	},
+	{
+		path: '/dashboard',
+		redirect: '/quan-tri/tong-quan',
+	},
+
+	// ── Quản Trị ─────────────────────────────────
+	{
+		path: '/quan-tri',
+		layout: false,
+		routes: [
+			{
+				path: '/quan-tri/tong-quan',
+				component: './Quản Trị/Tổng Quan',
+			},
+			{
+				path: '/quan-tri/don-hang',
+				component: './Quản Trị/Đơn Hàng',
+			},
+			{
+				path: '/quan-tri/quan-ly-mon',
+				component: './Quản Trị/Quản Lý Món',
+			},
+			{
+				path: '/quan-tri/kho-nguyen-lieu',
+				component: './Quản Trị/Kho Nguyên Liệu',
+			},
+			{
+				path: '/quan-tri/khuyen-mai',
+				component: './Quản Trị/Khuyến Mãi',
+			},
+			{
+				path: '/quan-tri/nguoi-dung',
+				component: './Quản Trị/Người Dùng',
+			},
+			{
+				path: '/quan-tri',
+				redirect: '/quan-tri/tong-quan',
+			},
+		],
+	},
+
+	// ── Exception ─────────────────────────────────
 	{
 		path: '/403',
 		component: './exception/403/403Page',

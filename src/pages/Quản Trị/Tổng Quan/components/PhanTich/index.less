@@ -1,0 +1,211 @@
+@primary: #16a34a;
+@border: #f0f0f0;
+@text-dark: #111827;
+@text-mid: #374151;
+@text-muted: #6b7280;
+@text-light: #9ca3af;
+@radius: 12px;
+@shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+
+.phanTichWrap { display: flex; flex-direction: column; gap: 14px; }
+
+// ── Banner thống kê ─────────────────────────────────────────
+.statBanner {
+  background: linear-gradient(135deg, #14532d 0%, #166534 60%, #15803d 100%);
+  border-radius: @radius;
+  padding: 20px 28px;
+  display: flex; align-items: stretch;
+  box-shadow: 0 4px 16px rgba(22,101,52,0.25);
+}
+
+.bannerDiv   { width: 1px; background: rgba(255,255,255,0.15); margin: 0 6px; flex-shrink: 0; }
+.bannerItem  { flex: 1; padding: 0 16px; }
+.bannerTop   { display: flex; align-items: center; justify-content: space-between; }
+.bannerLabel { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.65); letter-spacing: 0.05em; margin-bottom: 6px; }
+.bannerValue { font-size: 28px; font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 6px; }
+.bannerChange { font-size: 12px; color: #86efac; display: flex; align-items: center; }
+
+.bannerIconWrap {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+// ── Biểu đồ ────────────────────────────────────────────────
+.chartRow2 {
+  display: grid;
+  grid-template-columns: 1.65fr 1fr;
+  gap: 14px;
+}
+
+.barChartCard, .donutCard {
+  background: #fff;
+  border-radius: @radius;
+  padding: 18px 20px;
+  border: 1px solid @border;
+  box-shadow: @shadow;
+}
+
+.chartHeader2 {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.chartTitle2  { font-size: 15px; font-weight: 700; color: @text-dark; }
+.chartLegend  { display: flex; align-items: center; gap: 8px; font-size: 12px; color: @text-muted; }
+.legendBox    { width: 12px; height: 12px; border-radius: 3px; }
+
+.legendDash {
+  width: 20px; height: 2px;
+  background: repeating-linear-gradient(to right, #9ca3af 0, #9ca3af 4px, transparent 4px, transparent 8px);
+}
+
+.donutSubtitle { font-size: 12px; color: @text-muted; margin-bottom: 8px; }
+.donutWrap2    { display: flex; align-items: center; gap: 12px; }
+.donutLeg      { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.donutLegRow   { display: flex; align-items: center; gap: 7px; }
+.donutLegDot   { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.donutLegLabel { flex: 1; font-size: 13px; color: @text-mid; }
+.donutLegPct   { font-size: 13px; font-weight: 600; color: @text-dark; }
+
+// ── Bottom 3 cột ────────────────────────────────────────────
+.bottomRow {
+  display: grid;
+  grid-template-columns: 2fr 1.6fr 1.2fr;
+  gap: 14px;
+}
+
+.bottomCard {
+  background: #fff;
+  border-radius: @radius;
+  padding: 16px 18px;
+  border: 1px solid @border;
+  box-shadow: @shadow;
+}
+
+.cardHead {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.cardTitle { font-size: 14px; font-weight: 700; color: @text-dark; }
+.viewAll   { font-size: 12.5px; color: @primary; font-weight: 500; &:hover { color: #15803d; } }
+
+// Top món table
+.topMonTable {
+  width: 100%;
+  border-collapse: collapse;
+  th {
+    font-size: 10.5px; font-weight: 600; color: @text-light;
+    letter-spacing: 0.04em;
+    padding: 4px 6px 8px;
+    border-bottom: 1px solid @border;
+    text-align: left;
+  }
+  td {
+    padding: 8px 6px;
+    font-size: 13px; color: @text-mid;
+    border-bottom: 1px solid #f9fafb;
+  }
+  tr:last-child td { border-bottom: none; }
+}
+
+.topMonCell { display: flex; align-items: center; gap: 8px; }
+.topMonImg  { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; }
+.tdCenter   { text-align: center; }
+.tdRight    { text-align: right; font-weight: 600; color: @text-dark; }
+
+// Trạng thái đơn
+.trangThaiList { display: flex; flex-direction: column; gap: 10px; }
+.trangThaiRow  { display: flex; align-items: center; gap: 8px; }
+.trangThaiLeft { display: flex; align-items: center; gap: 6px; min-width: 120px; }
+.trangThaiDot  { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.trangThaiTen  { font-size: 12.5px; color: @text-mid; white-space: nowrap; }
+.trangThaiSo   { font-size: 12px; color: @text-muted; min-width: 46px; }
+
+.progressWrap2 { flex: 1; height: 6px; background: #f3f4f6; border-radius: 3px; overflow: hidden; }
+.progressBar   { height: 100%; border-radius: 3px; transition: width 0.3s; }
+.trangThaiPct  { font-size: 12px; font-weight: 600; color: @text-dark; min-width: 32px; text-align: right; }
+
+// Hiệu suất
+.hieuSuatList { display: flex; flex-direction: column; gap: 0; }
+
+.hieuSuatItem {
+  padding: 12px 0;
+  border-bottom: 1px solid #f9fafb;
+  &:last-child { border-bottom: none; }
+}
+
+.hieuSuatLabel { font-size: 12px; color: @text-muted; margin-bottom: 5px; }
+.hieuSuatRow   { display: flex; align-items: flex-end; justify-content: space-between; }
+.hieuSuatValue { font-size: 22px; font-weight: 800; color: @text-dark; }
+.hieuSuatUnit  { font-size: 14px; font-weight: 400; color: @text-muted; margin-left: 2px; }
+
+.hieuSuatChange {
+  display: flex; align-items: center; gap: 3px;
+  font-size: 12px; font-weight: 500;
+  &.up    { color: @primary; }
+  &.down2 { color: #3b82f6; }
+}
+
+.changeDetail { font-size: 11px; color: @text-light; font-weight: 400; margin-left: 2px; }
+
+.periodSelect {
+  font-size: 12.5px; color: @text-muted;
+  border: 1px solid @border;
+  border-radius: 7px;
+  background: #f9fafb;
+  padding: 4px 10px;
+  cursor: pointer;
+  &:hover { background: #f3f4f6; }
+}
+
+// ── Hoạt động ───────────────────────────────────────────────
+.hoatDongCard {
+  background: #fff;
+  border-radius: @radius;
+  padding: 16px 18px;
+  border: 1px solid @border;
+  box-shadow: @shadow;
+}
+
+.hoatDongScroll {
+  display: flex; gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  &::-webkit-scrollbar { height: 3px; }
+  &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
+}
+
+.hoatDongItem {
+  background: #f9fafb;
+  border: 1px solid @border;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex; align-items: flex-start; gap: 10px;
+  min-width: 200px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  &:hover { border-color: #d1d5db; background: #fff; }
+}
+
+.hdIconWrap {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.hdInfo  { flex: 1; min-width: 0; }
+.hdTitle { font-size: 13px; font-weight: 600; color: @text-dark; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hdMota  { font-size: 12px; color: @text-muted; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hdTime  { font-size: 11px; color: @text-light; }
+.hdArrow { font-size: 11px; color: @text-light; margin-top: 3px; flex-shrink: 0; }
+
+// ── Responsive ──────────────────────────────────────────────
+@media (max-width: 1200px) {
+  .chartRow2 { grid-template-columns: 1fr; }
+  .bottomRow { grid-template-columns: 1fr; }
+}

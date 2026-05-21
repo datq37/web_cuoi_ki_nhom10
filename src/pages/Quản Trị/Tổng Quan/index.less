@@ -1,3 +1,831 @@
-.container {
-  padding: 24px;
+@primary: #16a34a;
+@primary-light: #f0fdf4;
+@border: #f0f0f0;
+@text-dark: #111827;
+@text-mid: #374151;
+@text-muted: #6b7280;
+@text-light: #9ca3af;
+@bg: #f8fafc;
+@sidebar-w: 260px;
+@radius: 12px;
+@shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+
+// ── Layout ──────────────────────────────────────────────────
+.adminLayout { display: flex; min-height: 100vh; background: @bg; }
+
+.mainContent {
+  margin-left: @sidebar-w;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 0;
+}
+
+.pageBody { padding: 16px 20px 24px; flex: 1; display: flex; flex-direction: column; gap: 14px; }
+
+// ── Header tabs ──────────────────────────────────────────────
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tabsRow {
+  display: flex;
+  gap: 3px;
+  background: #fff;
+  border: 1px solid @border;
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.tabBtn {
+  padding: 7px 18px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: @text-muted;
+  cursor: pointer;
+  transition: all 0.15s;
+  &:hover { background: #f9fafb; color: @text-dark; }
+}
+
+.tabActive {
+  background: @primary !important;
+  color: white !important;
+  &:hover { background: #15803d !important; }
+}
+
+.headerRight { display: flex; align-items: center; gap: 10px; }
+
+.dateChip {
+  font-size: 13px;
+  color: @text-muted;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid @border;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.exportBtn {
+  background: @primary !important;
+  border-color: @primary !important;
+  border-radius: 9px !important;
+  font-weight: 500 !important;
+  height: 36px !important;
+  &:hover { background: #15803d !important; border-color: #15803d !important; }
+}
+
+// ────────────────────────────────────────────────────────────
+// TAB TRỰC TIẾP
+// ────────────────────────────────────────────────────────────
+.trucTiepWrap { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+
+// Live status bar
+.liveBar {
+  background: #fff;
+  border: 1px solid @border;
+  border-radius: @radius;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: @shadow;
+}
+
+.liveLeft { display: flex; align-items: center; gap: 8px; }
+
+.liveDot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22,163,74,0.2);
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(22,163,74,0.2); }
+  50% { box-shadow: 0 0 0 6px rgba(22,163,74,0.1); }
+}
+
+.liveTxt { font-size: 13px; font-weight: 700; color: @text-dark; }
+.liveDesc { font-size: 12px; color: @text-muted; }
+
+.liveStats { display: flex; align-items: center; gap: 0; flex: 1; flex-wrap: wrap; }
+
+.liveStat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px;
+  font-size: 13px;
+  color: @text-mid;
+  strong { font-size: 16px; font-weight: 700; color: @text-dark; }
+}
+
+.liveStatIcon {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.liveStatDiv { width: 1px; height: 28px; background: @border; margin: 0 2px; }
+
+.autoBtn {
+  background: @primary;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  &:hover { background: #15803d; }
+}
+
+// Kanban
+.kanbanBoard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  flex: 1;
+}
+
+.kanbanCot {
+  background: #f9fafb;
+  border-radius: @radius;
+  border: 1px solid @border;
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+  max-height: calc(100vh - 320px);
+}
+
+.cotHeader { padding: 12px 14px 8px; border-bottom: 1px solid @border; }
+
+.cotTitleRow { display: flex; align-items: center; gap: 8px; }
+
+.cotDot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+.cotTitle { font-size: 14px; font-weight: 600; color: @text-dark; flex: 1; }
+
+.cotBadge {
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+}
+
+.cotBody { flex: 1; overflow-y: auto; padding: 10px 10px 4px; display: flex; flex-direction: column; gap: 8px;
+  &::-webkit-scrollbar { width: 3px; }
+  &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
+}
+
+.cotFooter {
+  padding: 8px 14px;
+  font-size: 12px;
+  color: @text-muted;
+  border-top: 1px solid @border;
+  text-align: center;
+}
+
+// Don card
+.donCard {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px 13px;
+  border: 1px solid @border;
+  box-shadow: @shadow;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.donCardHeader { display: flex; justify-content: space-between; align-items: center; }
+
+.maDon { font-size: 12.5px; font-weight: 700; color: @text-dark; }
+
+.thoiGianDon { font-size: 11.5px; color: @text-light; }
+
+.khachRow { display: flex; align-items: center; gap: 8px; }
+
+.avatarCir {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  flex-shrink: 0;
+}
+
+.tenKH { font-size: 13px; font-weight: 500; color: @text-dark; }
+
+.monList { display: flex; flex-direction: column; gap: 3px; }
+
+.monRow {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12.5px; color: @text-mid;
+}
+
+.slMon { font-size: 12px; color: @text-light; }
+
+.conLai { font-size: 12px; color: @text-light; font-style: italic; }
+
+.ghiChu {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 20px;
+  width: fit-content;
+}
+
+.donCardFooter { display: flex; justify-content: space-between; align-items: center; padding-top: 4px; border-top: 1px solid #f3f4f6; }
+
+.tongTienDon { font-size: 14px; font-weight: 700; color: @text-dark; }
+
+.actionBtn {
+  border: none;
+  border-radius: 7px;
+  padding: 5px 12px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex; align-items: center;
+  transition: opacity 0.15s;
+  &:hover { opacity: 0.85; }
+}
+
+// Empty + trophy
+.emptyHint { display: flex; flex-direction: column; align-items: center; padding: 20px 0; opacity: 0.7; }
+.emptyIllus { margin-bottom: 8px; }
+.emptyText { font-size: 12px; color: @text-light; text-align: center; }
+
+.trophyCard {
+  background: @primary-light;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.trophyLabel { font-size: 12px; color: @text-muted; margin-bottom: 4px; }
+.trophyValue { font-size: 15px; font-weight: 700; color: @primary; }
+
+// Summary bar
+.summaryBar {
+  background: #fff;
+  border: 1px solid @border;
+  border-radius: @radius;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  box-shadow: @shadow;
+}
+
+.summaryLeft { display: flex; align-items: center; gap: 8px; }
+.summaryTitle { font-size: 13px; font-weight: 600; color: @text-dark; }
+
+.summaryDiv { width: 1px; height: 28px; background: @border; margin: 0 16px; }
+
+.summaryStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  strong { font-size: 15px; font-weight: 700; color: @text-dark; }
+  span { font-size: 11px; color: @text-muted; }
+}
+
+.summaryLink {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 500;
+  color: @primary;
+  &:hover { color: #15803d; }
+}
+
+// ────────────────────────────────────────────────────────────
+// TAB PHÂN TÍCH
+// ────────────────────────────────────────────────────────────
+.phanTichWrap { display: flex; flex-direction: column; gap: 14px; }
+
+// Banner
+.statBanner {
+  background: linear-gradient(135deg, #14532d 0%, #166534 60%, #15803d 100%);
+  border-radius: @radius;
+  padding: 20px 28px;
+  display: flex;
+  align-items: stretch;
+  box-shadow: 0 4px 16px rgba(22,101,52,0.25);
+}
+
+.bannerDiv { width: 1px; background: rgba(255,255,255,0.15); margin: 0 6px; flex-shrink: 0; }
+
+.bannerItem { flex: 1; padding: 0 16px; }
+
+.bannerTop { display: flex; align-items: center; justify-content: space-between; }
+
+.bannerLabel { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.65); letter-spacing: 0.05em; margin-bottom: 6px; }
+
+.bannerValue { font-size: 28px; font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 6px; }
+
+.bannerChange { font-size: 12px; color: #86efac; display: flex; align-items: center; }
+
+.bannerIconWrap {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+// Charts row
+.chartRow2 {
+  display: grid;
+  grid-template-columns: 1.65fr 1fr;
+  gap: 14px;
+}
+
+.barChartCard, .donutCard {
+  background: #fff;
+  border-radius: @radius;
+  padding: 18px 20px;
+  border: 1px solid @border;
+  box-shadow: @shadow;
+}
+
+.chartHeader2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.chartTitle2 { font-size: 15px; font-weight: 700; color: @text-dark; }
+
+.chartLegend { display: flex; align-items: center; gap: 8px; font-size: 12px; color: @text-muted; }
+
+.legendBox { width: 12px; height: 12px; border-radius: 3px; }
+
+.legendDash {
+  width: 20px; height: 2px;
+  background: repeating-linear-gradient(to right, #9ca3af 0, #9ca3af 4px, transparent 4px, transparent 8px);
+}
+
+.donutSubtitle { font-size: 12px; color: @text-muted; margin-bottom: 8px; }
+
+.donutWrap2 { display: flex; align-items: center; gap: 12px; }
+
+.donutLeg { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+
+.donutLegRow { display: flex; align-items: center; gap: 7px; }
+
+.donutLegDot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+.donutLegLabel { flex: 1; font-size: 13px; color: @text-mid; }
+
+.donutLegPct { font-size: 13px; font-weight: 600; color: @text-dark; }
+
+// Bottom 3 cols
+.bottomRow {
+  display: grid;
+  grid-template-columns: 2fr 1.6fr 1.2fr;
+  gap: 14px;
+}
+
+.bottomCard {
+  background: #fff;
+  border-radius: @radius;
+  padding: 16px 18px;
+  border: 1px solid @border;
+  box-shadow: @shadow;
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.cardTitle { font-size: 14px; font-weight: 700; color: @text-dark; }
+
+.viewAll { font-size: 12.5px; color: @primary; font-weight: 500;
+  &:hover { color: #15803d; }
+}
+
+// Top món table
+.topMonTable {
+  width: 100%;
+  border-collapse: collapse;
+  th {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: @text-light;
+    letter-spacing: 0.04em;
+    padding: 4px 6px 8px;
+    border-bottom: 1px solid @border;
+    text-align: left;
+  }
+  td {
+    padding: 8px 6px;
+    font-size: 13px;
+    color: @text-mid;
+    border-bottom: 1px solid #f9fafb;
+    &:last-child { border-bottom: none; }
+  }
+  tr:last-child td { border-bottom: none; }
+}
+
+.topMonCell { display: flex; align-items: center; gap: 8px; }
+
+.topMonImg { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; }
+
+.tdCenter { text-align: center; }
+.tdRight { text-align: right; font-weight: 600; color: @text-dark; }
+
+// Trạng thái đơn
+.trangThaiList { display: flex; flex-direction: column; gap: 10px; }
+
+.trangThaiRow { display: flex; align-items: center; gap: 8px; }
+
+.trangThaiLeft { display: flex; align-items: center; gap: 6px; min-width: 120px; }
+
+.trangThaiDot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+.trangThaiTen { font-size: 12.5px; color: @text-mid; white-space: nowrap; }
+
+.trangThaiSo { font-size: 12px; color: @text-muted; min-width: 46px; }
+
+.progressWrap2 { flex: 1; height: 6px; background: #f3f4f6; border-radius: 3px; overflow: hidden; }
+
+.progressBar { height: 100%; border-radius: 3px; transition: width 0.3s; }
+
+.trangThaiPct { font-size: 12px; font-weight: 600; color: @text-dark; min-width: 32px; text-align: right; }
+
+// Hiệu suất
+.hieuSuatList { display: flex; flex-direction: column; gap: 0; }
+
+.hieuSuatItem {
+  padding: 12px 0;
+  border-bottom: 1px solid #f9fafb;
+  &:last-child { border-bottom: none; }
+}
+
+.hieuSuatLabel { font-size: 12px; color: @text-muted; margin-bottom: 5px; }
+
+.hieuSuatRow { display: flex; align-items: flex-end; justify-content: space-between; }
+
+.hieuSuatValue { font-size: 22px; font-weight: 800; color: @text-dark; }
+
+.hieuSuatUnit { font-size: 14px; font-weight: 400; color: @text-muted; margin-left: 2px; }
+
+.hieuSuatChange {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 500;
+  &.up { color: @primary; }
+  &.down2 { color: #3b82f6; }
+}
+
+.changeDetail { font-size: 11px; color: @text-light; font-weight: 400; margin-left: 2px; }
+
+.periodSelect {
+  font-size: 12.5px;
+  color: @text-muted;
+  border: 1px solid @border;
+  border-radius: 7px;
+  background: #f9fafb;
+  padding: 4px 10px;
+  cursor: pointer;
+  &:hover { background: #f3f4f6; }
+}
+
+// Hoạt động
+.hoatDongCard {
+  background: #fff;
+  border-radius: @radius;
+  padding: 16px 18px;
+  border: 1px solid @border;
+  box-shadow: @shadow;
+}
+
+.hoatDongScroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  &::-webkit-scrollbar { height: 3px; }
+  &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
+}
+
+.hoatDongItem {
+  background: #f9fafb;
+  border: 1px solid @border;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 200px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  &:hover { border-color: #d1d5db; background: #fff; }
+}
+
+.hdIconWrap {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.hdInfo { flex: 1; min-width: 0; }
+
+.hdTitle { font-size: 13px; font-weight: 600; color: @text-dark; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.hdMota { font-size: 12px; color: @text-muted; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.hdTime { font-size: 11px; color: @text-light; }
+
+.hdArrow { font-size: 11px; color: @text-light; margin-top: 3px; flex-shrink: 0; }
+
+// ────────────────────────────────────────────────────────────
+// TAB TÁC NGHIỆP
+// ────────────────────────────────────────────────────────────
+.tnWrap { display: flex; flex-direction: column; gap: 14px; }
+
+// Stat cards grid
+.tnStatGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.tnStatCard {
+  background: #fff;
+  border: 1px solid @border;
+  border-radius: @radius;
+  padding: 16px 18px;
+  box-shadow: @shadow;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tnStatTop { display: flex; align-items: center; justify-content: space-between; }
+
+.tnStatLabel { font-size: 12.5px; color: @text-muted; font-weight: 500; }
+
+.tnStatIcon {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.tnStatValue { font-size: 24px; font-weight: 800; color: @text-dark; line-height: 1.1; }
+
+.tnStatChange {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 12px; font-weight: 500;
+  span { font-size: 12px; }
+}
+
+.tnUp { color: @primary; }
+.tnDown { color: #ef4444; }
+
+// Info cards grid
+.tnInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.tnInfoCard {
+  background: #fff;
+  border: 1px solid @border;
+  border-radius: @radius;
+  padding: 14px 16px;
+  box-shadow: @shadow;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tnInfoTitle { font-size: 12.5px; font-weight: 600; color: @text-muted; }
+
+.tnCompletion { display: flex; align-items: center; gap: 12px; }
+
+.tnBestDish { display: flex; align-items: center; gap: 10px; }
+
+.tnDishImg { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+
+.tnDishName { font-size: 13px; font-weight: 600; color: @text-dark; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.tnDishSold { font-size: 12px; color: @text-muted; }
+
+.tnTopBadge {
+  display: flex; align-items: center;
+  font-size: 11px; font-weight: 700;
+  color: #ef4444;
+  background: #fef2f2;
+  border-radius: 20px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+
+.tnPromo { display: flex; align-items: flex-start; gap: 10px; }
+
+.tnPromoIcon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  background: @primary-light;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.tnPromoName { font-size: 13px; font-weight: 600; color: @text-dark; margin-bottom: 2px; }
+
+.tnPromoLeft { font-size: 12px; color: @text-muted; margin-bottom: 4px; }
+
+.tnPromoLink { font-size: 12px; color: @primary; font-weight: 500; &:hover { color: #15803d; } }
+
+.tnSatisfy { display: flex; align-items: flex-start; gap: 10px; }
+
+.tnSatisfyIcon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  background: #fefce8;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.tnSatisfyScore { font-size: 20px; font-weight: 800; color: @text-dark; line-height: 1.1; }
+
+.tnSatisfyDesc { font-size: 11px; color: @text-muted; margin-bottom: 4px; }
+
+// Charts row
+.tnChartRow {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 14px;
+}
+
+.tnChartCard {
+  background: #fff;
+  border: 1px solid @border;
+  border-radius: @radius;
+  padding: 16px 18px;
+  box-shadow: @shadow;
+}
+
+.tnChartHead { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 4px; }
+
+.tnChartTitle { font-size: 14px; font-weight: 700; color: @text-dark; }
+
+.tnChartSub { font-size: 12px; color: @text-muted; margin-top: 2px; strong { color: @primary; } }
+
+.tnDonutWrap { display: flex; align-items: center; gap: 10px; }
+
+.tnDonutLeg { display: flex; flex-direction: column; gap: 7px; flex: 1; }
+
+.tnLegRow { display: flex; align-items: center; gap: 7px; }
+
+.tnLegDot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+.tnLegLabel { flex: 1; font-size: 12.5px; color: @text-mid; }
+
+.tnLegVal { font-size: 13px; font-weight: 700; color: @text-dark; }
+
+.tnViewAll {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: @primary;
+  font-weight: 500;
+  &:hover { color: #15803d; }
+}
+
+// Data row (table + top list)
+.tnDataRow {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 14px;
+}
+
+.tnTableCard, .tnTopCard {
+  background: #fff;
+  border: 1px solid @border;
+  border-radius: @radius;
+  padding: 16px 18px;
+  box-shadow: @shadow;
+}
+
+.tnTableHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.tnTableTitle { font-size: 14px; font-weight: 700; color: @text-dark; }
+
+.tnTable {
+  width: 100%;
+  border-collapse: collapse;
+  th {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: @text-light;
+    letter-spacing: 0.04em;
+    padding: 4px 8px 8px;
+    border-bottom: 1px solid @border;
+    text-align: left;
+    white-space: nowrap;
+  }
+  td {
+    padding: 9px 8px;
+    font-size: 13px;
+    color: @text-mid;
+    border-bottom: 1px solid #f9fafb;
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+}
+
+.tnMaDon { font-size: 12px; font-weight: 700; color: @text-dark; font-family: monospace; }
+.tnKH { font-size: 13px; font-weight: 500; color: @text-dark; }
+.tnPhong { font-size: 11.5px; color: @text-muted; }
+.tnMon { font-size: 12.5px; color: @text-mid; }
+.tnTien { font-size: 13px; font-weight: 700; color: @text-dark; white-space: nowrap; }
+.tnGio { font-size: 12px; color: @text-muted; }
+
+// Top list
+.tnTopList { display: flex; flex-direction: column; gap: 10px; }
+
+.tnTopRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f9fafb;
+  &:last-child { border-bottom: none; }
+}
+
+.tnTopRank { font-size: 18px; font-weight: 800; min-width: 24px; text-align: center; }
+
+.tnTopImg { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+
+.tnTopName { flex: 1; font-size: 13.5px; font-weight: 500; color: @text-dark; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.tnTopSuat { font-size: 12.5px; font-weight: 700; white-space: nowrap; }
+
+// Placeholder tab
+.placeholderTab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: @text-light;
+  p { font-size: 15px; color: @text-muted; }
+}
+
+// ── Responsive ──────────────────────────────────────────────
+@media (max-width: 1200px) {
+  .kanbanBoard { grid-template-columns: repeat(2, 1fr); }
+  .chartRow2 { grid-template-columns: 1fr; }
+  .bottomRow { grid-template-columns: 1fr; }
+  .tnStatGrid { grid-template-columns: repeat(2, 1fr); }
+  .tnInfoGrid { grid-template-columns: repeat(2, 1fr); }
+  .tnChartRow { grid-template-columns: 1fr; }
+  .tnDataRow { grid-template-columns: 1fr; }
 }

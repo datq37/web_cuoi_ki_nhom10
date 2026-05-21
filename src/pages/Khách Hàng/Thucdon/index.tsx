@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { useModel } from 'umi';
-import { CalendarDays, CheckCircle2, ChevronRight } from 'lucide-react';
-import { EmployeeMenuProps } from '@/services/Khách hàng/Thực đơn/typing';
+import { CheckCircle2 } from 'lucide-react';
 import MenuHero from './component/Hero';
 import DayTabs from './component/DateTabs';
 import CategoryBar from './component/CategoryBar';
 import DishCard from './component/DishCard';
 import DishDetailModal from './component/DishDetailModal';
 import './index.less';
+
+interface EmployeeMenuProps {
+    onOpenCart: () => void;
+    ordersToday: number;
+}
 
 const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) => {
     const {
@@ -44,16 +48,11 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
                         <strong>Đặt trước dễ dàng</strong>
                         <span>Tiết kiệm thời gian chờ đợi</span>
                     </div>
-                    <ChevronRight size={18} />
                 </div>
             </div>
             <MenuHero orders={ordersToday} totalDishes={filteredMenu.length} />
             <div className="schedule-row">
                 <DayTabs selected={day} onSelect={setDay} />
-                <button className="week-button">
-                    <CalendarDays size={16} />
-                    Lịch tuần
-                </button>
             </div>
             <CategoryBar />
             <div className="menu-grid">

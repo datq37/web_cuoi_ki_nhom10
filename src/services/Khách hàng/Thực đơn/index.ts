@@ -7,7 +7,6 @@ export type {
   Dish,
   DishCardProps,
   DishDetailModalProps,
-  EmployeeMenuProps,
   MenuHeroProps,
   Review,
   WeekDay,

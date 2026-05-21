@@ -191,7 +191,7 @@
   .schedule-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 16px;
     margin-bottom: 22px;
   }
@@ -255,30 +255,6 @@
 
     &:hover:not(.active) {
       background: var(--bg-soft);
-      transform: translateY(-1px);
-    }
-  }
-
-  .week-button {
-    display: inline-flex;
-    flex: 0 0 auto;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: 42px;
-    padding: 0 18px;
-    color: var(--accent);
-    font-size: 13px;
-    font-weight: 800;
-    background: var(--bg-elev);
-    border: none;
-    border-radius: 999px;
-    box-shadow: none;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
-
-    &:hover {
-      background: var(--accent-soft);
       transform: translateY(-1px);
     }
   }
@@ -682,9 +658,6 @@
       min-height: 42px;
     }
 
-    .week-button {
-      align-self: flex-end;
-    }
   }
 }
 
@@ -835,11 +808,6 @@
     .day-tab {
       width: 76px;
       height: 68px;
-    }
-
-    .week-button {
-      align-self: stretch;
-      min-height: 44px;
     }
 
     .menu-grid {

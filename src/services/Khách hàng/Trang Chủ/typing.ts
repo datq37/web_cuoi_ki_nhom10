@@ -50,6 +50,9 @@ export interface StepCardProps {
 /* Banner */
 export interface BannerProps {
   setPage: (page: string) => void;
+  todayDishCount: number;
+  activeOfferCount: number;
+  placedOrderCount: number;
 }
 
 /* Danh mục và Bán chạy */

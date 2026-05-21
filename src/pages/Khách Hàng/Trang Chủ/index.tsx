@@ -5,6 +5,7 @@ import Banner from './Components/Banner';
 import MenuAndBestSellers from './Components/Danh mục và Bán chạy';
 import OrderSteps from './Components/Quy trình';
 import OffersAndCombos from './Components/Ưu đãi';
+import homeBackground from '@/assets/Khách Hàng/Trang chủ/Backgroud.png';
 import './index.less';
 
 const CustomerHome: React.FC = () => {
@@ -16,13 +17,24 @@ const CustomerHome: React.FC = () => {
     selectedDish,
     setSelectedDish,
     bestSellingDishes,
+    todayDishCount,
+    activeOfferCount,
+    placedOrderCount,
     cartQty,
     getDishImage,
   } = useModel('Khách Hàng.Trang Chủ.index');
 
   return (
-    <div className="customer-home-page">
-      <Banner setPage={setPage} />
+    <div
+      className="customer-home-page"
+      style={{ backgroundImage: `url("${homeBackground}")` }}
+    >
+      <Banner
+        setPage={setPage}
+        todayDishCount={todayDishCount}
+        activeOfferCount={activeOfferCount}
+        placedOrderCount={placedOrderCount}
+      />
 
       <div className="home-main-grid">
         <div className="home-main-left">

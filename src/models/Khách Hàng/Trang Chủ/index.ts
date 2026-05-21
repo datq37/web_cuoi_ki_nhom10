@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useModel } from 'umi';
 import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
+import { SEED_VOUCHERS } from '@/services/Khách hàng/Giỏ hàng/cartoption';
 import type { Dish } from '@/services/Khách hàng/Thực đơn/typing';
 import comPhan from '@/assets/Khách Hàng/Trang chủ/com_phan_no_text.png';
 import bunPho from '@/assets/Khách Hàng/Trang chủ/bun_pho_no_text.png';
@@ -11,6 +12,7 @@ import chaySalad from '@/assets/Khách Hàng/Trang chủ/chay_salad_no_text.png'
 export default function useTrangChuModel() {
     const { setPage } = useModel('Khách Hàng.global') as any;
     const { cart, addToCart, incCart, decCart } = useModel('Khách Hàng.Thực đơn.index') as any;
+    const { orders } = useModel('Khách Hàng.Orders') as any;
     const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
 
     const bestSellingDishes = useMemo(
@@ -40,6 +42,9 @@ export default function useTrangChuModel() {
         selectedDish,
         setSelectedDish,
         bestSellingDishes,
+        todayDishCount: SEED_MENU.length,
+        activeOfferCount: SEED_VOUCHERS.length,
+        placedOrderCount: orders.length,
         cartQty,
         getDishImage,
     };

@@ -1,8 +1,6 @@
 import React from 'react';
 import { useModel } from 'umi';
 import type { DayTabsProps } from '@/services/Khách hàng/Thực đơn/DateTabs/typing';
-
-// ─── Tab chọn ngày trong tuần — lấy danh sách ngày từ model ─────────────────
 const DayTabs: React.FC<DayTabsProps> = ({ selected, onSelect }) => {
     const { days } = useModel('Khách Hàng.Thực đơn.index');
 

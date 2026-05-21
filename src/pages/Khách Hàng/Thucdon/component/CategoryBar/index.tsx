@@ -13,8 +13,6 @@ import {
 } from 'lucide-react';
 import { MENU_CATEGORIES } from '@/services/Khách hàng/Thực đơn';
 import { useModel } from 'umi';
-
-// Bảng ánh xạ tên icon sang component lucide tương ứng
 const IconMap: Record<string, React.ReactNode> = {
     AppstoreOutlined: <Grid2X2 size={15} />,
     CoffeeOutlined: <Beef size={15} />,
@@ -24,8 +22,6 @@ const IconMap: Record<string, React.ReactNode> = {
     FireOutlined: <Flame size={15} />,
     RestOutlined: <Coffee size={15} />,
 };
-
-// ─── Thanh tìm kiếm và lọc theo danh mục món ăn ─────────────────────────────
 const CategoryBar: React.FC = () => {
     const {
         activeCategory,
@@ -37,7 +33,6 @@ const CategoryBar: React.FC = () => {
 
     return (
         <div className="filter-section">
-            {/* Ô tìm kiếm theo tên món */}
             <div className="search-box">
                 <Search className="search-icon" size={18} />
                 <input
@@ -56,8 +51,6 @@ const CategoryBar: React.FC = () => {
                     </button>
                 )}
             </div>
-
-            {/* Chip lọc theo danh mục */}
             <div className="category-bar">
                 {MENU_CATEGORIES.map(cat => (
                     <button

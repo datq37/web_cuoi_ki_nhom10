@@ -6,6 +6,7 @@ import DayTabs from './component/DateTabs';
 import CategoryBar from './component/CategoryBar';
 import DishCard from './component/DishCard';
 import DishDetailModal from './component/DishDetailModal';
+import menuBackground from '@/assets/Khách Hàng/Thực đơn /Backgroud.png';
 import './index.less';
 
 interface EmployeeMenuProps {
@@ -33,7 +34,10 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
     };
 
     return (
-        <div className="employee-menu-container">
+        <div
+            className="employee-menu-container"
+            style={{ backgroundImage: `url("${menuBackground}")` }}
+        >
 
             <div className="page-header">
                 <div>

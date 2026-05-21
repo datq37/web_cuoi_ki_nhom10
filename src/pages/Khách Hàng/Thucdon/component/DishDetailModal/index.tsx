@@ -30,26 +30,18 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
     return (
         <div className="ddm-backdrop" onClick={handleBackdrop}>
             <div className="ddm-sheet">
-                {/* ── Hero image ── */}
                 <div className="ddm-hero">
                     <div className="ddm-hero-emoji">{dish.emoji}</div>
-
-                    {/* Tags */}
                     <div className="ddm-hero-tags">
                         {dish.tags.map((t) => (
                             <span key={t} className={`ddm-tag ${t}`}>{t.toUpperCase()}</span>
                         ))}
                     </div>
-
-                    {/* Close button */}
                     <button className="ddm-close" onClick={onClose}>
                         <CloseOutlined />
                     </button>
                 </div>
-
-                {/* ── Scrollable body ── */}
                 <div className="ddm-body">
-                    {/* Name & rating row */}
                     <div className="ddm-title-row">
                         <h2 className="ddm-name">{dish.name}</h2>
                         <span className="ddm-rating-badge">
@@ -57,17 +49,12 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
                         </span>
                     </div>
 
-                    {/* Meta chips */}
                     <div className="ddm-meta">
                         <span><ClockCircleOutlined /> {dish.prep} phút</span>
                         <span><ThunderboltOutlined /> {dish.kcal} kcal</span>
                         <span><FireOutlined /> {dish.sold} đã bán</span>
                     </div>
-
-                    {/* Description */}
                     <p className="ddm-desc">{dish.desc}</p>
-
-                    {/* Ingredients */}
                     <div className="ddm-ingredients">
                         <span className="ddm-section-label">Nguyên liệu</span>
                         <div className="ddm-ing-chips">
@@ -76,11 +63,7 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
                             ))}
                         </div>
                     </div>
-
-                    {/* Divider */}
                     <div className="ddm-divider" />
-
-                    {/* Reviews */}
                     <div className="ddm-reviews">
                         <span className="ddm-section-label">
                             Bình luận
@@ -106,8 +89,6 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
                         )}
                     </div>
                 </div>
-
-                {/* ── Sticky footer ── */}
                 <div className="ddm-footer">
                     <div className="ddm-price-block">
                         <span className="ddm-price">{dish.price.toLocaleString('vi-VN')}</span>

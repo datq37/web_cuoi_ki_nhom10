@@ -8,7 +8,6 @@ import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import { ETabKey } from '@/services/Quản Trị/Tổng Quan/typing';
 import TacNghiepView from './components/TacNghiep';
-import TrucTiepView  from './components/TrucTiep';
 import PhanTichView  from './components/PhanTich';
 import styles from './index.less';
 
@@ -20,7 +19,6 @@ const TongQuan: React.FC = () => {
   const tabs: { key: ETabKey; label: string }[] = [
     { key: ETabKey.TAC_NGHIEP, label: 'Tác nghiệp' },
     { key: ETabKey.PHAN_TICH,  label: 'Phân tích' },
-    { key: ETabKey.TRUC_TIEP,  label: 'Trực tiếp' },
   ];
 
   return (
@@ -55,7 +53,6 @@ const TongQuan: React.FC = () => {
           </div>
 
           {/* ── Content ── */}
-          {activeTab === ETabKey.TRUC_TIEP  && <TrucTiepView />}
           {activeTab === ETabKey.PHAN_TICH  && <PhanTichView />}
           {activeTab === ETabKey.TAC_NGHIEP && <TacNghiepView />}
         </div>

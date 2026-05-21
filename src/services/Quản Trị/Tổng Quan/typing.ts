@@ -2,7 +2,6 @@
 export enum ETabKey {
   TAC_NGHIEP = 'tac_nghiep',
   PHAN_TICH  = 'phan_tich',
-  TRUC_TIEP  = 'truc_tiep',
 }
 
 export enum ETrangThaiTrucTiep {

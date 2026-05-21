@@ -12,6 +12,7 @@ import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
 import OrderTracker from './component/OrderTracker';
 import RatingPage from '../Đánh Giá';
 import orderBackground from '@/assets/Khách Hàng/Đơn hàng/Backgroud.png';
+import { getPageBackground } from '../themeBackground';
 import './index.less';
 
 const formatVND = (n: number) => new Intl.NumberFormat('vi-VN').format(n);
@@ -20,7 +21,7 @@ const getDish = (id: string) => SEED_MENU.find(d => d.id === id);
 const HistoryPage: React.FC = () => {
     const { orders, advanceOrder } = useModel('Khách Hàng.Orders');
     const { setSearchQuery, setActiveCategory } = useModel('Khách Hàng.Thực đơn.index');
-    const { setPage } = useModel('Khách Hàng.global');
+    const { setPage, theme } = useModel('Khách Hàng.global');
     const [filter, setFilter] = useState('active');
     const [ratingOrder, setRatingOrder] = useState<any>(null);
 
@@ -47,7 +48,7 @@ const HistoryPage: React.FC = () => {
     return (
         <div
             className="history-page-container"
-            style={{ backgroundImage: `url("${orderBackground}")` }}
+            style={{ backgroundImage: getPageBackground(orderBackground, theme) }}
         >
             <div className="page-header">
                 <div>

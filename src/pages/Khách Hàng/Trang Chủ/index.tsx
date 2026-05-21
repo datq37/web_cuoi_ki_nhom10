@@ -6,9 +6,11 @@ import MenuAndBestSellers from './Components/Danh mục và Bán chạy';
 import OrderSteps from './Components/Quy trình';
 import OffersAndCombos from './Components/Ưu đãi';
 import homeBackground from '@/assets/Khách Hàng/Trang chủ/Backgroud.png';
+import { getPageBackground } from '../themeBackground';
 import './index.less';
 
 const CustomerHome: React.FC = () => {
+  const { theme } = useModel('Khách Hàng.global');
   const {
     setPage,
     addToCart,
@@ -27,7 +29,7 @@ const CustomerHome: React.FC = () => {
   return (
     <div
       className="customer-home-page"
-      style={{ backgroundImage: `url("${homeBackground}")` }}
+      style={{ backgroundImage: getPageBackground(homeBackground, theme) }}
     >
       <Banner
         setPage={setPage}

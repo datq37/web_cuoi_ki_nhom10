@@ -7,6 +7,7 @@ import CategoryBar from './component/CategoryBar';
 import DishCard from './component/DishCard';
 import DishDetailModal from './component/DishDetailModal';
 import menuBackground from '@/assets/Khách Hàng/Thực đơn /Backgroud.png';
+import { getPageBackground } from '../themeBackground';
 import './index.less';
 
 interface EmployeeMenuProps {
@@ -23,6 +24,7 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
         filteredMenu,
         todayTabIndex,
     } = useModel('Khách Hàng.Thực đơn.index');
+    const { theme } = useModel('Khách Hàng.global');
     const [day, setDay] = useState(todayTabIndex);
     const [selectedDish, setSelectedDish] = useState<any>(null);
 
@@ -36,7 +38,7 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
     return (
         <div
             className="employee-menu-container"
-            style={{ backgroundImage: `url("${menuBackground}")` }}
+            style={{ backgroundImage: getPageBackground(menuBackground, theme) }}
         >
 
             <div className="page-header">

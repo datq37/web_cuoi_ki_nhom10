@@ -11,6 +11,7 @@ import { ORDER_STATUSES, PAYMENT_METHODS } from '@/services/Khách hàng/Orders/
 import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
 import OrderTracker from './component/OrderTracker';
 import RatingPage from '../Đánh Giá';
+import orderBackground from '@/assets/Khách Hàng/Đơn hàng/Backgroud.png';
 import './index.less';
 
 const formatVND = (n: number) => new Intl.NumberFormat('vi-VN').format(n);
@@ -44,7 +45,10 @@ const HistoryPage: React.FC = () => {
     };
 
     return (
-        <div className="history-page-container">
+        <div
+            className="history-page-container"
+            style={{ backgroundImage: `url("${orderBackground}")` }}
+        >
             <div className="page-header">
                 <div>
                     <h1 className="page-title">Đơn của tôi</h1>

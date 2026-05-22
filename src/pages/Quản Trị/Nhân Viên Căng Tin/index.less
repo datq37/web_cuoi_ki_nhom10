@@ -1,0 +1,199 @@
+@bg: #f8fafc;
+@sidebar-w: 260px;
+@primary: #16a34a;
+@radius: 16px;
+@border: #f1f5f9;
+
+// ── Layout ──────────────────────────────────────────────────────
+.adminLayout { display: flex; min-height: 100vh; background: @bg; }
+
+.mainContent {
+  margin-left: @sidebar-w;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 0;
+}
+
+.pageBody {
+  padding: 20px 24px 32px;
+  flex: 1;
+}
+
+// ── Grid ─────────────────────────────────────────────────────────
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+
+  @media (max-width: 1200px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 700px)  { grid-template-columns: 1fr; }
+}
+
+// ── Staff card ───────────────────────────────────────────────────
+.card {
+  background: #fff;
+  border-radius: @radius;
+  padding: 22px 20px 18px;
+  border: 1px solid @border;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: box-shadow 0.2s, transform 0.2s;
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,.08);
+    transform: translateY(-2px);
+  }
+}
+
+// Header
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  flex-shrink: 0;
+}
+
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.cardName {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardEmail {
+  font-size: 12.5px;
+  color: #9ca3af;
+}
+
+// Meta row
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.roleBadge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.lastActive {
+  font-size: 12.5px;
+  color: #9ca3af;
+}
+
+// Action buttons
+.cardActions {
+  display: flex;
+  gap: 10px;
+  padding-top: 2px;
+}
+
+.actionBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 0;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    background: #f0fdf4;
+    border-color: @primary;
+    color: @primary;
+  }
+}
+
+.actionIcon {
+  font-size: 13px;
+}
+
+// ── Add member card ──────────────────────────────────────────────
+.addCard {
+  background: transparent;
+  border-radius: @radius;
+  border: 2px dashed #d1d5db;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 36px 20px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  min-height: 180px;
+
+  &:hover {
+    border-color: @primary;
+    background: #f0fdf4;
+
+    .addIconWrap {
+      background: @primary;
+
+      .addIcon { color: #fff; }
+    }
+
+    .addTitle { color: @primary; }
+  }
+}
+
+.addIconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #dcfce7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.addIcon {
+  font-size: 18px;
+  color: @primary;
+  transition: color 0.2s;
+}
+
+.addTitle {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #374151;
+  transition: color 0.2s;
+}
+
+.addSub {
+  font-size: 12.5px;
+  color: #9ca3af;
+  text-align: center;
+}

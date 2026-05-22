@@ -1,0 +1,32 @@
+import { ETrangThaiKhach, EVaiTro, IKhachHang, IStatKhach } from './typing';
+
+export const DANH_SACH_KHACH: IKhachHang[] = [
+  { id: 'kh1',  hoTen: 'Nguyễn Văn Hùng',  email: 'hung.nv@ct.vn',   vietTat: 'VH', mauNen: '#3b82f6', phongBan: 'IT',        vaiTro: EVaiTro.NHAN_VIEN,    soDon: 48, chiTieu: 1840000, thamGia: '12/3/2024',  trangThai: ETrangThaiKhach.HOAT_DONG },
+  { id: 'kh2',  hoTen: 'Trần Minh Anh',     email: 'anh.tm@ct.vn',    vietTat: 'MA', mauNen: '#f97316', phongBan: 'Marketing', vaiTro: EVaiTro.NHAN_VIEN,    soDon: 36, chiTieu: 1320000, thamGia: '4/5/2024',   trangThai: ETrangThaiKhach.HOAT_DONG },
+  { id: 'kh3',  hoTen: 'Lê Thị Hà',         email: 'ha.lt@ct.vn',     vietTat: 'TH', mauNen: '#0891b2', phongBan: 'Kế toán',   vaiTro: EVaiTro.TRUONG_PHONG, soDon: 52, chiTieu: 2100000, thamGia: '20/11/2023', trangThai: ETrangThaiKhach.HOAT_DONG },
+  { id: 'kh4',  hoTen: 'Phạm Quốc Bảo',     email: 'bao.pq@ct.vn',    vietTat: 'QB', mauNen: '#65a30d', phongBan: 'IT',        vaiTro: EVaiTro.NHAN_VIEN,    soDon: 29, chiTieu: 1080000, thamGia: '15/8/2024',  trangThai: ETrangThaiKhach.HOAT_DONG },
+  { id: 'kh5',  hoTen: 'Đỗ Phương Linh',    email: 'linh.dp@ct.vn',   vietTat: 'PL', mauNen: '#c026d3', phongBan: 'HR',        vaiTro: EVaiTro.NHAN_VIEN,    soDon: 22, chiTieu: 840000,  thamGia: '8/1/2025',   trangThai: ETrangThaiKhach.HOAT_DONG },
+  { id: 'kh6',  hoTen: 'Trần Minh Sơn',     email: 'son.tm@ct.vn',    vietTat: 'MS', mauNen: '#16a34a', phongBan: 'IT',        vaiTro: EVaiTro.NHAN_VIEN,    soDon: 64, chiTieu: 2460000, thamGia: '3/2/2024',   trangThai: ETrangThaiKhach.HOAT_DONG },
+  { id: 'kh7',  hoTen: 'Nguyễn Thị Kim',    email: 'kim.nt@ct.vn',    vietTat: 'NK', mauNen: '#e11d48', phongBan: 'Marketing', vaiTro: EVaiTro.NHAN_VIEN,    soDon: 18, chiTieu: 680000,  thamGia: '1/3/2025',   trangThai: ETrangThaiKhach.HOAT_DONG },
+  { id: 'kh8',  hoTen: 'Trần Văn Tú',       email: 'tu.tv@ct.vn',     vietTat: 'TV', mauNen: '#d97706', phongBan: 'Kế toán',   vaiTro: EVaiTro.TRUONG_PHONG, soDon: 41, chiTieu: 1580000, thamGia: '10/6/2023',  trangThai: ETrangThaiKhach.HOAT_DONG },
+  { id: 'kh9',  hoTen: 'Bùi Thị Hương',     email: 'huong.bt@ct.vn',  vietTat: 'BH', mauNen: '#64748b', phongBan: 'HR',        vaiTro: EVaiTro.NHAN_VIEN,    soDon: 15, chiTieu: 570000,  thamGia: '15/4/2025',  trangThai: ETrangThaiKhach.TAM_KHOA  },
+  { id: 'kh10', hoTen: 'Lưu Quang Định',    email: 'dinh.lq@ct.vn',   vietTat: 'LD', mauNen: '#4f46e5', phongBan: 'Marketing', vaiTro: EVaiTro.GIAM_DOC,     soDon: 78, chiTieu: 3040000, thamGia: '5/1/2023',   trangThai: ETrangThaiKhach.HOAT_DONG },
+];
+
+export const STAT_KHACH: IStatKhach = {
+  tongKhach: 24,
+  hoatDong:  22,
+  chiTieuTB: '1.2tr',
+  topTuan:   { ten: 'Trần Minh Sơn', soDon: 64 },
+};
+
+export const VAI_TRO_CONFIG: Record<EVaiTro, { label: string; color: string; bg: string }> = {
+  [EVaiTro.NHAN_VIEN]:    { label: 'Nhân viên',    color: '#374151', bg: '#f3f4f6' },
+  [EVaiTro.TRUONG_PHONG]: { label: 'Trưởng phòng', color: '#166534', bg: '#dcfce7' },
+  [EVaiTro.GIAM_DOC]:     { label: 'Giám đốc',     color: '#1e40af', bg: '#dbeafe' },
+};
+
+export const TRANG_THAI_KHACH_CONFIG: Record<ETrangThaiKhach, { label: string; color: string; bg: string }> = {
+  [ETrangThaiKhach.HOAT_DONG]: { label: 'Hoạt động', color: '#16a34a', bg: '#dcfce7' },
+  [ETrangThaiKhach.TAM_KHOA]:  { label: 'Tạm khóa',  color: '#6b7280', bg: '#f3f4f6' },
+};

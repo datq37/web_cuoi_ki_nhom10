@@ -1,0 +1,397 @@
+@bg: #f8fafc;
+@sidebar-w: 260px;
+@primary: #16a34a;
+@radius: 14px;
+@border: #f1f5f9;
+
+// ── Layout ──────────────────────────────────────────────────────
+.adminLayout { display: flex; min-height: 100vh; background: @bg; }
+
+.mainContent {
+  margin-left: @sidebar-w;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 0;
+}
+
+.pageBody {
+  padding: 20px 24px 32px;
+  flex: 1;
+}
+
+// ── Settings wrapper ─────────────────────────────────────────────
+.settingsWrap {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+// ── Left nav ─────────────────────────────────────────────────────
+.leftNav {
+  width: 240px;
+  flex-shrink: 0;
+  background: #fff;
+  border-radius: @radius;
+  border: 1px solid @border;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: #374151;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background 0.12s, color 0.12s;
+
+  &:hover {
+    background: #f8fafc;
+    color: #111827;
+  }
+}
+
+.navActive {
+  background: #f0fdf4 !important;
+  color: @primary !important;
+  font-weight: 600;
+
+  .navIcon { color: @primary !important; }
+}
+
+.navIcon {
+  font-size: 15px;
+  color: #6b7280;
+  width: 16px;
+  flex-shrink: 0;
+  transition: color 0.12s;
+}
+
+// ── Right content ────────────────────────────────────────────────
+.rightContent {
+  flex: 1;
+  background: #fff;
+  border-radius: @radius;
+  border: 1px solid @border;
+  min-width: 0;
+}
+
+.tabContent {
+  padding: 28px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contentTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.3;
+}
+
+.contentSub {
+  font-size: 13px;
+  color: #9ca3af;
+  margin-top: -14px;
+}
+
+// ── Logo section ─────────────────────────────────────────────────
+.logoSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #f5f0e8;
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+
+.logoIcon {
+  width: 56px;
+  height: 56px;
+  background: @primary;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logoMeta {
+  flex: 1;
+}
+
+.logoName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.logoHint {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 3px;
+}
+
+.btnOutline {
+  border-radius: 8px !important;
+  border-color: #d1d5db !important;
+  color: #374151 !important;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+// ── Form fields ───────────────────────────────────────────────────
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fieldFull { width: 100%; }
+
+.fieldRow {
+  display: flex;
+  gap: 16px;
+}
+
+.fieldHalf { flex: 1; min-width: 0; }
+
+.fieldLabel {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.required { color: #ef4444; margin-left: 2px; }
+
+.fieldInput {
+  border-radius: 8px !important;
+  border-color: #e5e7eb !important;
+  font-size: 13.5px;
+  height: 40px;
+
+  &:hover { border-color: #d1d5db !important; }
+  &:focus-within { border-color: @primary !important; box-shadow: 0 0 0 2px rgba(22,163,74,.1) !important; }
+
+  :global(.ant-input) { font-size: 13.5px; }
+  :global(.ant-input-password) { font-size: 13.5px; }
+}
+
+// ── Save row ──────────────────────────────────────────────────────
+.saveRow {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
+.btnSave {
+  background: @primary !important;
+  border-color: @primary !important;
+  border-radius: 9px !important;
+  font-weight: 600 !important;
+  padding: 0 28px !important;
+  height: 40px !important;
+
+  &:hover {
+    background: #15803d !important;
+    border-color: #15803d !important;
+  }
+}
+
+// ── Operating hours ───────────────────────────────────────────────
+.dayList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-radius: 12px;
+  border: 1px solid @border;
+  overflow: hidden;
+}
+
+.dayRow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  border-bottom: 1px solid @border;
+  transition: background 0.12s;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: #fafafa; }
+}
+
+.dayOff {
+  opacity: 0.45;
+}
+
+.dayLabel {
+  width: 90px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  flex-shrink: 0;
+}
+
+.timeInput {
+  width: 110px !important;
+  border-radius: 8px !important;
+  border-color: #e5e7eb !important;
+  font-size: 14px !important;
+  font-weight: 500;
+  text-align: center;
+  height: 40px;
+
+  :global(.ant-input) {
+    text-align: center;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  &:hover { border-color: #d1d5db !important; }
+}
+
+.timeDash {
+  font-size: 16px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+// ── Payment ───────────────────────────────────────────────────────
+.payList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-radius: 12px;
+  border: 1px solid @border;
+  overflow: hidden;
+}
+
+.payRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-bottom: 1px solid @border;
+  transition: background 0.12s;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: #fafafa; }
+}
+
+.payIconWrap {
+  width: 44px;
+  height: 44px;
+  background: #f1f5f9;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.payInfo { flex: 1; }
+
+.payName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.payMoTa {
+  font-size: 12.5px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+// ── Notifications ─────────────────────────────────────────────────
+.notifList {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  border: 1px solid @border;
+  overflow: hidden;
+}
+
+.notifRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  transition: background 0.12s;
+
+  &:hover { background: #fafafa; }
+}
+
+.notifBorder { border-bottom: 1px solid @border; }
+
+.notifInfo { flex: 1; }
+
+.notifName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.notifMoTa {
+  font-size: 12.5px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+// ── Security ──────────────────────────────────────────────────────
+.securityList {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  border: 1px solid @border;
+  overflow: hidden;
+}
+
+.secRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  border-bottom: 1px solid @border;
+  transition: background 0.12s;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: #fafafa; }
+}
+
+.secInfo { flex: 1; }
+
+.secName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.secMoTa {
+  font-size: 12.5px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+// ── Global switch color ───────────────────────────────────────────
+:global(.ant-switch-checked) {
+  background: @primary !important;
+}

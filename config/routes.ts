@@ -52,8 +52,16 @@ export default [
 				component: './Quản Trị/Khuyến Mãi',
 			},
 			{
-				path: '/quan-tri/nguoi-dung',
-				component: './Quản Trị/Người Dùng',
+				path: '/quan-tri/khach-hang',
+				component: './Quản Trị/Khách Hàng',
+			},
+			{
+				path: '/quan-tri/nhan-vien',
+				component: './Quản Trị/Nhân Viên Căng Tin',
+			},
+			{
+				path: '/quan-tri/cai-dat',
+				component: './Quản Trị/Cài Đặt',
 			},
 			{
 				path: '/quan-tri',

@@ -29,7 +29,7 @@ const MENU_QUAN_LY = [
   { key: '/quan-tri/quan-ly-mon',  icon: <ForkKnifeIcon />,      label: 'Quản lý món' },
   { key: '/quan-tri/kho-nguyen-lieu', icon: <InboxOutlined />,   label: 'Kho nguyên liệu' },
   { key: '/quan-tri/khuyen-mai',   icon: <TagOutlined />,        label: 'Khuyến mãi' },
-  { key: '/quan-tri/nguoi-dung',   icon: <UserOutlined />,       label: 'Khách hàng' },
+  { key: '/quan-tri/khach-hang',    icon: <UserOutlined />,       label: 'Khách hàng' },
   { key: '/quan-tri/nhan-vien',    icon: <UserSwitchOutlined />, label: 'Nhân viên căng tin' },
 ];
 

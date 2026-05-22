@@ -1,46 +1,57 @@
 import {
   AppstoreOutlined,
-  BarChartOutlined,
   InboxOutlined,
   LeftOutlined,
   LogoutOutlined,
-  QuestionCircleOutlined,
-  RightOutlined,
+  ReloadOutlined,
   SearchOutlined,
   SettingOutlined,
-  ShoppingCartOutlined,
+  ShoppingOutlined,
   TagOutlined,
-  TeamOutlined,
-  UnorderedListOutlined,
+  UserOutlined,
+  UserSwitchOutlined,
 } from '@ant-design/icons';
-import { Avatar, Badge, Input } from 'antd';
+import { Avatar, Badge } from 'antd';
 import React from 'react';
 import { history, useLocation } from 'umi';
 import styles from './index.less';
 
+// Fork+knife SVG vì AntD không có icon utensils
+const ForkKnifeIcon = () => (
+  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+    <path d="M18 3v4c0 1.1-.9 2-2 2h-1v12h-2V9h-1c-1.1 0-2-.9-2-2V3h2v3h1V3h2v3h1V3h2zM8 3H6C4.9 3 4 3.9 4 5v6c0 1.1.9 2 2 2h1v8h2V3z" />
+  </svg>
+);
+
 const MENU_QUAN_LY = [
-  { key: '/quan-tri/tong-quan', icon: <AppstoreOutlined />, label: 'Tổng quan' },
-  { key: '/quan-tri/don-hang', icon: <ShoppingCartOutlined />, label: 'Đơn hàng', badge: 5 },
-  { key: '/quan-tri/quan-ly-mon', icon: <UnorderedListOutlined />, label: 'Quản lý món' },
-  { key: '/quan-tri/kho-nguyen-lieu', icon: <InboxOutlined />, label: 'Kho nguyên liệu' },
-  { key: '/quan-tri/khuyen-mai', icon: <TagOutlined />, label: 'Khuyến mãi' },
-  { key: '/quan-tri/nguoi-dung', icon: <TeamOutlined />, label: 'Người dùng' },
-  { key: '/quan-tri/bao-cao', icon: <BarChartOutlined />, label: 'Báo cáo' },
+  { key: '/quan-tri/tong-quan',    icon: <AppstoreOutlined />,   label: 'Tổng quan' },
+  { key: '/quan-tri/don-hang',     icon: <ShoppingOutlined />,   label: 'Đơn hàng', badge: 5 },
+  { key: '/quan-tri/quan-ly-mon',  icon: <ForkKnifeIcon />,      label: 'Quản lý món' },
+  { key: '/quan-tri/kho-nguyen-lieu', icon: <InboxOutlined />,   label: 'Kho nguyên liệu' },
+  { key: '/quan-tri/khuyen-mai',   icon: <TagOutlined />,        label: 'Khuyến mãi' },
+  { key: '/quan-tri/nguoi-dung',   icon: <UserOutlined />,       label: 'Khách hàng' },
+  { key: '/quan-tri/nhan-vien',    icon: <UserSwitchOutlined />, label: 'Nhân viên căng tin' },
 ];
 
 const MENU_KHAC = [
   { key: '/quan-tri/cai-dat', icon: <SettingOutlined />, label: 'Cài đặt' },
-  { key: '/quan-tri/ho-tro', icon: <QuestionCircleOutlined />, label: 'Trung tâm hỗ trợ', hasArrow: true },
 ];
 
 const Sidebar: React.FC = () => {
-  const location = useLocation();
+  const location  = useLocation();
   const currentPath = location.pathname;
 
   const handleNav = (path: string) => history.push(path);
 
   return (
     <aside className={styles.sidebar}>
+      {/* Reload icon */}
+      <div className={styles.reloadRow}>
+        <button className={styles.reloadBtn} title="Tải lại">
+          <ReloadOutlined />
+        </button>
+      </div>
+
       {/* Logo */}
       <div className={styles.logoSection}>
         <div className={styles.logoWrapper}>
@@ -51,26 +62,21 @@ const Sidebar: React.FC = () => {
           </div>
           <div className={styles.logoText}>
             <span className={styles.brandName}>Căng tin</span>
-            <span className={styles.brandSub}>Admin · Tòa nhà A</span>
+            <span className={styles.brandSub}>Admin · Toà nhà A</span>
           </div>
         </div>
-        <button className={styles.collapseBtn} aria-label="Thu gọn menu">
-          <LeftOutlined />
-        </button>
       </div>
 
       {/* Search */}
       <div className={styles.searchSection}>
-        <Input
-          prefix={<SearchOutlined className={styles.searchIcon} />}
-          placeholder="Tìm kiếm menu..."
-          suffix={<span className={styles.searchShortcut}>⌘K</span>}
-          className={styles.searchInput}
-          readOnly
-        />
+        <div className={styles.searchBox}>
+          <SearchOutlined className={styles.searchIcon} />
+          <span className={styles.searchPlaceholder}>Tìm kiếm...</span>
+          <span className={styles.searchShortcut}>⌘K</span>
+        </div>
       </div>
 
-      {/* Menu chính */}
+      {/* Menu */}
       <nav className={styles.menuSection}>
         <span className={styles.groupLabel}>QUẢN LÝ</span>
         <ul className={styles.menuList}>
@@ -82,7 +88,9 @@ const Sidebar: React.FC = () => {
             >
               <span className={styles.menuIcon}>{item.icon}</span>
               <span className={styles.menuLabel}>{item.label}</span>
-              {item.badge && <Badge count={item.badge} className={styles.badge} />}
+              {item.badge && (
+                <Badge count={item.badge} className={styles.badge} />
+              )}
             </li>
           ))}
         </ul>
@@ -97,7 +105,6 @@ const Sidebar: React.FC = () => {
             >
               <span className={styles.menuIcon}>{item.icon}</span>
               <span className={styles.menuLabel}>{item.label}</span>
-              {item.hasArrow && <RightOutlined className={styles.menuArrow} />}
             </li>
           ))}
         </ul>
@@ -111,11 +118,15 @@ const Sidebar: React.FC = () => {
             <span className={styles.userName}>Nguyễn Minh Tâm</span>
             <span className={styles.userRole}>Quản trị viên</span>
           </div>
-          <RightOutlined className={styles.userArrow} />
+          <button className={styles.logoutBtn} title="Đăng xuất">
+            <LogoutOutlined />
+          </button>
         </div>
-        <button className={styles.logoutBtn}>
-          <LogoutOutlined />
-          <span>Đăng xuất</span>
+
+        <button className={styles.collapseBtn}>
+          <LeftOutlined />
+          <LeftOutlined />
+          <span>Thu gọn</span>
         </button>
       </div>
     </aside>

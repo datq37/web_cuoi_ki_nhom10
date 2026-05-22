@@ -1,3 +1,348 @@
-.container {
-  padding: 24px;
+@bg: #f8fafc;
+@sidebar-w: 260px;
+@primary: #16a34a;
+@radius: 12px;
+
+// ── Layout ──────────────────────────────────────────────────────
+.adminLayout { display: flex; min-height: 100vh; background: @bg; }
+
+.mainContent {
+  margin-left: @sidebar-w;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 0;
+}
+
+.pageBody {
+  padding: 16px 20px 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// ── Stat cards ───────────────────────────────────────────────────
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+
+  @media (max-width: 1100px) { grid-template-columns: repeat(2, 1fr); }
+}
+
+.statCard {
+  background: #fff;
+  border-radius: @radius;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+}
+
+.statLeft { display: flex; flex-direction: column; gap: 6px; }
+
+.statLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.statValue {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1;
+}
+
+.statSub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.statSubDown {
+  color: #ef4444;
+}
+
+.statIconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+// ── Warning banner ────────────────────────────────────────────────
+.warnBanner {
+  background: #fefce8;
+  border: 1px solid #fde68a;
+  border-radius: @radius;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.warnLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: #92400e;
+
+  strong { color: #78350f; }
+}
+
+.warnIcon {
+  font-size: 17px;
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+.btnTaoDon {
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  transition: all 0.15s;
+
+  &:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+  }
+}
+
+// ── Table section ─────────────────────────────────────────────────
+.tableSection {
+  background: #fff;
+  border-radius: @radius;
+  border: 1px solid #f1f5f9;
+  overflow: hidden;
+}
+
+.tableToolbar {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.searchInput {
+  width: 280px;
+  border-radius: 8px !important;
+
+  :global(.ant-input-prefix) { margin-right: 6px; }
+}
+
+.searchIcon { color: #9ca3af; }
+
+.tableActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btnOutline {
+  border-radius: 8px !important;
+  font-weight: 500;
+  color: #374151;
+  border-color: #d1d5db !important;
+}
+
+.addBtn {
+  background: @primary !important;
+  border-color: @primary !important;
+  border-radius: 8px !important;
+  font-weight: 500;
+
+  &:hover {
+    background: #15803d !important;
+    border-color: #15803d !important;
+  }
+}
+
+// ── Table ────────────────────────────────────────────────────────
+.table {
+  :global(.ant-table-thead > tr > th) {
+    background: #f8fafc;
+    font-size: 11px;
+    font-weight: 700;
+    color: #9ca3af;
+    letter-spacing: 0.4px;
+    border-bottom: 1px solid #f1f5f9 !important;
+    padding: 10px 16px;
+  }
+
+  :global(.ant-table-tbody > tr > td) {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f8fafc;
+    vertical-align: middle;
+  }
+
+  :global(.ant-table-tbody > tr:last-child > td) {
+    border-bottom: none;
+  }
+}
+
+.tableRow {
+  &:global(.ant-table-row:hover) > td {
+    background: #f8fafc !important;
+  }
+}
+
+// ── Column: Nguyên liệu ───────────────────────────────────────────
+.colNguyenLieu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nlIcon {
+  width: 36px;
+  height: 36px;
+  background: #f1f5f9;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nlIconSvg {
+  font-size: 16px;
+  color: #6b7280;
+}
+
+.nlTen {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.nlDonVi {
+  font-size: 11.5px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+// ── Column: Nhà cung cấp ──────────────────────────────────────────
+.nhaCungCap {
+  font-size: 13.5px;
+  color: #374151;
+}
+
+// ── Column: Tồn kho ───────────────────────────────────────────────
+.colTonKho {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tonKhoValue {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.progressBar {
+  height: 5px;
+  background: #f1f5f9;
+  border-radius: 99px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.3s;
+}
+
+// ── Column: Mức tối thiểu ─────────────────────────────────────────
+.mucToiThieu {
+  font-size: 13.5px;
+  color: #9ca3af;
+}
+
+// ── Column: Giá nhập ─────────────────────────────────────────────
+.giaNhap {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #374151;
+}
+
+// ── Column: Trạng thái ────────────────────────────────────────────
+.trangThaiBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+// ── Column: Actions ───────────────────────────────────────────────
+.rowActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btnNhap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #374151;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  padding: 4px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+
+  &:hover {
+    background: #f0fdf4;
+    border-color: @primary;
+    color: @primary;
+  }
+}
+
+.btnMore {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #e5e7eb;
+  border-radius: 7px;
+  background: #fff;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.15s;
+
+  &:hover {
+    background: #f3f4f6;
+    color: #111827;
+  }
 }

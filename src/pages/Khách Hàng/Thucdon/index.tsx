@@ -6,7 +6,7 @@ import DayTabs from './component/DateTabs';
 import CategoryBar from './component/CategoryBar';
 import DishCard from './component/DishCard';
 import DishDetailModal from './component/DishDetailModal';
-import menuBackground from '@/assets/Khách Hàng/Thực đơn /Backgroud.png';
+import menuBackground from '@/assets/Khách Hàng/Thực đơn/Backgroud.png';
 import { getPageBackground } from '../themeBackground';
 import './index.less';
 

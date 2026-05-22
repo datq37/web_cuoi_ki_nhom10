@@ -9,9 +9,10 @@ moment.locale('vi');
 
 interface TopbarProps {
   title?: string;
+  subtitle?: string;
 }
 
-const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
+const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
   const dateStr = moment().format('D [tháng] M, YYYY');
 
   return (
@@ -19,10 +20,14 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
       {/* Tiêu đề trang */}
       <div className={styles.left}>
         <h1 className={styles.pageTitle}>{title}</h1>
-        <div className={styles.pageDate}>
-          <CalendarOutlined className={styles.calIcon} />
-          <span>Hôm nay, {dateStr}</span>
-        </div>
+        {subtitle ? (
+          <div className={styles.pageDate}>{subtitle}</div>
+        ) : (
+          <div className={styles.pageDate}>
+            <CalendarOutlined className={styles.calIcon} />
+            <span>Hôm nay, {dateStr}</span>
+          </div>
+        )}
       </div>
 
       {/* Actions bên phải */}

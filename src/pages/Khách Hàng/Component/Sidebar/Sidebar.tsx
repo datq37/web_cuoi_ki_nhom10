@@ -54,7 +54,7 @@ const Sidebar: React.FC = () => {
       id: 'history',
       label: 'Đơn hàng',
       icon: <ClipboardList size={17} />,
-      active: page === 'history',
+      active: page === 'history' || page === 'qr-payment',
       onClick: () => setPage('history'),
     },
   ];

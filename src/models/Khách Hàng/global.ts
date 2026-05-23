@@ -5,6 +5,7 @@ const PAGE_TITLES: Record<string, string> = {
   home: 'Trang chủ',
   menu: 'Thực đơn hôm nay',
   history: 'Lịch sử đơn hàng',
+  'qr-payment': 'Thanh toán',
   vouchers: 'Kho Voucher',
   profile: 'Thông tin cá nhân',
   settings: 'Cài đặt tài khoản',

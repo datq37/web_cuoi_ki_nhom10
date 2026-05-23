@@ -1,4 +1,6 @@
+import { PaymentMethod } from '@/services/Khách hàng/Đơn Hàng';
+
 export interface ThanhToanProps {
-    payment: string;
-    onSelect: (key: string) => void;
+    payment: PaymentMethod;
+    onSelect: (key: PaymentMethod) => void;
 }

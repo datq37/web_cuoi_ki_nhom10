@@ -10,6 +10,7 @@ export function useGioHangModel() {
     const { addOrder } = useModel('Khách Hàng.Orders');
     const { setPage } = useModel('Khách Hàng.global');
     const { addNotification } = useModel('Khách Hàng.Notifications');
+    const { setPendingOrder } = useModel('Khách Hàng.Thanh toán QR.index');
 
     // ── State cục bộ của giỏ hàng ─────────────────────────────────────────────
     const [note, setNote] = useState('');
@@ -63,12 +64,19 @@ export function useGioHangModel() {
             };
 
             addOrder(newOrder);
+            const isQRPayment = payment === PaymentMethod.QR;
+
+            if (isQRPayment) {
+                setPendingOrder(newOrder);
+            }
 
             // Thêm thông báo
             addNotification({
                 id: `n-${Date.now()}`,
-                title: 'Đơn hàng đã được đặt thành công',
-                message: `Đơn hàng ${newOrder.id} của bạn đã được xác nhận và bếp đang bắt đầu chuẩn bị.`,
+                title: isQRPayment ? 'Đơn hàng đang chờ thanh toán QR' : 'Đơn hàng đã được đặt thành công',
+                message: isQRPayment
+                    ? `Đơn hàng ${newOrder.id} đã được tạo. Vui lòng quét mã QR để hoàn tất thanh toán.`
+                    : `Đơn hàng ${newOrder.id} của bạn đã được xác nhận và bếp đang bắt đầu chuẩn bị.`,
                 time: new Date().toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
                 isRead: false,
                 image: 'https://cdn-icons-png.flaticon.com/512/1046/1046784.png'
@@ -80,7 +88,7 @@ export function useGioHangModel() {
             
             setIsLoading(false);
             setCartOpen(false);
-            setPage('history');
+            setPage(isQRPayment ? 'qr-payment' : 'history');
         }, 1000);
     };
 

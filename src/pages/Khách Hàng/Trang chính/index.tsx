@@ -8,6 +8,7 @@ import HistoryPage from '../Đơn Hàng';
 import GioHang from '../Giỏ Hàng';
 import ThongBao from '../Thông Báo';
 import TaiKhoan from '../Tài khoản';
+import QRPaymentPage from '../Thanh Toán QR';
 import './index.less';
 
 const MainPage: React.FC = () => {
@@ -25,6 +26,8 @@ const MainPage: React.FC = () => {
         return <EmployeeMenu onOpenCart={() => setCartOpen(true)} ordersToday={12} />;
       case 'history':
         return <HistoryPage />;
+      case 'qr-payment':
+        return <QRPaymentPage />;
       case 'settings':
         return <TaiKhoan />;
       default:

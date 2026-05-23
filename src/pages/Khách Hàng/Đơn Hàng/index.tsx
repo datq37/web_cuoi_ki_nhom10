@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useModel } from 'umi';
 import { Button, Space } from 'antd';
 import { 
@@ -7,7 +7,7 @@ import {
     CheckOutlined, 
     ReloadOutlined 
 } from '@ant-design/icons';
-import { ORDER_STATUSES, PAYMENT_METHODS } from '@/services/Khách hàng/Orders/typing';
+import { ORDER_STATUSES, PAYMENT_METHODS, OrderStatus, Order } from '@/services/Khách hàng/Đơn Hàng';
 import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
 import OrderTracker from './component/OrderTracker';
 import RatingPage from '../Đánh Giá';
@@ -19,31 +19,17 @@ const formatVND = (n: number) => new Intl.NumberFormat('vi-VN').format(n);
 const getDish = (id: string) => SEED_MENU.find(d => d.id === id);
 
 const HistoryPage: React.FC = () => {
-    const { orders, advanceOrder } = useModel('Khách Hàng.Orders');
-    const { setSearchQuery, setActiveCategory } = useModel('Khách Hàng.Thực đơn.index');
-    const { setPage, theme } = useModel('Khách Hàng.global');
-    const [filter, setFilter] = useState('active');
-    const [ratingOrder, setRatingOrder] = useState<any>(null);
-
-    const filters = [
-        { id: 'all', label: 'Tất cả' },
-        { id: 'active', label: 'Đang xử lý' },
-        { id: 'done', label: 'Hoàn thành' },
-    ];
-
-    const visibleOrders = orders.filter(o => {
-        if (filter === 'all') return true;
-        if (filter === 'active') return o.status !== 'done' && o.status !== 'cancelled';
-        if (filter === 'done') return o.status === 'done';
-        return true;
-    });
-
-    const handleReorder = (order: any) => {
-        const firstName = order?.items?.[0]?.name || '';
-        setActiveCategory('all');
-        setSearchQuery(firstName);
-        setPage('menu');
-    };
+    const { 
+        theme, 
+        filter, 
+        setFilter, 
+        ratingOrder, 
+        setRatingOrder, 
+        filters, 
+        visibleOrders, 
+        handleReorder,
+        advanceOrder
+    } = useModel('Khách Hàng.Đơn Hàng.index');
 
     return (
         <div
@@ -57,7 +43,7 @@ const HistoryPage: React.FC = () => {
                 </div>
 
                 <div className="seg-radio">
-                    {filters.map(f => (
+                    {filters.map((f: any) => (
                         <button
                             key={f.id}
                             className={filter === f.id ? 'active' : ''}
@@ -77,7 +63,7 @@ const HistoryPage: React.FC = () => {
                 </div>
             ) : (
                 <div className="orders-grid">
-                    {visibleOrders.map(o => {
+                    {visibleOrders.map((o: Order) => {
                         const st = ORDER_STATUSES[o.status];
                         const pay = PAYMENT_METHODS[o.payment];
 
@@ -97,7 +83,7 @@ const HistoryPage: React.FC = () => {
                                         </div>
 
                                         <div className="order-items">
-                                            {o.items.map(it => (
+                                            {o.items.map((it: any) => (
                                                 <div key={it.id} className="item-preview">
                                                     <span className="emoji">{getDish(it.id)?.emoji || '🍽️'}</span>
                                                     <span className="name">{it.name}</span>
@@ -130,7 +116,7 @@ const HistoryPage: React.FC = () => {
 
                                 <div className="card-actions">
                                     <Space size="middle">
-                                        {o.status === 'ready' && (
+                                        {o.status === OrderStatus.Ready && (
                                             <Button 
                                                 type="primary" 
                                                 icon={<CheckOutlined />} 
@@ -140,7 +126,7 @@ const HistoryPage: React.FC = () => {
                                             </Button>
                                         )}
                                         
-                                        {o.status === 'done' && (
+                                        {o.status === OrderStatus.Done && (
                                             <>
                                                 <Button 
                                                     className="btn-rate-order"

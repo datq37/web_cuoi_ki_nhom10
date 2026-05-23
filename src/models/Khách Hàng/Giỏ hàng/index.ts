@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useModel } from 'umi';
 import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
-import type { Order } from '@/services/Khách hàng/Orders/typing';
+import { Order, OrderStatus, PaymentMethod } from '@/services/Khách hàng/Đơn Hàng';
 
 // ─── Custom Hook quản lý toàn bộ State & Logic nghiệp vụ của Giỏ Hàng ───────────
 export function useGioHangModel() {
@@ -14,7 +14,7 @@ export function useGioHangModel() {
     // ── State cục bộ của giỏ hàng ─────────────────────────────────────────────
     const [note, setNote] = useState('');
     const [selectedVoucher, setSelectedVoucher] = useState<Voucher | undefined>(undefined);
-    const [payment, setPayment] = useState('cash');
+    const [payment, setPayment] = useState<PaymentMethod>(PaymentMethod.Cash);
     const [isLoading, setIsLoading] = useState(false);
 
     const cartQty = cart.reduce((s: number, i: any) => s + i.qty, 0);
@@ -55,8 +55,8 @@ export function useGioHangModel() {
                     price: it.price
                 })),
                 total: total,
-                status: 'pending',
-                payment: payment as any,
+                status: OrderStatus.Pending,
+                payment: payment,
                 created: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
                 pickup: '15 phút nữa',
                 note: note

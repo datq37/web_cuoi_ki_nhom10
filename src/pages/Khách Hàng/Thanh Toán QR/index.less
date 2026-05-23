@@ -6,9 +6,9 @@
   --qr-line: rgba(19, 105, 50, 0.12);
   --qr-card: rgba(255, 255, 255, 0.94);
 
-  min-height: calc(100vh - 140px);
-  margin: -32px;
-  padding: 36px;
+  min-height: calc(100vh - 100px);
+  margin: -20px;
+  padding: 20px;
   color: var(--qr-ink);
   background:
     radial-gradient(circle at 18% 12%, rgba(49, 153, 80, 0.11), transparent 30%),
@@ -17,13 +17,13 @@
   .qr-payment-header {
     display: flex;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 28px;
+    gap: 12px;
+    margin-bottom: 16px;
   }
 
   .qr-back-button {
-    width: 58px;
-    height: 58px;
+    width: 44px;
+    height: 44px;
     border: 0;
     border-radius: 14px;
     color: var(--qr-ink);
@@ -46,7 +46,7 @@
     h1 {
       margin: 0;
       color: var(--qr-ink);
-      font-size: 34px;
+      font-size: 24px;
       font-weight: 900;
       line-height: 1.12;
       letter-spacing: 0;
@@ -58,15 +58,15 @@
       gap: 8px;
       margin: 8px 0 0;
       color: var(--qr-muted);
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 600;
     }
   }
 
   .qr-payment-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(420px, 1.04fr);
-    gap: 28px;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 1.2fr);
+    gap: 16px;
     align-items: stretch;
   }
 
@@ -79,7 +79,7 @@
   }
 
   .qr-code-card {
-    padding: 32px;
+    padding: 20px;
   }
 
   .qr-card-heading {
@@ -88,15 +88,15 @@
     h2 {
       margin: 0;
       color: var(--qr-ink);
-      font-size: 27px;
+      font-size: 20px;
       font-weight: 900;
       letter-spacing: 0;
     }
 
     p {
-      margin: 10px 0 0;
+      margin: 6px 0 0;
       color: var(--qr-muted);
-      font-size: 18px;
+      font-size: 14px;
       font-weight: 600;
 
       strong {
@@ -109,15 +109,15 @@
   .qr-code-wrap {
     display: flex;
     justify-content: center;
-    margin-top: 28px;
+    margin-top: 16px;
   }
 
   .qr-code-frame {
     position: relative;
-    width: 316px;
+    width: 220px;
     max-width: 100%;
     aspect-ratio: 1;
-    padding: 22px;
+    padding: 12px;
     border: 2px solid var(--qr-green);
     border-radius: 18px;
     background: #fff;
@@ -136,8 +136,8 @@
   .qr-logo-mark {
     position: absolute;
     inset: 50% auto auto 50%;
-    width: 70px;
-    height: 70px;
+    width: 48px;
+    height: 48px;
     transform: translate(-50%, -50%);
     border: 1px solid rgba(31, 143, 63, 0.14);
     border-radius: 14px;
@@ -149,28 +149,28 @@
     pointer-events: none;
 
     img {
-      width: 52px;
-      height: 52px;
+      width: 36px;
+      height: 36px;
       object-fit: contain;
     }
   }
 
   .qr-amount-block {
-    margin-top: 28px;
+    margin-top: 16px;
     text-align: center;
 
     p {
       margin: 0;
       color: var(--qr-muted);
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 600;
     }
 
     > strong {
       display: block;
-      margin-top: 8px;
+      margin-top: 4px;
       color: var(--qr-green);
-      font-size: 46px;
+      font-size: 28px;
       font-weight: 900;
       line-height: 1;
       letter-spacing: 0;
@@ -181,9 +181,9 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin-top: 22px;
+      margin-top: 12px;
       color: var(--qr-muted);
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 700;
     }
 
@@ -191,7 +191,7 @@
       display: block;
       margin-top: 6px;
       color: var(--qr-green);
-      font-size: 25px;
+      font-size: 18px;
       font-weight: 900;
 
       &.expired {
@@ -201,14 +201,14 @@
   }
 
   .qr-alert {
-    margin-top: 26px;
-    padding: 15px 18px;
+    margin-top: 16px;
+    padding: 10px 14px;
     border: 1px solid rgba(214, 142, 0, 0.14);
     border-radius: 14px;
     background: rgba(255, 250, 232, 0.82);
     color: #9a6400;
     text-align: center;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 700;
 
     &.expired {
@@ -219,7 +219,7 @@
   }
 
   .qr-guide-card {
-    padding: 34px;
+    padding: 20px;
     background:
       radial-gradient(circle at 92% 6%, rgba(31, 143, 63, 0.09), transparent 34%),
       linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(241, 249, 244, 0.94));
@@ -227,7 +227,7 @@
     > h2 {
       margin: 0;
       color: var(--qr-green);
-      font-size: 26px;
+      font-size: 20px;
       font-weight: 900;
       letter-spacing: 0;
     }
@@ -236,29 +236,29 @@
   .qr-step-list {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    margin-top: 30px;
+    gap: 12px;
+    margin-top: 16px;
   }
 
   .qr-payment-step {
     position: relative;
     display: grid;
-    grid-template-columns: 76px minmax(0, 1fr);
-    gap: 18px;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 12px;
     align-items: flex-start;
 
     .step-line {
       position: absolute;
-      left: 37px;
-      top: 76px;
-      height: 48px;
+      left: 24px;
+      top: 48px;
+      height: 24px;
       border-left: 2px dashed rgba(31, 143, 63, 0.18);
     }
 
     .step-icon {
       position: relative;
-      width: 76px;
-      height: 76px;
+      width: 48px;
+      height: 48px;
       border: 1px solid var(--qr-line);
       border-radius: 50%;
       background: #fff;
@@ -276,14 +276,14 @@
 
     .step-number {
       position: absolute;
-      top: 8px;
-      right: -12px;
-      width: 28px;
-      height: 28px;
+      top: 2px;
+      right: -6px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       color: #fff;
       background: var(--qr-green);
-      font-size: 14px;
+      font-size: 11px;
       font-weight: 900;
       display: flex;
       align-items: center;
@@ -292,12 +292,12 @@
     }
 
     .step-content {
-      padding-top: 7px;
+      padding-top: 4px;
 
       h3 {
         margin: 0;
         color: var(--qr-ink);
-        font-size: 18px;
+        font-size: 15px;
         font-weight: 900;
         letter-spacing: 0;
       }
@@ -306,22 +306,22 @@
         max-width: 430px;
         margin: 8px 0 0;
         color: var(--qr-muted);
-        font-size: 15px;
+        font-size: 13px;
         line-height: 1.55;
       }
     }
   }
 
   .qr-bank-section {
-    margin-top: 34px;
-    padding-top: 22px;
+    margin-top: 16px;
+    padding-top: 12px;
     border-top: 1px solid rgba(31, 143, 63, 0.12);
 
     p {
-      margin: 0 0 15px;
+      margin: 0 0 10px;
       color: var(--qr-muted);
       text-align: center;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
     }
   }
@@ -329,12 +329,12 @@
   .qr-bank-grid {
     display: grid;
     grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 10px;
+    gap: 6px;
   }
 
   .qr-bank-logo {
-    min-height: 48px;
-    padding: 8px 6px;
+    min-height: 36px;
+    padding: 4px;
     border: 1px solid rgba(17, 114, 45, 0.08);
     border-radius: 10px;
     background: #fff;
@@ -344,7 +344,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 900;
     word-break: break-word;
 
@@ -362,8 +362,8 @@
   }
 
   .qr-support-bar {
-    margin-top: 28px;
-    padding: 20px 28px;
+    margin-top: 16px;
+    padding: 14px 20px;
     border: 1px solid rgba(17, 114, 45, 0.07);
     border-radius: 22px;
     background: var(--qr-card);
@@ -380,9 +380,9 @@
     gap: 14px;
 
     .support-icon {
-      width: 54px;
-      height: 54px;
-      border-radius: 16px;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
       color: var(--qr-green);
       background: rgba(31, 143, 63, 0.08);
       display: flex;
@@ -393,7 +393,7 @@
     h3 {
       margin: 0;
       color: var(--qr-ink);
-      font-size: 18px;
+      font-size: 15px;
       font-weight: 900;
       letter-spacing: 0;
     }
@@ -401,7 +401,7 @@
     p {
       margin: 4px 0 0;
       color: var(--qr-muted);
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
     }
   }
@@ -412,13 +412,13 @@
     gap: 22px;
 
     button {
-      height: 46px;
-      padding: 0 24px;
+      height: 36px;
+      padding: 0 16px;
       border: 1px solid rgba(15, 23, 42, 0.1);
       border-radius: 12px;
       background: #fff;
       color: var(--qr-ink);
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 800;
       cursor: pointer;
       transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
@@ -433,7 +433,7 @@
     p {
       margin: 0;
       color: #e05260;
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 700;
       white-space: nowrap;
     }

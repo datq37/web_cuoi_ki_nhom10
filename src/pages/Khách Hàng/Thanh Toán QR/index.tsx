@@ -92,7 +92,7 @@ const QRPaymentPage: React.FC = () => {
             <div className="qr-code-frame">
               <QRCodeCanvas
                 value={qrValue}
-                size={270}
+                size={180}
                 bgColor="#ffffff"
                 fgColor="#111111"
                 level="H"

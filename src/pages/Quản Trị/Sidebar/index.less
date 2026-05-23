@@ -317,3 +317,41 @@
     color: @text-muted;
   }
 }
+
+// ── Dark mode overrides ─────────────────────────────────────────
+:global([data-theme="dark"]) {
+  .sidebar {
+    background: #1e293b;
+    border-right-color: #334155;
+  }
+
+  .reloadBtn { color: #64748b; &:hover { background: #0f172a; color: #94a3b8; } }
+
+  .brandName { color: #f1f5f9; }
+  .brandSub  { color: #64748b; }
+
+  .searchBox {
+    background: #0f172a;
+    border-color: #334155;
+    &:hover { border-color: #475569; }
+  }
+  .searchIcon, .searchPlaceholder { color: #64748b; }
+  .searchShortcut { background: #334155; border-color: #475569; color: #64748b; }
+
+  .groupLabel { color: #64748b; }
+
+  .menuItem {
+    color: #94a3b8;
+    &:hover { background: #0f172a; color: #cbd5e1; .menuIcon { color: #94a3b8; } }
+    &.active { background: rgba(22,163,74,.15); color: #4ade80; .menuIcon { color: #4ade80; } }
+  }
+  .menuIcon { color: #64748b; }
+
+  .userSection { border-top-color: #334155; }
+  .userCard { &:hover { background: #0f172a; } }
+  .userName { color: #f1f5f9; }
+  .userRole  { color: #64748b; }
+  .logoutBtn { color: #64748b; &:hover { background: rgba(239,68,68,.15); color: #ef4444; } }
+
+  .collapseBtn { color: #64748b; &:hover { background: #0f172a; color: #94a3b8; } }
+}

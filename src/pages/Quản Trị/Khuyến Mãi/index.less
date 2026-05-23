@@ -293,3 +293,32 @@
     color: #111827;
   }
 }
+
+// ── Dark mode overrides ─────────────────────────────────────────
+:global([data-theme="dark"]) {
+  .adminLayout { background: #0f172a; }
+
+  .statCard { background: #1e293b; border-color: #334155; }
+  .statValue { color: #f1f5f9; }
+  .statLabel { color: #64748b; }
+  .statSub   { color: #94a3b8; }
+
+  .promoList { background: #1e293b; border-color: #334155; }
+  .divider   { background: #334155; }
+  .promoRow  { &:hover { background: #0f172a; } }
+
+  .promoName { color: #f1f5f9; }
+  .promoMoTa { color: #64748b; }
+  .usageLabel { color: #64748b; }
+  .usageCount { color: #cbd5e1; }
+  .usageBar   { background: #334155; }
+  .expiryLabel { color: #64748b; }
+  .expiryDate  { color: #cbd5e1; }
+
+  .moreBtn {
+    background: #0f172a;
+    border-color: #334155;
+    color: #94a3b8;
+    &:hover { background: #334155; color: #f1f5f9; }
+  }
+}

@@ -346,3 +346,57 @@
     color: #111827;
   }
 }
+
+// ── Dark mode overrides ─────────────────────────────────────────
+:global([data-theme="dark"]) {
+  .adminLayout { background: #0f172a; }
+
+  .statCard { background: #1e293b; border-color: #334155; }
+  .statValue { color: #f1f5f9; }
+  .statLabel { color: #64748b; }
+  .statSub   { color: #94a3b8; }
+
+  .warnBanner { background: rgba(251,191,36,.08); border-color: rgba(251,191,36,.25); }
+  .warnLeft   { color: #fcd34d; strong { color: #fde68a; } }
+
+  .tableSection { background: #1e293b; border-color: #334155; }
+  .tableToolbar { border-bottom-color: #334155; }
+
+  .table {
+    :global(.ant-table-thead > tr > th) {
+      background: #0f172a !important;
+      color: #64748b !important;
+      border-bottom-color: #334155 !important;
+    }
+    :global(.ant-table-tbody > tr > td) {
+      border-bottom-color: #334155 !important;
+      background: #1e293b;
+    }
+    :global(.ant-table-tbody > tr:hover > td) {
+      background: #0f172a !important;
+    }
+  }
+
+  .nlIcon { background: #334155; }
+  .nlIconSvg { color: #94a3b8; }
+  .nlTen { color: #f1f5f9; }
+  .nlDonVi { color: #64748b; }
+  .nhaCungCap { color: #cbd5e1; }
+  .tonKhoValue { color: #f1f5f9; }
+  .progressBar { background: #334155; }
+  .mucToiThieu { color: #64748b; }
+  .giaNhap { color: #cbd5e1; }
+
+  .btnNhap {
+    background: #0f172a;
+    border-color: #334155;
+    color: #cbd5e1;
+    &:hover { background: rgba(22,163,74,.12); border-color: #16a34a; color: #4ade80; }
+  }
+  .btnMore {
+    background: #0f172a;
+    border-color: #334155;
+    color: #94a3b8;
+    &:hover { background: #334155; color: #f1f5f9; }
+  }
+}

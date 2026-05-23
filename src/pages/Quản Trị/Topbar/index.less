@@ -4,7 +4,6 @@
 @text-mid: #374151;
 @text-muted: #6b7280;
 @text-light: #9ca3af;
-@bg-input: #f9fafb;
 
 .topbar {
   height: 68px;
@@ -20,7 +19,6 @@
   flex-shrink: 0;
 }
 
-/* ── Bên trái: tiêu đề ── */
 .left {
   display: flex;
   flex-direction: column;
@@ -43,44 +41,12 @@
   color: @text-muted;
 }
 
-.calIcon {
-  font-size: 12px;
-}
+.calIcon { font-size: 12px; }
 
-/* ── Bên phải: actions ── */
 .right {
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.searchInput {
-  width: 310px;
-  border-radius: 10px !important;
-  border-color: #e5e7eb !important;
-  background: @bg-input !important;
-  height: 38px;
-
-  &:hover,
-  &:focus-within {
-    border-color: #d1d5db !important;
-    background: #ffffff !important;
-  }
-
-  :global(.ant-input) {
-    background: transparent;
-    font-size: 13px;
-    color: @text-mid;
-
-    &::placeholder {
-      color: @text-light;
-    }
-  }
-}
-
-.searchIcon {
-  color: @text-light;
-  font-size: 14px;
 }
 
 .iconBtn {
@@ -103,22 +69,9 @@
     background: #f9fafb !important;
     color: @text-dark !important;
   }
-
-  :global(.ant-badge-count) {
-    background: #ef4444;
-    box-shadow: none;
-    font-size: 10px;
-    min-width: 16px;
-    height: 16px;
-    line-height: 16px;
-    padding: 0 4px;
-  }
 }
 
-/* Badge bên ngoài button */
-:global(.ant-badge) {
-  line-height: 1;
-}
+:global(.ant-badge) { line-height: 1; }
 
 :global(.ant-badge .ant-badge-count) {
   background: #ef4444;
@@ -130,7 +83,6 @@
   padding: 0 4px;
 }
 
-/* ── User avatar ── */
 .userWrap {
   display: flex;
   align-items: center;
@@ -139,10 +91,7 @@
   padding: 4px 6px;
   border-radius: 9px;
   transition: background 0.12s;
-
-  &:hover {
-    background: #f9fafb;
-  }
+  &:hover { background: #f9fafb; }
 }
 
 .userAvatar {
@@ -152,6 +101,124 @@
   flex-shrink: 0;
 }
 
-.userNameShort {
-  display: none;
+// ── Notification Popup ──────────────────────────────────────────
+.notifPopup {
+  width: 340px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.notifHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.notifTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: @text-dark;
+}
+
+.markAllBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 12px;
+  color: @primary;
+  cursor: pointer;
+  font-weight: 500;
+  &:hover { color: #15803d; }
+}
+
+.notifList { padding: 0; }
+
+.notifItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f8fafc;
+  cursor: pointer;
+  transition: background 0.12s;
+  &:last-child { border-bottom: none; }
+  &:hover { background: #f9fafb; }
+}
+
+.notifUnread { background: #f0fdf4; &:hover { background: #dcfce7; } }
+
+.notifIcon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+
+.notifBody { flex: 1; min-width: 0; }
+
+.notifItemTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: @text-dark;
+  margin-bottom: 3px;
+}
+
+.notifDesc {
+  font-size: 11.5px;
+  color: @text-muted;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notifDot {
+  width: 7px;
+  height: 7px;
+  background: @primary;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.notifFooter {
+  padding: 10px 16px;
+  text-align: center;
+  font-size: 12.5px;
+  color: @text-muted;
+  border-top: 1px solid #f1f5f9;
+  cursor: pointer;
+  &:hover { color: @primary; }
+}
+
+// ── Dark mode overrides ─────────────────────────────────────────
+:global([data-theme="dark"]) {
+  .topbar {
+    background: #1e293b;
+    border-bottom-color: #334155;
+  }
+
+  .pageTitle { color: #f1f5f9; }
+  .pageDate { color: #94a3b8; }
+
+  .iconBtn {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+    &:hover {
+      background: #1e293b !important;
+      border-color: #475569 !important;
+      color: #f1f5f9 !important;
+    }
+  }
+
+  .userWrap { &:hover { background: #0f172a; } }
+
+  .notifHeader { border-bottom-color: #334155; }
+  .notifTitle { color: #f1f5f9; }
+  .notifItem {
+    border-bottom-color: #1e293b;
+    &:hover { background: #1e293b; }
+  }
+  .notifUnread { background: rgba(22,163,74,.12); &:hover { background: rgba(22,163,74,.18); } }
+  .notifItemTitle { color: #f1f5f9; }
+  .notifDesc { color: #94a3b8; }
+  .notifFooter { border-top-color: #334155; color: #94a3b8; &:hover { color: #4ade80; } }
+  .notifPopup { background: #1e293b; }
 }

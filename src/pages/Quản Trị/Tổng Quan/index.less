@@ -829,3 +829,86 @@
   .tnChartRow { grid-template-columns: 1fr; }
   .tnDataRow { grid-template-columns: 1fr; }
 }
+
+// ── Dark mode overrides ─────────────────────────────────────────
+:global([data-theme="dark"]) {
+  .adminLayout { background: #0f172a; }
+
+  .tabsRow { background: #1e293b; border-color: #334155; }
+  .tabBtn { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
+
+  .dateChip { background: #1e293b; border-color: #334155; color: #94a3b8; }
+
+  // Kanban
+  .liveBar, .summaryBar { background: #1e293b; border-color: #334155; }
+  .liveTxt { color: #f1f5f9; }
+  .liveDesc { color: #94a3b8; }
+  .liveStat { color: #cbd5e1; strong { color: #f1f5f9; } }
+  .liveStatDiv { background: #334155; }
+  .kanbanCot { background: #1e293b; border-color: #334155; }
+  .cotHeader { border-bottom-color: #334155; }
+  .cotTitle { color: #f1f5f9; }
+  .cotFooter { border-top-color: #334155; color: #94a3b8; }
+  .donCard { background: #0f172a; border-color: #334155; }
+  .maDon { color: #f1f5f9; }
+  .tenKH { color: #f1f5f9; }
+  .thoiGianDon { color: #64748b; }
+  .monRow { color: #cbd5e1; }
+  .slMon, .conLai { color: #64748b; }
+  .donCardFooter { border-top-color: #334155; }
+  .tongTienDon { color: #f1f5f9; }
+  .summaryTitle { color: #f1f5f9; }
+  .summaryDiv { background: #334155; }
+  .summaryStat { strong { color: #f1f5f9; } span { color: #94a3b8; } }
+
+  // Phân tích
+  .barChartCard, .donutCard, .bottomCard, .hoatDongCard { background: #1e293b; border-color: #334155; }
+  .chartTitle2 { color: #f1f5f9; }
+  .chartLegend { color: #94a3b8; }
+  .donutSubtitle { color: #94a3b8; }
+  .donutLegLabel { color: #cbd5e1; }
+  .donutLegPct { color: #f1f5f9; }
+  .cardTitle { color: #f1f5f9; }
+  .topMonTable {
+    th { color: #64748b; border-bottom-color: #334155; }
+    td { color: #cbd5e1; border-bottom-color: #1e293b; }
+  }
+  .tdRight { color: #f1f5f9; }
+  .trangThaiTen { color: #cbd5e1; }
+  .trangThaiSo { color: #94a3b8; }
+  .progressWrap2 { background: #334155; }
+  .trangThaiPct { color: #f1f5f9; }
+  .hieuSuatLabel { color: #94a3b8; }
+  .hieuSuatValue { color: #f1f5f9; }
+  .hieuSuatUnit { color: #94a3b8; }
+  .periodSelect { background: #0f172a; border-color: #334155; color: #94a3b8; &:hover { background: #334155; } }
+  .hoatDongItem { background: #0f172a; border-color: #334155; &:hover { background: #1e293b; border-color: #475569; } }
+  .hdTitle { color: #f1f5f9; }
+  .hdMota { color: #94a3b8; }
+  .hdTime, .hdArrow { color: #64748b; }
+
+  // Tác nghiệp
+  .tnStatCard, .tnInfoCard, .tnChartCard, .tnTableCard, .tnTopCard { background: #1e293b; border-color: #334155; }
+  .tnStatLabel { color: #94a3b8; }
+  .tnStatValue { color: #f1f5f9; }
+  .tnChartTitle { color: #f1f5f9; }
+  .tnChartSub { color: #94a3b8; }
+  .tnTableTitle { color: #f1f5f9; }
+  .tnTable {
+    th { color: #64748b; border-bottom-color: #334155; }
+    td { color: #cbd5e1; border-bottom-color: #1e293b; }
+  }
+  .tnMaDon, .tnKH, .tnTien { color: #f1f5f9; }
+  .tnPhong, .tnMon, .tnGio { color: #94a3b8; }
+  .tnTopName { color: #f1f5f9; }
+  .tnLegLabel { color: #cbd5e1; }
+  .tnLegVal { color: #f1f5f9; }
+  .tnTopRow { border-bottom-color: #334155; }
+  .tnInfoTitle { color: #94a3b8; }
+  .tnDishName { color: #f1f5f9; }
+  .tnDishSold { color: #94a3b8; }
+  .tnPromoName { color: #f1f5f9; }
+  .tnPromoLeft { color: #94a3b8; }
+  .tnSatisfyScore { color: #f1f5f9; }
+  .tnSatisfyDesc { color: #94a3b8; }
+}

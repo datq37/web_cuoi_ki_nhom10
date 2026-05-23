@@ -395,3 +395,52 @@
 :global(.ant-switch-checked) {
   background: @primary !important;
 }
+
+// ── Dark mode overrides ─────────────────────────────────────────
+:global([data-theme="dark"]) {
+  .adminLayout { background: #0f172a; }
+
+  .leftNav { background: #1e293b; border-color: #334155; }
+  .navItem { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
+  .navActive { background: rgba(22,163,74,.15) !important; color: #4ade80 !important; .navIcon { color: #4ade80 !important; } }
+  .navIcon { color: #64748b; }
+
+  .rightContent { background: #1e293b; border-color: #334155; }
+  .contentTitle { color: #f1f5f9; }
+  .contentSub   { color: #64748b; }
+
+  .logoSection { background: #0f172a; }
+  .logoName { color: #f1f5f9; }
+  .logoHint { color: #64748b; }
+
+  .fieldLabel { color: #cbd5e1; }
+  .fieldInput {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    :global(.ant-input), :global(.ant-input-password) { background: #0f172a; color: #f1f5f9; }
+    &:focus-within { border-color: #16a34a !important; }
+  }
+
+  .dayList { border-color: #334155; }
+  .dayRow { border-bottom-color: #334155; &:hover { background: #0f172a; } }
+  .dayLabel { color: #cbd5e1; }
+  .timeInput { background: #0f172a !important; border-color: #334155 !important; color: #f1f5f9 !important; }
+  .timeDash { color: #64748b; }
+
+  .payList { border-color: #334155; }
+  .payRow { border-bottom-color: #334155; &:hover { background: #0f172a; } }
+  .payIconWrap { background: #334155; }
+  .payName { color: #f1f5f9; }
+  .payMoTa { color: #64748b; }
+
+  .notifList { border-color: #334155; }
+  .notifRow { &:hover { background: #0f172a; } }
+  .notifBorder { border-bottom-color: #334155; }
+  .notifName { color: #f1f5f9; }
+  .notifMoTa { color: #64748b; }
+
+  .securityList { border-color: #334155; }
+  .secRow { border-bottom-color: #334155; &:hover { background: #0f172a; } }
+  .secName { color: #f1f5f9; }
+  .secMoTa { color: #64748b; }
+}

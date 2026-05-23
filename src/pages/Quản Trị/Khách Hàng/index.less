@@ -42,3 +42,45 @@
 .thamGia { font-size: 13px; color: #9ca3af; }
 .trangThaiBadge { display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 600; padding: 4px 12px; border-radius: 20px; }
 .moreBtn { width: 30px; height: 30px; border: 1px solid #e5e7eb; border-radius: 7px; background: #fff; color: #6b7280; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; transition: all 0.15s; &:hover { background: #f3f4f6; color: #111827; } }
+
+// ── Dark mode overrides ─────────────────────────────────────────
+:global([data-theme="dark"]) {
+  .adminLayout { background: #0f172a; }
+
+  .statCard { background: #1e293b; border-color: #334155; }
+  .statValue { color: #f1f5f9; }
+  .statLabel { color: #64748b; }
+  .statSub   { color: #94a3b8; }
+
+  .tableSection { background: #1e293b; border-color: #334155; }
+  .tableToolbar { border-bottom-color: #334155; }
+
+  .table {
+    :global(.ant-table-thead > tr > th) {
+      background: #0f172a !important;
+      color: #64748b !important;
+      border-bottom-color: #334155 !important;
+    }
+    :global(.ant-table-tbody > tr > td) {
+      border-bottom-color: #334155 !important;
+      background: #1e293b;
+    }
+    :global(.ant-table-tbody > tr:hover > td) {
+      background: #0f172a !important;
+    }
+  }
+
+  .khachTen  { color: #f1f5f9; }
+  .khachEmail { color: #64748b; }
+  .phongBan  { color: #cbd5e1; }
+  .soDon     { color: #f1f5f9; }
+  .chiTieu   { color: #cbd5e1; }
+  .thamGia   { color: #64748b; }
+
+  .moreBtn {
+    background: #0f172a;
+    border-color: #334155;
+    color: #94a3b8;
+    &:hover { background: #334155; color: #f1f5f9; }
+  }
+}

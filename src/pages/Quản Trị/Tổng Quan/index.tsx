@@ -7,6 +7,7 @@ require('moment/locale/vi');
 import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import { ETabKey } from '@/services/Quản Trị/Tổng Quan/typing';
+import BaoCaoModal from './components/BaoCao';
 import TacNghiepView from './components/TacNghiep';
 import PhanTichView  from './components/PhanTich';
 import styles from './index.less';
@@ -15,6 +16,7 @@ moment.locale('vi');
 
 const TongQuan: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ETabKey>(ETabKey.PHAN_TICH);
+  const [reportOpen, setReportOpen] = useState(false);
 
   const tabs: { key: ETabKey; label: string }[] = [
     { key: ETabKey.TAC_NGHIEP, label: 'Tác nghiệp' },
@@ -46,7 +48,12 @@ const TongQuan: React.FC = () => {
                 <CalendarOutlined style={{ marginRight: 5, color: '#9ca3af' }} />
                 Hôm nay · {moment().format('D/M/YYYY')}
               </span>
-              <Button type="primary" icon={<DownloadOutlined />} className={styles.exportBtn}>
+              <Button
+                type="primary"
+                icon={<DownloadOutlined />}
+                className={styles.exportBtn}
+                onClick={() => setReportOpen(true)}
+              >
                 Xuất báo cáo
               </Button>
             </div>
@@ -57,6 +64,8 @@ const TongQuan: React.FC = () => {
           {activeTab === ETabKey.TAC_NGHIEP && <TacNghiepView />}
         </div>
       </div>
+
+      <BaoCaoModal open={reportOpen} onClose={() => setReportOpen(false)} />
     </div>
   );
 };

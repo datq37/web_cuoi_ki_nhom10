@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { history } from 'umi';
+import React from 'react';
+import { history, useModel } from 'umi';
 import {
   ArrowRight,
   Leaf,
@@ -15,7 +15,8 @@ import { BulbOutlined, BulbFilled } from '@ant-design/icons';
 import './topbar.less';
 
 const Topbar: React.FC = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  const { theme, toggleTheme } = useModel('Khách Hàng.global');
+  const darkMode = theme === 'dark';
 
   return (
     <div className={`landing-page ${darkMode ? 'dark' : 'light'}`}>
@@ -36,7 +37,7 @@ const Topbar: React.FC = () => {
             {/* Theme toggle */}
             <button
               className={`lt-theme-toggle ${darkMode ? 'dark' : ''}`}
-              onClick={() => setDarkMode(!darkMode)}
+              onClick={toggleTheme}
               title={darkMode ? 'Chế độ sáng' : 'Chế độ tối'}
             >
               {darkMode

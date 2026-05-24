@@ -1,4 +1,5 @@
 import React from 'react';
+import { useModel } from 'umi';
 import { motion } from 'framer-motion';
 import Topbar from './Component/topbar/topbar';
 import FeaturedMenu from './Component/FeaturedMenu';
@@ -7,13 +8,15 @@ import Footer from './Component/footer';
 import './index.less';
 
 const HomePage: React.FC = () => {
+  const { theme } = useModel('Khách Hàng.global');
+
   const revealVariants = {
     hidden: { opacity: 0, y: 80 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } }
   };
 
   return (
-    <div className="home-page-container">
+    <div className={`home-page-container theme-${theme}`}>
       <Topbar />
       <main>
         <motion.div

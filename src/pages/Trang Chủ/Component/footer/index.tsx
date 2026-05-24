@@ -16,13 +16,10 @@ import {
 } from 'lucide-react';
 import { FacebookOutlined, InstagramOutlined } from '@ant-design/icons';
 import './index.less';
-
 const logo = '/logo.webp';
-
 export default function HomeFooter() {
   return (
     <footer className="home-footer-wrapper">
-      {/* Lá trang trí */}
       <div className="home-footer-leaf left-leaf">
         ❧
       </div>
@@ -33,9 +30,7 @@ export default function HomeFooter() {
 
       <div className="home-footer-inner">
         <div className="home-footer-card">
-          {/* Main footer */}
           <div className="home-footer-main">
-            {/* Brand */}
             <div className="home-footer-brand-section">
               <div className="brand-header">
                 <div className="brand-logo-wrap">
@@ -67,8 +62,6 @@ export default function HomeFooter() {
                 <FeatureBadge icon={<Heart size={24} />} text="Phục vụ tận tâm" />
               </div>
             </div>
-
-            {/* Links */}
             <FooterColumn title="LIÊN KẾT">
               <FooterLink
                 icon={<ShieldCheck size={22} />}
@@ -107,8 +100,6 @@ export default function HomeFooter() {
                 text="123 Đường ABC, Quận 1, TP. Hồ Chí Minh"
               />
             </FooterColumn>
-
-            {/* Social */}
             <div className="home-footer-newsletter-section">
               <FooterTitle title="THEO DÕI CHÚNG TÔI" />
 
@@ -133,7 +124,6 @@ export default function HomeFooter() {
     </footer>
   );
 }
-
 function FooterColumn({ title, children }: { title: string, children: ReactNode }) {
   return (
     <div>
@@ -144,6 +134,7 @@ function FooterColumn({ title, children }: { title: string, children: ReactNode 
     </div>
   );
 }
+
 
 function FooterTitle({ title }: { title: string }) {
   return (

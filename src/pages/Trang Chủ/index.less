@@ -6,6 +6,83 @@ html, body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: var(--bg-main, #f7f9f8);
+  color: var(--ink, #111827);
+  transition: background-color 0.3s, color 0.3s;
+
+  &.theme-dark {
+    /* Global dark overrides to match user pages */
+    --bg-main: #141414;
+    --bg-elev: #1f1f1f;
+    --bg-soft: #2a2a2a;
+    --bg-mute: #333333;
+    --line: #303030;
+    --ink: #f0f0f0;
+    --ink-2: #d0d0d0;
+    --ink-3: #999999;
+    --accent: #22c55e;
+    
+    /* override FeaturedMenu */
+    .featured-section { background: var(--bg-main); }
+    .featured-title { color: var(--ink); }
+    .feature-badge { 
+      background: var(--bg-elev); 
+      border-color: rgba(255,255,255,0.1); 
+    }
+    .feature-badge .feature-badge-value { color: var(--ink); }
+    .feature-badge .feature-badge-label { color: var(--ink-3); }
+    .food-mini-card { background: var(--bg-elev); }
+    .food-mini-card-name { color: var(--ink); }
+    .featured-nav-btn { background: var(--bg-elev); color: var(--ink); }
+    
+    /* override WhyChooseUs */
+    .why-section { background: var(--bg-main); }
+    .why-title { color: var(--ink); }
+    .why-subtitle { color: var(--ink-3); }
+    .why-tabs { 
+      background: var(--bg-elev); 
+      border-color: rgba(255,255,255,0.1); 
+    }
+    .why-tab-btn { color: var(--ink-2); }
+    .why-card { 
+      background: var(--bg-elev); 
+      border-color: rgba(255,255,255,0.1); 
+    }
+    .why-desc { color: var(--ink-2); }
+    .why-badge { background: rgba(31,31,31,0.96); border-color: rgba(255,255,255,0.1); }
+    .why-badge .why-badge-title { color: var(--ink); }
+    .why-blob.why-blob-left { background: rgba(21, 128, 61, 0.15); }
+    .why-blob.why-blob-right { background: rgba(21, 128, 61, 0.1); }
+    .why-image-bg-blob { background: var(--bg-soft); }
+    .why-icon-wrap { background: var(--bg-soft); border: 1px solid rgba(255,255,255,0.05); }
+    .why-feature-box {
+      background: var(--bg-soft);
+      border-color: rgba(255,255,255,0.05);
+    }
+    .why-feature-icon { background: var(--bg-elev); }
+    .why-feature-title { color: var(--ink); }
+    .why-feature-desc { color: var(--ink-3); }
+    
+    /* override Footer */
+    .home-footer-wrapper { background: var(--bg-main); }
+    .home-footer-card {
+      background: var(--bg-elev);
+      border-color: rgba(255,255,255,0.1);
+    }
+    .brand-logo-wrap { background: var(--bg-soft); border-color: rgba(255,255,255,0.05); }
+    .brand-text-wrap h2 { color: var(--ink); }
+    .brand-desc { color: var(--ink-2); }
+    .home-footer-badge { background: var(--bg-soft); border-color: rgba(255,255,255,0.05); }
+    .home-footer-badge .badge-text { color: var(--ink); }
+    .home-footer-title h3 { color: var(--ink); }
+    .home-footer-link { border-bottom-color: rgba(255,255,255,0.05); }
+    .home-footer-link .link-left .link-text { color: var(--ink-2); }
+    .home-footer-link .link-left .link-icon { background: var(--bg-soft); border-color: rgba(255,255,255,0.05); }
+    .home-footer-info-item .info-icon { background: var(--bg-soft); border-color: rgba(255,255,255,0.05); }
+    .home-footer-info-item .info-text { color: var(--ink-2); }
+    .newsletter-desc { color: var(--ink-2); }
+    .social-btn { background: var(--bg-soft); color: var(--ink); border-color: rgba(255,255,255,0.05); }
+  }
 }
 
 main {

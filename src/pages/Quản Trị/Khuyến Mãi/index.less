@@ -448,6 +448,234 @@
   transition: width 0.3s;
 }
 
+// ── Tabs ─────────────────────────────────────────────────────────
+.mainTabs {
+  :global(.ant-tabs-nav) {
+    margin-bottom: 0;
+    padding: 0 4px;
+    background: #fff;
+    border-radius: @radius @radius 0 0;
+    border: 1px solid #f1f5f9;
+    border-bottom: none;
+  }
+  :global(.ant-tabs-tab) {
+    font-weight: 600;
+    color: #6b7280;
+    padding: 12px 16px;
+  }
+  :global(.ant-tabs-tab-active .ant-tabs-tab-btn) {
+    color: @primary;
+  }
+  :global(.ant-tabs-ink-bar) {
+    background: @primary;
+  }
+  :global(.ant-tabs-content-holder) {
+    background: #fff;
+    border: 1px solid #f1f5f9;
+    border-radius: 0 0 @radius @radius;
+    border-top: none;
+    padding: 16px 0 0;
+  }
+}
+
+// ── Combo toolbar ────────────────────────────────────────────────
+.comboToolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px 16px;
+}
+
+.btnComboCreate {
+  margin-left: auto;
+  background: @primary !important;
+  border-color: @primary !important;
+  border-radius: 8px !important;
+  font-weight: 600;
+  padding: 0 20px !important;
+
+  &:hover {
+    background: #15803d !important;
+    border-color: #15803d !important;
+  }
+}
+
+// ── Combo list ───────────────────────────────────────────────────
+.comboList {
+  display: flex;
+  flex-direction: column;
+}
+
+// ── Combo card ───────────────────────────────────────────────────
+.comboCard {
+  padding: 18px 20px;
+  border-top: 1px solid #f8fafc;
+  transition: background 0.15s;
+  cursor: pointer;
+
+  &:first-child { border-top: none; }
+  &:hover { background: #fafafa; }
+}
+
+.comboCardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.comboCardLeft { flex: 1; min-width: 0; }
+
+.comboCardTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.comboCardName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.comboCardMoTa {
+  font-size: 12.5px;
+  color: #9ca3af;
+}
+
+.comboCardActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+// ── Dish chips ───────────────────────────────────────────────────
+.comboDishChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.comboDishChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+// ── Price row ────────────────────────────────────────────────────
+.comboPriceRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.comboOriginalPrice {
+  color: #9ca3af;
+  text-decoration: line-through;
+  font-size: 12.5px;
+}
+
+.comboArrow { color: #d1d5db; }
+
+.comboFinalPrice {
+  font-size: 15px;
+  font-weight: 700;
+  color: @primary;
+}
+
+.comboSaving {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #fff;
+  background: @primary;
+  border-radius: 20px;
+  padding: 2px 8px;
+}
+
+.comboExpiry {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.comboExpiryLabel {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.comboExpiryDate {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #374151;
+}
+
+// ── Combo form preview ───────────────────────────────────────────
+.comboFormPreview {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.previewRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #374151;
+}
+
+.previewRowLabel { color: #6b7280; }
+
+.previewDivider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 4px 0;
+}
+
+.previewFinalRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.previewFinalLabel { color: #111827; }
+
+.previewFinalValue { color: @primary; }
+
+.previewSavingRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: @primary;
+}
+
+.previewError {
+  font-size: 12px;
+  color: #dc2626;
+  margin-top: 4px;
+}
+
 // ── Dark mode overrides ─────────────────────────────────────────
 :global([data-theme="dark"]) {
   .adminLayout { background: #0f172a; }

@@ -32,3 +32,20 @@ export interface IStatKhuyenMai {
   doanhThuTao: string;
   tyLeChuyenDoi: number;
 }
+
+export enum ELoaiGiaCombo {
+  PHAN_TRAM   = 'phan_tram',
+  GIA_CO_DINH = 'gia_co_dinh',
+}
+
+export interface ICombo {
+  id: string;
+  ten: string;
+  moTa: string;
+  monAnIds: string[];
+  loaiGia: ELoaiGiaCombo;
+  giaTriGiam: number;
+  hetHan: string;
+  trangThai: ETrangThaiKhuyenMai;
+  hoatDong: boolean;
+}

@@ -24,6 +24,7 @@ import {
   Radio,
   Select,
   Switch,
+  Tabs,
   message,
 } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
@@ -33,14 +34,18 @@ import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import {
   DANH_SACH_KHUYEN_MAI,
+  DANH_SACH_COMBO,
   STAT_KHUYEN_MAI,
   TRANG_THAI_KM_CONFIG,
 } from '@/services/Quản Trị/Khuyến Mãi';
 import {
   ELoaiGiamGia,
+  ELoaiGiaCombo,
   ETrangThaiKhuyenMai,
+  ICombo,
   IKhuyenMai,
 } from '@/services/Quản Trị/Khuyến Mãi/typing';
+import { DANH_SACH_MON } from '@/services/Quản Trị/Quản Lý Món';
 import styles from './index.less';
 
 dayjs.extend(customParseFormat);
@@ -61,6 +66,20 @@ const fmtGiaTri = (item: IKhuyenMai) => {
 };
 
 type FormPayload = Omit<IKhuyenMai, 'id' | 'daDung'>;
+
+type ComboFormPayload = Omit<ICombo, 'id'>;
+
+function tinhGiaCombo(combo: ICombo): { tongLe: number; giaCombo: number; tietKiem: number } {
+  const tongLe = combo.monAnIds.reduce((sum, id) => {
+    const mon = DANH_SACH_MON.find((m) => m.id === id);
+    return sum + (mon?.giaBan ?? 0);
+  }, 0);
+  const giaCombo =
+    combo.loaiGia === ELoaiGiaCombo.PHAN_TRAM
+      ? Math.round(tongLe * (1 - combo.giaTriGiam / 100))
+      : combo.giaTriGiam;
+  return { tongLe, giaCombo, tietKiem: tongLe - giaCombo };
+}
 
 type StatCard = {
   label: string;
@@ -338,6 +357,221 @@ const KhuyenMaiDetail: React.FC<{
   );
 };
 
+// ── ComboForm ─────────────────────────────────────────────────────
+const ComboForm: React.FC<{
+  open: boolean;
+  initial: ICombo | null;
+  onCancel: () => void;
+  onSubmit: (data: ComboFormPayload) => void;
+}> = ({ open, initial, onCancel, onSubmit }) => {
+  const [form] = Form.useForm();
+  const loaiGiaWatch  = Form.useWatch('loaiGia',    form) as ELoaiGiaCombo | undefined;
+  const monAnIdsWatch = Form.useWatch('monAnIds',   form) as string[]      | undefined;
+  const giaTriWatch   = Form.useWatch('giaTriGiam', form) as number        | undefined;
+
+  const tongLe = (monAnIdsWatch ?? []).reduce((sum, id) => {
+    const mon = DANH_SACH_MON.find((m) => m.id === id);
+    return sum + (mon?.giaBan ?? 0);
+  }, 0);
+
+  const giaComboPreview =
+    loaiGiaWatch === ELoaiGiaCombo.PHAN_TRAM && giaTriWatch
+      ? Math.round(tongLe * (1 - giaTriWatch / 100))
+      : loaiGiaWatch === ELoaiGiaCombo.GIA_CO_DINH && giaTriWatch
+      ? giaTriWatch
+      : null;
+
+  const tietKiemPreview = giaComboPreview !== null ? tongLe - giaComboPreview : null;
+  const previewError =
+    giaComboPreview !== null && giaComboPreview >= tongLe
+      ? 'Giá combo phải nhỏ hơn tổng giá lẻ'
+      : null;
+
+  const showPreview = (monAnIdsWatch ?? []).length >= 2 && tongLe > 0;
+
+  useEffect(() => {
+    if (!open) return;
+    if (initial) {
+      form.setFieldsValue({
+        ...initial,
+        hetHanDate: dayjs(initial.hetHan, 'D/M/YYYY'),
+      });
+    } else {
+      form.resetFields();
+      form.setFieldsValue({
+        loaiGia:   ELoaiGiaCombo.PHAN_TRAM,
+        trangThai: ETrangThaiKhuyenMai.DANG_CHAY,
+        hoatDong:  true,
+        monAnIds:  [],
+      });
+    }
+  }, [open, initial]);
+
+  const handleOk = () => {
+    form.validateFields().then((values) => {
+      const { hetHanDate, ...rest } = values;
+      onSubmit({ ...rest, hetHan: (hetHanDate as Dayjs).format('D/M/YYYY') });
+    });
+  };
+
+  return (
+    <Modal
+      visible={open}
+      title={initial ? `Chỉnh sửa: ${initial.ten}` : 'Tạo combo mới'}
+      width={640}
+      onCancel={onCancel}
+      onOk={handleOk}
+      okText={initial ? 'Lưu thay đổi' : 'Tạo combo'}
+      cancelText="Huỷ"
+      destroyOnClose
+      className={styles.formModal}
+    >
+      <Form form={form} layout="vertical" preserve={false}>
+        <Form.Item
+          label="Tên combo"
+          name="ten"
+          rules={[
+            { required: true, message: 'Vui lòng nhập tên combo' },
+            { max: 80, message: 'Tối đa 80 ký tự' },
+          ]}
+        >
+          <Input placeholder="VD: Combo cơm trưa" />
+        </Form.Item>
+
+        <Form.Item
+          label="Mô tả"
+          name="moTa"
+          rules={[{ max: 120, message: 'Tối đa 120 ký tự' }]}
+        >
+          <Input.TextArea rows={2} showCount maxLength={120} placeholder="Mô tả ngắn..." />
+        </Form.Item>
+
+        <Form.Item
+          label="Món ăn trong combo"
+          name="monAnIds"
+          rules={[
+            { required: true, message: 'Vui lòng chọn ít nhất 2 món' },
+            {
+              validator: (_: any, value: string[]) =>
+                !value || value.length >= 2
+                  ? Promise.resolve()
+                  : Promise.reject(new Error('Combo cần ít nhất 2 món')),
+            },
+          ]}
+        >
+          <Select
+            mode="multiple"
+            placeholder="Chọn các món để tạo combo..."
+            optionFilterProp="label"
+            showArrow
+            allowClear
+          >
+            {DANH_SACH_MON.map((mon) => (
+              <Select.Option key={mon.id} value={mon.id} label={mon.ten}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span>{mon.ten}</span>
+                  <span style={{ fontSize: 11, color: '#9ca3af' }}>{fmtVnd(mon.giaBan)}</span>
+                </div>
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        {showPreview && (
+          <div style={{ marginBottom: 16, fontSize: 13, color: '#6b7280' }}>
+            Tổng giá lẻ: <strong style={{ color: '#111827' }}>{fmtVnd(tongLe)}</strong>
+          </div>
+        )}
+
+        <Form.Item label="Loại giá combo" name="loaiGia" rules={[{ required: true }]}>
+          <Radio.Group>
+            <Radio value={ELoaiGiaCombo.PHAN_TRAM}>Giảm %</Radio>
+            <Radio value={ELoaiGiaCombo.GIA_CO_DINH}>Giá cố định</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Item
+          label={loaiGiaWatch === ELoaiGiaCombo.PHAN_TRAM ? 'Mức giảm (%)' : 'Giá combo (đ)'}
+          name="giaTriGiam"
+          rules={[
+            { required: true, message: 'Vui lòng nhập giá trị' },
+            ...(loaiGiaWatch === ELoaiGiaCombo.PHAN_TRAM
+              ? [{ type: 'number' as const, min: 1, max: 99, message: 'Nhập 1–99%' }]
+              : [{ type: 'number' as const, min: 1000, message: 'Tối thiểu 1.000đ' }]),
+          ]}
+        >
+          <InputNumber
+            min={loaiGiaWatch === ELoaiGiaCombo.PHAN_TRAM ? 1 : 1000}
+            max={loaiGiaWatch === ELoaiGiaCombo.PHAN_TRAM ? 99 : undefined}
+            addonAfter={loaiGiaWatch === ELoaiGiaCombo.PHAN_TRAM ? '%' : 'đ'}
+            style={{ width: '100%' }}
+            formatter={
+              loaiGiaWatch === ELoaiGiaCombo.GIA_CO_DINH
+                ? (v) => `${v ?? ''}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : undefined
+            }
+            parser={
+              loaiGiaWatch === ELoaiGiaCombo.GIA_CO_DINH
+                ? (v) => Number((v ?? '').replace(/,/g, '')) as any
+                : undefined
+            }
+          />
+        </Form.Item>
+
+        {showPreview && giaComboPreview !== null && (
+          <div className={styles.comboFormPreview}>
+            <div className={styles.previewRow}>
+              <span className={styles.previewRowLabel}>Tổng giá lẻ</span>
+              <span>{fmtVnd(tongLe)}</span>
+            </div>
+            {loaiGiaWatch === ELoaiGiaCombo.PHAN_TRAM && (
+              <div className={styles.previewRow}>
+                <span className={styles.previewRowLabel}>Giảm ({giaTriWatch}%)</span>
+                <span style={{ color: '#dc2626' }}>−{fmtVnd(tongLe - giaComboPreview)}</span>
+              </div>
+            )}
+            <div className={styles.previewDivider} />
+            <div className={styles.previewFinalRow}>
+              <span className={styles.previewFinalLabel}>Giá combo</span>
+              <span className={styles.previewFinalValue}>{fmtVnd(giaComboPreview)}</span>
+            </div>
+            {tietKiemPreview !== null && tietKiemPreview > 0 && (
+              <div className={styles.previewSavingRow}>
+                <span>Tiết kiệm</span>
+                <span>{fmtVnd(tietKiemPreview)}</span>
+              </div>
+            )}
+            {previewError && <div className={styles.previewError}>{previewError}</div>}
+          </div>
+        )}
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 16 }}>
+          <Form.Item
+            label="Ngày hết hạn"
+            name="hetHanDate"
+            rules={[{ required: true, message: 'Vui lòng chọn ngày' }]}
+          >
+            <DatePicker format="D/M/YYYY" style={{ width: '100%' }} />
+          </Form.Item>
+
+          <Form.Item label="Trạng thái" name="trangThai" rules={[{ required: true }]}>
+            <Select>
+              <Select.Option value={ETrangThaiKhuyenMai.DANG_CHAY}>Đang chạy</Select.Option>
+              <Select.Option value={ETrangThaiKhuyenMai.SAP_HET}>Sắp hết</Select.Option>
+              <Select.Option value={ETrangThaiKhuyenMai.TAM_DUNG}>Tạm dừng</Select.Option>
+              <Select.Option value={ETrangThaiKhuyenMai.HET_HAN}>Hết hạn</Select.Option>
+            </Select>
+          </Form.Item>
+        </div>
+
+        <Form.Item label="Kích hoạt" name="hoatDong" valuePropName="checked">
+          <Switch checkedChildren="Bật" unCheckedChildren="Tắt" />
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+};
+
 // ── KhuyenMaiRow ──────────────────────────────────────────────────
 const KhuyenMaiRow: React.FC<{
   item: IKhuyenMai;
@@ -402,6 +636,81 @@ const KhuyenMaiRow: React.FC<{
   );
 };
 
+// ── ComboRow ──────────────────────────────────────────────────────
+const ComboRow: React.FC<{
+  item: ICombo;
+  onClick: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
+  onToggle: (v: boolean) => void;
+}> = ({ item, onClick, onEdit, onDelete, onToggle }) => {
+  const cfg = TRANG_THAI_KM_CONFIG[item.trangThai];
+  const { tongLe, giaCombo, tietKiem } = tinhGiaCombo(item);
+
+  const monList = item.monAnIds
+    .map((id) => DANH_SACH_MON.find((m) => m.id === id))
+    .filter(Boolean) as (typeof DANH_SACH_MON[number])[];
+
+  const moreMenu = (
+    <Menu onClick={({ key }) => { if (key === 'edit') onEdit(); else if (key === 'delete') onDelete(); }}>
+      <Menu.Item key="edit" icon={<EditOutlined />}>Chỉnh sửa</Menu.Item>
+      <Menu.Item key="delete" icon={<DeleteOutlined />} danger>Xoá</Menu.Item>
+    </Menu>
+  );
+
+  return (
+    <div className={styles.comboCard} onClick={onClick}>
+      <div className={styles.comboCardTop}>
+        <div className={styles.comboCardLeft}>
+          <div className={styles.comboCardTitle}>
+            <span className={styles.comboCardName}>{item.ten}</span>
+            <span className={styles.promoStatus} style={{ color: cfg.color, background: cfg.bg }}>
+              {cfg.label}
+            </span>
+          </div>
+          <div className={styles.comboCardMoTa}>{item.moTa}</div>
+        </div>
+
+        <div className={styles.comboCardActions} onClick={(e) => e.stopPropagation()}>
+          <Switch
+            checked={item.hoatDong}
+            onChange={onToggle}
+            className={item.hoatDong ? styles.switchOn : styles.switchOff}
+          />
+          <Dropdown overlay={moreMenu} trigger={['click']}>
+            <button className={styles.moreBtn}>
+              <MoreOutlined />
+            </button>
+          </Dropdown>
+        </div>
+      </div>
+
+      <div className={styles.comboDishChips}>
+        {monList.map((mon) => (
+          <span
+            key={mon.id}
+            className={styles.comboDishChip}
+            style={{ background: mon.mauNen }}
+          >
+            {mon.ten}
+          </span>
+        ))}
+      </div>
+
+      <div className={styles.comboPriceRow}>
+        <span className={styles.comboOriginalPrice}>{fmtVnd(tongLe)}</span>
+        <span className={styles.comboArrow}>→</span>
+        <span className={styles.comboFinalPrice}>{fmtVnd(giaCombo)}</span>
+        <span className={styles.comboSaving}>Tiết kiệm {fmtVnd(tietKiem)}</span>
+        <div className={styles.comboExpiry}>
+          <span className={styles.comboExpiryLabel}>Hết hạn</span>
+          <span className={styles.comboExpiryDate}>{item.hetHan}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ── KhuyenMai page ────────────────────────────────────────────────
 const KhuyenMai: React.FC = () => {
   const [items,          setItems]          = useState<IKhuyenMai[]>(DANH_SACH_KHUYEN_MAI);
@@ -410,6 +719,13 @@ const KhuyenMai: React.FC = () => {
   const [editing,        setEditing]        = useState<IKhuyenMai | null>(null);
   const [viewing,        setViewing]        = useState<IKhuyenMai | null>(null);
   const [formOpen,       setFormOpen]       = useState(false);
+
+  // ── Combo state ────────────────────────────────────────────────
+  const [activeTab,     setActiveTab]     = useState<'ma-giam-gia' | 'combo'>('ma-giam-gia');
+  const [comboItems,    setComboItems]    = useState<ICombo[]>(DANH_SACH_COMBO);
+  const [comboFormOpen, setComboFormOpen] = useState(false);
+  const [editingCombo,  setEditingCombo]  = useState<ICombo | null>(null);
+  const [comboTuKhoa,   setComboTuKhoa]   = useState('');
 
   // ── Dynamic stats ──────────────────────────────────────────────
   const stats = useMemo(() => ({
@@ -504,6 +820,48 @@ const KhuyenMai: React.FC = () => {
     setEditing(null);
   };
 
+  // ── Combo handlers ────────────────────────────────────────────
+  const handleComboToggle = (id: string, v: boolean) => {
+    setComboItems((prev) => prev.map((c) => (c.id === id ? { ...c, hoatDong: v } : c)));
+    message.success(v ? 'Đã kích hoạt combo' : 'Đã tạm dừng combo');
+  };
+
+  const handleComboDelete = (item: ICombo) => {
+    Modal.confirm({
+      title: 'Xác nhận xoá combo?',
+      icon: <ExclamationCircleOutlined />,
+      content: `Xoá combo "${item.ten}"? Hành động không thể hoàn tác.`,
+      okText: 'Xoá',
+      okType: 'danger',
+      cancelText: 'Huỷ',
+      onOk: () => {
+        setComboItems((prev) => prev.filter((c) => c.id !== item.id));
+        message.success(`Đã xoá combo "${item.ten}"`);
+      },
+    });
+  };
+
+  const handleComboSubmit = (data: ComboFormPayload) => {
+    if (editingCombo) {
+      setComboItems((prev) =>
+        prev.map((c) => (c.id === editingCombo.id ? { ...c, ...data } : c)),
+      );
+      message.success('Đã cập nhật combo');
+    } else {
+      const newCombo: ICombo = { ...data, id: `cb_${Date.now()}` };
+      setComboItems((prev) => [newCombo, ...prev]);
+      message.success(`Đã tạo combo "${data.ten}"`);
+    }
+    setComboFormOpen(false);
+    setEditingCombo(null);
+  };
+
+  const danhSachComboLoc = useMemo(() => {
+    if (!comboTuKhoa.trim()) return comboItems;
+    const kw = comboTuKhoa.toLowerCase();
+    return comboItems.filter((c) => c.ten.toLowerCase().includes(kw));
+  }, [comboItems, comboTuKhoa]);
+
   // ── Filter dropdown ────────────────────────────────────────────
   const filterMenu = (
     <Menu
@@ -555,51 +913,95 @@ const KhuyenMai: React.FC = () => {
             ))}
           </div>
 
-          {/* ── Toolbar ── */}
-          <div className={styles.toolbar}>
-            <Input
-              prefix={<SearchOutlined className={styles.searchIcon} />}
-              placeholder="Tìm mã, tên chương trình..."
-              className={styles.searchInput}
-              value={tuKhoa}
-              onChange={(e) => setTuKhoa(e.target.value)}
-              allowClear
-            />
-            <Badge count={filterTrangThai ? 1 : 0} size="small" offset={[-4, 4]}>
-              <Dropdown overlay={filterMenu} trigger={['click']}>
-                <Button icon={<FilterOutlined />} className={styles.btnFilter}>
-                  Lọc trạng thái
-                </Button>
-              </Dropdown>
-            </Badge>
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              className={styles.btnCreate}
-              onClick={() => { setEditing(null); setFormOpen(true); }}
-            >
-              Tạo khuyến mãi
-            </Button>
-          </div>
-
-          {/* ── Promo list ── */}
-          <div className={styles.promoList}>
-            {danhSachLoc.map((item, idx) => (
-              <React.Fragment key={item.id}>
-                <KhuyenMaiRow
-                  item={item}
-                  onClick={() => setViewing(item)}
-                  onEdit={() => { setEditing(item); setFormOpen(true); }}
-                  onDelete={() => handleDelete(item)}
-                  onToggle={(v) => handleToggleHoatDong(item.id, v)}
+          {/* ── Tabs ── */}
+          <Tabs
+            activeKey={activeTab}
+            onChange={(key) => setActiveTab(key as 'ma-giam-gia' | 'combo')}
+            className={styles.mainTabs}
+          >
+            <Tabs.TabPane key="ma-giam-gia" tab="Mã Giảm Giá">
+              <div className={styles.toolbar} style={{ padding: '0 20px 16px' }}>
+                <Input
+                  prefix={<SearchOutlined className={styles.searchIcon} />}
+                  placeholder="Tìm mã, tên chương trình..."
+                  className={styles.searchInput}
+                  value={tuKhoa}
+                  onChange={(e) => setTuKhoa(e.target.value)}
+                  allowClear
                 />
-                {idx < danhSachLoc.length - 1 && <div className={styles.divider} />}
-              </React.Fragment>
-            ))}
-            {danhSachLoc.length === 0 && (
-              <div className={styles.empty}>Không tìm thấy khuyến mãi phù hợp</div>
-            )}
-          </div>
+                <Badge count={filterTrangThai ? 1 : 0} size="small" offset={[-4, 4]}>
+                  <Dropdown overlay={filterMenu} trigger={['click']}>
+                    <Button icon={<FilterOutlined />} className={styles.btnFilter}>
+                      Lọc trạng thái
+                    </Button>
+                  </Dropdown>
+                </Badge>
+                <Button
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  className={styles.btnCreate}
+                  onClick={() => { setEditing(null); setFormOpen(true); }}
+                >
+                  Tạo khuyến mãi
+                </Button>
+              </div>
+
+              <div className={styles.promoList} style={{ border: 'none', borderRadius: 0 }}>
+                {danhSachLoc.map((item, idx) => (
+                  <React.Fragment key={item.id}>
+                    <KhuyenMaiRow
+                      item={item}
+                      onClick={() => setViewing(item)}
+                      onEdit={() => { setEditing(item); setFormOpen(true); }}
+                      onDelete={() => handleDelete(item)}
+                      onToggle={(v) => handleToggleHoatDong(item.id, v)}
+                    />
+                    {idx < danhSachLoc.length - 1 && <div className={styles.divider} />}
+                  </React.Fragment>
+                ))}
+                {danhSachLoc.length === 0 && (
+                  <div className={styles.empty}>Không tìm thấy khuyến mãi phù hợp</div>
+                )}
+              </div>
+            </Tabs.TabPane>
+
+            <Tabs.TabPane key="combo" tab="Combo">
+              <div className={styles.comboToolbar}>
+                <Input
+                  prefix={<SearchOutlined className={styles.searchIcon} />}
+                  placeholder="Tìm tên combo..."
+                  className={styles.searchInput}
+                  value={comboTuKhoa}
+                  onChange={(e) => setComboTuKhoa(e.target.value)}
+                  allowClear
+                />
+                <Button
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  className={styles.btnComboCreate}
+                  onClick={() => { setEditingCombo(null); setComboFormOpen(true); }}
+                >
+                  Tạo combo
+                </Button>
+              </div>
+
+              <div className={styles.comboList}>
+                {danhSachComboLoc.map((item) => (
+                  <ComboRow
+                    key={item.id}
+                    item={item}
+                    onClick={() => {}}
+                    onEdit={() => { setEditingCombo(item); setComboFormOpen(true); }}
+                    onDelete={() => handleComboDelete(item)}
+                    onToggle={(v) => handleComboToggle(item.id, v)}
+                  />
+                ))}
+                {danhSachComboLoc.length === 0 && (
+                  <div className={styles.empty}>Không tìm thấy combo phù hợp</div>
+                )}
+              </div>
+            </Tabs.TabPane>
+          </Tabs>
         </div>
       </div>
 
@@ -614,6 +1016,12 @@ const KhuyenMai: React.FC = () => {
         item={viewing}
         onClose={() => setViewing(null)}
         onEdit={() => { setEditing(viewing); setViewing(null); setFormOpen(true); }}
+      />
+      <ComboForm
+        open={comboFormOpen}
+        initial={editingCombo}
+        onCancel={() => { setComboFormOpen(false); setEditingCombo(null); }}
+        onSubmit={handleComboSubmit}
       />
     </div>
   );

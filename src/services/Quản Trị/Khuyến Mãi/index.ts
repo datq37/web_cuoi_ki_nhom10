@@ -1,4 +1,4 @@
-import { ELoaiGiamGia, ETrangThaiKhuyenMai, IKhuyenMai, IStatKhuyenMai } from './typing';
+import { ELoaiGiamGia, ELoaiGiaCombo, ETrangThaiKhuyenMai, ICombo, IKhuyenMai, IStatKhuyenMai } from './typing';
 
 export const DANH_SACH_KHUYEN_MAI: IKhuyenMai[] = [
   {
@@ -93,6 +93,42 @@ export const STAT_KHUYEN_MAI: IStatKhuyenMai = {
   doanhThuTao: '12.4tr',
   tyLeChuyenDoi: 62,
 };
+
+export const DANH_SACH_COMBO: ICombo[] = [
+  {
+    id: 'cb1',
+    ten: 'Combo cơm trưa',
+    moTa: 'Cơm chiên kết hợp trà đào mát lạnh',
+    monAnIds: ['m1', 'm5'],
+    loaiGia: ELoaiGiaCombo.PHAN_TRAM,
+    giaTriGiam: 10,
+    hetHan: '30/6/2026',
+    trangThai: ETrangThaiKhuyenMai.DANG_CHAY,
+    hoatDong: true,
+  },
+  {
+    id: 'cb2',
+    ten: 'Combo bánh mì & trà sữa',
+    moTa: 'Bữa xế chiều hoàn hảo',
+    monAnIds: ['m10', 'm7'],
+    loaiGia: ELoaiGiaCombo.GIA_CO_DINH,
+    giaTriGiam: 50000,
+    hetHan: '31/8/2026',
+    trangThai: ETrangThaiKhuyenMai.DANG_CHAY,
+    hoatDong: true,
+  },
+  {
+    id: 'cb3',
+    ten: 'Combo chay đặc biệt',
+    moTa: 'Đậu hũ + cà phê sữa thanh đạm',
+    monAnIds: ['m11', 'm12', 'm6'],
+    loaiGia: ELoaiGiaCombo.PHAN_TRAM,
+    giaTriGiam: 15,
+    hetHan: '15/7/2026',
+    trangThai: ETrangThaiKhuyenMai.SAP_HET,
+    hoatDong: true,
+  },
+];
 
 export const TRANG_THAI_KM_CONFIG: Record<
   ETrangThaiKhuyenMai,

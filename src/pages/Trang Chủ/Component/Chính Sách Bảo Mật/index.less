@@ -90,7 +90,25 @@
   .pp-sidebar-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    cursor: default;
+  }
+
+  .pp-sidebar-title-group {
+    display: flex;
+    align-items: center;
     gap: 12px;
+  }
+
+  .pp-sidebar-toggle {
+    display: none;
+    color: #6b7280;
+    transition: transform 0.3s;
+    &.open { transform: rotate(180deg); }
+  }
+
+  .pp-sidebar-collapsible {
+    display: block;
   }
 
   .pp-sidebar-icon {
@@ -445,6 +463,18 @@
     .pp-sidebar {
       position: static;
     }
+    .pp-sidebar-header {
+      cursor: pointer;
+    }
+    .pp-sidebar-toggle {
+      display: block;
+    }
+    .pp-sidebar-collapsible {
+      display: none;
+      &.open {
+        display: block;
+      }
+    }
     .pp-security-grid {
       grid-template-columns: 1fr;
     }
@@ -473,6 +503,91 @@
     }
     .pp-header {
       padding: 0 16px;
+    }
+  }
+
+  &.theme-dark {
+    background-color: #141414;
+    color: #f0f0f0;
+
+    .pp-header {
+      background-color: #1f1f1f;
+      border-bottom-color: #303030;
+    }
+    .pp-back-btn {
+      background-color: #1f1f1f;
+      border-color: #303030;
+      color: #22c55e;
+      &:hover { background-color: #2a2a2a; }
+    }
+    .pp-brand-name { color: #22c55e; }
+    .pp-brand-slogan { color: #9ca3af; }
+    
+    .pp-sidebar {
+      background-color: #1f1f1f;
+      border-color: #303030;
+      box-shadow: none;
+    }
+    .pp-sidebar-icon { background-color: #2a2a2a; color: #22c55e; }
+    .pp-sidebar-title { color: #f0f0f0; }
+    .pp-sidebar-divider { background-color: #22c55e; }
+    
+    .pp-nav-item {
+      color: #d1d5db;
+      &:hover { background-color: #2a2a2a; color: #22c55e; }
+      &.active {
+        background-color: #166534;
+        color: #f0f0f0;
+        .pp-nav-icon { background-color: #14532d; color: #f0f0f0; }
+      }
+    }
+    .pp-nav-icon { background-color: #303030; color: #9ca3af; }
+    
+    .pp-sidebar-banner {
+      background: linear-gradient(to bottom right, #166534, #1f1f1f);
+      border-color: #14532d;
+    }
+    .pp-banner-icon { background-color: #1f1f1f; color: #22c55e; }
+    .pp-banner-text h3 { color: #22c55e; }
+    .pp-banner-text p { color: #d1d5db; }
+    
+    .pp-content-area {
+      background-color: #1f1f1f;
+      border-color: #303030;
+      box-shadow: none;
+    }
+    .pp-main-title { color: #f0f0f0; }
+    .pp-last-updated { color: #9ca3af; .icon { color: #22c55e; } }
+    
+    .pp-intro-box {
+      background: linear-gradient(to right, #166534, #1f1f1f, #166534);
+      border-color: #14532d;
+    }
+    .pp-intro-icon-wrapper {
+      background-color: #1f1f1f;
+      .pp-intro-icon-bg { background: linear-gradient(to bottom right, #14532d, #1f1f1f); }
+      .icon { color: #22c55e; }
+    }
+    .pp-intro-text { color: #d1d5db; }
+    
+    .pp-divider { background-color: #303030; }
+    
+    .pp-section-number { background-color: #22c55e; color: #1f1f1f; box-shadow: none; }
+    .pp-section-title { color: #f0f0f0; }
+    .pp-section-body { color: #d1d5db; }
+    
+    .pp-info-line {
+      .pp-info-icon { background-color: #2a2a2a; color: #22c55e; }
+      b { color: #22c55e; }
+    }
+    .pp-check-item .icon { color: #22c55e; }
+    
+    .pp-security-card {
+      background-color: #2a2a2a;
+      border-color: #303030;
+      .pp-security-icon { background-color: #1f1f1f; color: #22c55e; }
+      h3 { color: #f0f0f0; }
+      p { color: #9ca3af; }
     }
   }
 }

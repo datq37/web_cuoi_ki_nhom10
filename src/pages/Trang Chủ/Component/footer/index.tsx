@@ -79,10 +79,6 @@ export default function HomeFooter() {
                 text="Hỗ trợ khách hàng"
                 onClick={() => history.push('/lien-he')}
               />
-              <FooterLink
-                icon={<CircleHelp size={22} />}
-                text="Câu hỏi thường gặp"
-              />
             </FooterColumn>
 
             {/* Contact */}

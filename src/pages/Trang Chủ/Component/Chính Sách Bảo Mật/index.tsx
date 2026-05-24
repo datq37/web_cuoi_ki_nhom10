@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import {
   ArrowLeft,
   BookOpen,
@@ -12,9 +12,9 @@ import {
   Building2,
   Mail,
   Truck,
-  TicketPercent,
   History,
   CheckCircle2,
+  ChevronDown,
 } from 'lucide-react';
 
 import './index.less';
@@ -38,7 +38,9 @@ const menuItems = [
 ];
 
 export default function PrivacyPage() {
+  const { theme } = useModel('Khách Hàng.global');
   const [activeSection, setActiveSection] = React.useState(menuItems[0].id);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   // Cuộn lên đầu trang khi load
   useEffect(() => {
@@ -55,7 +57,7 @@ export default function PrivacyPage() {
   };
 
   return (
-    <div className="privacy-page-wrapper">
+    <div className={`privacy-page-wrapper theme-${theme}`}>
       {/* Header */}
       <header className="pp-header">
         <button className="pp-back-btn" onClick={() => history.push('/')}>
@@ -81,42 +83,56 @@ export default function PrivacyPage() {
       <main className="pp-main">
         {/* Sidebar */}
         <aside className="pp-sidebar">
-          <div className="pp-sidebar-header">
-            <div className="pp-sidebar-icon">
-              <BookOpen size={20} />
+          <div 
+            className="pp-sidebar-header"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <div className="pp-sidebar-title-group">
+              <div className="pp-sidebar-icon">
+                <BookOpen size={20} />
+              </div>
+              <h2 className="pp-sidebar-title">MỤC LỤC</h2>
             </div>
-            <h2 className="pp-sidebar-title">MỤC LỤC</h2>
+            
+            <div className={`pp-sidebar-toggle ${isMenuOpen ? 'open' : ''}`}>
+              <ChevronDown size={20} />
+            </div>
           </div>
 
-          <div className="pp-sidebar-divider" />
+          <div className={`pp-sidebar-collapsible ${isMenuOpen ? 'open' : ''}`}>
+            <div className="pp-sidebar-divider" />
 
-          <nav className="pp-nav-menu">
-            {menuItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`pp-nav-item ${activeSection === item.id ? 'active' : ''}`}
-              >
-                <span className="pp-nav-icon">
-                  {item.icon}
-                </span>
-                <span className="pp-nav-text">
-                  {item.title}
-                </span>
-              </button>
-            ))}
-          </nav>
+            <nav className="pp-nav-menu">
+              {menuItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    scrollToSection(item.id);
+                    setIsMenuOpen(false); // Đóng menu khi click trên mobile
+                  }}
+                  className={`pp-nav-item ${activeSection === item.id ? 'active' : ''}`}
+                >
+                  <span className="pp-nav-icon">
+                    {item.icon}
+                  </span>
+                  <span className="pp-nav-text">
+                    {item.title}
+                  </span>
+                </button>
+              ))}
+            </nav>
 
-          <div className="pp-sidebar-banner">
-            <div className="pp-banner-deco">❧</div>
+            <div className="pp-sidebar-banner">
+              <div className="pp-banner-deco">❧</div>
 
-            <div className="pp-banner-content">
-              <div className="pp-banner-icon">
-                <ShieldCheck size={24} />
-              </div>
-              <div className="pp-banner-text">
-                <h3>Dữ liệu an toàn</h3>
-                <p>Cam kết bảo mật dữ liệu theo tiêu chuẩn ISO 27001.</p>
+              <div className="pp-banner-content">
+                <div className="pp-banner-icon">
+                  <ShieldCheck size={24} />
+                </div>
+                <div className="pp-banner-text">
+                  <h3>Dữ liệu an toàn</h3>
+                  <p>Cam kết bảo mật dữ liệu theo tiêu chuẩn ISO 27001.</p>
+                </div>
               </div>
             </div>
           </div>

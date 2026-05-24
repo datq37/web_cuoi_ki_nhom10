@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import {
   ArrowLeft,
   Phone,
@@ -40,12 +40,14 @@ const contactItems = [
 ];
 
 export default function ContactPage() {
+  const { theme } = useModel('Khách Hàng.global');
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
-    <div className="contact-page-wrapper">
+    <div className={`contact-page-wrapper theme-${theme}`}>
       <header className="cp-header">
         <button className="cp-back-btn" onClick={() => history.push('/')}>
           <ArrowLeft size={18} />

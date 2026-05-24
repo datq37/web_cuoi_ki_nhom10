@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import {
   ArrowLeft,
   BookOpen,
@@ -15,6 +15,7 @@ import {
   User,
   FileText,
   Truck,
+  ChevronDown,
 } from 'lucide-react';
 
 import '../Chính Sách Bảo Mật/index.less'; // Import chung CSS đã được chuẩn hóa
@@ -43,7 +44,9 @@ const menuItems = [
 ];
 
 export default function TermsPage() {
+  const { theme } = useModel('Khách Hàng.global');
   const [activeSection, setActiveSection] = React.useState(menuItems[0].id);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -59,7 +62,7 @@ export default function TermsPage() {
   };
 
   return (
-    <div className="privacy-page-wrapper">
+    <div className={`privacy-page-wrapper theme-${theme}`}>
       {/* Header */}
       <header className="pp-header">
         <button className="pp-back-btn" onClick={() => history.push('/')}>
@@ -84,47 +87,61 @@ export default function TermsPage() {
       <main className="pp-main">
         {/* Sidebar */}
         <aside className="pp-sidebar">
-          <div className="pp-sidebar-header">
-            <div className="pp-sidebar-icon">
-              <BookOpen size={20} />
-            </div>
-
-            <h2 className="pp-sidebar-title">
-              Điều Khoản
-            </h2>
-          </div>
-
-          <div className="pp-sidebar-divider" />
-
-          <nav className="pp-nav-menu">
-            {menuItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`pp-nav-item ${activeSection === item.id ? 'active' : ''}`}
-              >
-                <span className="pp-nav-icon">
-                  {item.icon}
-                </span>
-
-                <span className="pp-nav-text">
-                  {item.title}
-                </span>
-              </button>
-            ))}
-          </nav>
-
-          <div className="pp-sidebar-banner">
-            <div className="pp-banner-deco">❧</div>
-
-            <div className="pp-banner-content">
-              <div className="pp-banner-icon">
-                <ShieldCheck size={24} />
+          <div 
+            className="pp-sidebar-header"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <div className="pp-sidebar-title-group">
+              <div className="pp-sidebar-icon">
+                <BookOpen size={20} />
               </div>
 
-              <div className="pp-banner-text">
-                <h3>Sử dụng nội bộ</h3>
-                <p>Áp dụng riêng cho Cán bộ, Nhân viên của doanh nghiệp.</p>
+              <h2 className="pp-sidebar-title">
+                Điều Khoản
+              </h2>
+            </div>
+            
+            <div className={`pp-sidebar-toggle ${isMenuOpen ? 'open' : ''}`}>
+              <ChevronDown size={20} />
+            </div>
+          </div>
+
+          <div className={`pp-sidebar-collapsible ${isMenuOpen ? 'open' : ''}`}>
+            <div className="pp-sidebar-divider" />
+
+            <nav className="pp-nav-menu">
+              {menuItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    scrollToSection(item.id);
+                    setIsMenuOpen(false); // Đóng menu khi click trên mobile
+                  }}
+                  className={`pp-nav-item ${activeSection === item.id ? 'active' : ''}`}
+                >
+                  <span className="pp-nav-icon">
+                    {item.icon}
+                  </span>
+
+                  <span className="pp-nav-text">
+                    {item.title}
+                  </span>
+                </button>
+              ))}
+            </nav>
+
+            <div className="pp-sidebar-banner">
+              <div className="pp-banner-deco">❧</div>
+
+              <div className="pp-banner-content">
+                <div className="pp-banner-icon">
+                  <ShieldCheck size={24} />
+                </div>
+
+                <div className="pp-banner-text">
+                  <h3>Sử dụng nội bộ</h3>
+                  <p>Áp dụng riêng cho Cán bộ, Nhân viên của doanh nghiệp.</p>
+                </div>
               </div>
             </div>
           </div>

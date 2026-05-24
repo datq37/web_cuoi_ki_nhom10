@@ -319,4 +319,68 @@
       padding: 0 20px;
     }
   }
+
+  &.theme-dark {
+    background-color: #141414;
+    color: #f0f0f0;
+
+    .cp-header {
+      background-color: #1f1f1f;
+      border-bottom-color: #303030;
+    }
+    .cp-back-btn {
+      background-color: #1f1f1f;
+      border-color: #303030;
+      color: #22c55e;
+      &:hover { background-color: #2a2a2a; }
+    }
+    .cp-brand-name { color: #22c55e; }
+    .cp-brand-slogan { color: #9ca3af; }
+    
+    .cp-deco-leaf { color: #166534; opacity: 0.3; }
+    
+    .cp-hero-card {
+      background-color: #1f1f1f;
+      border-color: #303030;
+      box-shadow: none;
+    }
+    
+    .cp-illustration-circle {
+      background: linear-gradient(to bottom right, #166534, #1f1f1f);
+      .icon { color: #22c55e; }
+    }
+    .cp-illustration-bg { background-color: #14532d; }
+    .cp-badge-1 { background-color: #166534; }
+    .cp-badge-2, .cp-badge-3 { background-color: #22c55e; }
+    
+    .cp-hero-text {
+      .cp-title { color: #f0f0f0; }
+      .cp-desc { color: #d1d5db; }
+    }
+    
+    .cp-contact-card {
+      background-color: #1f1f1f;
+      border-color: #303030;
+      box-shadow: none;
+      &.active { border-color: #22c55e; }
+      &:hover {
+        background-color: #2a2a2a;
+        .cp-card-icon { background-color: #22c55e; color: #1f1f1f; }
+      }
+      &.active .cp-card-icon { background-color: #166534; color: #22c55e; }
+      
+      .cp-card-icon { background-color: #2a2a2a; color: #22c55e; }
+      .cp-card-content {
+        .cp-card-title { color: #f0f0f0; }
+        .cp-card-value { color: #22c55e; }
+        .cp-card-desc { color: #9ca3af; }
+      }
+    }
+    
+    .cp-footer {
+      background-color: #1f1f1f;
+      border-top-color: #303030;
+      color: #9ca3af;
+    }
+  }
 }

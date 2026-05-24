@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Topbar from './Component/topbar/topbar';
-import FoodSlider from './Hero Section';
+import FeaturedMenu from './Component/FeaturedMenu';
 import WhyChooseUs from './Component/WhyChooseUs';
 import Footer from './Component/footer';
 import './index.less';
@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
           viewport={{ once: true, amount: 0.1 }}
           variants={revealVariants}
         >
-          <FoodSlider />
+          <FeaturedMenu />
         </motion.div>
 
         <motion.div
@@ -34,7 +34,14 @@ const HomePage: React.FC = () => {
           <WhyChooseUs />
         </motion.div>
       </main>
-      <Footer />
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+        variants={revealVariants}
+      >
+        <Footer />
+      </motion.div>
     </div>
   );
 };

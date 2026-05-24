@@ -10,7 +10,6 @@ export interface IMonAn {
   id: string;
   ten: string;
   moTa: string;
-  emoji: string;
   danhMuc: EDanhMuc;
   giaBan: number;
   thoiGian: number;

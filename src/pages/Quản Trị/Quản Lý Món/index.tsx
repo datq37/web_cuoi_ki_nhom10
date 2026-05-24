@@ -81,7 +81,7 @@ const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete }) => 
       {mon.hinhAnh ? (
         <img src={mon.hinhAnh} alt={mon.ten} className={styles.cardImg} />
       ) : (
-        <span className={styles.cardEmoji}>{mon.emoji}</span>
+        <PictureOutlined className={styles.cardNoImg} />
       )}
       {mon.isHot && (
         <span className={styles.hotBadge}>
@@ -99,7 +99,7 @@ const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete }) => 
           <ClockCircleOutlined className={styles.statIcon} />
           {mon.thoiGian} phút
         </span>
-        <span className={styles.statItem}>🔥 {mon.calo} kcal</span>
+        <span className={styles.statItem}><FireOutlined className={styles.statIcon} /> {mon.calo} kcal</span>
         <span className={styles.statItem}>
           <StarFilled className={styles.starIcon} />
           {mon.danhGia}
@@ -152,7 +152,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
       form.setFieldsValue({
         danhMuc:    EDanhMuc.MON_CHINH,
         isHot:      false,
-        emoji:      '🍽️',
         mauNen:     PRESET_GRADIENTS[0],
         danhGia:    5,
         thoiGian:   10,
@@ -336,7 +335,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
 
         {/* hidden — giữ giá trị khi edit, dùng default khi tạo mới */}
         <Form.Item name="mauNen" hidden><Input /></Form.Item>
-        <Form.Item name="emoji"  hidden><Input /></Form.Item>
         <Form.Item name="isHot"  hidden valuePropName="checked"><Switch /></Form.Item>
 
         <Form.Item name="danhGia" label="Đánh giá mặc định" style={{ marginBottom: 0 }}>
@@ -393,7 +391,7 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
         ) : (
-          <span style={{ fontSize: 80 }}>{mon.emoji}</span>
+          <PictureOutlined style={{ fontSize: 48, color: 'rgba(255,255,255,0.6)' }} />
         )}
         {mon.isHot && (
           <span style={{

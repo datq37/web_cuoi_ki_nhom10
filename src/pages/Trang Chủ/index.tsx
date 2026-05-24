@@ -1,9 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Topbar from './Component/topbar/topbar';
-import Banner from './Banner/banner';
 import FoodSlider from './Hero Section';
-import ContentSection from './Content';
+import WhyChooseUs from './Component/WhyChooseUs';
 import Footer from './Component/footer';
 import './index.less';
 
@@ -17,8 +16,6 @@ const HomePage: React.FC = () => {
     <div className="home-page-container">
       <Topbar />
       <main>
-        <Banner />
-        
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -34,10 +31,8 @@ const HomePage: React.FC = () => {
           viewport={{ once: true, amount: 0.1 }}
           variants={revealVariants}
         >
-          <ContentSection />
+          <WhyChooseUs />
         </motion.div>
-
-        {/* Các phần khác của trang chủ sẽ được thêm vào đây sau */}
       </main>
       <Footer />
     </div>

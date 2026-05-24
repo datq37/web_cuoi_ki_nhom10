@@ -1,9 +1,11 @@
 import {
   AppstoreOutlined,
   ClockCircleOutlined,
+  CloseOutlined,
   DeleteOutlined,
   EditOutlined,
   FireOutlined,
+  PictureOutlined,
   PlusOutlined,
   SearchOutlined,
   StarFilled,
@@ -19,17 +21,24 @@ import {
   Row,
   Select,
   Switch,
+  Tag,
   message,
 } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
+import { DANH_SACH_NGUYEN_LIEU } from '@/services/Quản Trị/Kho Nguyên Liệu';
 import { DANH_SACH_MON } from '@/services/Quản Trị/Quản Lý Món';
 import { EDanhMuc, IMonAn } from '@/services/Quản Trị/Quản Lý Món/typing';
 import styles from './index.less';
 
-// ── Helpers ──────────────────────────────────────────────────────
+// ── Local extension — không sửa typing.ts ────────────────────────
+interface IMonAnLocal extends IMonAn {
+  hinhAnh?: string;
+  nguyenLieu?: string[];
+}
 
+// ── Helpers ──────────────────────────────────────────────────────
 function formatGia(gia: number): string {
   return new Intl.NumberFormat('vi-VN').format(gia) + 'đ';
 }
@@ -59,9 +68,8 @@ interface TabDanhMuc {
 }
 
 // ── MonCard ───────────────────────────────────────────────────────
-
 interface MonCardProps {
-  mon: IMonAn;
+  mon: IMonAnLocal;
   onClick: () => void;
   onEdit: () => void;
   onDelete: () => void;
@@ -69,8 +77,12 @@ interface MonCardProps {
 
 const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete }) => (
   <div className={styles.monCard} onClick={onClick} style={{ cursor: 'pointer' }}>
-    <div className={styles.cardImage} style={{ background: mon.mauNen }}>
-      <span className={styles.cardEmoji}>{mon.emoji}</span>
+    <div className={styles.cardImage} style={mon.hinhAnh ? {} : { background: mon.mauNen }}>
+      {mon.hinhAnh ? (
+        <img src={mon.hinhAnh} alt={mon.ten} className={styles.cardImg} />
+      ) : (
+        <span className={styles.cardEmoji}>{mon.emoji}</span>
+      )}
       {mon.isHot && (
         <span className={styles.hotBadge}>
           <FireOutlined style={{ marginRight: 3 }} />HOT
@@ -118,45 +130,53 @@ const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete }) => 
 );
 
 // ── MonForm ───────────────────────────────────────────────────────
-
 interface MonFormProps {
   open: boolean;
-  initial: IMonAn | null;
+  initial: IMonAnLocal | null;
   onCancel: () => void;
-  onSubmit: (values: any) => void;
+  onSubmit: (values: Partial<IMonAnLocal>) => void;
 }
 
 const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) => {
   const [form] = Form.useForm();
+  const [imgPreview, setImgPreview] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (open) {
-      if (initial) {
-        form.setFieldsValue(initial);
-      } else {
-        form.setFieldsValue({
-          id:       undefined,
-          danhMuc:  EDanhMuc.MON_CHINH,
-          isHot:    false,
-          emoji:    '🍽️',
-          mauNen:   PRESET_GRADIENTS[0],
-          danhGia:  5,
-          thoiGian: 10,
-          calo:     0,
-          ten:      undefined,
-          moTa:     undefined,
-          giaBan:   undefined,
-        });
-      }
+    if (!open) return;
+    setImgPreview(initial?.hinhAnh ?? '');
+    if (initial) {
+      form.setFieldsValue({ ...initial, nguyenLieu: initial.nguyenLieu ?? [] });
+    } else {
+      form.resetFields();
+      form.setFieldsValue({
+        danhMuc:    EDanhMuc.MON_CHINH,
+        isHot:      false,
+        emoji:      '🍽️',
+        mauNen:     PRESET_GRADIENTS[0],
+        danhGia:    5,
+        thoiGian:   10,
+        calo:       0,
+        nguyenLieu: [],
+      });
     }
   }, [open, initial]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => setImgPreview(ev.target!.result as string);
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
 
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-      onSubmit(values);
+      onSubmit({ ...values, hinhAnh: imgPreview || undefined });
     } catch {
-      // validation failed — antd shows field errors automatically
+      // antd hiển thị lỗi tự động
     }
   };
 
@@ -167,18 +187,56 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
       onOk={handleOk}
       okText={initial ? 'Cập nhật' : 'Thêm món'}
       cancelText="Huỷ"
-      width={640}
+      width={660}
       title={initial ? `Chỉnh sửa: ${initial.ten}` : 'Thêm món mới'}
       destroyOnClose
       okButtonProps={{ type: 'primary' }}
       className={styles.formModal}
       transitionName="ant-move-up"
     >
-      <Form form={form} layout="vertical" preserve={false} style={{ marginTop: 12 }}>
-        {/* hidden id */}
+      <Form form={form} layout="vertical" preserve={false} style={{ marginTop: 8 }}>
         <Form.Item name="id" hidden><Input /></Form.Item>
 
-        {/* Tên */}
+        {/* ── Hình ảnh ── */}
+        <Form.Item label="Hình ảnh món ăn">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={handleFileChange}
+          />
+          <div
+            className={`${styles.imgUploadArea} ${imgPreview ? styles.imgUploadHasImg : ''}`}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            {imgPreview ? (
+              <>
+                <img src={imgPreview} alt="preview" className={styles.imgPreviewImg} />
+                <div className={styles.imgPreviewOverlay}>
+                  <PictureOutlined style={{ marginRight: 6 }} />Thay ảnh
+                </div>
+              </>
+            ) : (
+              <div className={styles.imgEmptyState}>
+                <PictureOutlined className={styles.imgEmptyIcon} />
+                <div className={styles.imgEmptyText}>Click để chọn ảnh từ máy</div>
+                <div className={styles.imgEmptyHint}>PNG, JPG, WEBP · Khuyến nghị 800×600 px</div>
+              </div>
+            )}
+          </div>
+          {imgPreview && (
+            <button
+              type="button"
+              className={styles.imgRemoveBtn}
+              onClick={() => setImgPreview('')}
+            >
+              <CloseOutlined style={{ marginRight: 4 }} />Xoá ảnh
+            </button>
+          )}
+        </Form.Item>
+
+        {/* ── Tên ── */}
         <Form.Item
           name="ten"
           label="Tên món"
@@ -192,7 +250,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
         </Form.Item>
 
         <Row gutter={16}>
-          {/* Danh mục */}
           <Col span={12}>
             <Form.Item
               name="danhMuc"
@@ -206,21 +263,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
               </Select>
             </Form.Item>
           </Col>
-
-          {/* Emoji */}
-          <Col span={12}>
-            <Form.Item
-              name="emoji"
-              label="Emoji đại diện"
-              rules={[{ required: true, message: 'Nhập emoji cho món' }]}
-            >
-              <Input maxLength={4} placeholder="🍽️" />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={16}>
-          {/* Giá bán */}
           <Col span={12}>
             <Form.Item
               name="giaBan"
@@ -240,8 +282,10 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
               />
             </Form.Item>
           </Col>
+        </Row>
 
-          {/* Thời gian */}
+        <Row gutter={16}>
+          {/* ── Thời gian chuẩn bị ── */}
           <Col span={12}>
             <Form.Item
               name="thoiGian"
@@ -254,25 +298,14 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
               <InputNumber style={{ width: '100%' }} min={1} addonAfter="phút" />
             </Form.Item>
           </Col>
-        </Row>
-
-        <Row gutter={16}>
-          {/* Calo */}
           <Col span={12}>
             <Form.Item name="calo" label="Calo">
               <InputNumber style={{ width: '100%' }} min={0} addonAfter="kcal" />
             </Form.Item>
           </Col>
-
-          {/* Đánh giá */}
-          <Col span={12}>
-            <Form.Item name="danhGia" label="Đánh giá mặc định">
-              <InputNumber style={{ width: '100%' }} min={1} max={5} step={0.1} />
-            </Form.Item>
-          </Col>
         </Row>
 
-        {/* Mô tả */}
+        {/* ── Mô tả ── */}
         <Form.Item
           name="moTa"
           label="Mô tả"
@@ -281,23 +314,56 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
           <Input.TextArea rows={3} maxLength={200} showCount placeholder="Mô tả ngắn về món ăn..." />
         </Form.Item>
 
-        {/* Màu nền */}
-        <Form.Item name="mauNen" label="Màu nền thẻ">
-          <Select optionLabelProp="label">
-            {PRESET_GRADIENTS.map((g, i) => (
-              <Select.Option key={i} value={g} label={`Màu ${i + 1}`}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{ width: 64, height: 20, borderRadius: 4, background: g, flexShrink: 0 }} />
-                  <span style={{ color: '#374151' }}>Màu {i + 1}</span>
+        {/* ── Nguyên liệu từ kho ── */}
+        <Form.Item name="nguyenLieu" label="Nguyên liệu sử dụng">
+          <Select
+            mode="multiple"
+            placeholder="Chọn nguyên liệu từ kho..."
+            optionFilterProp="label"
+            showArrow
+            allowClear
+          >
+            {DANH_SACH_NGUYEN_LIEU.map((nl) => (
+              <Select.Option key={nl.id} value={nl.id} label={nl.ten}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span>{nl.ten}</span>
+                  <span style={{ fontSize: 11, color: '#9ca3af' }}>{nl.donVi}</span>
                 </div>
               </Select.Option>
             ))}
           </Select>
         </Form.Item>
 
-        {/* isHot */}
-        <Form.Item name="isHot" label="Gắn nhãn HOT" valuePropName="checked">
-          <Switch checkedChildren="HOT" unCheckedChildren="Thường" />
+        {/* ── Màu nền + Emoji + HOT ── */}
+        <Row gutter={16}>
+          <Col span={14}>
+            <Form.Item name="mauNen" label="Màu nền thẻ (dự phòng khi chưa có ảnh)">
+              <Select optionLabelProp="label">
+                {PRESET_GRADIENTS.map((g, i) => (
+                  <Select.Option key={i} value={g} label={`Màu ${i + 1}`}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{ width: 64, height: 20, borderRadius: 4, background: g, flexShrink: 0 }} />
+                      <span style={{ color: '#374151' }}>Màu {i + 1}</span>
+                    </div>
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={5}>
+            <Form.Item name="emoji" label="Emoji dự phòng" rules={[{ required: true, message: 'Nhập emoji' }]}>
+              <Input maxLength={4} placeholder="🍽️" />
+            </Form.Item>
+          </Col>
+          <Col span={5}>
+            <Form.Item name="isHot" label="Nhãn HOT" valuePropName="checked">
+              <Switch checkedChildren="HOT" unCheckedChildren="Thường" />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Form.Item name="danhGia" label="Đánh giá mặc định" style={{ marginBottom: 0 }}>
+          <InputNumber style={{ width: '100%' }} min={1} max={5} step={0.1} />
         </Form.Item>
       </Form>
     </Modal>
@@ -305,15 +371,18 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
 };
 
 // ── MonDetail ─────────────────────────────────────────────────────
-
 interface MonDetailProps {
-  mon: IMonAn | null;
+  mon: IMonAnLocal | null;
   onClose: () => void;
   onEdit: () => void;
 }
 
 const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
   if (!mon) return null;
+
+  const ingredientList = (mon.nguyenLieu ?? [])
+    .map((id) => DANH_SACH_NGUYEN_LIEU.find((n) => n.id === id))
+    .filter(Boolean) as (typeof DANH_SACH_NGUYEN_LIEU[number])[];
 
   return (
     <Modal
@@ -331,15 +400,24 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
     >
       {/* Hero */}
       <div style={{
-        height: 160,
-        background: mon.mauNen,
+        height: 180,
+        background: mon.hinhAnh ? undefined : mon.mauNen,
         borderRadius: '8px 8px 0 0',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
+        overflow: 'hidden',
       }}>
-        <span style={{ fontSize: 80 }}>{mon.emoji}</span>
+        {mon.hinhAnh ? (
+          <img
+            src={mon.hinhAnh}
+            alt={mon.ten}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        ) : (
+          <span style={{ fontSize: 80 }}>{mon.emoji}</span>
+        )}
         {mon.isHot && (
           <span style={{
             position: 'absolute', top: 12, left: 12,
@@ -387,21 +465,42 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
             </div>
           ))}
         </div>
+
+        {/* Nguyên liệu */}
+        {ingredientList.length > 0 && (
+          <div style={{ marginTop: 18, paddingBottom: 8 }}>
+            <div style={{
+              fontSize: 11, fontWeight: 700, color: '#9ca3af',
+              letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: 8,
+            }}>
+              Nguyên liệu
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {ingredientList.map((nl) => (
+                <Tag
+                  key={nl.id}
+                  style={{ borderRadius: 20, fontSize: 12, padding: '2px 10px', margin: 0 }}
+                >
+                  {nl.ten} <span style={{ color: '#9ca3af' }}>({nl.donVi})</span>
+                </Tag>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </Modal>
   );
 };
 
 // ── QuanLyMon (main page) ─────────────────────────────────────────
-
 const QuanLyMon: React.FC = () => {
-  const [items,    setItems]    = useState<IMonAn[]>(DANH_SACH_MON);
+  const [items,    setItems]    = useState<IMonAnLocal[]>(DANH_SACH_MON as IMonAnLocal[]);
   const [activeTab, setActiveTab] = useState<EDanhMuc | 'tat_ca'>('tat_ca');
   const [tuKhoa,   setTuKhoa]   = useState('');
   const [isGrid,   setIsGrid]   = useState(true);
   const [formOpen, setFormOpen] = useState(false);
-  const [editing,  setEditing]  = useState<IMonAn | null>(null);
-  const [viewing,  setViewing]  = useState<IMonAn | null>(null);
+  const [editing,  setEditing]  = useState<IMonAnLocal | null>(null);
+  const [viewing,  setViewing]  = useState<IMonAnLocal | null>(null);
 
   // Dynamic tab counts
   const tabs = useMemo<TabDanhMuc[]>(() => [
@@ -423,8 +522,7 @@ const QuanLyMon: React.FC = () => {
   }, [activeTab, tuKhoa, items]);
 
   // ── Handlers ──────────────────────────────────────────────────
-
-  const handleDelete = (mon: IMonAn) => {
+  const handleDelete = (mon: IMonAnLocal) => {
     Modal.confirm({
       title: 'Xác nhận xoá món?',
       content: `Xoá "${mon.ten}" khỏi thực đơn? Hành động không thể hoàn tác.`,
@@ -438,12 +536,12 @@ const QuanLyMon: React.FC = () => {
     });
   };
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: Partial<IMonAnLocal>) => {
     if (values.id) {
-      setItems((prev) => prev.map((i) => i.id === values.id ? { ...i, ...values } as IMonAn : i));
+      setItems((prev) => prev.map((i) => i.id === values.id ? { ...i, ...values } as IMonAnLocal : i));
       message.success('Đã cập nhật món');
     } else {
-      const newItem: IMonAn = { ...values, id: `mon_${Date.now()}` };
+      const newItem: IMonAnLocal = { ...values, id: `mon_${Date.now()}` } as IMonAnLocal;
       setItems((prev) => [newItem, ...prev]);
       message.success('Đã thêm món mới');
     }
@@ -452,7 +550,6 @@ const QuanLyMon: React.FC = () => {
   };
 
   // ── Render ────────────────────────────────────────────────────
-
   return (
     <div className={styles.adminLayout}>
       <Sidebar />

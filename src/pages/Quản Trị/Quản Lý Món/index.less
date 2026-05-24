@@ -353,6 +353,103 @@
   }
 }
 
+// ── Card image (khi có ảnh thật) ─────────────────────────────────
+.cardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+// ── Image upload area ─────────────────────────────────────────────
+.imgUploadArea {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  border: 2px dashed #d1d5db;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+
+  &:hover {
+    border-color: @primary;
+    background: #f0fdf4;
+  }
+}
+
+.imgUploadHasImg {
+  border-style: solid;
+  border-color: #e5e7eb;
+
+  &:hover { border-color: @primary; }
+}
+
+.imgPreviewImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.imgPreviewOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.48);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.18s;
+
+  .imgUploadArea:hover & { opacity: 1; }
+}
+
+.imgEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.imgEmptyIcon {
+  font-size: 32px;
+  color: #d1d5db;
+}
+
+.imgEmptyText {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.imgEmptyHint {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.imgRemoveBtn {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  color: #9ca3af;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 0 0;
+  transition: color 0.15s;
+
+  &:hover { color: #ef4444; }
+}
+
 // ── Form modal ───────────────────────────────────────────────────
 .formModal {
   :global(.ant-modal-content) {
@@ -519,6 +616,17 @@
   .actionDelete {
     &:hover { background: rgba(239,68,68,.12) !important; border-color: #ef4444 !important; color: #ef4444 !important; }
   }
+
+  .imgUploadArea {
+    background: #0f172a;
+    border-color: #334155;
+    &:hover { border-color: #16a34a; background: rgba(22,163,74,.08); }
+  }
+  .imgUploadHasImg { border-color: #334155; &:hover { border-color: #16a34a; } }
+  .imgEmptyIcon { color: #475569; }
+  .imgEmptyText { color: #64748b; }
+  .imgEmptyHint { color: #475569; }
+  .imgRemoveBtn { color: #475569; &:hover { color: #f87171; } }
 
   // Modals in dark mode
   .formModal {

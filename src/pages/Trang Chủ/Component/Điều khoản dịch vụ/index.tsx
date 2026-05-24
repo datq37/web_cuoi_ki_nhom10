@@ -1,177 +1,310 @@
 import React, { useEffect } from 'react';
 import { history } from 'umi';
 import {
-  ArrowLeftOutlined,
-  ReadOutlined,
-  LockOutlined,
-  ShoppingOutlined,
-  CreditCardOutlined,
-  ExclamationCircleOutlined,
-  CheckCircleOutlined
-} from '@ant-design/icons';
-import './index.less';
+  ArrowLeft,
+  BookOpen,
+  CalendarDays,
+  CheckCircle2,
+  Lock,
+  ShieldCheck,
+  ShoppingBag,
+  CreditCard,
+  AlertTriangle,
+  ClipboardCheck,
+  Building2,
+  User,
+  FileText,
+  Truck,
+} from 'lucide-react';
 
-const TermsOfService: React.FC = () => {
-  // Cuộn lên đầu trang khi load
+import '../Chính Sách Bảo Mật/index.less'; // Import chung CSS đã được chuẩn hóa
+
+const menuItems = [
+  {
+    id: 'section-1',
+    icon: <BookOpen size={18} />,
+    title: 'Chấp Thuận Các Điều Khoản',
+  },
+  {
+    id: 'section-2',
+    icon: <Lock size={18} />,
+    title: 'Quản Lý Tài Khoản Và An Ninh',
+  },
+  {
+    id: 'section-3',
+    icon: <ShoppingBag size={18} />,
+    title: 'Quy Tắc Đặt Món Và Hủy Đơn',
+  },
+  {
+    id: 'section-4',
+    icon: <CreditCard size={18} />,
+    title: 'Thanh Toán Và Giao Nhận',
+  },
+];
+
+export default function TermsPage() {
+  const [activeSection, setActiveSection] = React.useState(menuItems[0].id);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const sections = [
-    {
-      id: 'acceptance',
-      icon: <ReadOutlined />,
-      title: '1. Chấp Thuận Các Điều Khoản',
-      content: (
-        <>
-          <p>Bằng việc đăng ký tài khoản và sử dụng hệ thống đặt món trực tuyến của Căng tin Doanh nghiệp, bạn đồng ý vô điều kiện tuân thủ tất cả các điều khoản, quy định được nêu chi tiết tại văn bản này.</p>
-          <p>Nếu bạn không đồng ý với bất kỳ điều khoản nào, vui lòng ngưng sử dụng dịch vụ và liên hệ trực tiếp với bộ phận Quản lý nhân sự hoặc Ban quản lý căng tin để được hỗ trợ giải quyết.</p>
-        </>
-      ),
-    },
-    {
-      id: 'account',
-      icon: <LockOutlined />,
-      title: '2. Quản Lý Tài Khoản Và An Ninh',
-      content: (
-        <>
-          <p>Dịch vụ này được cung cấp độc quyền cho Cán bộ Nhân viên (CBNV) chính thức của công ty:</p>
-          <ul>
-            <li><strong>Tính chính chủ:</strong> Bạn có trách nhiệm bảo mật mật khẩu tài khoản cá nhân và hoàn toàn chịu trách nhiệm cho mọi giao dịch đặt món được thực hiện dưới tên tài khoản của bạn.</li>
-            <li><strong>Chính xác thông tin:</strong> CBNV phải cung cấp chính xác thông tin phòng ban, tòa nhà và tầng làm việc hiện tại để đảm bảo việc giao nhận món không xảy ra sai sót.</li>
-            <li><strong>Nghiêm cấm chia sẻ:</strong> Tuyệt đối không chia sẻ tài khoản cho người ngoài doanh nghiệp hoặc sử dụng tài khoản để đặt món với mục đích thương mại phi pháp.</li>
-          </ul>
-        </>
-      ),
-    },
-    {
-      id: 'ordering',
-      icon: <ShoppingOutlined />,
-      title: '3. Quy Tắc Đặt Món Và Hủy Đơn',
-      content: (
-        <>
-          <p>Để tối ưu quy trình chế biến của bếp và đảm bảo món ăn nóng sốt đúng giờ, CBNV cần tuân thủ lịch trình đặt món:</p>
-          <ul>
-            <li><strong>Khung giờ đặt trước:</strong> Khuyến khích đặt món trước giờ ăn tối thiểu 30 phút để nhà bếp chuẩn bị chu đáo nhất.</li>
-            <li><strong>Giới hạn đặt món:</strong> CBNV không thể đặt món cho các ngày trong tương lai (Chỉ được phép xem trước thực đơn tương lai tại lịch tuần).</li>
-            <li><strong>Hủy đơn hàng:</strong> CBNV chỉ có thể hủy đơn và được hoàn tiền khi đơn hàng ở trạng thái <em>Chờ xác nhận</em> (Bếp chưa bắt đầu chế biến). Một khi bếp đã xác nhận và chế biến, đơn hàng sẽ không thể hủy bỏ.</li>
-          </ul>
-        </>
-      ),
-    },
-    {
-      id: 'payment',
-      icon: <CreditCardOutlined />,
-      title: '4. Thanh Toán Và Giao Nhận Nội Bộ',
-      content: (
-        <>
-          <p>Hệ thống hỗ trợ các phương thức giao nhận và thanh toán nội bộ khép kín linh hoạt:</p>
-          <ul>
-            <li><strong>Phương thức thanh toán:</strong> CBNV thanh toán qua ví điện tử nội bộ, tiền mặt trực tiếp tại quầy hoặc khấu trừ lương cuối tháng tùy theo chính sách phúc lợi được đăng ký.</li>
-            <li><strong>Giao nhận tận nơi:</strong> Đội ngũ giao hàng nội bộ sẽ chuyển món ăn đến đúng Phòng ban/Tòa nhà/Tầng đã nhập trong form thông tin. CBNV vui lòng chú ý điện thoại khi trạng thái đơn hàng chuyển sang <em>Đang giao hàng</em>.</li>
-          </ul>
-        </>
-      ),
-    },
-    {
-      id: 'disclaimer',
-      icon: <ExclamationCircleOutlined />,
-      title: '5. Giới Hạn Trách Nhiệm Về Dị Ứng Thực Phẩm',
-      content: (
-        <>
-          <p>Sức khỏe của CBNV là vốn quý nhất của doanh nghiệp. Tuy nhiên, chúng tôi cần lưu ý một số điểm sau:</p>
-          <ul>
-            <li><strong>Thành phần dị ứng:</strong> CBNV có trách nhiệm tự kiểm tra kỹ danh sách nguyên liệu của món ăn (được hiển thị đầy đủ tại Modal Chi tiết món ăn) trước khi đặt món nếu bản thân có tiền sử dị ứng với đậu phộng, hải sản, gluten, v.v.</li>
-            <li><strong>Trách nhiệm của bếp:</strong> Căng tin cam kết chế biến sạch sẽ, đảm bảo vệ sinh an toàn thực phẩm theo chuẩn Bộ Y tế nhưng không chịu trách nhiệm pháp lý đối với các phản ứng dị ứng cá nhân do CBNV không xem kỹ nguyên liệu món ăn trước khi đặt.</li>
-          </ul>
-        </>
-      ),
-    },
-  ];
+  const scrollToSection = (id: string) => {
+    setActiveSection(id);
+    const element = document.getElementById(id);
+    if (element) {
+      const y = element.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
 
   return (
-    <div className="terms-of-service-page">
-      {/* Top Header */}
-      <header className="terms-header">
-        <div className="header-container">
-          <button className="btn-back" onClick={() => history.push('/')}>
-            <ArrowLeftOutlined /> Quay lại Trang Chủ
-          </button>
-          <div className="header-brand">
-            <img src="/logo.webp" alt="Logo" className="logo" />
-            <div className="brand-text">
-              <span className="name">Căng tin</span>
-              <span className="sub">DOANH NGHIỆP</span>
-            </div>
+    <div className="privacy-page-wrapper">
+      {/* Header */}
+      <header className="pp-header">
+        <button className="pp-back-btn" onClick={() => history.push('/')}>
+          <ArrowLeft size={18} />
+          Quay lại Trang Chủ
+        </button>
+
+        <div className="pp-brand">
+          <img
+            src="/logo.webp"
+            alt="Căng tin"
+            className="pp-logo"
+          />
+
+          <div className="pp-brand-text">
+            <h1 className="pp-brand-name">Căng tin</h1>
+            <p className="pp-brand-slogan">DOANH NGHIỆP</p>
           </div>
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main className="terms-main">
-        <div className="terms-container">
-          {/* Left Column: Sticky Table of Contents */}
-          <aside className="terms-sidebar">
-            <div className="sidebar-card">
-              <h3 className="sidebar-title">Điều Khoản</h3>
-              <nav className="sidebar-nav">
-                {sections.map((sec) => (
-                  <a key={sec.id} href={`#${sec.id}`} className="nav-link">
-                    {sec.icon}
-                    <span>{sec.title.split('. ')[1]}</span>
-                  </a>
-                ))}
-              </nav>
-              <div className="sidebar-decor">
-                <CheckCircleOutlined className="icon-shield" />
-                <div className="decor-text">
-                  <h4>Sử dụng nội bộ</h4>
-                  <p>Áp dụng riêng cho Cán bộ Nhân viên của doanh nghiệp.</p>
-                </div>
+      <main className="pp-main">
+        {/* Sidebar */}
+        <aside className="pp-sidebar">
+          <div className="pp-sidebar-header">
+            <div className="pp-sidebar-icon">
+              <BookOpen size={20} />
+            </div>
+
+            <h2 className="pp-sidebar-title">
+              Điều Khoản
+            </h2>
+          </div>
+
+          <div className="pp-sidebar-divider" />
+
+          <nav className="pp-nav-menu">
+            {menuItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={`pp-nav-item ${activeSection === item.id ? 'active' : ''}`}
+              >
+                <span className="pp-nav-icon">
+                  {item.icon}
+                </span>
+
+                <span className="pp-nav-text">
+                  {item.title}
+                </span>
+              </button>
+            ))}
+          </nav>
+
+          <div className="pp-sidebar-banner">
+            <div className="pp-banner-deco">❧</div>
+
+            <div className="pp-banner-content">
+              <div className="pp-banner-icon">
+                <ShieldCheck size={24} />
+              </div>
+
+              <div className="pp-banner-text">
+                <h3>Sử dụng nội bộ</h3>
+                <p>Áp dụng riêng cho Cán bộ, Nhân viên của doanh nghiệp.</p>
               </div>
             </div>
-          </aside>
+          </div>
+        </aside>
 
-          {/* Right Column: Main Articles */}
-          <article className="terms-content">
-            <div className="content-card">
-              <h1 className="content-title">Điều Khoản Dịch Vụ</h1>
-              <p className="last-updated">Cập nhật lần cuối: Ngày 18 tháng 05 năm 2026</p>
-              
-              <div className="content-intro">
-                <p>Chào mừng bạn đến với Hệ thống đặt trước và điều phối ẩm thực nội bộ của doanh nghiệp. Khi tham gia sử dụng các dịch vụ đặt món, thanh toán và giao nhận tại căng tin của chúng tôi, bạn được mặc định là đã hiểu rõ và đồng ý tuân thủ đầy đủ các điều khoản dịch vụ dưới đây để cùng xây dựng một nét văn hóa ẩm thực công sở văn minh, hiện đại và tiện lợi.</p>
-              </div>
+        {/* Content */}
+        <section className="pp-content-area">
+          <div className="pp-content-header">
+            <h1 className="pp-main-title">
+              Điều Khoản Dịch Vụ
+            </h1>
 
-              <div className="policy-divider" />
-
-              <div className="policy-sections">
-                {sections.map((sec) => (
-                  <section key={sec.id} id={sec.id} className="policy-section">
-                    <h2 className="section-title">
-                      <span className="icon-wrapper">{sec.icon}</span>
-                      {sec.title}
-                    </h2>
-                    <div className="section-body">
-                      {sec.content}
-                    </div>
-                  </section>
-                ))}
-              </div>
-
-              <div className="policy-footer">
-                <p>Mọi thắc mắc, đóng góp ý kiến về chất lượng dịch vụ hoặc các phản hồi liên quan đến Điều khoản dịch vụ này, xin vui lòng gửi về Ban quản lý căng tin qua hòm thư nội bộ hoặc email chính thức: <a href="mailto:support@cantindoanhnghiep.com">support@cantindoanhnghiep.com</a>.</p>
-              </div>
+            <div className="pp-last-updated">
+              <CalendarDays size={16} className="icon" />
+              <span>Cập nhật lần cuối: Ngày 18 tháng 05 năm 2026</span>
             </div>
-          </article>
-        </div>
+          </div>
+
+          {/* Intro box */}
+          <div className="pp-intro-box">
+            <div className="pp-intro-icon-wrapper">
+              <div className="pp-intro-icon-bg" />
+              <ClipboardCheck size={64} className="icon" />
+            </div>
+
+            <p className="pp-intro-text">
+              Chào mừng bạn đến với hệ thống đặt trước và điều phối ẩm thực nội bộ
+              của doanh nghiệp. Khi tham gia sử dụng các dịch vụ đặt món, thanh toán
+              và giao nhận tại căng tin của chúng tôi, bạn được mặc định là đã hiểu rõ
+              và đồng ý tuân thủ đầy đủ các điều khoản dịch vụ dưới đây.
+            </p>
+          </div>
+
+          <Divider />
+
+          <TermsSection
+            id="section-1"
+            number="1"
+            icon={<BookOpen size={20} />}
+            title="Chấp Thuận Các Điều Khoản"
+          >
+            <p>
+              Bằng việc đăng ký tài khoản và sử dụng hệ thống đặt món trực tuyến
+              của Căng tin Doanh nghiệp, bạn đồng ý vô điều kiện tuân thủ tất cả
+              các điều khoản, quy định được nêu chi tiết tại văn bản này.
+            </p>
+
+            <p>
+              Nếu bạn không đồng ý với bất kỳ điều khoản nào, vui lòng ngừng sử dụng
+              dịch vụ và liên hệ trực tiếp với bộ phận Quản lý nhân sự hoặc Ban quản lý
+              căng tin để được hỗ trợ giải quyết.
+            </p>
+          </TermsSection>
+
+          <Divider />
+
+          <TermsSection
+            id="section-2"
+            number="2"
+            icon={<Lock size={20} />}
+            title="Quản Lý Tài Khoản Và An Ninh"
+          >
+            <p>
+              Dịch vụ này được cung cấp độc quyền cho Cán bộ Nhân viên chính thức
+              của công ty. Mỗi người dùng có trách nhiệm bảo mật tài khoản cá nhân
+              và chịu trách nhiệm đối với mọi giao dịch đặt món phát sinh từ tài khoản đó.
+            </p>
+
+            <div className="pp-security-grid">
+              <InfoCard
+                icon={<User size={24} />}
+                title="Tính chính chủ"
+                desc="Không chia sẻ tài khoản cho người khác sử dụng khi chưa được phép."
+              />
+
+              <InfoCard
+                icon={<Building2 size={24} />}
+                title="Chính xác thông tin"
+                desc="Cập nhật đúng phòng ban, tòa nhà, tầng và vị trí nhận món."
+              />
+
+              <InfoCard
+                icon={<ShieldCheck size={24} />}
+                title="Phạm vi sử dụng"
+                desc="Tài khoản chỉ dùng cho hoạt động đặt món và giao nhận nội bộ."
+              />
+            </div>
+          </TermsSection>
+
+          <Divider />
+
+          <TermsSection
+            id="section-3"
+            number="3"
+            icon={<ShoppingBag size={20} />}
+            title="Quy Tắc Đặt Món Và Hủy Đơn"
+          >
+            <CheckItem text="Người dùng cần kiểm tra kỹ món ăn, số lượng, ghi chú và thời gian nhận món trước khi xác nhận đơn hàng." />
+            <CheckItem text="Đơn hàng đã được bếp xác nhận có thể không được hủy tùy theo trạng thái chế biến thực tế." />
+            <CheckItem text="Ghi chú món ăn cần rõ ràng, lịch sự và phù hợp với khả năng phục vụ của căng tin." />
+            <CheckItem text="Thực đơn có thể thay đổi theo ngày tùy theo tình trạng nguyên liệu và lịch phục vụ." />
+          </TermsSection>
+
+          <Divider />
+
+          <TermsSection
+            id="section-4"
+            number="4"
+            icon={<CreditCard size={20} />}
+            title="Thanh Toán Và Giao Nhận"
+          >
+            <p>
+              Hệ thống hỗ trợ nhiều hình thức thanh toán như tiền mặt, QR/Bank
+              hoặc các phương thức nội bộ khác nếu được doanh nghiệp kích hoạt.
+            </p>
+
+            <div className="pp-security-grid">
+              <InfoCard
+                icon={<CreditCard size={24} />}
+                title="Thanh toán linh hoạt"
+                desc="Hỗ trợ thanh toán bằng tiền mặt, QR hoặc ngân hàng."
+              />
+
+              <InfoCard
+                icon={<Truck size={24} />}
+                title="Giao nhận nội bộ"
+                desc="Giao món đến đúng tòa nhà, tầng và vị trí đã đăng ký."
+              />
+
+              <InfoCard
+                icon={<FileText size={24} />}
+                title="Xác nhận đơn"
+                desc="Trạng thái đơn hàng được cập nhật rõ ràng theo thời gian thực."
+              />
+            </div>
+          </TermsSection>
+        </section>
       </main>
-
-      {/* Simplified footer */}
-      <footer className="terms-footer-simple">
-        <p>© 2026 Căng tin Doanh nghiệp. Bảo lưu mọi quyền.</p>
-      </footer>
     </div>
   );
-};
+}
 
-export default TermsOfService;
+function Divider() {
+  return <div className="pp-divider" />;
+}
+
+function TermsSection({ id, number, icon, title, children }: any) {
+  return (
+    <section id={id} className="pp-section">
+      <div className="pp-section-header">
+        <div className="pp-info-icon" style={{ margin: 0 }}>
+          {icon}
+        </div>
+
+        <div className="pp-section-number">{number}</div>
+        <h2 className="pp-section-title">{title}</h2>
+      </div>
+
+      <div className="pp-section-body">
+        {children}
+      </div>
+    </section>
+  );
+}
+
+function InfoCard({ icon, title, desc }: any) {
+  return (
+    <div className="pp-security-card">
+      <div className="pp-security-icon">{icon}</div>
+      <h3>{title}</h3>
+      <p>{desc}</p>
+    </div>
+  );
+}
+
+function CheckItem({ text }: any) {
+  return (
+    <div className="pp-check-item">
+      <CheckCircle2 size={18} className="icon" fill="#e8f5ec" />
+      <p>{text}</p>
+    </div>
+  );
+}

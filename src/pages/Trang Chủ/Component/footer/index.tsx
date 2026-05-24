@@ -1,56 +1,197 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
+import {
+  ShieldCheck,
+  FileText,
+  Headphones,
+  CircleHelp,
+  Building2,
+  Mail,
+  Phone,
+  MapPin,
+  Leaf,
+  Heart,
+  Send,
+  LockKeyhole,
+  ChevronRight,
+} from 'lucide-react';
 import { FacebookOutlined, InstagramOutlined } from '@ant-design/icons';
 import './index.less';
 
-const AppFooter: React.FC = () => {
+const logo = '/logo.webp';
+
+export default function HomeFooter() {
   return (
-    <footer className="modern-footer">
-      <div className="modern-footer-container">
-        <div className="footer-column brand-column">
-          <div className="brand-logo">
-            <img src="/logo.webp" alt="Logo Căng tin Hiện đại" className="logo-img" />
-          </div>
-          <p className="brand-description">
-            Trải nghiệm ẩm thực tuyệt vời<br />trong không gian hiện đại.
-          </p>
-        </div>
+    <footer className="home-footer-wrapper">
+      {/* Lá trang trí */}
+      <div className="home-footer-leaf left-leaf">
+        ❧
+      </div>
 
-        <div className="footer-column links-column">
-          <h4 className="footer-heading">Liên kết</h4>
-          <ul className="footer-links">
-            <li><a href="/chinh-sach-bao-mat">Chính sách bảo mật</a></li>
-            <li><a href="/dieu-khoan-dich-vu">Điều khoản dịch vụ</a></li>
-            <li><a href="/lien-he">Liên hệ</a></li>
+      <div className="home-footer-leaf right-leaf">
+        ❧
+      </div>
 
-          </ul>
-        </div>
+      <div className="home-footer-inner">
+        <div className="home-footer-card">
+          {/* Main footer */}
+          <div className="home-footer-main">
+            {/* Brand */}
+            <div className="home-footer-brand-section">
+              <div className="brand-header">
+                <div className="brand-logo-wrap">
+                  <img
+                    src={logo}
+                    alt="Căng tin doanh nghiệp"
+                  />
+                </div>
 
-        <div className="footer-column contact-column">
-          <h4 className="footer-heading">Liên hệ</h4>
-          <ul className="footer-contact-info">
-            <li>Công ty doanh nghiệp</li>
-            <li><a href="mailto:contact@cantinhiendai.com">contact@cantinhiendai.com</a></li>
-            <li><a href="tel:+84123456789">+84 123 456 789</a></li>
-          </ul>
-        </div>
+                <div className="brand-text-wrap">
+                  <h2>
+                    Căng tin
+                  </h2>
+                  <p>
+                    DOANH NGHIỆP
+                  </p>
+                </div>
+              </div>
 
-        <div className="footer-column social-column">
-          <h4 className="footer-heading">Theo dõi chúng tôi</h4>
-          <div className="social-container">
-            <a href="https://www.facebook.com/" className="social-btn facebook">
-              <FacebookOutlined className="icon" />
-              <span className="text">Facebook</span>
-            </a>
+              <p className="brand-desc">
+                Trải nghiệm ẩm thực tuyệt vời trong không gian hiện đại.
+                Chúng tôi cam kết mang đến những bữa ăn ngon miệng, an toàn
+                và tiện lợi cho toàn thể nhân viên.
+              </p>
 
-            <a href="https://www.instagram.com/" className="social-btn instagram">
-              <InstagramOutlined className="icon" />
-              <span className="text">Instagram</span>
-            </a>
+              <div className="brand-features">
+                <FeatureBadge icon={<Leaf size={24} />} text="Nguyên liệu tươi ngon" />
+                <FeatureBadge icon={<ShieldCheck size={24} />} text="An toàn vệ sinh" />
+                <FeatureBadge icon={<Heart size={24} />} text="Phục vụ tận tâm" />
+              </div>
+            </div>
+
+            {/* Links */}
+            <FooterColumn title="LIÊN KẾT">
+              <FooterLink
+                icon={<ShieldCheck size={22} />}
+                text="Chính sách bảo mật"
+              />
+              <FooterLink
+                icon={<FileText size={22} />}
+                text="Điều khoản dịch vụ"
+              />
+              <FooterLink
+                icon={<Headphones size={22} />}
+                text="Hỗ trợ khách hàng"
+              />
+              <FooterLink
+                icon={<CircleHelp size={22} />}
+                text="Câu hỏi thường gặp"
+              />
+            </FooterColumn>
+
+            {/* Contact */}
+            <FooterColumn title="LIÊN HỆ">
+              <InfoItem
+                icon={<Building2 size={22} />}
+                text="Công ty doanh nghiệp"
+              />
+              <InfoItem
+                icon={<Mail size={22} />}
+                text="contact@cantinhiendai.com"
+              />
+              <InfoItem
+                icon={<Phone size={22} />}
+                text="+84 123 456 789"
+              />
+              <InfoItem
+                icon={<MapPin size={22} />}
+                text="123 Đường ABC, Quận 1, TP. Hồ Chí Minh"
+              />
+            </FooterColumn>
+
+            {/* Social */}
+            <div className="home-footer-newsletter-section">
+              <FooterTitle title="THEO DÕI CHÚNG TÔI" />
+
+              <p className="newsletter-desc">
+                Cập nhật ưu đãi, món mới và thông báo mới nhất từ căng tin.
+              </p>
+
+              <div className="social-buttons">
+                <a href="https://www.facebook.com/" className="social-btn facebook">
+                  <FacebookOutlined className="icon" />
+                  <span className="text">Facebook</span>
+                </a>
+                <a href="https://www.instagram.com/" className="social-btn instagram">
+                  <InstagramOutlined className="icon" />
+                  <span className="text">Instagram</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </footer>
   );
-};
+}
 
-export default AppFooter;
+function FooterColumn({ title, children }: { title: string, children: ReactNode }) {
+  return (
+    <div>
+      <FooterTitle title={title} />
+      <div className="home-footer-links-wrap">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function FooterTitle({ title }: { title: string }) {
+  return (
+    <div className="home-footer-title">
+      <h3>{title}</h3>
+      <div className="title-line" />
+    </div>
+  );
+}
+
+function FooterLink({ icon, text }: { icon: ReactNode, text: string }) {
+  return (
+    <button className="home-footer-link">
+      <div className="link-left">
+        <span className="link-icon">
+          {icon}
+        </span>
+        <span className="link-text">
+          {text}
+        </span>
+      </div>
+      <ChevronRight size={22} className="link-right-icon" />
+    </button>
+  );
+}
+
+function InfoItem({ icon, text }: { icon: ReactNode, text: string }) {
+  return (
+    <div className="home-footer-info-item">
+      <span className="info-icon">
+        {icon}
+      </span>
+      <span className="info-text">
+        {text}
+      </span>
+    </div>
+  );
+}
+
+function FeatureBadge({ icon, text }: { icon: ReactNode, text: string }) {
+  return (
+    <div className="home-footer-badge">
+      <span className="badge-icon">
+        {icon}
+      </span>
+      <span className="badge-text">
+        {text}
+      </span>
+    </div>
+  );
+}

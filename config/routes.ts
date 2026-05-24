@@ -26,7 +26,7 @@ export default [
   },
   {
     path: '/dang-ky',
-    component: './Khách Hàng/đăng kí',
+    component: './Khách Hàng/đăng nhập',
     layout: false,
   },
   {

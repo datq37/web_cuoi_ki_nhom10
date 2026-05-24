@@ -14,14 +14,18 @@ import {
   Headphones
 } from "lucide-react";
 import { message } from "antd";
-import { history } from "umi";
+import { history, useModel } from "umi";
 
 import './index.less';
 import bgImage from "@/assets/dangki/dangnhap.png";
 
 export default function LoginPage() {
+  const isRegisterRoute = history.location.pathname === '/dang-ky';
   const [showPassword, setShowPassword] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(isRegisterRoute);
+  
+  const { theme } = useModel('Khách Hàng.global');
+  const darkMode = theme === 'dark';
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
@@ -49,7 +53,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={`new-login-page ${isSignUp ? 'is-sign-up' : ''}`}>
+    <div className={`new-login-page ${isSignUp ? 'is-sign-up' : ''} ${darkMode ? 'theme-dark' : ''}`}>
       <div className="login-card">
 
         {/* PHẦN TRÁI: FORM */}

@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { history } from 'umi';
 import {
   ShieldCheck,
   FileText,
@@ -66,14 +67,17 @@ export default function HomeFooter() {
               <FooterLink
                 icon={<ShieldCheck size={22} />}
                 text="Chính sách bảo mật"
+                onClick={() => history.push('/chinh-sach-bao-mat')}
               />
               <FooterLink
                 icon={<FileText size={22} />}
                 text="Điều khoản dịch vụ"
+                onClick={() => history.push('/dieu-khoan-dich-vu')}
               />
               <FooterLink
                 icon={<Headphones size={22} />}
                 text="Hỗ trợ khách hàng"
+                onClick={() => history.push('/lien-he')}
               />
               <FooterLink
                 icon={<CircleHelp size={22} />}
@@ -145,9 +149,9 @@ function FooterTitle({ title }: { title: string }) {
   );
 }
 
-function FooterLink({ icon, text }: { icon: ReactNode, text: string }) {
+function FooterLink({ icon, text, onClick }: { icon: ReactNode, text: string, onClick?: () => void }) {
   return (
-    <button className="home-footer-link">
+    <button className="home-footer-link" onClick={onClick}>
       <div className="link-left">
         <span className="link-icon">
           {icon}

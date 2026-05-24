@@ -1,0 +1,501 @@
+@primary:       #16a34a;
+@primary-hover: #15803d;
+@border:        #f0f0f0;
+@divider:       #f3f4f6;
+@text-dark:     #111827;
+@text-mid:      #374151;
+@text-muted:    #6b7280;
+@ease:          cubic-bezier(0.22, 0.61, 0.36, 1);
+
+// ── Drawer shell overrides ───────────────────────────────────
+.orderDrawer {
+  :global(.ant-drawer-content) {
+    display: flex;
+    flex-direction: column;
+  }
+  :global(.ant-drawer-wrapper-body) {
+    display: flex;
+    flex-direction: column;
+  }
+  :global(.ant-drawer-header) {
+    padding: 0;
+    border-bottom: 1px solid @border;
+    flex-shrink: 0;
+  }
+  :global(.ant-drawer-body) {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+    &::-webkit-scrollbar { width: 4px; }
+    &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+  }
+  :global(.ant-drawer-footer) {
+    border-top: 1px solid @border;
+    flex-shrink: 0;
+  }
+  :global(.ant-btn-primary) {
+    background: @primary;
+    border-color: @primary;
+    &:hover { background: @primary-hover; border-color: @primary-hover; }
+  }
+}
+
+// ── Header ───────────────────────────────────────────────────
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+}
+
+.backBtn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: @text-muted;
+  font-size: 14px;
+  transition: all 150ms @ease;
+  flex-shrink: 0;
+  &:hover { background: @divider; color: @text-dark; }
+}
+
+.headerMid {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.headerLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: @text-dark;
+}
+
+.headerMaDon {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: @primary;
+  letter-spacing: 0.02em;
+}
+
+.headerActions {
+  display: flex;
+  gap: 6px;
+}
+
+.iconBtn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid @border;
+  border-radius: 8px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: @text-muted;
+  font-size: 14px;
+  transition: all 150ms @ease;
+  &:hover { border-color: #d1d5db; color: @text-dark; background: #f9fafb; }
+}
+
+// ── Footer ───────────────────────────────────────────────────
+.drawerFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.footerRight {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+// ── Body ─────────────────────────────────────────────────────
+.drawerBody {
+  display: flex;
+  flex-direction: column;
+}
+
+// ── Status row ───────────────────────────────────────────────
+.statusRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px 10px;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.thoiGianDon {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: @text-muted;
+}
+
+// ── Steps ────────────────────────────────────────────────────
+.stepsWrap {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px 14px;
+  gap: 0;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  flex: 1;
+
+  &:last-child {
+    flex: 0;
+  }
+}
+
+.stepDot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  transition: all 200ms @ease;
+}
+
+.stepDone {
+  background: @primary;
+  color: #fff;
+}
+
+.stepActive {
+  background: @primary;
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.2);
+  animation: pulse 2s infinite;
+}
+
+.stepPending {
+  background: #f1f5f9;
+  color: #9ca3af;
+}
+
+.stepNum {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stepLabel {
+  font-size: 11px;
+  color: @text-muted;
+  white-space: nowrap;
+  margin-left: 6px;
+}
+
+.stepLabelActive {
+  color: @primary;
+  font-weight: 600;
+}
+
+.stepLine {
+  flex: 1;
+  height: 2px;
+  background: #e5e7eb;
+  margin: 0 8px;
+  border-radius: 2px;
+  transition: background 300ms @ease;
+}
+
+.stepLineDone {
+  background: @primary;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.2); }
+  50%       { box-shadow: 0 0 0 7px rgba(22, 163, 74, 0.1); }
+}
+
+// ── Divider ──────────────────────────────────────────────────
+.divider {
+  height: 6px;
+  background: @divider;
+  flex-shrink: 0;
+}
+
+// ── Section ──────────────────────────────────────────────────
+.section {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionTitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: @text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sectionCount {
+  font-size: 11px;
+  font-weight: 500;
+  color: @text-muted;
+  background: @divider;
+  padding: 2px 7px;
+  border-radius: 99px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+// ── Customer ─────────────────────────────────────────────────
+.customerCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: @divider;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.customerInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.customerName {
+  font-size: 14px;
+  font-weight: 600;
+  color: @text-dark;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.customerSub {
+  font-size: 12px;
+  color: @text-muted;
+  margin-top: 2px;
+}
+
+.customerBtns {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.contactBtn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: @text-muted;
+  font-size: 14px;
+  transition: all 150ms @ease;
+  &:hover { border-color: @primary; color: @primary; background: rgba(22, 163, 74, 0.06); }
+}
+
+// ── Items ────────────────────────────────────────────────────
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itemRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.itemAvatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+
+.itemName {
+  flex: 1;
+  font-size: 13.5px;
+  color: @text-dark;
+  font-weight: 500;
+}
+
+.itemQty {
+  font-size: 13px;
+  color: @text-muted;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+// ── Note ─────────────────────────────────────────────────────
+.noteBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fffbeb;
+  border: 1px solid #fef08a;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  color: @text-mid;
+}
+
+.noteIcon {
+  color: #d97706;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.noteText {
+  flex: 1;
+}
+
+.gcTag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+
+// ── Pricing ──────────────────────────────────────────────────
+.priceList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13.5px;
+  color: @text-muted;
+}
+
+.discount {
+  color: #16a34a;
+}
+
+.priceDivider {
+  height: 1px;
+  background: @border;
+  margin: 4px 0;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.totalLabel {
+  font-size: 15px;
+  font-weight: 700;
+  color: @text-dark;
+}
+
+.totalValue {
+  font-size: 22px;
+  font-weight: 700;
+  color: @primary;
+}
+
+.paymentRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: @divider;
+  border-radius: 8px;
+  margin-top: 4px;
+}
+
+.payIcon {
+  font-size: 18px;
+}
+
+.payLabel {
+  font-size: 13px;
+  color: @text-muted;
+}
+
+// ── Dark mode ─────────────────────────────────────────────────
+:global([data-theme="dark"]) {
+  .orderDrawer {
+    :global(.ant-drawer-content) { background: #1e293b; }
+    :global(.ant-drawer-header) { background: #1e293b; border-bottom-color: #334155; }
+    :global(.ant-drawer-footer) { background: #1e293b; border-top-color: #334155; }
+    :global(.ant-drawer-body) { &::-webkit-scrollbar-thumb { background: #334155; } }
+    :global(.ant-btn:not(.ant-btn-primary):not(.ant-btn-dangerous)) {
+      background: #0f172a; border-color: #334155; color: #94a3b8;
+      &:hover { background: #1e293b; color: #f1f5f9; border-color: #475569; }
+    }
+  }
+  .backBtn { color: #64748b; &:hover { background: #0f172a; color: #94a3b8; } }
+  .headerLabel { color: #f1f5f9; }
+  .iconBtn { border-color: #334155; color: #64748b; &:hover { background: #0f172a; color: #94a3b8; border-color: #475569; } }
+  .thoiGianDon { color: #64748b; }
+  .stepPending { background: #0f172a; color: #64748b; }
+  .stepLine { background: #334155; }
+  .divider { background: #0f172a; }
+  .sectionTitle { color: #475569; }
+  .sectionCount { background: #0f172a; color: #475569; }
+  .customerCard { background: #0f172a; }
+  .customerName { color: #f1f5f9; }
+  .customerSub { color: #64748b; }
+  .contactBtn { background: #1e293b; border-color: #334155; color: #64748b; }
+  .itemName { color: #e2e8f0; }
+  .itemQty { color: #64748b; }
+  .noteBox { background: rgba(253, 224, 71, 0.08); border-color: rgba(253, 224, 71, 0.2); color: #94a3b8; }
+  .priceRow { color: #64748b; }
+  .totalLabel { color: #f1f5f9; }
+  .totalValue { color: #4ade80; }
+  .paymentRow { background: #0f172a; }
+  .payLabel { color: #64748b; }
+  .priceDivider { background: #334155; }
+}

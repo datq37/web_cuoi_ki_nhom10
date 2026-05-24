@@ -334,33 +334,10 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
           </Select>
         </Form.Item>
 
-        {/* ── Màu nền + Emoji + HOT ── */}
-        <Row gutter={16}>
-          <Col span={14}>
-            <Form.Item name="mauNen" label="Màu nền thẻ (dự phòng khi chưa có ảnh)">
-              <Select optionLabelProp="label">
-                {PRESET_GRADIENTS.map((g, i) => (
-                  <Select.Option key={i} value={g} label={`Màu ${i + 1}`}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div style={{ width: 64, height: 20, borderRadius: 4, background: g, flexShrink: 0 }} />
-                      <span style={{ color: '#374151' }}>Màu {i + 1}</span>
-                    </div>
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col span={5}>
-            <Form.Item name="emoji" label="Emoji dự phòng" rules={[{ required: true, message: 'Nhập emoji' }]}>
-              <Input maxLength={4} placeholder="🍽️" />
-            </Form.Item>
-          </Col>
-          <Col span={5}>
-            <Form.Item name="isHot" label="Nhãn HOT" valuePropName="checked">
-              <Switch checkedChildren="HOT" unCheckedChildren="Thường" />
-            </Form.Item>
-          </Col>
-        </Row>
+        {/* hidden — giữ giá trị khi edit, dùng default khi tạo mới */}
+        <Form.Item name="mauNen" hidden><Input /></Form.Item>
+        <Form.Item name="emoji"  hidden><Input /></Form.Item>
+        <Form.Item name="isHot"  hidden valuePropName="checked"><Switch /></Form.Item>
 
         <Form.Item name="danhGia" label="Đánh giá mặc định" style={{ marginBottom: 0 }}>
           <InputNumber style={{ width: '100%' }} min={1} max={5} step={0.1} />

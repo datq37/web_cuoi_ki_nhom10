@@ -53,3 +53,18 @@ python scripts/seed_admin.py
 | CRUD | `/api/v1/users` | Admin quản lý tài khoản |
 
 Header: `Authorization: Bearer <access_token>`
+
+## Module Thực đơn (Menu)
+
+| Method | Endpoint | Quyền |
+|--------|----------|--------|
+| GET | `/api/v1/categories` | User đăng nhập |
+| POST/PATCH/DELETE | `/api/v1/categories` | Admin |
+| GET | `/api/v1/menus/items` | User (lọc `category_id`, `is_available`) |
+| POST/PATCH/DELETE | `/api/v1/menus/items` | Admin |
+| POST | `/api/v1/menus/items/{id}/upload-image` | Admin |
+| PATCH | `/api/v1/menus/items/{id}/toggle-status` | Admin |
+| GET | `/api/v1/menus/daily?menu_date=YYYY-MM-DD` | User |
+| POST/DELETE | `/api/v1/menus/daily` | Admin |
+
+Ảnh upload lưu tại `Backend/uploads/`, truy cập qua `/uploads/<filename>`.

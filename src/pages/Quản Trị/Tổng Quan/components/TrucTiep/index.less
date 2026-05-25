@@ -230,3 +230,34 @@
 @media (max-width: 1200px) {
   .kanbanBoard { grid-template-columns: repeat(2, 1fr); }
 }
+
+// ── Dark mode ────────────────────────────────────────────────
+:global([data-theme="dark"]) {
+  .liveBar    { background: #1e293b; border-color: #334155; }
+  .liveTxt    { color: #f1f5f9; }
+  .liveDesc   { color: #94a3b8; }
+  .liveStat   { color: #cbd5e1; strong { color: #f1f5f9; } }
+  .liveStatDiv { background: #334155; }
+
+  .kanbanCot  { background: #1e293b; border-color: #334155; }
+  .cotHeader  { border-bottom-color: #334155; }
+  .cotTitle   { color: #f1f5f9; }
+  .cotBody    { &::-webkit-scrollbar-thumb { background: #334155; } }
+  .cotFooter  { color: #64748b; border-top-color: #334155; }
+
+  .donCard         { background: #0f172a; border-color: #334155; }
+  .donCardFooter   { border-top-color: #334155; }
+  .maDon           { color: #f1f5f9; }
+  .thoiGianDon     { color: #64748b; }
+  .tenKH           { color: #cbd5e1; }
+  .monRow          { color: #94a3b8; }
+  .tongTienDon     { color: #f1f5f9; }
+
+  .trophyCard  { background: #052e16; border-color: #14532d; }
+  .trophyLabel { color: #94a3b8; }
+
+  .summaryBar   { background: #1e293b; border-color: #334155; }
+  .summaryTitle { color: #f1f5f9; }
+  .summaryDiv   { background: #334155; }
+  .summaryStat  { strong { color: #f1f5f9; } span { color: #94a3b8; } }
+}

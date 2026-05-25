@@ -234,3 +234,43 @@
   .tnChartRow  { grid-template-columns: 1fr; }
   .tnDataRow   { grid-template-columns: 1fr; }
 }
+
+// ── Dark mode ────────────────────────────────────────────────
+:global([data-theme="dark"]) {
+  .tnStatCard, .tnInfoCard, .tnChartCard, .tnTableCard, .tnTopCard {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .tnStatLabel  { color: #94a3b8; }
+  .tnStatValue  { color: #f1f5f9; }
+
+  .tnInfoTitle  { color: #94a3b8; }
+  .tnDishName   { color: #f1f5f9; }
+  .tnDishSold   { color: #94a3b8; }
+  .tnPromoName  { color: #f1f5f9; }
+  .tnPromoLeft  { color: #94a3b8; }
+  .tnSatisfyScore { color: #f1f5f9; }
+  .tnSatisfyDesc  { color: #94a3b8; }
+
+  .tnChartTitle { color: #f1f5f9; }
+  .tnChartSub   { color: #94a3b8; }
+  .tnLegLabel   { color: #cbd5e1; }
+  .tnLegVal     { color: #f1f5f9; }
+
+  .tnTableTitle { color: #f1f5f9; }
+  .tnTable {
+    th { color: #64748b; border-bottom-color: #334155; }
+    td { color: #94a3b8; border-bottom-color: #334155; }
+    tr:last-child td { border-bottom: none; }
+  }
+  .tnMaDon { color: #f1f5f9; }
+  .tnKH    { color: #f1f5f9; }
+  .tnPhong { color: #64748b; }
+  .tnMon   { color: #94a3b8; }
+  .tnTien  { color: #f1f5f9; }
+  .tnGio   { color: #64748b; }
+
+  .tnTopRow  { border-bottom-color: #334155; }
+  .tnTopName { color: #f1f5f9; }
+}

@@ -364,12 +364,15 @@ const ComboForm: React.FC<{
   onCancel: () => void;
   onSubmit: (data: ComboFormPayload) => void;
 }> = ({ open, initial, onCancel, onSubmit }) => {
-  const [form] = Form.useForm();
-  const loaiGiaWatch  = Form.useWatch('loaiGia',    form) as ELoaiGiaCombo | undefined;
-  const monAnIdsWatch = Form.useWatch('monAnIds',   form) as string[]      | undefined;
-  const giaTriWatch   = Form.useWatch('giaTriGiam', form) as number        | undefined;
+  const [form]        = Form.useForm();
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [dishSearch,  setDishSearch]  = useState('');
 
-  const tongLe = (monAnIdsWatch ?? []).reduce((sum, id) => {
+  const loaiGiaWatch = Form.useWatch('loaiGia',    form) as ELoaiGiaCombo | undefined;
+  const giaTriWatch  = Form.useWatch('giaTriGiam', form) as number        | undefined;
+
+  // Tổng giá lẻ tính từ các món đã chọn
+  const tongLe = selectedIds.reduce((sum, id) => {
     const mon = DANH_SACH_MON.find((m) => m.id === id);
     return sum + (mon?.giaBan ?? 0);
   }, 0);
@@ -387,30 +390,58 @@ const ComboForm: React.FC<{
       ? 'Giá combo phải nhỏ hơn tổng giá lẻ'
       : null;
 
-  const showPreview = (monAnIdsWatch ?? []).length >= 2 && tongLe > 0;
+  // Danh sách món hiển thị trong picker (có filter)
+  const filteredDishes = useMemo(() => {
+    if (!dishSearch.trim()) return DANH_SACH_MON;
+    const kw = dishSearch.toLowerCase();
+    return DANH_SACH_MON.filter((m) => m.ten.toLowerCase().includes(kw));
+  }, [dishSearch]);
+
+  // Các đối tượng mon đã được chọn (theo đúng thứ tự chọn)
+  const selectedDishes = selectedIds
+    .map((id) => DANH_SACH_MON.find((m) => m.id === id))
+    .filter(Boolean) as (typeof DANH_SACH_MON[number])[];
 
   useEffect(() => {
     if (!open) return;
     if (initial) {
       form.setFieldsValue({
-        ...initial,
+        ten:        initial.ten,
+        moTa:       initial.moTa,
+        loaiGia:    initial.loaiGia,
+        giaTriGiam: initial.giaTriGiam,
         hetHanDate: dayjs(initial.hetHan, 'D/M/YYYY'),
+        trangThai:  initial.trangThai,
+        hoatDong:   initial.hoatDong,
       });
+      setSelectedIds([...initial.monAnIds]);
     } else {
       form.resetFields();
       form.setFieldsValue({
         loaiGia:   ELoaiGiaCombo.PHAN_TRAM,
         trangThai: ETrangThaiKhuyenMai.DANG_CHAY,
         hoatDong:  true,
-        monAnIds:  [],
       });
+      setSelectedIds([]);
     }
+    setDishSearch('');
   }, [open, initial]);
 
+  const handleAdd    = (id: string) => setSelectedIds((p) => p.includes(id) ? p : [...p, id]);
+  const handleRemove = (id: string) => setSelectedIds((p) => p.filter((x) => x !== id));
+
   const handleOk = () => {
+    if (selectedIds.length < 2) {
+      message.error('Combo cần ít nhất 2 món');
+      return;
+    }
+    if (previewError) {
+      message.error(previewError);
+      return;
+    }
     form.validateFields().then((values) => {
       const { hetHanDate, ...rest } = values;
-      onSubmit({ ...rest, hetHan: (hetHanDate as Dayjs).format('D/M/YYYY') });
+      onSubmit({ ...rest, monAnIds: selectedIds, hetHan: (hetHanDate as Dayjs).format('D/M/YYYY') });
     });
   };
 
@@ -446,43 +477,94 @@ const ComboForm: React.FC<{
           <Input.TextArea rows={2} showCount maxLength={120} placeholder="Mô tả ngắn..." />
         </Form.Item>
 
-        <Form.Item
-          label="Món ăn trong combo"
-          name="monAnIds"
-          rules={[
-            { required: true, message: 'Vui lòng chọn ít nhất 2 món' },
-            {
-              validator: (_: any, value: string[]) =>
-                !value || value.length >= 2
-                  ? Promise.resolve()
-                  : Promise.reject(new Error('Combo cần ít nhất 2 món')),
-            },
-          ]}
-        >
-          <Select
-            mode="multiple"
-            placeholder="Chọn các món để tạo combo..."
-            optionFilterProp="label"
-            showArrow
-            allowClear
-          >
-            {DANH_SACH_MON.map((mon) => (
-              <Select.Option key={mon.id} value={mon.id} label={mon.ten}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>{mon.ten}</span>
-                  <span style={{ fontSize: 11, color: '#9ca3af' }}>{fmtVnd(mon.giaBan)}</span>
-                </div>
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-
-        {showPreview && (
-          <div style={{ marginBottom: 16, fontSize: 13, color: '#6b7280' }}>
-            Tổng giá lẻ: <strong style={{ color: '#111827' }}>{fmtVnd(tongLe)}</strong>
+        {/* ── Dish picker ── */}
+        <div className={styles.dishPicker}>
+          {/* Header */}
+          <div className={styles.dishPickerHead}>
+            <span className={styles.dishPickerHeadLabel}>MÓN TRONG COMBO</span>
+            {selectedIds.length > 0 && (
+              <span className={styles.dishPickerHeadCount}>{selectedIds.length} đã chọn</span>
+            )}
           </div>
-        )}
 
+          {/* Search */}
+          <div className={styles.dishPickerSearch}>
+            <Input
+              prefix={<SearchOutlined style={{ color: '#9ca3af', fontSize: 13 }} />}
+              placeholder="Tìm món để thêm..."
+              value={dishSearch}
+              onChange={(e) => setDishSearch(e.target.value)}
+              allowClear
+              bordered={false}
+            />
+          </div>
+
+          {/* Available dishes */}
+          <div className={styles.dishAvailableList}>
+            {filteredDishes.length === 0 && (
+              <div className={styles.dishListEmpty}>Không tìm thấy món</div>
+            )}
+            {filteredDishes.map((mon) => {
+              const added = selectedIds.includes(mon.id);
+              return (
+                <div
+                  key={mon.id}
+                  className={`${styles.dishAvailableRow} ${added ? styles.dishAvailableRowAdded : ''}`}
+                >
+                  <span className={styles.dishDot} style={{ background: mon.mauNen }} />
+                  <span className={styles.dishRowName}>{mon.ten}</span>
+                  <span className={styles.dishRowPrice}>{fmtVnd(mon.giaBan)}</span>
+                  <button
+                    className={`${styles.dishToggleBtn} ${added ? styles.dishToggleBtnAdded : ''}`}
+                    onClick={() => added ? handleRemove(mon.id) : handleAdd(mon.id)}
+                    title={added ? 'Bỏ khỏi combo' : 'Thêm vào combo'}
+                  >
+                    {added ? '✓' : '+'}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Selected dishes */}
+          <div className={styles.dishSelected}>
+            <div className={styles.dishSelectedHead}>
+              <span className={styles.dishSelectedLabel}>ĐÃ CHỌN</span>
+              <span className={`${styles.dishSelectedCount} ${selectedIds.length < 2 ? styles.dishSelectedCountWarn : ''}`}>
+                {selectedIds.length} món{selectedIds.length < 2 ? ' — cần ít nhất 2' : ''}
+              </span>
+            </div>
+
+            {selectedDishes.length === 0 ? (
+              <div className={styles.dishSelectedEmpty}>
+                Chưa chọn món nào — thêm từ danh sách bên trên
+              </div>
+            ) : (
+              <>
+                {selectedDishes.map((mon) => (
+                  <div key={mon.id} className={styles.dishSelectedRow}>
+                    <span className={styles.dishDot} style={{ background: mon.mauNen }} />
+                    <span className={styles.dishSelectedName}>{mon.ten}</span>
+                    <span className={styles.dishSelectedPrice}>{fmtVnd(mon.giaBan)}</span>
+                    <button
+                      className={styles.dishRemoveBtn}
+                      onClick={() => handleRemove(mon.id)}
+                      title="Bỏ khỏi combo"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+                <div className={styles.dishSelectedTotal}>
+                  <span>Tổng giá lẻ</span>
+                  <strong>{fmtVnd(tongLe)}</strong>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* ── Cấu hình giá ── */}
         <Form.Item label="Loại giá combo" name="loaiGia" rules={[{ required: true }]}>
           <Radio.Group>
             <Radio value={ELoaiGiaCombo.PHAN_TRAM}>Giảm %</Radio>
@@ -518,7 +600,8 @@ const ComboForm: React.FC<{
           />
         </Form.Item>
 
-        {showPreview && giaComboPreview !== null && (
+        {/* Preview tính giá */}
+        {selectedIds.length >= 2 && tongLe > 0 && giaComboPreview !== null && (
           <div className={styles.comboFormPreview}>
             <div className={styles.previewRow}>
               <span className={styles.previewRowLabel}>Tổng giá lẻ</span>

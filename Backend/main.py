@@ -7,15 +7,25 @@ from fastapi.staticfiles import StaticFiles
 
 import config
 from database import Base, engine
-from model.menu import Category, DailyMenu, MenuItem  # noqa: F401
-from model.user import RefreshToken, User  # noqa: F401 — đăng ký metadata
+from model import (  # noqa: F401 — đăng ký metadata theo schema.sql
+    CoSoVatChat,
+    DailyMenu,
+    DanhMucMonAn,
+    KhachHang,
+    KhoHang,
+    KhuyenMai,
+    NhanVien,
+    Order,
+    Review,
+    ThucDon,
+)
 from routes import api_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Tạo bảng khi khởi động (dev). Production nên dùng Alembic."""
-    Base.metadata.create_all(bind=engine)
+    # DB đã có sẵn bảng từ schema.sql — không gọi create_all để tránh tạo bảng trùng/thừa.
+    # Base.metadata.create_all(bind=engine)
     yield
 
 

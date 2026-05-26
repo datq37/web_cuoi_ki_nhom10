@@ -7,7 +7,7 @@ from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 # Chuỗi kết nối PostgreSQL — ưu tiên biến môi trường DATABASE_URL
 DATABASE_URL: str = os.getenv(
     "DATABASE_URL",
-    "postgresql://root:123456 @localhost:5432/canteen_db",
+    "postgresql://postgres:123456 @localhost:5432/canteen_db",
 )
 
 # Engine kết nối tới PostgreSQL

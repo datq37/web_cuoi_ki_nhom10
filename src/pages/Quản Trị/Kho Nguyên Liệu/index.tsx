@@ -500,7 +500,8 @@ const NguyenLieuDetail: React.FC<{
               <div className={styles.detailHeroSub}>{d.nhaCungCap}</div>
               <span
                 className={styles.detailStatusBadge}
-                style={{ color: cfg.color, background: cfg.bg }}
+                data-status={d!.trangThai}
+                style={{ color: cfg.color }}
               >
                 {cfg.label}
               </span>
@@ -763,7 +764,7 @@ const KhoNguyenLieu: React.FC = () => {
       render: (val) => {
         const cfg = TRANG_THAI_CONFIG[val];
         return (
-          <span className={styles.trangThaiBadge} style={{ color: cfg.color, background: cfg.bg }}>
+          <span className={styles.trangThaiBadge} data-status={val} style={{ color: cfg.color }}>
             {cfg.label}
           </span>
         );

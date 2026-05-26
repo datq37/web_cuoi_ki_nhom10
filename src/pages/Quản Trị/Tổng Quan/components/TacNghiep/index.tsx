@@ -72,7 +72,7 @@ const TacNghiepView: React.FC = () => {
       render: (r: DonGanDay) => {
         const cfg = getTrangThaiDon(r.trangThai);
         return (
-          <span style={{ color: cfg.color, background: cfg.bg, border: 'none', borderRadius: 20, fontWeight: 500, fontSize: 12, padding: '3px 10px', display: 'inline-block' }}>
+          <span className={styles.tnStatusBadge} data-status={r.trangThai} style={{ color: cfg.color }}>
             {cfg.label}
           </span>
         );

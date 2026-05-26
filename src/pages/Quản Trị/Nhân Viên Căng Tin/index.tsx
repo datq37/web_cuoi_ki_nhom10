@@ -40,7 +40,8 @@ const NhanVienCard: React.FC<{ nv: INhanVien }> = ({ nv }) => {
       <div className={styles.cardMeta}>
         <span
           className={styles.roleBadge}
-          style={{ color: cfg.color, background: cfg.bg }}
+          data-vaitro={nv.vaiTro}
+          style={{ color: cfg.color }}
         >
           {cfg.label}
         </span>

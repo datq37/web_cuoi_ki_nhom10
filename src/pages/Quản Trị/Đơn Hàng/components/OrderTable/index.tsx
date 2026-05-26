@@ -96,11 +96,14 @@ const OrderTable: React.FC<OrderTableProps> = ({
       key: 'trangThai',
       width: 145,
       render: (_: any, r: DonTrucTiep) => {
-        const cfg = getStatusCfg(r.trangThai, cancelledIds.has(r.maDon));
+        const isCancelled = cancelledIds.has(r.maDon);
+        const cfg = getStatusCfg(r.trangThai, isCancelled);
+        const statusKey = isCancelled ? 'huy' : r.trangThai;
         return (
           <span
             className={styles.statusTag}
-            style={{ background: cfg.bgLight, color: cfg.mau }}
+            data-status={statusKey}
+            style={{ color: cfg.mau }}
           >
             <span className={styles.statusDot} style={{ background: cfg.mau }} />
             {cfg.tieuDe}

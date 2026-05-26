@@ -296,7 +296,7 @@ const KhuyenMaiDetail: React.FC<{
         <div className={styles.detailBody}>
           <div className={styles.detailHeader}>
             <span className={styles.detailCode}>{d.ma}</span>
-            <span className={styles.detailStatusTag} style={{ color: cfg.color, background: cfg.bg }}>
+            <span className={styles.detailStatusTag} data-status={d.trangThai} style={{ color: cfg.color }}>
               {cfg.label}
             </span>
           </div>
@@ -670,7 +670,7 @@ const KhuyenMaiRow: React.FC<{
       <div className={styles.promoLeft}>
         <div className={styles.promoBadges}>
           <span className={styles.promoCode}>{item.ma}</span>
-          <span className={styles.promoStatus} style={{ color: cfg.color, background: cfg.bg }}>
+          <span className={styles.promoStatus} data-status={item.trangThai} style={{ color: cfg.color }}>
             {cfg.label}
           </span>
         </div>
@@ -738,7 +738,7 @@ const ComboRow: React.FC<{
         <div className={styles.comboCardLeft}>
           <div className={styles.comboCardTitle}>
             <span className={styles.comboCardName}>{item.ten}</span>
-            <span className={styles.promoStatus} style={{ color: cfg.color, background: cfg.bg }}>
+            <span className={styles.promoStatus} data-status={item.trangThai} style={{ color: cfg.color }}>
               {cfg.label}
             </span>
           </div>

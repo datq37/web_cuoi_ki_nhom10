@@ -273,6 +273,10 @@
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
+
+  &[data-status="du_hang"]  { background: #f0fdf4; }
+  &[data-status="sap_het"]  { background: #fffbeb; }
+  &[data-status="het_hang"] { background: #fef2f2; }
 }
 
 .rowActions {
@@ -434,6 +438,10 @@
   border-radius: 20px;
   padding: 2px 10px;
   width: fit-content;
+
+  &[data-status="du_hang"]  { background: #f0fdf4; }
+  &[data-status="sap_het"]  { background: #fffbeb; }
+  &[data-status="het_hang"] { background: #fef2f2; }
 }
 
 .detailGrid2 {
@@ -540,9 +548,13 @@
 
   .warnBanner { background: rgba(251,191,36,.08); border-color: rgba(251,191,36,.25); }
   .warnLeft   { color: #fcd34d; strong { color: #fde68a; } }
+  .warnIcon   { color: #fbbf24; }
+  .btnTaoDon  { background: #1e293b; border-color: #334155; color: #cbd5e1; &:hover { background: #0f172a; border-color: #475569; } }
 
   .tableSection { background: #1e293b; border-color: #334155; }
   .tableToolbar { border-bottom-color: #334155; }
+  .searchIcon   { color: #475569; }
+  .btnOutline   { border-color: #334155 !important; color: #94a3b8 !important; background: #0f172a !important; }
 
   .table {
     :global(.ant-table-thead > tr > th) {
@@ -607,6 +619,7 @@
   .detailHeroIconWrap { background: rgba(22,163,74,.15); color: #4ade80; }
   .detailHeroName  { color: #f1f5f9; }
   .detailHeroSub   { color: #64748b; }
+  .detailGridLabel { color: #64748b; }
   .detailGridValue { color: #cbd5e1; }
   .detailValueBig  { color: #4ade80; }
   .detailProgress10 { background: #334155; }
@@ -618,5 +631,16 @@
     :global(.ant-table-tbody > tr > td) { background: #1e293b; border-bottom-color: #334155 !important; }
     :global(.ant-table-tbody > tr:hover > td) { background: #0f172a !important; }
     :global(.ant-checkbox-inner) { background: #0f172a; border-color: #334155; }
+  }
+
+  .trangThaiBadge {
+    &[data-status="du_hang"]  { background: rgba(22,163,74,0.15); }
+    &[data-status="sap_het"]  { background: rgba(217,119,6,0.15); }
+    &[data-status="het_hang"] { background: rgba(220,38,38,0.15); }
+  }
+  .detailStatusBadge {
+    &[data-status="du_hang"]  { background: rgba(22,163,74,0.15); }
+    &[data-status="sap_het"]  { background: rgba(217,119,6,0.15); }
+    &[data-status="het_hang"] { background: rgba(220,38,38,0.15); }
   }
 }

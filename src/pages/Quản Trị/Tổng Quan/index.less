@@ -794,6 +794,7 @@
 :global([data-theme="dark"]) {
   .tabsRow { background: #1e293b; border-color: #334155; }
   .tabBtn { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
+  .tabCount { background: rgba(255,255,255,0.08); color: #94a3b8; }
 
   .dateChip { background: #1e293b; border-color: #334155; color: #94a3b8; }
 
@@ -805,6 +806,7 @@
   .kanbanCot { background: #1e293b; border-color: #334155; }
   .cotHeader { border-bottom-color: #334155; }
   .cotTitle { color: #f1f5f9; }
+  .cotBody { &::-webkit-scrollbar-thumb { background: #334155; } }
   .cotFooter { border-top-color: #334155; color: #94a3b8; }
   .donCard { background: #0f172a; border-color: #334155; }
   .maDon { color: #f1f5f9; }
@@ -862,8 +864,24 @@
   .tnInfoTitle { color: #94a3b8; }
   .tnDishName { color: #f1f5f9; }
   .tnDishSold { color: #94a3b8; }
+  .tnTopBadge { background: rgba(239,68,68,.15); color: #f87171; }
+  .tnPromoIcon { background: rgba(22,163,74,.15); }
   .tnPromoName { color: #f1f5f9; }
   .tnPromoLeft { color: #94a3b8; }
+  .tnSatisfyIcon { background: rgba(234,179,8,.12); }
   .tnSatisfyScore { color: #f1f5f9; }
   .tnSatisfyDesc { color: #94a3b8; }
+
+  .trophyCard  { background: rgba(22,163,74,.1); border-color: rgba(22,163,74,.3); }
+  .trophyLabel { color: #94a3b8; }
+  .trophyValue { color: #4ade80; }
+
+  .emptyText { color: #64748b; }
+
+  .hieuSuatItem  { border-bottom-color: #334155; }
+  .hieuSuatLabel { color: #94a3b8; }
+  .hieuSuatValue { color: #f1f5f9; }
+  .hieuSuatUnit  { color: #94a3b8; }
+  .changeDetail  { color: #64748b; }
+  .donutSubtitle { color: #94a3b8; }
 }

@@ -168,6 +168,11 @@
   font-weight: 600;
   border-radius: 20px;
   padding: 2px 10px;
+
+  &[data-status="dang_chay"] { background: #dcfce7; }
+  &[data-status="sap_het"]   { background: #fef3c7; }
+  &[data-status="tam_dung"]  { background: #f3f4f6; }
+  &[data-status="het_han"]   { background: #fee2e2; }
 }
 
 .promoName {
@@ -352,6 +357,11 @@
   font-weight: 600;
   border-radius: 20px;
   padding: 3px 10px;
+
+  &[data-status="dang_chay"] { background: #dcfce7; }
+  &[data-status="sap_het"]   { background: #fef3c7; }
+  &[data-status="tam_dung"]  { background: #f3f4f6; }
+  &[data-status="het_han"]   { background: #fee2e2; }
 }
 
 .detailTitle {
@@ -1079,4 +1089,17 @@
   .previewFinalLabel  { color: #f1f5f9; }
   .previewFinalValue  { color: #4ade80; }
   .previewSavingRow   { color: #4ade80; }
+
+  .detailStatusTag {
+    &[data-status="dang_chay"] { background: rgba(22,163,74,0.15); }
+    &[data-status="sap_het"]   { background: rgba(217,119,6,0.15); }
+    &[data-status="tam_dung"]  { background: rgba(107,114,128,0.15); }
+    &[data-status="het_han"]   { background: rgba(220,38,38,0.15); }
+  }
+  .promoStatus {
+    &[data-status="dang_chay"] { background: rgba(22,163,74,0.15); }
+    &[data-status="sap_het"]   { background: rgba(217,119,6,0.15); }
+    &[data-status="tam_dung"]  { background: rgba(107,114,128,0.15); }
+    &[data-status="het_han"]   { background: rgba(220,38,38,0.15); }
+  }
 }

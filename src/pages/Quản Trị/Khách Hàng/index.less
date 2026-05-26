@@ -33,11 +33,31 @@
 .khachTen { font-size: 13.5px; font-weight: 600; color: #111827; }
 .khachEmail { font-size: 12px; color: #9ca3af; margin-top: 2px; }
 .phongBan { font-size: 13.5px; color: #374151; }
-.vaiTroBadge { display: inline-block; font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+.vaiTroBadge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+
+  &[data-vaitro="nhan_vien"]    { background: #f3f4f6; }
+  &[data-vaitro="truong_phong"] { background: #dcfce7; }
+  &[data-vaitro="giam_doc"]     { background: #dbeafe; }
+}
 .soDon { font-size: 13.5px; font-weight: 700; color: #111827; }
 .chiTieu { font-size: 13.5px; font-weight: 500; color: #374151; }
 .thamGia { font-size: 13px; color: #9ca3af; }
-.trangThaiBadge { display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 600; padding: 4px 12px; border-radius: 20px; }
+.trangThaiBadge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+
+  &[data-trangthai="hoat_dong"] { background: #dcfce7; }
+  &[data-trangthai="tam_khoa"]  { background: #f3f4f6; }
+}
 .moreBtn { width: 30px; height: 30px; border: 1px solid #e5e7eb; border-radius: 7px; background: #fff; color: #6b7280; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; transition: all 0.15s; &:hover { background: #f3f4f6; color: #111827; } }
 
 :global([data-theme="dark"]) {
@@ -92,4 +112,14 @@
   }
 
   .tableRow { &:global(.ant-table-row:hover) > td { background: #0f172a !important; } }
+
+  .vaiTroBadge {
+    &[data-vaitro="nhan_vien"]    { background: rgba(55,65,81,0.15); }
+    &[data-vaitro="truong_phong"] { background: rgba(22,163,74,0.15); }
+    &[data-vaitro="giam_doc"]     { background: rgba(30,64,175,0.15); }
+  }
+  .trangThaiBadge {
+    &[data-trangthai="hoat_dong"] { background: rgba(22,163,74,0.15); }
+    &[data-trangthai="tam_khoa"]  { background: rgba(107,114,128,0.15); }
+  }
 }

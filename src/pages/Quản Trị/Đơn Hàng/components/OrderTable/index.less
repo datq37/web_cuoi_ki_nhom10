@@ -92,6 +92,12 @@
   font-size: 12.5px;
   font-weight: 500;
   white-space: nowrap;
+
+  &[data-status="cho_xac_nhan"]  { background: #fff7ed; }
+  &[data-status="dang_che_bien"] { background: #eff6ff; }
+  &[data-status="san_sang"]      { background: #f5f3ff; }
+  &[data-status="hoan_thanh"]    { background: #f0fdf4; }
+  &[data-status="huy"]           { background: #f3f4f6; }
 }
 
 .statusDot {
@@ -123,10 +129,24 @@
     :global(.ant-table-row-selected > td) { background: rgba(22, 163, 74, 0.12) !important; }
     :global(.ant-table-placeholder) { background: #0f172a; }
     :global(.ant-empty-description) { color: #475569; }
-    :global(.ant-pagination-item a) { color: #64748b; }
-    :global(.ant-pagination-item:hover a) { color: #4ade80; }
-    :global(.ant-pagination-item-active a) { color: #4ade80; }
-    :global(.ant-pagination-item-active) { border-color: #4ade80; }
+    :global(.ant-pagination-item) { background: #1e293b !important; border-color: #334155 !important; }
+    :global(.ant-pagination-item a) { color: #64748b !important; }
+    :global(.ant-pagination-item:hover) { border-color: #4ade80 !important; }
+    :global(.ant-pagination-item:hover a) { color: #4ade80 !important; }
+    :global(.ant-pagination-item-active) { border-color: #4ade80 !important; background: #0f172a !important; }
+    :global(.ant-pagination-item-active a) { color: #4ade80 !important; }
+    :global(.ant-pagination-prev .ant-pagination-item-link),
+    :global(.ant-pagination-next .ant-pagination-item-link) {
+      background: #1e293b !important;
+      border-color: #334155 !important;
+      color: #64748b !important;
+    }
+    :global(.ant-pagination-prev:hover .ant-pagination-item-link),
+    :global(.ant-pagination-next:hover .ant-pagination-item-link) {
+      border-color: #4ade80 !important;
+      color: #4ade80 !important;
+    }
+    :global(.ant-pagination-total-text) { color: #64748b !important; }
   }
   .maDonCell { color: #f1f5f9; }
   .tenKH     { color: #e2e8f0; }
@@ -134,4 +154,12 @@
   .monCell   { color: #94a3b8; }
   .thoiGianCell { color: #64748b; }
   .chevron   { color: #475569; }
+
+  .statusTag {
+    &[data-status="cho_xac_nhan"]  { background: rgba(249,115,22,0.15); }
+    &[data-status="dang_che_bien"] { background: rgba(59,130,246,0.15); }
+    &[data-status="san_sang"]      { background: rgba(139,92,246,0.15); }
+    &[data-status="hoan_thanh"]    { background: rgba(22,163,74,0.15); }
+    &[data-status="huy"]           { background: rgba(107,114,128,0.15); }
+  }
 }

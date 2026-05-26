@@ -178,6 +178,10 @@
   position: relative;
 
   &:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+
+  &[data-status="san_sang"]  { background: #f0fdf4; border-color: #bbf7d0; }
+  &[data-status="dang_dung"] { background: #fff7ed; border-color: #fed7aa; }
+  &[data-status="bao_tri"]   { background: #fef2f2; border-color: #fecaca; }
 }
 
 .chipSo {
@@ -360,4 +364,10 @@
   }
 
   .colorSwatchActive { box-shadow: 0 0 0 2px #94a3b8; }
+
+  .tableChip {
+    &[data-status="san_sang"]  { background: rgba(22,163,74,0.15); border-color: rgba(22,163,74,0.3); }
+    &[data-status="dang_dung"] { background: rgba(234,88,12,0.15); border-color: rgba(234,88,12,0.3); }
+    &[data-status="bao_tri"]   { background: rgba(220,38,38,0.15); border-color: rgba(220,38,38,0.3); }
+  }
 }

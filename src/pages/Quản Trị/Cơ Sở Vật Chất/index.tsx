@@ -42,7 +42,7 @@ const BanChip: React.FC<BanChipProps> = ({ ban, onClick }) => {
   return (
     <div
       className={styles.tableChip}
-      style={{ background: s.bg, borderColor: s.border }}
+      data-status={ban.trangThai}
       onClick={onClick}
       title={`${ban.so} · ${LOAI_BAN_LABEL[ban.loai]}${ban.ghiChu ? ` · ${ban.ghiChu}` : ''}`}
     >

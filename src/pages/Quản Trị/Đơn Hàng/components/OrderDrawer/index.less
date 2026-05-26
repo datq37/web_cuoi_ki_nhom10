@@ -138,6 +138,12 @@
   border-radius: 99px;
   font-size: 13px;
   font-weight: 600;
+
+  &[data-status="cho_xac_nhan"]  { background: #fff7ed; }
+  &[data-status="dang_che_bien"] { background: #eff6ff; }
+  &[data-status="san_sang"]      { background: #f5f3ff; }
+  &[data-status="hoan_thanh"]    { background: #f0fdf4; }
+  &[data-status="huy"]           { background: #f3f4f6; }
 }
 
 .statusDot {
@@ -389,6 +395,10 @@
   padding: 2px 8px;
   border-radius: 99px;
   flex-shrink: 0;
+
+  &[data-ghichu="it_cay"],
+  &[data-ghichu="khong_hanh"] { background: #fff7ed; }
+  &[data-ghichu="mang_di"]    { background: #f5f3ff; }
 }
 
 .priceList {
@@ -485,4 +495,16 @@
   .paymentRow { background: #0f172a; }
   .payLabel { color: #64748b; }
   .priceDivider { background: #334155; }
+  .statusBadge {
+    &[data-status="cho_xac_nhan"]  { background: rgba(249,115,22,0.15); }
+    &[data-status="dang_che_bien"] { background: rgba(59,130,246,0.15); }
+    &[data-status="san_sang"]      { background: rgba(139,92,246,0.15); }
+    &[data-status="hoan_thanh"]    { background: rgba(22,163,74,0.15); }
+    &[data-status="huy"]           { background: rgba(107,114,128,0.15); }
+  }
+  .gcTag {
+    &[data-ghichu="it_cay"],
+    &[data-ghichu="khong_hanh"] { background: rgba(249,115,22,0.15); }
+    &[data-ghichu="mang_di"]    { background: rgba(139,92,246,0.15); }
+  }
 }

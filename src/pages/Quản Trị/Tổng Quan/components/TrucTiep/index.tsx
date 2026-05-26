@@ -20,7 +20,7 @@ import styles from './index.less';
 const GhiChuBadge: React.FC<{ type: keyof typeof GHI_CHU_CONFIG }> = ({ type }) => {
   const cfg = GHI_CHU_CONFIG[type];
   return (
-    <div className={styles.ghiChu} style={{ color: cfg.mau, background: cfg.bg }}>
+    <div className={styles.ghiChu} data-ghichu={type} style={{ color: cfg.mau }}>
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style={{ marginRight: 4 }}>
         <path
           d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
@@ -84,7 +84,7 @@ const KanbanCot: React.FC<{ trangThai: ETrangThaiTrucTiep; dons: DonTrucTiep[] }
         <div className={styles.cotTitleRow}>
           <span className={styles.cotDot} style={{ background: cfg.mau }} />
           <span className={styles.cotTitle}>{cfg.tieuDe}</span>
-          <span className={styles.cotBadge} style={{ color: cfg.mau, background: cfg.bgLight }}>
+          <span className={styles.cotBadge} data-col={trangThai} style={{ color: cfg.mau }}>
             {dons.length}
           </span>
         </div>
@@ -148,7 +148,7 @@ const TrucTiepView: React.FC = () => {
         </div>
         <div className={styles.liveStats}>
           <div className={styles.liveStat}>
-            <span className={styles.liveStatIcon} style={{ background: '#fff7ed', color: '#f97316' }}>
+            <span className={styles.liveStatIcon} data-stat="cho_xac_nhan">
               <svg width="15" height="15" fill="none" viewBox="0 0 24 24">
                 <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 <circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth="2" />
@@ -159,7 +159,7 @@ const TrucTiepView: React.FC = () => {
           </div>
           <div className={styles.liveStatDiv} />
           <div className={styles.liveStat}>
-            <span className={styles.liveStatIcon} style={{ background: '#eff6ff', color: '#3b82f6' }}>
+            <span className={styles.liveStatIcon} data-stat="dang_che_bien">
               <svg width="15" height="15" fill="none" viewBox="0 0 24 24">
                 <path d="M3 6h18M3 10h18M3 14h11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
@@ -169,7 +169,7 @@ const TrucTiepView: React.FC = () => {
           </div>
           <div className={styles.liveStatDiv} />
           <div className={styles.liveStat}>
-            <span className={styles.liveStatIcon} style={{ background: '#f5f3ff', color: '#8b5cf6' }}>
+            <span className={styles.liveStatIcon} data-stat="san_sang">
               <svg width="15" height="15" fill="none" viewBox="0 0 24 24">
                 <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3m-4 12h6m-3-3v6M9 17h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
@@ -179,7 +179,7 @@ const TrucTiepView: React.FC = () => {
           </div>
           <div className={styles.liveStatDiv} />
           <div className={styles.liveStat}>
-            <span className={styles.liveStatIcon} style={{ background: '#f0fdf4', color: '#16a34a' }}>
+            <span className={styles.liveStatIcon} data-stat="hoan_thanh">
               <svg width="15" height="15" fill="none" viewBox="0 0 24 24">
                 <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
                 <path d="M12 7v5l3 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />

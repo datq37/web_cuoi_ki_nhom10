@@ -111,7 +111,7 @@ const KhachHang: React.FC = () => {
       render: (val) => {
         const cfg = VAI_TRO_CONFIG[val];
         return (
-          <span className={styles.vaiTroBadge} style={{ color: cfg.color, background: cfg.bg }}>
+          <span className={styles.vaiTroBadge} data-vaitro={val} style={{ color: cfg.color }}>
             {cfg.label}
           </span>
         );
@@ -148,7 +148,7 @@ const KhachHang: React.FC = () => {
       render: (val) => {
         const cfg = TRANG_THAI_KHACH_CONFIG[val];
         return (
-          <span className={styles.trangThaiBadge} style={{ color: cfg.color, background: cfg.bg }}>
+          <span className={styles.trangThaiBadge} data-trangthai={val} style={{ color: cfg.color }}>
             <CheckOutlined style={{ fontSize: 10, marginRight: 4 }} />
             {cfg.label}
           </span>

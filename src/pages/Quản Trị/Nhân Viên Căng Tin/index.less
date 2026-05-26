@@ -81,6 +81,12 @@
   padding: 3px 12px;
   border-radius: 20px;
   white-space: nowrap;
+
+  &[data-vaitro="quan_tri_vien"],
+  &[data-vaitro="bep_truong"],
+  &[data-vaitro="thu_ngan"]        { background: #dcfce7; }
+  &[data-vaitro="nhan_vien_bep"]   { background: #dbeafe; }
+  &[data-vaitro="nhan_vien_phuc_vu"] { background: #fef3c7; }
 }
 
 .lastActive {
@@ -203,4 +209,12 @@
   .addIconWrap { background: rgba(22,163,74,.15); }
   .addTitle { color: #cbd5e1; }
   .addSub   { color: #64748b; }
+
+  .roleBadge {
+    &[data-vaitro="quan_tri_vien"],
+    &[data-vaitro="bep_truong"],
+    &[data-vaitro="thu_ngan"]          { background: rgba(22,163,74,0.15); }
+    &[data-vaitro="nhan_vien_bep"]     { background: rgba(30,64,175,0.15); }
+    &[data-vaitro="nhan_vien_phuc_vu"] { background: rgba(146,64,14,0.15); }
+  }
 }

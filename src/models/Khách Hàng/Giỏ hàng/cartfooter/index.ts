@@ -16,6 +16,11 @@ export function useCartFooterModel(selectedVoucher: Voucher | undefined) {
     const discount = (() => {
         if (!selectedVoucher) return 0;
         if (selectedVoucher.minOrder && subtotal < selectedVoucher.minOrder) return 0;
+        // Nếu loại giảm là phần trăm, tính theo % của subtotal
+        if (selectedVoucher.loai === 'phan_tram') {
+            return Math.round(subtotal * selectedVoucher.discount / 100);
+        }
+        // Ngược lại dùng số tiền cố định
         return selectedVoucher.discount;
     })();
 

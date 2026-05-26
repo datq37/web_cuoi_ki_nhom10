@@ -97,7 +97,13 @@ const CartOption: React.FC<CartOptionProps> = ({
                             <CheckCircle size={28} className="success-icon" />
                             <div className="text">
                                 <strong>{selectedVoucher.code}</strong>
-                                <span>- Đã áp dụng giảm {selectedVoucher.discount.toLocaleString()}đ</span>
+                                <span>
+                                    {selectedVoucher.loai === 'phan_tram'
+                                        ? `- Giảm ${selectedVoucher.discount}% đơn hàng`
+                                        : selectedVoucher.loai === 'mien_ship'
+                                        ? '- Miễn phí phục vụ'
+                                        : `- Đã áp dụng giảm ${selectedVoucher.discount.toLocaleString()}đ`}
+                                </span>
                             </div>
                         </div>
                     ) : (

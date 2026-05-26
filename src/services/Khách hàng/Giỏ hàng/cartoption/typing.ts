@@ -1,7 +1,8 @@
 export interface Voucher {
     id: string;
     code: string;
-    discount: number; // số tiền giảm hoặc % (tùy logic xử lý sau này)
+    discount: number; // số tiền giảm (so_tien/mien_ship) hoặc % giảm (phan_tram)
+    loai?: 'phan_tram' | 'so_tien' | 'mien_ship'; // loại giảm để tính đúng
     desc: string;
     minOrder?: number;
     badge?: string;

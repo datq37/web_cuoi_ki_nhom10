@@ -35,6 +35,7 @@ function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
                 id: k.id,
                 code: k.ma,
                 discount,
+                loai: k.loai as 'phan_tram' | 'so_tien' | 'mien_ship',
                 desc: k.ten || k.moTa || k.ma,
                 minOrder: k.donToiThieu || 0,
                 badge: k.trangThai === 'sap_het' ? 'Sắp hết' : 'Ưu đãi có hạn',

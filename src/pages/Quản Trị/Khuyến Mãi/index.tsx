@@ -942,6 +942,18 @@ const KhuyenMai: React.FC = () => {
       const newItem: IKhuyenMai = { ...data, id: `km_${Date.now()}`, daDung: 0 };
       setItems((prev) => [newItem, ...prev]);
       message.success(`Đã tạo khuyến mãi ${data.ma}`);
+      
+      // Dispatch notification
+      window.dispatchEvent(new CustomEvent('new_notification', {
+        detail: {
+            id: `notif_voucher_${Date.now()}`,
+            title: 'Mã khuyến mãi mới!',
+            message: `Admin vừa tung mã giảm giá mới: ${data.ma}. Nhanh tay đặt món ngay kẻo lỡ!`,
+            time: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }),
+            isRead: false,
+            image: 'https://cdn-icons-png.flaticon.com/512/879/879859.png'
+        }
+      }));
     }
     setFormOpen(false);
     setEditing(null);
@@ -978,6 +990,18 @@ const KhuyenMai: React.FC = () => {
       const newCombo: ICombo = { ...data, id: `cb_${Date.now()}` };
       setComboItems((prev) => [newCombo, ...prev]);
       message.success(`Đã tạo combo "${data.ten}"`);
+      
+      // Dispatch notification
+      window.dispatchEvent(new CustomEvent('new_notification', {
+        detail: {
+            id: `notif_combo_${Date.now()}`,
+            title: 'Combo Mới Cực Hời!',
+            message: `Vừa ra mắt combo mới: ${data.ten}. Tiết kiệm hơn khi đặt chung nha bạn ơi!`,
+            time: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }),
+            isRead: false,
+            image: 'https://cdn-icons-png.flaticon.com/512/3480/3480823.png'
+        }
+      }));
     }
     setComboFormOpen(false);
     setEditingCombo(null);

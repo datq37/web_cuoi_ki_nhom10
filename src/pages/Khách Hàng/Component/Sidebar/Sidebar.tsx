@@ -18,7 +18,7 @@ import { useModel, history } from 'umi';
 
 const Sidebar: React.FC = () => {
   const { page, setPage, isSidebarOpen, setIsSidebarOpen } = useModel('Khách Hàng.global');
-  const { currentUser } = useModel('Khách Hàng.user');
+  const { currentUser, rankInfo } = useModel('Khách Hàng.user');
   const { cart, setCartOpen } = useModel('Khách Hàng.Thực đơn.index');
   const { unreadCount, setIsNotificationOpen } = useModel('Khách Hàng.Notifications');
 
@@ -26,6 +26,38 @@ const Sidebar: React.FC = () => {
   const cartQty = cart.reduce((sum: number, item: any) => sum + item.qty, 0);
 
   const closeSidebar = () => setIsSidebarOpen(false);
+
+  // --- Tính toán điểm và hạng tiếp theo ---
+  // Import động nếu chưa import, tuy nhiên ta có thể dùng require hoặc tính thẳng ở đây để gọn.
+  // Ta có RANKS: Đồng (0), Bạc (1M), Vàng (3M), Kim Cương (10M)
+  const RANKS = [
+    { name: 'Đồng', min: 0, mult: 1, color: '#cd7f32' },
+    { name: 'Bạc', min: 1000000, mult: 1.2, color: '#c0c0c0' },
+    { name: 'Vàng', min: 3000000, mult: 1.5, color: '#ffd700' },
+    { name: 'Kim Cương', min: 10000000, mult: 2, color: '#b9f2ff' }
+  ];
+
+  const currentSpent = user.totalSpent || 0;
+  const currentPoints = user.points || 0;
+  let nextRank = RANKS[RANKS.length - 1]; // Giả định là max rank
+  let currentRank = RANKS[0];
+  let isMaxRank = true;
+
+  for (let i = 0; i < RANKS.length; i++) {
+    if (currentSpent < RANKS[i].min) {
+      nextRank = RANKS[i];
+      currentRank = RANKS[i - 1] || RANKS[0];
+      isMaxRank = false;
+      break;
+    }
+  }
+
+  // Progress tính theo số tiền (chi tiêu) vì hạng dựa vào tiền
+  // Tuy nhiên, UI có thể hiển thị "cần chi tiêu thêm X VNĐ" thay vì "điểm" để lên hạng.
+  // Hoặc ta có thể quy đổi ngược ra điểm tương đối.
+  const spentNeeded = nextRank.min - currentSpent;
+  const progressPercent = isMaxRank ? 100 : ((currentSpent - currentRank.min) / (nextRank.min - currentRank.min)) * 100;
+  const fmt = (n: number) => new Intl.NumberFormat('vi-VN').format(n);
 
   const orderItems = [
     {
@@ -149,15 +181,19 @@ const Sidebar: React.FC = () => {
         </div>
 
         <div className="sidebar-bottom">
-          <div className="reward-card">
-            <div className="reward-icon">
+          <div className="reward-card" style={{ cursor: 'pointer' }} onClick={() => setPage('settings')}>
+            <div className="reward-icon" style={{ background: currentRank.color, color: '#fff' }}>
               <Gift size={28} />
             </div>
-            <p>Điểm thưởng</p>
-            <h3>1.250 điểm</h3>
-            <span>Bạn còn <strong>250 điểm</strong> sẽ lên hạng Bạc</span>
+            <p>Điểm thưởng ({currentRank.name})</p>
+            <h3>{fmt(currentPoints)} điểm</h3>
+            {isMaxRank ? (
+              <span>Bạn đang ở hạng cao nhất!</span>
+            ) : (
+              <span>Cần thêm <strong>{fmt(spentNeeded)}đ</strong> chi tiêu để lên hạng {nextRank.name}</span>
+            )}
             <div className="reward-progress">
-              <div />
+              <div style={{ width: `${Math.min(100, Math.max(0, progressPercent))}%`, background: nextRank.color }} />
             </div>
           </div>
 

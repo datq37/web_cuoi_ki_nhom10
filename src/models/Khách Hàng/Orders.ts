@@ -55,6 +55,19 @@ export default function useOrderModel() {
                         setTimeout(() => {
                             changedOrders.forEach(co => {
                                 message.info(`Đơn hàng ${co.id} của bạn đã được cập nhật thành: ${co.status}`);
+                                
+                                // Gửi thông báo cho khách hàng
+                                window.dispatchEvent(new CustomEvent('new_notification', {
+                                    detail: {
+                                        id: `notif_${Date.now()}_${co.id}`,
+                                        title: 'Trạng thái đơn hàng cập nhật',
+                                        message: `Đơn hàng ${co.id} của bạn đã chuyển sang trạng thái: ${co.status}`,
+                                        time: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }),
+                                        isRead: false,
+                                        image: 'https://cdn-icons-png.flaticon.com/512/2830/2830305.png'
+                                    }
+                                }));
+
                                 if (co.status === OrderStatus.Done) {
                                     window.dispatchEvent(new CustomEvent('order_completed', { detail: { amount: co.total } }));
                                 }
@@ -114,6 +127,19 @@ export default function useOrderModel() {
                 adminOrders = [donTrucTiep, ...adminOrders];
                 localStorage.setItem('admin_orders', JSON.stringify(adminOrders));
                 window.dispatchEvent(new Event('admin_orders_updated'));
+                
+                // Gửi thông báo cho khách hàng
+                window.dispatchEvent(new CustomEvent('new_notification', {
+                    detail: {
+                        id: `notif_${Date.now()}`,
+                        title: 'Đơn hàng đã được đặt thành công',
+                        message: `Đơn hàng ${newOrder.id} của bạn đã được xác nhận. Bếp đang chuẩn bị!`,
+                        time: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }),
+                        isRead: false,
+                        image: 'https://cdn-icons-png.flaticon.com/512/1046/1046784.png'
+                    }
+                }));
+
             } catch (e) {
                 console.error("Lỗi đồng bộ đơn hàng với Admin:", e);
             }
@@ -138,6 +164,17 @@ export default function useOrderModel() {
                     nextStatusToAdmin = 'hoan_thanh';
                     setTimeout(() => {
                         window.dispatchEvent(new CustomEvent('order_completed', { detail: { amount: o.total } }));
+                        
+                        window.dispatchEvent(new CustomEvent('new_notification', {
+                            detail: {
+                                id: `notif_received_${Date.now()}`,
+                                title: 'Đã nhận món thành công',
+                                message: `Bạn đã xác nhận nhận món cho đơn hàng ${o.id}. Chúc bạn ngon miệng! Đừng quên đánh giá nhé.`,
+                                time: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }),
+                                isRead: false,
+                                image: 'https://cdn-icons-png.flaticon.com/512/1046/1046784.png'
+                            }
+                        }));
                     }, 0);
                 }
 

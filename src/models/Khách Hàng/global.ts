@@ -13,16 +13,35 @@ const PAGE_TITLES: Record<string, string> = {
 
 export default function useGlobalModel() {
   const [theme, setTheme] = useState<ThemeType>(() => {
-    const savedTheme = localStorage.getItem('app-theme');
-    return (savedTheme as ThemeType) || ThemeType.LIGHT;
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('app-theme');
+      return (savedTheme as ThemeType) || ThemeType.LIGHT;
+    }
+    return ThemeType.LIGHT;
   });
-  const [page, setPage] = useState('home');
+  
+  const [page, setPage] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedPage = sessionStorage.getItem('current_page');
+      return savedPage || 'home';
+    }
+    return 'home';
+  });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Lưu theme vào localStorage mỗi khi có thay đổi
   useEffect(() => {
-    localStorage.setItem('app-theme', theme);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('app-theme', theme);
+    }
   }, [theme]);
+
+  // Lưu page vào sessionStorage mỗi khi có thay đổi
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('current_page', page);
+    }
+  }, [page]);
 
   const toggleTheme = useCallback(() => {
     setTheme(prev => (prev === 'light' ? ThemeType.DARK : ThemeType.LIGHT));

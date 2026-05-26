@@ -1,6 +1,6 @@
-from sqlalchemy import Boolean, Float, Integer, String, Text
+from sqlalchemy import Boolean, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.dialects.postgresql import ARRAY
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
 
@@ -19,4 +19,7 @@ class ThucDon(Base):
     soluongdaban: Mapped[int | None] = mapped_column(Integer, nullable=True)
     hethang: Mapped[bool | None] = mapped_column(Boolean, nullable=True, default=False, server_default="false")
     tags: Mapped[list[str] | None] = mapped_column(ARRAY(String), nullable=True)
-    danhmucid: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    danhmucid: Mapped[int | None] = mapped_column(ForeignKey("danhmucmonan.id"), nullable=True)
+
+    # Quan hệ N-1: Món ăn thuộc về một danh mục
+    danhmuc: Mapped["DanhMucMonAn"] = relationship("DanhMucMonAn", back_populates="thucdons")

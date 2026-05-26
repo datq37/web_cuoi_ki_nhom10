@@ -1,6 +1,4 @@
-import uuid
 from typing import Annotated
-
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
@@ -25,17 +23,18 @@ def list_categories(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=200),
 ):
-    """Xem danh sách danh mục — mọi user đã đăng nhập."""
+    """Xem danh sách danh mục món ăn — yêu cầu đã đăng nhập."""
     items, _ = category_crud.get_categories(db, skip=skip, limit=limit)
     return items
 
 
 @router.get("/{category_id}", response_model=CategoryResponse)
 def get_category(
-    category_id: uuid.UUID,
+    category_id: int,
     db: Annotated[Session, Depends(get_db)],
     _: Annotated[KhachHang, Depends(get_current_user)],
 ):
+    """Xem thông tin chi tiết một danh mục món ăn — yêu cầu đã đăng nhập."""
     return menu_service.get_category_or_404(db, category_id)
 
 
@@ -45,26 +44,26 @@ def create_category(
     db: Annotated[Session, Depends(get_db)],
     _: Annotated[KhachHang, Depends(get_current_active_admin)],
 ):
-    """Admin: tạo danh mục."""
+    """Admin: tạo danh mục món ăn mới."""
     return menu_service.create_category(db, data)
 
 
 @router.patch("/{category_id}", response_model=CategoryResponse)
 def update_category(
-    category_id: uuid.UUID,
+    category_id: int,
     data: CategoryUpdate,
     db: Annotated[Session, Depends(get_db)],
     _: Annotated[KhachHang, Depends(get_current_active_admin)],
 ):
-    """Admin: cập nhật danh mục."""
+    """Admin: cập nhật danh mục món ăn."""
     return menu_service.update_category(db, category_id, data)
 
 
 @router.delete("/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_category(
-    category_id: uuid.UUID,
+    category_id: int,
     db: Annotated[Session, Depends(get_db)],
     _: Annotated[KhachHang, Depends(get_current_active_admin)],
 ):
-    """Admin: xóa danh mục."""
+    """Admin: xóa danh mục món ăn."""
     menu_service.delete_category(db, category_id)

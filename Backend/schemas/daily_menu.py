@@ -1,28 +1,35 @@
 from datetime import date
-
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
+from schemas.thucdon import ThucDonResponse
 
 
 class DailyMenuBase(BaseModel):
+    """Schema cơ sở lịch thực đơn theo ngày."""
     serve_date: date | None = None
-    menu_item_id: int | None = None
+    menu_item_id: str | None = Field(default=None, description="Mã món ăn (mamon)")
 
 
 class DailyMenuCreate(DailyMenuBase):
-    pass
+    """Schema thêm món vào lịch ngày."""
+    serve_date: date = Field(..., description="Ngày phục vụ (YYYY-MM-DD)")
+    menu_item_id: str = Field(..., min_length=1, description="Mã món ăn (mamon)")
 
 
 class DailyMenuUpdate(BaseModel):
+    """Schema cập nhật lịch ngày."""
     serve_date: date | None = None
-    menu_item_id: int | None = None
+    menu_item_id: str | None = None
 
 
 class DailyMenuResponse(DailyMenuBase):
+    """Schema phản hồi thông tin lịch ngày."""
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+    thucdon: ThucDonResponse | None = None
 
 
 class DailyMenuListResponse(BaseModel):
+    """Schema danh sách thực đơn theo ngày."""
     date: date
     items: list[DailyMenuResponse]

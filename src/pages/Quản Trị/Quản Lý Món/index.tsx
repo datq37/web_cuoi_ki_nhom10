@@ -469,7 +469,26 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
 
 // ── QuanLyMon (main page) ─────────────────────────────────────────
 const QuanLyMon: React.FC = () => {
-  const [items,    setItems]    = useState<IMonAnLocal[]>(DANH_SACH_MON as IMonAnLocal[]);
+  const [items, setItems] = useState<IMonAnLocal[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('admin_dishes');
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+    return DANH_SACH_MON as IMonAnLocal[];
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('admin_dishes', JSON.stringify(items));
+    }
+  }, [items]);
+
   const [activeTab, setActiveTab] = useState<EDanhMuc | 'tat_ca'>('tat_ca');
   const [tuKhoa,   setTuKhoa]   = useState('');
   const [isGrid,   setIsGrid]   = useState(true);

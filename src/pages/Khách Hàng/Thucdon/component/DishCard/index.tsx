@@ -43,7 +43,7 @@ const categoryFallbackImages: Record<string, string> = {
 const DishCard: React.FC<DishCardProps> = ({ dish, qty, onAdd, onInc, onDec, onClick, isFuture }) => (
     <div className="dish-card" onClick={onClick} style={{ cursor: 'pointer' }}>
         <div className="dish-image">
-            <img src={dishImages[dish.id] || categoryFallbackImages[dish.cat]} alt={dish.name} />
+            <img src={dish.hinhAnh || dishImages[dish.id] || categoryFallbackImages[dish.cat]} alt={dish.name} />
             <div className="dish-tags">
                 {dish.tags.map(t => (
                     <span key={t} className={`dish-tag ${t}`}>{t.toUpperCase()}</span>

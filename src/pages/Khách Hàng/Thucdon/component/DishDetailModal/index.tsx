@@ -31,13 +31,17 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
         <div className="ddm-backdrop" onClick={handleBackdrop}>
             <div className="ddm-sheet">
                 <div className="ddm-hero">
-                    <div className="ddm-hero-emoji">{dish.emoji}</div>
+                    {dish.hinhAnh ? (
+                        <img src={dish.hinhAnh} alt={dish.name} style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} />
+                    ) : (
+                        <div className="ddm-hero-emoji">{dish.emoji}</div>
+                    )}
                     <div className="ddm-hero-tags">
                         {dish.tags.map((t) => (
                             <span key={t} className={`ddm-tag ${t}`}>{t.toUpperCase()}</span>
                         ))}
                     </div>
-                    <button className="ddm-close" onClick={onClose}>
+                    <button className="ddm-close" onClick={onClose} style={{ zIndex: 10 }}>
                         <CloseOutlined />
                     </button>
                 </div>

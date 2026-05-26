@@ -132,9 +132,14 @@ export default function useOrderModel() {
         }));
     }, []);
 
+    const markAsReviewed = useCallback((orderId: string) => {
+        setOrders(prev => prev.map(o => o.id === orderId ? { ...o, isReviewed: true } : o));
+    }, []);
+
     return {
         orders,
         addOrder,
-        advanceOrder
+        advanceOrder,
+        markAsReviewed
     };
 }

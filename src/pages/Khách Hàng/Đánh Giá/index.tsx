@@ -17,6 +17,7 @@ interface RatingPageProps {
 const RatingPage: React.FC<RatingPageProps> = ({ order, onClose }) => {
     const { currentUser } = useModel('Khách Hàng.user');
     const { addReview } = useModel('Khách Hàng.Thực đơn.index');
+    const { markAsReviewed } = useModel('Khách Hàng.Orders');
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
     const [images, setImages] = useState<string[]>([]);
@@ -59,6 +60,9 @@ const RatingPage: React.FC<RatingPageProps> = ({ order, onClose }) => {
             });
         }
         
+        if (order?.id) {
+            markAsReviewed(order.id);
+        }
         message.success("Cảm ơn bạn đã gửi đánh giá món ăn!");
         onClose();
     };

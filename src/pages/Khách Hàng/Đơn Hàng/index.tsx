@@ -128,12 +128,14 @@ const HistoryPage: React.FC = () => {
                                         
                                         {o.status === OrderStatus.Done && (
                                             <>
-                                                <Button 
-                                                    className="btn-rate-order"
-                                                    onClick={() => setRatingOrder(o)}
-                                                >
-                                                    Đánh giá
-                                                </Button>
+                                                {!o.isReviewed && (
+                                                    <Button 
+                                                        className="btn-rate-order"
+                                                        onClick={() => setRatingOrder(o)}
+                                                    >
+                                                        Đánh giá
+                                                    </Button>
+                                                )}
                                                 <Button 
                                                     icon={<ReloadOutlined />} 
                                                     type="text"

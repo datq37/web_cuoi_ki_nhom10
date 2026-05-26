@@ -19,4 +19,5 @@ export interface Order {
     created: string;
     pickup: string;
     note?: string;
+    isReviewed?: boolean;
 }

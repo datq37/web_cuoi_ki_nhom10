@@ -1051,4 +1051,73 @@
     span { color: #64748b; }
     strong { color: #4ade80; }
   }
+
+  // ── Tabs ──────────────────────────────────────────────────────
+  .mainTabs {
+    :global(.ant-tabs-nav) {
+      background: #1e293b !important;
+      border-color: #334155 !important;
+    }
+    :global(.ant-tabs-tab) { color: #64748b !important; }
+    :global(.ant-tabs-tab-active .ant-tabs-tab-btn) { color: #4ade80 !important; }
+    :global(.ant-tabs-ink-bar) { background: #4ade80 !important; }
+    :global(.ant-tabs-content-holder) {
+      background: #1e293b !important;
+      border-color: #334155 !important;
+    }
+    :global(.ant-tabs-nav::before) { border-bottom-color: #334155 !important; }
+  }
+
+  // ── Toolbar ───────────────────────────────────────────────────
+  .searchInput {
+    :global(.ant-input-affix-wrapper) {
+      background: #1e293b !important;
+      border-color: #334155 !important;
+    }
+    :global(.ant-input) { background: #1e293b !important; color: #e2e8f0 !important; }
+    :global(.ant-input-prefix) { color: #475569; }
+  }
+
+  .btnFilter {
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+    background: #1e293b !important;
+    &:hover { color: #f1f5f9 !important; border-color: #475569 !important; background: #0f172a !important; }
+  }
+
+  // ── Stat sub ──────────────────────────────────────────────────
+  .statSubComplex { color: #94a3b8; }
+  .statSubSuffix  { color: #64748b; }
+
+  // ── Empty state ───────────────────────────────────────────────
+  .empty { color: #475569; }
+
+  // ── Combo list ────────────────────────────────────────────────
+  .comboCard {
+    border-top-color: #334155;
+    &:hover { background: #0f172a; }
+  }
+
+  .comboCardName    { color: #f1f5f9; }
+  .comboCardMoTa    { color: #64748b; }
+
+  .comboOriginalPrice { color: #475569; }
+  .comboArrow         { color: #334155; }
+  .comboFinalPrice    { color: #4ade80; }
+  .comboSaving        { background: #16a34a; }
+  .comboExpiryLabel   { color: #64748b; }
+  .comboExpiryDate    { color: #cbd5e1; }
+
+  // ── Combo form preview ────────────────────────────────────────
+  .comboFormPreview {
+    background: #0f172a;
+    border-color: #334155;
+  }
+  .previewRow         { color: #cbd5e1; }
+  .previewRowLabel    { color: #64748b; }
+  .previewDivider     { background: #334155; }
+  .previewFinalRow    {}
+  .previewFinalLabel  { color: #f1f5f9; }
+  .previewFinalValue  { color: #4ade80; }
+  .previewSavingRow   { color: #4ade80; }
 }

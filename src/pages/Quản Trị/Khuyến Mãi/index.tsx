@@ -796,7 +796,22 @@ const ComboRow: React.FC<{
 
 // ── KhuyenMai page ────────────────────────────────────────────────
 const KhuyenMai: React.FC = () => {
-  const [items,          setItems]          = useState<IKhuyenMai[]>(DANH_SACH_KHUYEN_MAI);
+  const [items, setItems] = useState<IKhuyenMai[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('admin_vouchers');
+      if (saved) {
+        try { return JSON.parse(saved); } catch { /* ignore */ }
+      }
+    }
+    return DANH_SACH_KHUYEN_MAI;
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('admin_vouchers', JSON.stringify(items));
+    }
+  }, [items]);
+
   const [tuKhoa,         setTuKhoa]         = useState('');
   const [filterTrangThai, setFilterTrangThai] = useState<ETrangThaiKhuyenMai | null>(null);
   const [editing,        setEditing]        = useState<IKhuyenMai | null>(null);

@@ -3,6 +3,62 @@ import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
 import { SEED_VOUCHERS, BUFFER_MIN } from '@/services/Khách hàng/Giỏ hàng/cartoption';
 import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
 
+//  Chuyển đổi IKhuyenMai (Admin) → Voucher (Customer)
+function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
+    return adminList
+        .filter((k: any) => k.hoatDong && k.trangThai !== 'het_han' && k.trangThai !== 'tam_dung')
+        .map((k: any): Voucher => {
+            let discount = 0;
+            let valueLabel = '';
+            let typeLabel = 'GIẢM GIÁ';
+            let theme: 'green' | 'orange' | 'lime' = 'green';
+
+            if (k.loai === 'phan_tram') {
+                // Sẽ tính theo % đơn hàng; lưu giá trị % vào discount tạm
+                discount = k.giaTriGiam;
+                valueLabel = `${k.giaTriGiam}%`;
+                typeLabel = 'GIẢM %';
+                theme = 'lime';
+            } else if (k.loai === 'so_tien') {
+                discount = k.giaTriGiam;
+                valueLabel = `${Number(k.giaTriGiam).toLocaleString('vi-VN')}đ`;
+                typeLabel = 'GIẢM GIÁ';
+                theme = 'green';
+            } else if (k.loai === 'mien_ship') {
+                discount = 2000;
+                valueLabel = 'MIỄN PHÍ';
+                typeLabel = 'PHỤC VỤ';
+                theme = 'orange';
+            }
+
+            return {
+                id: k.id,
+                code: k.ma,
+                discount,
+                desc: k.ten || k.moTa || k.ma,
+                minOrder: k.donToiThieu || 0,
+                badge: k.trangThai === 'sap_het' ? 'Sắp hết' : 'Ưu đãi có hạn',
+                expire: k.hetHan || '31.12.2026',
+                valueLabel,
+                typeLabel,
+                theme,
+            };
+        });
+}
+
+function loadVouchersFromStorage(): Voucher[] {
+    if (typeof window === 'undefined') return SEED_VOUCHERS;
+    const saved = localStorage.getItem('admin_vouchers');
+    if (saved) {
+        try {
+            const adminList = JSON.parse(saved);
+            const converted = mapAdminVouchersToCustomer(adminList);
+            return converted.length > 0 ? converted : SEED_VOUCHERS;
+        } catch { /* ignore */ }
+    }
+    return SEED_VOUCHERS;
+}
+
 //  Tính giờ nhận tự động
 export function calcPickupTime(cart: any[]): { timeStr: string; prepMin: number } {
     if (cart.length === 0) return { timeStr: '--:--', prepMin: 0 };
@@ -33,6 +89,7 @@ export function useCartOptionModel(
     setIsVoucherModalOpen: (open: boolean) => void
 ) {
     const [pickup, setPickup] = useState(() => calcPickupTime(cart));
+    const [allVouchers, setAllVouchers] = useState<Voucher[]>(() => loadVouchersFromStorage());
 
     useEffect(() => {
         setPickup(calcPickupTime(cart));
@@ -40,8 +97,19 @@ export function useCartOptionModel(
         return () => clearInterval(timer);
     }, [cart]);
 
-    const availableVouchers = SEED_VOUCHERS.filter(v => !v.minOrder || subtotal >= v.minOrder);
-    const unavailableVouchers = SEED_VOUCHERS.filter(v => v.minOrder && subtotal < v.minOrder);
+    useEffect(() => {
+        const reload = () => setAllVouchers(loadVouchersFromStorage());
+        reload();
+        window.addEventListener('storage', reload);
+        window.addEventListener('focus', reload);
+        return () => {
+            window.removeEventListener('storage', reload);
+            window.removeEventListener('focus', reload);
+        };
+    }, []);
+
+    const availableVouchers = allVouchers.filter(v => !v.minOrder || subtotal >= v.minOrder);
+    const unavailableVouchers = allVouchers.filter(v => v.minOrder && subtotal < v.minOrder);
 
     const [tempSelectedId, setTempSelectedId] = useState<string | undefined>(selectedVoucher?.id);
 
@@ -52,7 +120,7 @@ export function useCartOptionModel(
     }, [isVoucherModalOpen, selectedVoucher]);
 
     const confirmSelection = () => {
-        const v = SEED_VOUCHERS.find(x => x.id === tempSelectedId);
+        const v = allVouchers.find(x => x.id === tempSelectedId);
         onSelectVoucher(v);
         setIsVoucherModalOpen(false);
     };

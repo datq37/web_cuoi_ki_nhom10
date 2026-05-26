@@ -18,6 +18,8 @@ const CartFooter: React.FC<CartFooterProps> = ({
         subtotal,
         serviceFee,
         discount,
+        voucherDiscount,
+        comboDiscount,
         total,
         isEmpty,
         voucherNotMet,
@@ -39,11 +41,21 @@ const CartFooter: React.FC<CartFooterProps> = ({
                     <span className="price-value fee">+{fmtVND(serviceFee)}</span>
                 </div>
 
+                {/* Giảm giá Combo */}
+                {comboDiscount > 0 && (
+                    <div className="price-row voucher-row">
+                        <span className="price-label">
+                            Combo Nổi Bật
+                        </span>
+                        <span className="price-value discount">-{fmtVND(comboDiscount)}</span>
+                    </div>
+                )}
+
                 {/* Khuyến mãi / Voucher */}
                 {selectedVoucher && (
                     <div className={`price-row voucher-row ${voucherNotMet ? 'disabled' : ''}`}>
                         <span className="price-label">
-                            Giảm giá
+                            Mã Giảm Giá
                             <span className="voucher-badge">{selectedVoucher.code}</span>
                         </span>
                         {voucherNotMet ? (
@@ -52,7 +64,7 @@ const CartFooter: React.FC<CartFooterProps> = ({
                                 &nbsp;Chưa đủ {fmtVND(selectedVoucher.minOrder!)}
                             </span>
                         ) : (
-                            <span className="price-value discount">-{fmtVND(discount)}</span>
+                            <span className="price-value discount">-{fmtVND(voucherDiscount)}</span>
                         )}
                     </div>
                 )}

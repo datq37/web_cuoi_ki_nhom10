@@ -70,12 +70,10 @@ const DrawerContent: React.FC<ContentProps> = ({
   onPrint,
 }) => {
   const isCancelled = cancelledIds.has(order.maDon);
-  const cfg = isCancelled ? HUY_CFG : COT_CONFIG[order.trangThai];
-  const currentStep = STEP_MAP[order.trangThai];
-  const nextAction = isCancelled ? null : NEXT_ACTION[order.trangThai];
-  const isDone = order.trangThai === ETrangThaiTrucTiep.HOAN_THANH;
-  const phiPhucVu = Math.round(order.tongTien * 0.05);
-  const tongCong = order.tongTien + phiPhucVu;
+  const cfg = isCancelled ? HUY_CFG : (COT_CONFIG[order.trangThai as ETrangThaiTrucTiep] || COT_CONFIG['cho_xac_nhan']);
+  const currentStep = STEP_MAP[order.trangThai as ETrangThaiTrucTiep] || 0;
+  const phiPhucVu = Math.round((order.tongTien || 0) * 0.05);
+  const tongCong = (order.tongTien || 0) + phiPhucVu;
 
   return (
     <>
@@ -90,7 +88,7 @@ const DrawerContent: React.FC<ContentProps> = ({
         </span>
         <span className={styles.thoiGianDon}>
           <ClockCircleOutlined style={{ marginRight: 4, fontSize: 12 }} />
-          {order.thoiGian}
+          {order.thoiGian || 'Vừa xong'}
         </span>
       </div>
 
@@ -150,17 +148,17 @@ const DrawerContent: React.FC<ContentProps> = ({
           <Avatar
             size={44}
             style={{
-              background: order.khachHang.mauNen,
-              color: order.khachHang.mauChu,
+              background: order.khachHang?.mauNen || '#e5e7eb',
+              color: order.khachHang?.mauChu || '#374151',
               fontWeight: 700,
               fontSize: 16,
               flexShrink: 0,
             }}
           >
-            {order.khachHang.vietTat}
+            {order.khachHang?.vietTat || 'KH'}
           </Avatar>
           <div className={styles.customerInfo}>
-            <div className={styles.customerName}>{order.khachHang.ten}</div>
+            <div className={styles.customerName}>{order.khachHang?.ten || 'Khách hàng'}</div>
             <div className={styles.customerSub}>Khách hàng căng tin</div>
           </div>
           <div className={styles.customerBtns}>
@@ -180,14 +178,14 @@ const DrawerContent: React.FC<ContentProps> = ({
       <div className={styles.section}>
         <div className={styles.sectionTitle}>
           Món ăn
-          <span className={styles.sectionCount}>{order.monAn.length} món</span>
+          <span className={styles.sectionCount}>{(order.monAn || []).length} món</span>
         </div>
         <div className={styles.itemList}>
-          {order.monAn.map((m, i) => (
+          {(order.monAn || []).map((m, i) => (
             <div key={i} className={styles.itemRow}>
               <div
                 className={styles.itemAvatar}
-                style={{ background: order.khachHang.mauNen }}
+                style={{ background: order.khachHang?.mauNen || '#e5e7eb' }}
               >
                 🍽️
               </div>

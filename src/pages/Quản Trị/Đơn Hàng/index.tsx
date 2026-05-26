@@ -5,7 +5,7 @@ import {
   UnorderedListOutlined,
 } from '@ant-design/icons';
 import { Button, Input, Modal, message } from 'antd';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import { fmt } from '@/models/Quản Trị/Tổng Quan';
@@ -32,8 +32,63 @@ const TABS: { key: TabKey; label: string }[] = [
 
 // ── Component ─────────────────────────────────────────────────────
 const DonHang: React.FC = () => {
-  const [orders,       setOrders]       = useState<DonTrucTiep[]>(mockData.trucTiep.donHang);
-  const [cancelledIds, setCancelledIds] = useState<Set<string>>(new Set());
+  const [orders, setOrders] = useState<DonTrucTiep[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('admin_orders');
+      if (saved) {
+        try {
+          const list = JSON.parse(saved);
+          if (Array.isArray(list) && list.length > 0) return list;
+        } catch { /* ignore */ }
+      } else {
+        // Init if empty
+        localStorage.setItem('admin_orders', JSON.stringify(mockData.trucTiep.donHang));
+      }
+    }
+    return mockData.trucTiep.donHang;
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('admin_orders', JSON.stringify(orders));
+      window.dispatchEvent(new Event('admin_orders_updated'));
+    }
+  }, [orders]);
+
+  useEffect(() => {
+    const handleStorage = () => {
+      const saved = localStorage.getItem('admin_orders');
+      if (saved) {
+        try {
+          const list = JSON.parse(saved);
+          if (Array.isArray(list)) {
+            setOrders(list);
+            const set = new Set<string>();
+            list.forEach(o => {
+              if (o.trangThai === ('da_huy' as any)) set.add(o.maDon);
+            });
+            setCancelledIds(set);
+          }
+        } catch { /* ignore */ }
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+    window.addEventListener('focus', handleStorage);
+    window.addEventListener('admin_orders_updated', handleStorage);
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+      window.removeEventListener('focus', handleStorage);
+      window.removeEventListener('admin_orders_updated', handleStorage);
+    };
+  }, []);
+
+  const [cancelledIds, setCancelledIds] = useState<Set<string>>(() => {
+    const set = new Set<string>();
+    orders.forEach(o => {
+      if (o.trangThai === ('da_huy' as any)) set.add(o.maDon);
+    });
+    return set;
+  });
   const [activeTab,    setActiveTab]    = useState<TabKey>('tat_ca');
   const [view,         setView]         = useState<'table' | 'kanban'>('table');
   const [searchKw,     setSearchKw]     = useState('');
@@ -83,14 +138,17 @@ const DonHang: React.FC = () => {
   ) => {
     if (newStatus === 'da_huy') {
       setCancelledIds((prev) => new Set([...prev, maDon]));
+      setOrders((prev) =>
+        prev.map((o) => (o.maDon === maDon ? { ...o, trangThai: newStatus as any } : o)),
+      );
       setSelectedOrder((prev) => (prev?.maDon === maDon ? null : prev));
       if (!silent) message.success(`Đã huỷ đơn ${maDon}`);
     } else {
       setOrders((prev) =>
-        prev.map((o) => (o.maDon === maDon ? { ...o, trangThai: newStatus } : o)),
+        prev.map((o) => (o.maDon === maDon ? { ...o, trangThai: newStatus as any } : o)),
       );
       setSelectedOrder((prev) =>
-        prev?.maDon === maDon ? { ...prev, trangThai: newStatus } : prev,
+        prev?.maDon === maDon ? { ...prev, trangThai: newStatus as any } : prev,
       );
       if (!silent) message.success(`Đã cập nhật đơn ${maDon}`);
     }
@@ -117,6 +175,13 @@ const DonHang: React.FC = () => {
 
     if (newStatus === 'da_huy') {
       setCancelledIds((prev) => new Set([...prev, ...selectedRows]));
+      setOrders((prev) =>
+        prev.map((o) =>
+          selectedRows.includes(o.maDon)
+            ? { ...o, trangThai: newStatus as any }
+            : o,
+        ),
+      );
     } else {
       setOrders((prev) =>
         prev.map((o) =>

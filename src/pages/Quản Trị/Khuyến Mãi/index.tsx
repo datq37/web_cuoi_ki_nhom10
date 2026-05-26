@@ -835,7 +835,21 @@ const KhuyenMai: React.FC = () => {
 
   // ── Combo state ────────────────────────────────────────────────
   const [activeTab,     setActiveTab]     = useState<'ma-giam-gia' | 'combo'>('ma-giam-gia');
-  const [comboItems,    setComboItems]    = useState<ICombo[]>(DANH_SACH_COMBO);
+  const [comboItems, setComboItems] = useState<ICombo[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('admin_combos');
+      if (saved) {
+        try { return JSON.parse(saved); } catch { /* ignore */ }
+      }
+    }
+    return DANH_SACH_COMBO;
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('admin_combos', JSON.stringify(comboItems));
+    }
+  }, [comboItems]);
   const [comboFormOpen, setComboFormOpen] = useState(false);
   const [editingCombo,  setEditingCombo]  = useState<ICombo | null>(null);
   const [comboTuKhoa,   setComboTuKhoa]   = useState('');

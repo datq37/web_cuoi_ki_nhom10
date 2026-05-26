@@ -1,4 +1,4 @@
-import {
+﻿import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   FireOutlined,
@@ -20,7 +20,6 @@ import { mockData } from '@/services/Quản Trị/Tổng Quan';
 import type { DonGanDay, StatCard } from '@/services/Quản Trị/Tổng Quan/typing';
 import styles from './index.less';
 
-// ── Icon SVG cho stat card ──────────────────────────────────
 const StatIconTN: React.FC<{ type: string; color: string; bg: string }> = ({ type, color, bg }) => {
   const icons: Record<string, React.ReactNode> = {
     revenue: (
@@ -53,7 +52,6 @@ const StatIconTN: React.FC<{ type: string; color: string; bg: string }> = ({ typ
   return <div className={styles.tnStatIcon} style={{ background: bg }}>{icons[type]}</div>;
 };
 
-// ── TacNghiepView ───────────────────────────────────────────
 const TacNghiepView: React.FC = () => {
   const { statCards, infoCard, doanhThu7Ngay, trangThaiDon, tongDonHomNay, donGanDay, topMon } =
     mockData.tacNghiep;

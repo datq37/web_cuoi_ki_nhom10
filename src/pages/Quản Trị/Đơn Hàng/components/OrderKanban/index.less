@@ -1,4 +1,4 @@
-@primary: #16a34a;
+﻿@primary: #16a34a;
 @ease:    cubic-bezier(0.22, 0.61, 0.36, 1);
 
 .kanbanWrap {
@@ -9,7 +9,6 @@
   min-height: 0;
 }
 
-// ── Column ───────────────────────────────────────────────────
 .kanbanCol {
   background: #f8fafc;
   border-radius: 12px;
@@ -60,7 +59,6 @@
   &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
 }
 
-// ── Card ─────────────────────────────────────────────────────
 .donCard {
   background: #fff;
   border-radius: 10px;
@@ -190,7 +188,6 @@
   &:hover { opacity: 0.85; }
 }
 
-// ── Empty col ─────────────────────────────────────────────────
 .emptyCol {
   display: flex;
   align-items: center;
@@ -203,7 +200,6 @@
   color: #d1d5db;
 }
 
-// ── Dark mode ─────────────────────────────────────────────────
 :global([data-theme="dark"]) {
   .kanbanCol  { background: #1e293b; }
   .colHeader  { border-bottom-color: #334155; }

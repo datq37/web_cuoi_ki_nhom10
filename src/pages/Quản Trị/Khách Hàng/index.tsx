@@ -171,7 +171,7 @@ const KhachHang: React.FC = () => {
     <>
       <Topbar title="Khách hàng" subtitle="Nhân viên công ty đặt món tại căng tin" />
 
-        <div className={styles.pageBody}>
+      <div className={styles.pageBody}>
           <div className={styles.statGrid}>
             {STAT_CARDS.map((card) => (
               <div key={card.label} className={styles.statCard}>
@@ -217,7 +217,7 @@ const KhachHang: React.FC = () => {
               rowClassName={styles.tableRow}
             />
           </div>
-        </div>
+      </div>
     </>
   );
 };

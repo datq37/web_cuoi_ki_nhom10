@@ -1,4 +1,4 @@
-import {
+﻿import {
   DeleteOutlined,
   EditOutlined,
   PlusOutlined,
@@ -26,7 +26,6 @@ import {
 import { ELoaiBan, ETrangThaiBan, IBan, IKhuVuc } from '@/services/Quản Trị/Cơ Sở Vật Chất/typing';
 import styles from './index.less';
 
-// ── BanChip ─────────────────────────────────────────────────────
 interface BanChipProps {
   ban: IBan;
   onClick: () => void;
@@ -53,7 +52,6 @@ const BanChip: React.FC<BanChipProps> = ({ ban, onClick }) => {
   );
 };
 
-// ── KhuVucCard ──────────────────────────────────────────────────
 interface KhuVucCardProps {
   khu: IKhuVuc;
   onEditKhu: () => void;
@@ -127,7 +125,6 @@ const KhuVucCard: React.FC<KhuVucCardProps> = ({
   );
 };
 
-// ── BanModal (thêm / chỉnh sửa bàn) ─────────────────────────────
 interface BanModalProps {
   open: boolean;
   initial: IBan | null;
@@ -221,7 +218,6 @@ const BanModal: React.FC<BanModalProps> = ({ open, initial, onCancel, onSubmit, 
   );
 };
 
-// ── KhuVucModal (thêm / chỉnh sửa khu vực) ───────────────────────
 interface KhuVucModalProps {
   open: boolean;
   initial: IKhuVuc | null;
@@ -304,7 +300,6 @@ const KhuVucModal: React.FC<KhuVucModalProps> = ({ open, initial, onCancel, onSu
   );
 };
 
-// ── CoSoVatChat (main page) ───────────────────────────────────────
 const CoSoVatChat: React.FC = () => {
   const [khuVucs, setKhuVucs] = useState<IKhuVuc[]>(DANH_SACH_KHU_VUC);
 
@@ -316,7 +311,6 @@ const CoSoVatChat: React.FC = () => {
   const [editingBan, setEditingBan] = useState<IBan | null>(null);
   const [targetKhuId, setTargetKhuId] = useState<string | null>(null);
 
-  // ── Stats ────────────────────────────────────────────────────
   const stats = useMemo(() => {
     const allBan = khuVucs.flatMap((k) => k.danhSachBan);
     return {
@@ -359,7 +353,6 @@ const CoSoVatChat: React.FC = () => {
     },
   ];
 
-  // ── Khu vực handlers ─────────────────────────────────────────
   const openAddKhu = () => { setEditingKhu(null); setKhuModal(true); };
   const openEditKhu = (khu: IKhuVuc) => { setEditingKhu(khu); setKhuModal(true); };
 
@@ -391,7 +384,6 @@ const CoSoVatChat: React.FC = () => {
     setKhuModal(false);
   };
 
-  // ── Bàn handlers ──────────────────────────────────────────────
   const openAddBan = (khuId: string) => {
     setTargetKhuId(khuId); setEditingBan(null); setBanModal(true);
   };
@@ -438,13 +430,11 @@ const CoSoVatChat: React.FC = () => {
     });
   };
 
-  // ── Render ────────────────────────────────────────────────────
   return (
     <>
       <Topbar title="Cơ sở vật chất" />
 
-        <div className={styles.pageBody}>
-          {/* ── Stat cards ── */}
+      <div className={styles.pageBody}>
           <div className={styles.statGrid}>
             {STAT_CARDS.map((c) => (
               <div key={c.label} className={styles.statCard}>
@@ -460,7 +450,6 @@ const CoSoVatChat: React.FC = () => {
             ))}
           </div>
 
-          {/* ── Legend ── */}
           <div className={styles.legend}>
             {Object.entries(TRANG_THAI_BAN_CONFIG).map(([, cfg]) => (
               <div key={cfg.label} className={styles.legendItem}>
@@ -473,7 +462,6 @@ const CoSoVatChat: React.FC = () => {
             </span>
           </div>
 
-          {/* ── Area grid ── */}
           <div className={styles.areaGrid}>
             {khuVucs.map((khu) => (
               <KhuVucCard
@@ -486,16 +474,14 @@ const CoSoVatChat: React.FC = () => {
               />
             ))}
 
-            {/* Add area card */}
             <div className={styles.addAreaCard} onClick={openAddKhu}>
               <div className={styles.addAreaIcon}><PlusOutlined /></div>
               <div className={styles.addAreaTitle}>Thêm khu vực mới</div>
               <div className={styles.addAreaSub}>Tạo khu vực ăn uống,<br />sau đó thêm bàn vào khu</div>
             </div>
           </div>
-        </div>
+      </div>
 
-      {/* ── Modals ── */}
       <KhuVucModal
         open={khuModal}
         initial={editingKhu}

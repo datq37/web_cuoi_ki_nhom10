@@ -1,4 +1,4 @@
-@primary:       #16a34a;
+﻿@primary:       #16a34a;
 @primary-hover: #15803d;
 @primary-soft:  #dcfce7;
 @border:        #f0f0f0;
@@ -16,7 +16,6 @@
 @sidebar-w-col: 64px;
 @ease:          cubic-bezier(0.22, 0.61, 0.36, 1);
 
-// ── Sidebar shell ────────────────────────────────────────────────
 .sidebar {
   width: @sidebar-w;
   height: 100vh;
@@ -36,7 +35,6 @@
   width: @sidebar-w-col;
 }
 
-// ── Logo ─────────────────────────────────────────────────────────
 .logoSection {
   padding: 16px 12px 14px;
   flex-shrink: 0;
@@ -86,7 +84,6 @@
   white-space: nowrap;
 }
 
-// ── Menu ─────────────────────────────────────────────────────────
 .menuSection {
   flex: 1;
   overflow-y: auto;
@@ -193,7 +190,6 @@
   border: 1.5px solid @surface;
 }
 
-// ── Collapse section ─────────────────────────────────────────────
 .collapseSection {
   border-top: 1px solid @border;
   padding: 10px;
@@ -228,7 +224,6 @@
   }
 }
 
-// ── Dark mode ────────────────────────────────────────────────────
 :global([data-theme="dark"]) {
   .sidebar {
     background: #1e293b;

@@ -1,4 +1,4 @@
-@primary: #16a34a;
+﻿@primary: #16a34a;
 @border: #f0f0f0;
 @text-dark: #111827;
 @text-mid: #374151;
@@ -9,7 +9,6 @@
 
 .phanTichWrap { display: flex; flex-direction: column; gap: 14px; }
 
-// ── Banner thống kê ─────────────────────────────────────────
 .statBanner {
   background: linear-gradient(135deg, #14532d 0%, #166534 60%, #15803d 100%);
   border-radius: @radius;
@@ -33,7 +32,6 @@
   flex-shrink: 0;
 }
 
-// ── Biểu đồ ────────────────────────────────────────────────
 .chartRow2 {
   display: grid;
   grid-template-columns: 1.65fr 1fr;
@@ -70,7 +68,6 @@
 .donutLegLabel { flex: 1; font-size: 13px; color: @text-mid; }
 .donutLegPct   { font-size: 13px; font-weight: 600; color: @text-dark; }
 
-// ── Range toggle ─────────────────────────────────────────────
 .rangeToggle {
   display: flex;
   align-items: center;
@@ -102,7 +99,6 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-// ── Heatmap ──────────────────────────────────────────────────
 .heatLegend {
   display: flex;
   align-items: center;
@@ -193,7 +189,6 @@
   color: #f1f5f9;
 }
 
-// ── Bottom 3 cột ────────────────────────────────────────────
 .bottomRow {
   display: grid;
   grid-template-columns: 1.6fr 1.2fr 1.6fr;
@@ -285,7 +280,6 @@
   &:hover { background: #f3f4f6; }
 }
 
-// ── Hoạt động ───────────────────────────────────────────────
 .hoatDongCard {
   background: #fff;
   border-radius: @radius;
@@ -327,13 +321,11 @@
 .hdTime  { font-size: 11px; color: @text-light; }
 .hdArrow { font-size: 11px; color: @text-light; margin-top: 3px; flex-shrink: 0; }
 
-// ── Responsive ──────────────────────────────────────────────
 @media (max-width: 1200px) {
   .chartRow2 { grid-template-columns: 1fr; }
   .bottomRow { grid-template-columns: 1fr; }
 }
 
-// ── Dark mode ────────────────────────────────────────────────
 :global([data-theme="dark"]) {
   .barChartCard, .donutCard, .bottomCard, .hoatDongCard {
     background: #1e293b;

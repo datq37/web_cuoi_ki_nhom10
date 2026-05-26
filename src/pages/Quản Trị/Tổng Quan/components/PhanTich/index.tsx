@@ -1,4 +1,4 @@
-import { ArrowUpOutlined, RightOutlined } from '@ant-design/icons';
+﻿import { ArrowUpOutlined, RightOutlined } from '@ant-design/icons';
 import React, { useMemo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import {
@@ -11,7 +11,6 @@ import { mockData } from '@/services/Quản Trị/Tổng Quan';
 import type { HoatDongItem } from '@/services/Quản Trị/Tổng Quan/typing';
 import styles from './index.less';
 
-// ── Icon banner ─────────────────────────────────────────────
 const BannerIcon: React.FC<{ type: string }> = ({ type }) => {
   const icons: Record<string, React.ReactNode> = {
     revenue: (
@@ -44,7 +43,6 @@ const BannerIcon: React.FC<{ type: string }> = ({ type }) => {
   return <div className={styles.bannerIconWrap}>{icons[type]}</div>;
 };
 
-// ── Icon hoạt động ──────────────────────────────────────────
 const HoatDongIcon: React.FC<{ item: HoatDongItem }> = ({ item }) => {
   const icons: Record<string, React.ReactNode> = {
     order: (
@@ -81,7 +79,6 @@ const HoatDongIcon: React.FC<{ item: HoatDongItem }> = ({ item }) => {
   );
 };
 
-// ── Range data ───────────────────────────────────────────────
 type Range = 'week' | 'month' | 'quarter';
 
 const RANGE_DATA: Record<Range, { labels: string[]; tuanNay: number[]; trungBinh: number[] }> = {
@@ -108,7 +105,6 @@ const RANGE_CFG: Record<Range, { label: string; title: string }> = {
   quarter: { label: '1 quý',   title: 'Doanh thu 12 tháng gần nhất' },
 };
 
-// ── CSS Heatmap ──────────────────────────────────────────────
 const HEAT_HOURS = ['7h','8h','9h','10h','11h','12h','13h','14h','15h','16h','17h','18h'];
 const HEAT_DAYS  = ['T2','T3','T4','T5','T6','T7','CN'];
 const HEAT_VALS  = [
@@ -179,7 +175,6 @@ const CssHeatmap: React.FC = () => {
   );
 };
 
-// ── PhanTichView ────────────────────────────────────────────
 const PhanTichView: React.FC = () => {
   const [range, setRange] = useState<Range>('week');
   const { banners, doanhThuTuan, danhMuc, tongDanhMuc, topMon, donTheoTrangThai, hoatDong } =

@@ -1,4 +1,4 @@
-import {
+﻿import {
   ArrowLeftOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -51,7 +51,6 @@ const NEXT_ACTION: Partial<
 
 const HUY_CFG = { tieuDe: 'Đã huỷ', mau: '#6b7280', bgLight: '#f3f4f6' };
 
-// ── DrawerContent — renders only when order is non-null ──────────
 interface ContentProps {
   order: DonTrucTiep;
   cancelledIds: Set<string>;
@@ -254,7 +253,6 @@ const DrawerContent: React.FC<ContentProps> = ({
   );
 };
 
-// ── OrderDrawer ──────────────────────────────────────────────────
 const OrderDrawer: React.FC<OrderDrawerProps> = ({
   order,
   cancelledIds,

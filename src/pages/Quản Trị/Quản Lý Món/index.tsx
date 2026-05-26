@@ -1,4 +1,4 @@
-import {
+﻿import {
   AppstoreOutlined,
   ClockCircleOutlined,
   CloseOutlined,
@@ -31,13 +31,11 @@ import { DANH_SACH_MON } from '@/services/Quản Trị/Quản Lý Món';
 import { EDanhMuc, IMonAn } from '@/services/Quản Trị/Quản Lý Món/typing';
 import styles from './index.less';
 
-// ── Local extension — không sửa typing.ts ────────────────────────
 interface IMonAnLocal extends IMonAn {
   hinhAnh?: string;
   nguyenLieu?: string[];
 }
 
-// ── Helpers ──────────────────────────────────────────────────────
 function formatGia(gia: number): string {
   return new Intl.NumberFormat('vi-VN').format(gia) + 'đ';
 }
@@ -66,7 +64,6 @@ interface TabDanhMuc {
   soLuong: number;
 }
 
-// ── MonCard ───────────────────────────────────────────────────────
 interface MonCardProps {
   mon: IMonAnLocal;
   onClick: () => void;
@@ -128,7 +125,6 @@ const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete }) => 
   </div>
 );
 
-// ── MonForm ───────────────────────────────────────────────────────
 interface MonFormProps {
   open: boolean;
   initial: IMonAnLocal | null;
@@ -195,7 +191,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
       <Form form={form} layout="vertical" preserve={false} style={{ marginTop: 8 }}>
         <Form.Item name="id" hidden><Input /></Form.Item>
 
-        {/* ── Hình ảnh ── */}
         <Form.Item label="Hình ảnh món ăn">
           <input
             ref={fileInputRef}
@@ -234,7 +229,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
           )}
         </Form.Item>
 
-        {/* ── Tên ── */}
         <Form.Item
           name="ten"
           label="Tên món"
@@ -283,7 +277,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
         </Row>
 
         <Row gutter={16}>
-          {/* ── Thời gian chuẩn bị ── */}
           <Col span={12}>
             <Form.Item
               name="thoiGian"
@@ -303,7 +296,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
           </Col>
         </Row>
 
-        {/* ── Mô tả ── */}
         <Form.Item
           name="moTa"
           label="Mô tả"
@@ -312,7 +304,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
           <Input.TextArea rows={3} maxLength={200} showCount placeholder="Mô tả ngắn về món ăn..." />
         </Form.Item>
 
-        {/* ── Nguyên liệu từ kho ── */}
         <Form.Item name="nguyenLieu" label="Nguyên liệu sử dụng">
           <Select
             mode="multiple"
@@ -344,7 +335,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
   );
 };
 
-// ── MonDetail ─────────────────────────────────────────────────────
 interface MonDetailProps {
   mon: IMonAnLocal | null;
   onClose: () => void;
@@ -466,7 +456,6 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
   );
 };
 
-// ── QuanLyMon (main page) ─────────────────────────────────────────
 const QuanLyMon: React.FC = () => {
   const [items,    setItems]    = useState<IMonAnLocal[]>(DANH_SACH_MON as IMonAnLocal[]);
   const [activeTab, setActiveTab] = useState<EDanhMuc | 'tat_ca'>('tat_ca');
@@ -495,7 +484,6 @@ const QuanLyMon: React.FC = () => {
     return ds;
   }, [activeTab, tuKhoa, items]);
 
-  // ── Handlers ──────────────────────────────────────────────────
   const handleDelete = (mon: IMonAnLocal) => {
     Modal.confirm({
       title: 'Xác nhận xoá món?',
@@ -523,13 +511,11 @@ const QuanLyMon: React.FC = () => {
     setEditing(null);
   };
 
-  // ── Render ────────────────────────────────────────────────────
   return (
     <>
       <Topbar title="Quản lý món ăn" />
 
-        <div className={styles.pageBody}>
-          {/* ── Toolbar ── */}
+      <div className={styles.pageBody}>
           <div className={styles.toolbar}>
             <div className={styles.tabsRow}>
               {tabs.map((t) => (
@@ -579,7 +565,6 @@ const QuanLyMon: React.FC = () => {
             </div>
           </div>
 
-          {/* ── Grid / List ── */}
           <div className={isGrid ? styles.gridView : styles.listView}>
             {danhSachLoc.map((mon) => (
               <MonCard
@@ -594,9 +579,8 @@ const QuanLyMon: React.FC = () => {
               <div className={styles.empty}>Không tìm thấy món ăn phù hợp</div>
             )}
           </div>
-        </div>
+      </div>
 
-      {/* ── Modals ── */}
       <MonForm
         open={formOpen}
         initial={editing}

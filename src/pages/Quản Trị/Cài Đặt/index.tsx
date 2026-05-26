@@ -1,4 +1,4 @@
-import {
+﻿import {
   AppstoreOutlined,
   BellOutlined,
   ClockCircleOutlined,
@@ -11,7 +11,6 @@ import React, { useState } from 'react';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import styles from './index.less';
 
-// ── Enums & types ───────────────────────────────────────────────
 type TTab = 'thong-tin' | 'gio-hoat-dong' | 'thanh-toan' | 'thong-bao' | 'bao-mat';
 
 const TABS: { key: TTab; label: string; Icon: React.FC<any> }[] = [
@@ -32,7 +31,6 @@ const DAYS = [
   { label: 'Chủ Nhật', defaultOn: false, mo: '08:00', close: '12:00' },
 ];
 
-// ── Tab: Thông tin chung ────────────────────────────────────────
 const ThongTinChung: React.FC = () => (
   <div className={styles.tabContent}>
     <div className={styles.contentTitle}>Thông tin chung</div>
@@ -97,7 +95,6 @@ const ThongTinChung: React.FC = () => (
   </div>
 );
 
-// ── Tab: Giờ hoạt động ──────────────────────────────────────────
 const GioHoatDong: React.FC = () => {
   const [days, setDays] = useState(DAYS.map((d) => ({ ...d, on: d.defaultOn })));
 
@@ -136,7 +133,6 @@ const GioHoatDong: React.FC = () => {
   );
 };
 
-// ── Tab: Thanh toán ─────────────────────────────────────────────
 interface IPayMethod { id: string; icon: string; ten: string; moTa: string; on: boolean }
 
 const PAYMENT_METHODS: IPayMethod[] = [
@@ -171,7 +167,6 @@ const ThanhToan: React.FC = () => {
   );
 };
 
-// ── Tab: Thông báo ──────────────────────────────────────────────
 const NOTIF_ITEMS = [
   { id: 'don-moi',    ten: 'Đơn hàng mới',      moTa: 'Mỗi khi có đơn hàng mới được tạo',              on: true  },
   { id: 'don-huy',    ten: 'Đơn hàng huỷ',      moTa: 'Khi khách huỷ đơn hoặc đơn không thực hiện được', on: true  },
@@ -207,7 +202,6 @@ const ThongBao: React.FC = () => {
   );
 };
 
-// ── Tab: Bảo mật ────────────────────────────────────────────────
 const BaoMat: React.FC = () => {
   const [twoFA, setTwoFA] = useState(true);
   const [autoLogout, setAutoLogout] = useState(true);
@@ -259,7 +253,6 @@ const BaoMat: React.FC = () => {
   );
 };
 
-// ── Main page ───────────────────────────────────────────────────
 const CONTENT_MAP: Record<TTab, React.FC> = {
   'thong-tin':     ThongTinChung,
   'gio-hoat-dong': GioHoatDong,
@@ -276,9 +269,8 @@ const CaiDat: React.FC = () => {
     <>
       <Topbar title="Cài đặt" subtitle="Tuỳ chỉnh thông tin và cấu hình căng tin" />
 
-        <div className={styles.pageBody}>
+      <div className={styles.pageBody}>
           <div className={styles.settingsWrap}>
-            {/* Left nav */}
             <div className={styles.leftNav}>
               {TABS.map((tab) => (
                 <button
@@ -292,12 +284,11 @@ const CaiDat: React.FC = () => {
               ))}
             </div>
 
-            {/* Right content */}
             <div className={styles.rightContent}>
               <ContentComponent />
             </div>
           </div>
-        </div>
+      </div>
     </>
   );
 };

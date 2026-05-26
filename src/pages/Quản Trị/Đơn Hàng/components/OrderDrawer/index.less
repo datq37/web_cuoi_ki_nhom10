@@ -1,4 +1,4 @@
-@primary:       #16a34a;
+﻿@primary:       #16a34a;
 @primary-hover: #15803d;
 @border:        #f0f0f0;
 @divider:       #f3f4f6;
@@ -7,7 +7,6 @@
 @text-muted:    #6b7280;
 @ease:          cubic-bezier(0.22, 0.61, 0.36, 1);
 
-// ── Drawer shell overrides ───────────────────────────────────
 .orderDrawer {
   :global(.ant-drawer-content) {
     display: flex;
@@ -40,7 +39,6 @@
   }
 }
 
-// ── Header ───────────────────────────────────────────────────
 .drawerHeader {
   display: flex;
   align-items: center;
@@ -107,7 +105,6 @@
   &:hover { border-color: #d1d5db; color: @text-dark; background: #f9fafb; }
 }
 
-// ── Footer ───────────────────────────────────────────────────
 .drawerFooter {
   display: flex;
   align-items: center;
@@ -121,13 +118,11 @@
   margin-left: auto;
 }
 
-// ── Body ─────────────────────────────────────────────────────
 .drawerBody {
   display: flex;
   flex-direction: column;
 }
 
-// ── Status row ───────────────────────────────────────────────
 .statusRow {
   display: flex;
   align-items: center;
@@ -159,7 +154,6 @@
   color: @text-muted;
 }
 
-// ── Steps ────────────────────────────────────────────────────
 .stepsWrap {
   display: flex;
   align-items: center;
@@ -243,14 +237,12 @@
   50%       { box-shadow: 0 0 0 7px rgba(22, 163, 74, 0.1); }
 }
 
-// ── Divider ──────────────────────────────────────────────────
 .divider {
   height: 6px;
   background: @divider;
   flex-shrink: 0;
 }
 
-// ── Section ──────────────────────────────────────────────────
 .section {
   padding: 16px 20px;
   display: flex;
@@ -280,7 +272,6 @@
   letter-spacing: 0;
 }
 
-// ── Customer ─────────────────────────────────────────────────
 .customerCard {
   display: flex;
   align-items: center;
@@ -332,7 +323,6 @@
   &:hover { border-color: @primary; color: @primary; background: rgba(22, 163, 74, 0.06); }
 }
 
-// ── Items ────────────────────────────────────────────────────
 .itemList {
   display: flex;
   flex-direction: column;
@@ -371,7 +361,6 @@
   flex-shrink: 0;
 }
 
-// ── Note ─────────────────────────────────────────────────────
 .noteBox {
   display: flex;
   align-items: center;
@@ -402,7 +391,6 @@
   flex-shrink: 0;
 }
 
-// ── Pricing ──────────────────────────────────────────────────
 .priceList {
   display: flex;
   flex-direction: column;
@@ -464,7 +452,6 @@
   color: @text-muted;
 }
 
-// ── Dark mode ─────────────────────────────────────────────────
 :global([data-theme="dark"]) {
   .orderDrawer {
     :global(.ant-drawer-content) { background: #1e293b; }

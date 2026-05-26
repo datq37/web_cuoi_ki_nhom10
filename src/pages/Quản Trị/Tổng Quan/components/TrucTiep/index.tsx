@@ -1,4 +1,4 @@
-import {
+﻿import {
   ArrowRightOutlined,
   CheckCircleOutlined,
   ReloadOutlined,
@@ -17,7 +17,6 @@ import { ETrangThaiTrucTiep } from '@/services/Quản Trị/Tổng Quan/typing';
 import type { DonTrucTiep } from '@/services/Quản Trị/Tổng Quan/typing';
 import styles from './index.less';
 
-// ── Ghi chú badge ───────────────────────────────────────────
 const GhiChuBadge: React.FC<{ type: keyof typeof GHI_CHU_CONFIG }> = ({ type }) => {
   const cfg = GHI_CHU_CONFIG[type];
   return (
@@ -33,7 +32,6 @@ const GhiChuBadge: React.FC<{ type: keyof typeof GHI_CHU_CONFIG }> = ({ type }) 
   );
 };
 
-// ── Thẻ đơn hàng ────────────────────────────────────────────
 const DonCard: React.FC<{ don: DonTrucTiep; trangThai: ETrangThaiTrucTiep }> = ({ don, trangThai }) => {
   const cfg    = COT_CONFIG[trangThai];
   const hienMon = don.monAn.slice(0, 2);
@@ -76,7 +74,6 @@ const DonCard: React.FC<{ don: DonTrucTiep; trangThai: ETrangThaiTrucTiep }> = (
   );
 };
 
-// ── Cột Kanban ──────────────────────────────────────────────
 const KanbanCot: React.FC<{ trangThai: ETrangThaiTrucTiep; dons: DonTrucTiep[] }> = ({ trangThai, dons }) => {
   const cfg      = COT_CONFIG[trangThai];
   const tongTien = tongTienCot(dons);
@@ -131,7 +128,6 @@ const KanbanCot: React.FC<{ trangThai: ETrangThaiTrucTiep; dons: DonTrucTiep[] }
   );
 };
 
-// ── TrucTiepView ────────────────────────────────────────────
 const TrucTiepView: React.FC = () => {
   const { thongKe, donHang, tomTat } = mockData.trucTiep;
   const cols: ETrangThaiTrucTiep[] = [

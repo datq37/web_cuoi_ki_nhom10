@@ -1,4 +1,4 @@
-import {
+﻿import {
   AppstoreOutlined,
   CloseOutlined,
   SearchOutlined,
@@ -16,10 +16,8 @@ import OrderKanban from './components/OrderKanban';
 import OrderTable from './components/OrderTable';
 import styles from './index.less';
 
-// ── Types ─────────────────────────────────────────────────────────
 type TabKey = 'tat_ca' | ETrangThaiTrucTiep | 'da_huy';
 
-// ── Constants ─────────────────────────────────────────────────────
 const TABS: { key: TabKey; label: string }[] = [
   { key: 'tat_ca',                          label: 'Tất cả'         },
   { key: ETrangThaiTrucTiep.CHO_XAC_NHAN,  label: 'Chờ xác nhận'  },
@@ -29,7 +27,6 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: 'da_huy',                           label: 'Đã huỷ'        },
 ];
 
-// ── Component ─────────────────────────────────────────────────────
 const DonHang: React.FC = () => {
   const [orders,       setOrders]       = useState<DonTrucTiep[]>(mockData.trucTiep.donHang);
   const [cancelledIds, setCancelledIds] = useState<Set<string>>(new Set());
@@ -39,7 +36,6 @@ const DonHang: React.FC = () => {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<DonTrucTiep | null>(null);
 
-  // ── Tab counts ──────────────────────────────────────────────────
   const tabCounts = useMemo<Record<string, number>>(() => {
     const active = orders.filter((o) => !cancelledIds.has(o.maDon));
     return {
@@ -52,7 +48,6 @@ const DonHang: React.FC = () => {
     };
   }, [orders, cancelledIds]);
 
-  // ── Filtered list ───────────────────────────────────────────────
   const filteredOrders = useMemo(() => {
     let list =
       activeTab === 'da_huy'
@@ -74,7 +69,6 @@ const DonHang: React.FC = () => {
     return list;
   }, [orders, activeTab, searchKw, cancelledIds]);
 
-  // ── Handlers ────────────────────────────────────────────────────
   const handleMoveStatus = (
     maDon: string,
     newStatus: ETrangThaiTrucTiep | 'da_huy',
@@ -168,14 +162,12 @@ const DonHang: React.FC = () => {
     setTimeout(() => { w.print(); w.close(); }, 300);
   };
 
-  // ── Render ──────────────────────────────────────────────────────
   return (
     <>
       <Topbar title="Quản lý đơn hàng" />
 
-        <div className={styles.pageBody}>
+      <div className={styles.pageBody}>
 
-          {/* ── Tabs ── */}
           <div className={styles.tabsRow}>
             {TABS.map((tab) => (
               <button
@@ -191,7 +183,6 @@ const DonHang: React.FC = () => {
             ))}
           </div>
 
-          {/* ── Toolbar ── */}
           <div className={styles.toolbar}>
             <Input
               prefix={<SearchOutlined style={{ color: '#9ca3af' }} />}
@@ -222,7 +213,6 @@ const DonHang: React.FC = () => {
             </div>
           </div>
 
-          {/* ── Bulk action bar ── */}
           {selectedRows.length > 0 && (
             <div className={styles.bulkBar}>
               <span className={styles.bulkCount}>
@@ -253,7 +243,6 @@ const DonHang: React.FC = () => {
             </div>
           )}
 
-          {/* ── Content ── */}
           {view === 'table' ? (
             <OrderTable
               orders={filteredOrders}
@@ -271,9 +260,8 @@ const DonHang: React.FC = () => {
             />
           )}
 
-        </div>
+      </div>
 
-      {/* ── Drawer ── */}
       <OrderDrawer
         order={selectedOrder}
         cancelledIds={cancelledIds}

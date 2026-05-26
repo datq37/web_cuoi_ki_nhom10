@@ -1,27 +1,13 @@
-@bg: #f8fafc;
-@sidebar-w: 260px;
+﻿@bg: #f8fafc;
 @primary: #16a34a;
 @radius: 16px;
 @border: #f1f5f9;
-
-// ── Layout ──────────────────────────────────────────────────────
-.adminLayout { display: flex; min-height: 100vh; background: @bg; }
-
-.mainContent {
-  margin-left: @sidebar-w;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  min-width: 0;
-}
 
 .pageBody {
   padding: 20px 24px 32px;
   flex: 1;
 }
 
-// ── Grid ─────────────────────────────────────────────────────────
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -31,7 +17,6 @@
   @media (max-width: 700px)  { grid-template-columns: 1fr; }
 }
 
-// ── Staff card ───────────────────────────────────────────────────
 .card {
   background: #fff;
   border-radius: @radius;
@@ -49,7 +34,6 @@
   }
 }
 
-// Header
 .cardHeader {
   display: flex;
   align-items: center;
@@ -83,7 +67,6 @@
   color: #9ca3af;
 }
 
-// Meta row
 .cardMeta {
   display: flex;
   align-items: center;
@@ -105,7 +88,6 @@
   color: #9ca3af;
 }
 
-// Action buttons
 .cardActions {
   display: flex;
   gap: 10px;
@@ -139,7 +121,6 @@
   font-size: 13px;
 }
 
-// ── Add member card ──────────────────────────────────────────────
 .addCard {
   background: transparent;
   border-radius: @radius;
@@ -198,10 +179,7 @@
   text-align: center;
 }
 
-// ── Dark mode overrides ─────────────────────────────────────────
 :global([data-theme="dark"]) {
-  .adminLayout { background: #0f172a; }
-
   .card {
     background: #1e293b;
     border-color: #334155;

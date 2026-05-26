@@ -61,7 +61,6 @@ const Sidebar: React.FC = () => {
   return (
     <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}>
 
-      {/* ── Logo ─────────────────────────────────────────── */}
       <div className={styles.logoSection}>
         <div className={styles.logoWrapper}>
           <div className={styles.logoIcon}>
@@ -78,7 +77,6 @@ const Sidebar: React.FC = () => {
         </div>
       </div>
 
-      {/* ── Menu ─────────────────────────────────────────── */}
       <nav className={styles.menuSection}>
         {!collapsed && <span className={styles.groupLabel}>QUẢN LÝ</span>}
         <ul className={styles.menuList}>
@@ -113,7 +111,6 @@ const Sidebar: React.FC = () => {
         </ul>
       </nav>
 
-      {/* ── Collapse ─────────────────────────────────────── */}
       <div className={styles.collapseSection}>
         <button className={styles.collapseBtn} onClick={handleCollapse}>
           {collapsed ? <RightOutlined /> : <LeftOutlined />}

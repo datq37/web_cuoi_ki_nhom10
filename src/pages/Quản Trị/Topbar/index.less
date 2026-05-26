@@ -1,4 +1,4 @@
-@primary:       #16a34a;
+﻿@primary:       #16a34a;
 @primary-hover: #15803d;
 @primary-soft:  #dcfce7;
 @border:        #f0f0f0;
@@ -14,7 +14,6 @@
 @danger-soft:   #fee2e2;
 @ease:          cubic-bezier(0.22, 0.61, 0.36, 1);
 
-// ── Topbar shell ─────────────────────────────────────────────────
 .topbar {
   height: 64px;
   background: @surface;
@@ -29,7 +28,6 @@
   flex-shrink: 0;
 }
 
-// ── Left — title block ───────────────────────────────────────────
 .left {
   display: flex;
   flex-direction: column;
@@ -57,14 +55,12 @@
 
 .calIcon { font-size: 12px; }
 
-// ── Right — action cluster ───────────────────────────────────────
 .right {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-// ── Icon buttons (dark toggle, bell) ─────────────────────────────
 .iconBtn {
   width: 38px !important;
   height: 38px !important;
@@ -100,7 +96,6 @@
   border-radius: 8px;
 }
 
-// ── Notification popup ───────────────────────────────────────────
 .notifPopup {
   width: 380px;
 }
@@ -226,7 +221,6 @@
   &:hover { background: @primary-soft; }
 }
 
-// ── User pill ────────────────────────────────────────────────────
 .userPill {
   display: flex;
   align-items: center;
@@ -261,7 +255,6 @@
   transform: rotate(180deg);
 }
 
-// ── User dropdown ────────────────────────────────────────────────
 .userDropdown {
   width: 240px;
   background: @surface;
@@ -351,7 +344,6 @@
   &:hover { background: @danger-soft; color: @danger; }
 }
 
-// ── Dark mode ────────────────────────────────────────────────────
 :global([data-theme="dark"]) {
   .topbar {
     background: #1e293b;

@@ -1,4 +1,4 @@
-import {
+﻿import {
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleFilled,
@@ -41,10 +41,8 @@ import {
 } from '@/services/Quản Trị/Kho Nguyên Liệu/typing';
 import styles from './index.less';
 
-// ── Constants ─────────────────────────────────────────────────────
 const DON_VI_OPTIONS = ['kg', 'g', 'L', 'lít', 'ml', 'thùng', 'gói', 'hộp', 'chai', 'quả', 'cái'];
 
-// ── Helpers ──────────────────────────────────────────────────────
 function formatGia(gia: number): string {
   return new Intl.NumberFormat('vi-VN').format(gia) + 'đ';
 }
@@ -63,7 +61,6 @@ function tinhTrangThai(tonKho: number, mucToiThieu: number): ETrangThaiNguyenLie
 type TrangThaiFilter = 'all' | ETrangThaiNguyenLieu;
 type NguyenLieuFormValues = Omit<INguyenLieu, 'id' | 'trangThai'>;
 
-// ── NguyenLieuForm ────────────────────────────────────────────────
 const NguyenLieuForm: React.FC<{
   open: boolean;
   initial: INguyenLieu | null;
@@ -208,7 +205,6 @@ const NguyenLieuForm: React.FC<{
   );
 };
 
-// ── NguyenLieuRestock ─────────────────────────────────────────────
 const NguyenLieuRestock: React.FC<{
   open: boolean;
   item: INguyenLieu | null;
@@ -310,7 +306,6 @@ const NguyenLieuRestock: React.FC<{
   );
 };
 
-// ── BulkRestockModal ──────────────────────────────────────────────
 const BulkRestockModal: React.FC<{
   open: boolean;
   items: INguyenLieu[];
@@ -456,7 +451,6 @@ const BulkRestockModal: React.FC<{
   );
 };
 
-// ── NguyenLieuDetail ──────────────────────────────────────────────
 const NguyenLieuDetail: React.FC<{
   item: INguyenLieu | null;
   onClose: () => void;
@@ -569,7 +563,6 @@ const NguyenLieuDetail: React.FC<{
   );
 };
 
-// ── KhoNguyenLieu page ────────────────────────────────────────────
 const KhoNguyenLieu: React.FC = () => {
   const [items,           setItems]           = useState<INguyenLieu[]>(DANH_SACH_NGUYEN_LIEU);
   const [tuKhoa,          setTuKhoa]          = useState('');
@@ -582,7 +575,6 @@ const KhoNguyenLieu: React.FC = () => {
   const [bulkRestockOpen, setBulkRestockOpen] = useState(false);
   const [bulkPreSelectIds,setBulkPreSelectIds]= useState<string[]>([]);
 
-  // ── Dynamic stats ──────────────────────────────────────────────
   const stats = useMemo(() => {
     const tongNguyenLieu = items.length;
     const sapHetHet      = items.filter(
@@ -603,19 +595,16 @@ const KhoNguyenLieu: React.FC = () => {
     [stats],
   );
 
-  // ── Dynamic canNhapThem ────────────────────────────────────────
   const canNhapThemItems = useMemo(
     () => items.filter((n) => n.trangThai !== ETrangThaiNguyenLieu.DU_HANG),
     [items],
   );
 
-  // ── Existing suppliers for AutoComplete ───────────────────────
   const nhaCungCapOptions = useMemo(
     () => Array.from(new Set(items.map((n) => n.nhaCungCap))),
     [items],
   );
 
-  // ── Filtered list ──────────────────────────────────────────────
   const danhSachLoc = useMemo(() => {
     let list = items;
     if (filterTrangThai !== 'all') {
@@ -630,7 +619,6 @@ const KhoNguyenLieu: React.FC = () => {
     return list;
   }, [items, tuKhoa, filterTrangThai]);
 
-  // ── Handlers ──────────────────────────────────────────────────
   const handleSubmit = (values: NguyenLieuFormValues) => {
     const trangThai = tinhTrangThai(values.tonKho, values.mucToiThieu);
     if (editing) {
@@ -696,7 +684,6 @@ const KhoNguyenLieu: React.FC = () => {
     });
   };
 
-  // ── Filter dropdown ────────────────────────────────────────────
   const filterMenu = (
     <Menu
       selectedKeys={[filterTrangThai]}
@@ -709,7 +696,6 @@ const KhoNguyenLieu: React.FC = () => {
     </Menu>
   );
 
-  // ── Table columns ──────────────────────────────────────────────
   const columns: ColumnsType<INguyenLieu> = [
     {
       title: 'NGUYÊN LIỆU',
@@ -822,8 +808,7 @@ const KhoNguyenLieu: React.FC = () => {
     <>
       <Topbar title="Kho nguyên liệu" />
 
-        <div className={styles.pageBody}>
-          {/* ── Stat cards ── */}
+      <div className={styles.pageBody}>
           <div className={styles.statGrid}>
             {statCards.map((card) => (
               <div key={card.label} className={styles.statCard}>
@@ -843,7 +828,6 @@ const KhoNguyenLieu: React.FC = () => {
             ))}
           </div>
 
-          {/* ── Warning banner (chỉ hiện khi có mặt hàng cần nhập) ── */}
           {canNhapThemItems.length > 0 && (
             <div className={styles.warnBanner}>
               <div className={styles.warnLeft}>
@@ -866,7 +850,6 @@ const KhoNguyenLieu: React.FC = () => {
             </div>
           )}
 
-          {/* ── Table section ── */}
           <div className={styles.tableSection}>
             <div className={styles.tableToolbar}>
               <Input
@@ -916,9 +899,8 @@ const KhoNguyenLieu: React.FC = () => {
               })}
             />
           </div>
-        </div>
+      </div>
 
-      {/* ── Modals ── */}
       <NguyenLieuForm
         open={formOpen}
         initial={editing}

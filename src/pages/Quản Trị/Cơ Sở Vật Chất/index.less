@@ -1,20 +1,7 @@
-@bg: #f8fafc;
-@sidebar-w: 260px;
+﻿@bg: #f8fafc;
 @primary: #16a34a;
 @radius: 12px;
 @border: #f1f5f9;
-
-// ── Layout ────────────────────────────────────────────────────────
-.adminLayout { display: flex; min-height: 100vh; background: @bg; }
-
-.mainContent {
-  margin-left: @sidebar-w;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  min-width: 0;
-}
 
 .pageBody {
   padding: 16px 20px 32px;
@@ -24,7 +11,6 @@
   gap: 16px;
 }
 
-// ── Stat cards ────────────────────────────────────────────────────
 .statGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -51,7 +37,6 @@
 .statSub   { font-size: 12px; color: #6b7280; }
 .statIconWrap { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
-// ── Toolbar ───────────────────────────────────────────────────────
 .toolbar {
   display: flex;
   align-items: center;
@@ -70,7 +55,6 @@
   &:hover { background: #15803d !important; border-color: #15803d !important; }
 }
 
-// ── Area grid ─────────────────────────────────────────────────────
 .areaGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -80,7 +64,6 @@
   @media (max-width: 800px)  { grid-template-columns: 1fr; }
 }
 
-// ── Area card ─────────────────────────────────────────────────────
 .areaCard {
   background: #fff;
   border-radius: @radius;
@@ -152,7 +135,6 @@
 
 .iconBtnDanger:hover { background: #fee2e2 !important; color: #dc2626 !important; border-color: #fca5a5 !important; }
 
-// ── Capacity summary ──────────────────────────────────────────────
 .capRow {
   display: flex;
   align-items: center;
@@ -176,7 +158,6 @@
 
 .capNum { font-weight: 600; color: #374151; }
 
-// ── Table chips ───────────────────────────────────────────────────
 .tableGrid {
   display: flex;
   flex-wrap: wrap;
@@ -212,7 +193,6 @@
   margin-top: 2px;
 }
 
-// ── Add table button ──────────────────────────────────────────────
 .addTableBtn {
   width: 42px;
   height: 42px;
@@ -230,7 +210,6 @@
   &:hover { border-color: @primary; color: @primary; background: #f0fdf4; }
 }
 
-// ── Add area card ─────────────────────────────────────────────────
 .addAreaCard {
   background: transparent;
   border-radius: @radius;
@@ -280,7 +259,6 @@
   text-align: center;
 }
 
-// ── Modals ────────────────────────────────────────────────────────
 .modal {
   :global(.ant-modal-content) { border-radius: 16px; overflow: hidden; }
   :global(.ant-modal-header) { padding: 20px 24px 16px; border-bottom: 1px solid @border; }
@@ -292,7 +270,6 @@
   }
 }
 
-// ── Color picker ──────────────────────────────────────────────────
 .colorPicker {
   display: flex;
   flex-wrap: wrap;
@@ -312,7 +289,6 @@
 
 .colorSwatchActive { border-color: #fff; box-shadow: 0 0 0 2px #374151; }
 
-// ── Legend ────────────────────────────────────────────────────────
 .legend {
   display: flex;
   align-items: center;
@@ -335,10 +311,7 @@
   flex-shrink: 0;
 }
 
-// ── Dark mode ─────────────────────────────────────────────────────
 :global([data-theme="dark"]) {
-  .adminLayout { background: #0f172a; }
-
   .statCard  { background: #1e293b; border-color: #334155; }
   .statValue { color: #f1f5f9; }
   .statLabel { color: #64748b; }

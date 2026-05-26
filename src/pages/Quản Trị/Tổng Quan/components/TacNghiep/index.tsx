@@ -8,6 +8,7 @@
 } from '@ant-design/icons';
 import { Progress, Rate } from 'antd';
 import React, { useMemo } from 'react';
+import { Link } from 'umi';
 import ReactApexChart from 'react-apexcharts';
 import {
   buildAreaOptions,
@@ -155,7 +156,7 @@ const TacNghiepView: React.FC = () => {
             <div>
               <div className={styles.tnPromoName}>{infoCard.khuyenMai.ten}</div>
               <div className={styles.tnPromoLeft}>{infoCard.khuyenMai.conLai}</div>
-              <a className={styles.tnPromoLink} href="#">Xem chi tiết</a>
+              <Link className={styles.tnPromoLink} to="/quan-tri/khuyen-mai">Xem chi tiết</Link>
             </div>
           </div>
         </div>
@@ -203,9 +204,9 @@ const TacNghiepView: React.FC = () => {
               ))}
             </div>
           </div>
-          <a href="#" className={styles.tnViewAll}>
+          <Link to="/quan-tri/don-hang" className={styles.tnViewAll}>
             Xem chi tiết đơn hàng <RightOutlined style={{ fontSize: 10 }} />
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -214,7 +215,7 @@ const TacNghiepView: React.FC = () => {
         <div className={styles.tnTableCard}>
           <div className={styles.tnTableHead}>
             <span className={styles.tnTableTitle}>Đơn gần đây</span>
-            <a href="#" className={styles.tnViewAll}>Xem tất cả</a>
+            <Link to="/quan-tri/don-hang" className={styles.tnViewAll}>Xem tất cả</Link>
           </div>
           <table className={styles.tnTable}>
             <thead>
@@ -230,7 +231,7 @@ const TacNghiepView: React.FC = () => {
         <div className={styles.tnTopCard}>
           <div className={styles.tnTableHead}>
             <span className={styles.tnTableTitle}>Top món bán chạy</span>
-            <a href="#" className={styles.tnViewAll}>Xem tất cả</a>
+            <Link to="/quan-tri/quan-ly-mon" className={styles.tnViewAll}>Xem tất cả</Link>
           </div>
           <div className={styles.tnTopList}>
             {topMon.map((m) => (

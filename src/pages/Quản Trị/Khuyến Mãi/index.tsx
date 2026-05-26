@@ -571,7 +571,7 @@ const ComboForm: React.FC<{
           rules={[
             { required: true, message: 'Vui lòng nhập giá trị' },
             ...(loaiGiaWatch === ELoaiGiaCombo.PHAN_TRAM
-              ? [{ type: 'number' as const, min: 1, max: 99, message: 'Nhập 1–99%' }]
+              ? [{ type: 'number' as const, min: 1, max: 99, message: 'Vui lòng nhập từ 1–99%' }]
               : [{ type: 'number' as const, min: 1000, message: 'Tối thiểu 1.000đ' }]),
           ]}
         >

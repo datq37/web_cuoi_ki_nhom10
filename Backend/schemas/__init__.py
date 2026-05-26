@@ -6,7 +6,7 @@ from .khachhang import KhachHangCreate, KhachHangResponse, KhachHangUpdate, Khac
 from .khohang import KhoHangCreate, KhoHangResponse, KhoHangUpdate
 from .khuyenmai import KhuyenMaiCreate, KhuyenMaiResponse, KhuyenMaiUpdate
 from .nhanvien import NhanVienCreate, NhanVienResponse, NhanVienUpdate
-from .orders import OrderCreate, OrderResponse, OrderUpdate
+from .orders import OrderCreate, OrderResponse, OrderUpdate, OrderDetailCreate, OrderDetailResponse, OrderStatusUpdate
 from .reviews import ReviewCreate, ReviewResponse, ReviewUpdate
 from .thucdon import ThucDonCreate, ThucDonResponse, ThucDonUpdate
 
@@ -43,6 +43,9 @@ __all__ = [
     "OrderCreate",
     "OrderResponse",
     "OrderUpdate",
+    "OrderDetailCreate",
+    "OrderDetailResponse",
+    "OrderStatusUpdate",
     "ReviewCreate",
     "ReviewResponse",
     "ReviewUpdate",

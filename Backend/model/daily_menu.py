@@ -13,7 +13,11 @@ class DailyMenu(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True, nullable=False)
     serve_date: Mapped[date | None] = mapped_column(Date, nullable=True)
-    menu_item_id: Mapped[str | None] = mapped_column("menu_item_id", String, ForeignKey("thucdon.mamon"), nullable=True)
+    menu_item_id: Mapped[str | None] = mapped_column("menu_item_id", String, nullable=True)
 
-    # Quan hệ N-1: Lịch ngày tham chiếu đến món ăn (ThucDon)
-    thucdon: Mapped["ThucDon"] = relationship("ThucDon")
+    # Quan hệ N-1: Lịch ngày tham chiếu đến món ăn (ThucDon) - liên kết logic không tạo FK vật lý
+    thucdon: Mapped["ThucDon"] = relationship(
+        "ThucDon",
+        primaryjoin="DailyMenu.menu_item_id == ThucDon.mamon",
+        foreign_keys=[menu_item_id]
+    )

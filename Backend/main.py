@@ -24,8 +24,8 @@ from routes import api_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # DB đã có sẵn bảng từ schema.sql — không gọi create_all để tránh tạo bảng trùng/thừa.
-    # Base.metadata.create_all(bind=engine)
+    # Tự động tạo các bảng còn thiếu (ví dụ: chitietdonhang) nếu chưa tồn tại
+    Base.metadata.create_all(bind=engine)
     yield
 
 

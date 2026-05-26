@@ -56,29 +56,36 @@ const DonHang: React.FC = () => {
   }, [orders]);
 
   useEffect(() => {
-    const handleStorage = () => {
+    const handleStorage = (e?: Event) => {
+      // Dùng storage event để đồng bộ giữa các tab.
       const saved = localStorage.getItem('admin_orders');
       if (saved) {
         try {
           const list = JSON.parse(saved);
           if (Array.isArray(list)) {
-            setOrders(list);
-            const set = new Set<string>();
-            list.forEach(o => {
-              if (o.trangThai === ('da_huy' as any)) set.add(o.maDon);
+            setOrders((prev) => {
+              if (JSON.stringify(prev) === saved) return prev; // Avoid infinite loop!
+              return list;
             });
-            setCancelledIds(set);
+            setCancelledIds((prevIds) => {
+              const newSet = new Set<string>();
+              list.forEach(o => {
+                if (o.trangThai === ('da_huy' as any)) newSet.add(o.maDon);
+              });
+              if (prevIds.size === newSet.size) return prevIds;
+              return newSet;
+            });
           }
         } catch { /* ignore */ }
       }
     };
+    
     window.addEventListener('storage', handleStorage);
     window.addEventListener('focus', handleStorage);
-    window.addEventListener('admin_orders_updated', handleStorage);
+    
     return () => {
       window.removeEventListener('storage', handleStorage);
       window.removeEventListener('focus', handleStorage);
-      window.removeEventListener('admin_orders_updated', handleStorage);
     };
   }, []);
 

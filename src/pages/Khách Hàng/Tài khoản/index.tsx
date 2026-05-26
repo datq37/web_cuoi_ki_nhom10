@@ -15,7 +15,7 @@ import './index.less';
 
 const TaiKhoan: React.FC = () => {
     // ── Models ───────────────────────────────────────────────────────────────
-    const { currentUser, updateProfile } = useModel('Khách Hàng.user');
+    const { currentUser, updateProfile, rankInfo } = useModel('Khách Hàng.user');
     const { theme } = useModel('Khách Hàng.global');
     const { avatarUrl, syncAvatar, beforeUpload, onFinish, isAvatarImage } = useTaiKhoanModel();
 
@@ -41,6 +41,7 @@ const TaiKhoan: React.FC = () => {
                     avatarUrl={avatarUrl}
                     isAvatarImage={isAvatarImage}
                     beforeUpload={beforeUpload}
+                    rankInfo={rankInfo}
                 />
                 <BieuMau
                     form={form}

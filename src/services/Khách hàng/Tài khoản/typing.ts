@@ -10,6 +10,8 @@ export interface UserProfile {
   building?: string;
   floor?: string;
   desk?: string;
+  points?: number;
+  totalSpent?: number;
 }
 
 /** Props của component Thanh Bên (sidebar) */
@@ -18,6 +20,7 @@ export interface ThanhBenProps {
   avatarUrl: string;
   isAvatarImage: () => boolean;
   beforeUpload: (file: File) => boolean | string;
+  rankInfo?: any;
 }
 
 /** Props của component Biểu Mẫu (form chính) */

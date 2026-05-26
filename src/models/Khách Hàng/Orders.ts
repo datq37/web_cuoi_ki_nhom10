@@ -38,14 +38,14 @@ export default function useOrderModel() {
 
                 setOrders(prev => {
                     let changed = false;
-                    const changedOrders: { id: string, status: string }[] = [];
+                    const changedOrders: { id: string, status: string, total: number }[] = [];
                     const next = prev.map(o => {
                         const adminMatch = adminOrders.find((ao: any) => ao.maDon === o.id);
                         if (adminMatch) {
                             const newStatus = STATUS_MAP[adminMatch.trangThai] || o.status;
                             if (newStatus !== o.status) {
                                 changed = true;
-                                changedOrders.push({ id: o.id, status: newStatus });
+                                changedOrders.push({ id: o.id, status: newStatus, total: o.total });
                                 return { ...o, status: newStatus };
                             }
                         }
@@ -55,6 +55,9 @@ export default function useOrderModel() {
                         setTimeout(() => {
                             changedOrders.forEach(co => {
                                 message.info(`Đơn hàng ${co.id} của bạn đã được cập nhật thành: ${co.status}`);
+                                if (co.status === OrderStatus.Done) {
+                                    window.dispatchEvent(new CustomEvent('order_completed', { detail: { amount: co.total } }));
+                                }
                             });
                         }, 0);
                         return next;
@@ -118,18 +121,54 @@ export default function useOrderModel() {
     }, []);
 
     const advanceOrder = useCallback((orderId: string) => {
-        setOrders(prev => prev.map(o => {
-            if (o.id !== orderId) return o;
+        setOrders(prev => {
+            let nextStatusToAdmin: string | null = null;
+            const next = prev.map(o => {
+                if (o.id !== orderId) return o;
 
-            const nextStatus: Record<string, OrderStatus> = {
-                [OrderStatus.Pending]: OrderStatus.Preparing,
-                [OrderStatus.Preparing]: OrderStatus.Ready,
-                [OrderStatus.Ready]: OrderStatus.Done,
-                [OrderStatus.Done]: OrderStatus.Done
-            };
+                const nextStatus: Record<string, OrderStatus> = {
+                    [OrderStatus.Pending]: OrderStatus.Preparing,
+                    [OrderStatus.Preparing]: OrderStatus.Ready,
+                    [OrderStatus.Ready]: OrderStatus.Done,
+                    [OrderStatus.Done]: OrderStatus.Done
+                };
+                
+                const finalStatus = nextStatus[o.status] || o.status;
+                if (finalStatus === OrderStatus.Done && o.status !== OrderStatus.Done) {
+                    nextStatusToAdmin = 'hoan_thanh';
+                    setTimeout(() => {
+                        window.dispatchEvent(new CustomEvent('order_completed', { detail: { amount: o.total } }));
+                    }, 0);
+                }
 
-            return { ...o, status: nextStatus[o.status] || o.status };
-        }));
+                return { ...o, status: finalStatus };
+            });
+
+            if (nextStatusToAdmin && typeof window !== 'undefined') {
+                try {
+                    const savedAdmin = localStorage.getItem('admin_orders');
+                    if (savedAdmin) {
+                        const adminList = JSON.parse(savedAdmin);
+                        let adminChanged = false;
+                        const newAdminList = adminList.map((ao: any) => {
+                            if (ao.maDon === orderId) {
+                                adminChanged = true;
+                                return { ...ao, trangThai: nextStatusToAdmin };
+                            }
+                            return ao;
+                        });
+                        if (adminChanged) {
+                            localStorage.setItem('admin_orders', JSON.stringify(newAdminList));
+                            window.dispatchEvent(new Event('admin_orders_updated'));
+                        }
+                    }
+                } catch (e) {
+                    console.error("Lỗi đồng bộ advanceOrder:", e);
+                }
+            }
+
+            return next;
+        });
     }, []);
 
     const markAsReviewed = useCallback((orderId: string) => {

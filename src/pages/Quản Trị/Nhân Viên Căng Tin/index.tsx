@@ -5,7 +5,6 @@ import {
 } from '@ant-design/icons';
 import { Avatar } from 'antd';
 import React from 'react';
-import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import {
   DANH_SACH_NHAN_VIEN,
@@ -77,24 +76,21 @@ const AddMemberCard: React.FC = () => (
 
 const NhanVienCangTin: React.FC = () => {
   return (
-    <div className={styles.adminLayout}>
-      <Sidebar />
-      <div className={styles.mainContent}>
-        <Topbar
-          title="Nhân viên căng tin"
-          subtitle="Đội ngũ quản lý, bếp và thu ngân"
-        />
+    <>
+      <Topbar
+        title="Nhân viên căng tin"
+        subtitle="Đội ngũ quản lý, bếp và thu ngân"
+      />
 
-        <div className={styles.pageBody}>
-          <div className={styles.grid}>
-            {DANH_SACH_NHAN_VIEN.map((nv) => (
-              <NhanVienCard key={nv.id} nv={nv} />
-            ))}
-            <AddMemberCard />
-          </div>
+      <div className={styles.pageBody}>
+        <div className={styles.grid}>
+          {DANH_SACH_NHAN_VIEN.map((nv) => (
+            <NhanVienCard key={nv.id} nv={nv} />
+          ))}
+          <AddMemberCard />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

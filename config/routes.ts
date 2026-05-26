@@ -30,6 +30,7 @@ export default [
 	{
 		path: '/quan-tri',
 		layout: false,
+		component: './Quản Trị/AdminLayout',
 		routes: [
 			{
 				path: '/quan-tri/tong-quan',

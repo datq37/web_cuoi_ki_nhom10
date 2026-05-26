@@ -15,7 +15,6 @@ import {
   message,
 } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
-import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import {
   DANH_SACH_KHU_VUC,
@@ -441,10 +440,8 @@ const CoSoVatChat: React.FC = () => {
 
   // ── Render ────────────────────────────────────────────────────
   return (
-    <div className={styles.adminLayout}>
-      <Sidebar />
-      <div className={styles.mainContent}>
-        <Topbar title="Cơ sở vật chất" />
+    <>
+      <Topbar title="Cơ sở vật chất" />
 
         <div className={styles.pageBody}>
           {/* ── Stat cards ── */}
@@ -497,7 +494,6 @@ const CoSoVatChat: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
 
       {/* ── Modals ── */}
       <KhuVucModal
@@ -513,7 +509,7 @@ const CoSoVatChat: React.FC = () => {
         onSubmit={handleSubmitBan}
         onDelete={editingBan ? handleDeleteBan : undefined}
       />
-    </div>
+    </>
   );
 };
 

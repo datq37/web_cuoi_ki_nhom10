@@ -25,7 +25,6 @@ import {
   message,
 } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import { DANH_SACH_NGUYEN_LIEU } from '@/services/Quản Trị/Kho Nguyên Liệu';
 import { DANH_SACH_MON } from '@/services/Quản Trị/Quản Lý Món';
@@ -526,10 +525,8 @@ const QuanLyMon: React.FC = () => {
 
   // ── Render ────────────────────────────────────────────────────
   return (
-    <div className={styles.adminLayout}>
-      <Sidebar />
-      <div className={styles.mainContent}>
-        <Topbar title="Quản lý món ăn" />
+    <>
+      <Topbar title="Quản lý món ăn" />
 
         <div className={styles.pageBody}>
           {/* ── Toolbar ── */}
@@ -598,7 +595,6 @@ const QuanLyMon: React.FC = () => {
             )}
           </div>
         </div>
-      </div>
 
       {/* ── Modals ── */}
       <MonForm
@@ -612,7 +608,7 @@ const QuanLyMon: React.FC = () => {
         onClose={() => setViewing(null)}
         onEdit={() => { setEditing(viewing); setViewing(null); setFormOpen(true); }}
       />
-    </div>
+    </>
   );
 };
 

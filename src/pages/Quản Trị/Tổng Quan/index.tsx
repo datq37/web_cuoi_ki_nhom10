@@ -4,7 +4,6 @@ import moment from 'moment';
 import React, { useState } from 'react';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 require('moment/locale/vi');
-import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import { ETabKey } from '@/services/Quản Trị/Tổng Quan/typing';
 import BaoCaoModal from './components/BaoCao';
@@ -24,10 +23,8 @@ const TongQuan: React.FC = () => {
   ];
 
   return (
-    <div className={styles.adminLayout}>
-      <Sidebar />
-      <div className={styles.mainContent}>
-        <Topbar title="Tổng quan" />
+    <>
+      <Topbar title="Tổng quan" />
 
         <div className={styles.pageBody}>
           {/* ── Header: tabs + date + export ── */}
@@ -63,10 +60,9 @@ const TongQuan: React.FC = () => {
           {activeTab === ETabKey.PHAN_TICH  && <PhanTichView />}
           {activeTab === ETabKey.TAC_NGHIEP && <TacNghiepView />}
         </div>
-      </div>
 
       <BaoCaoModal open={reportOpen} onClose={() => setReportOpen(false)} />
-    </div>
+    </>
   );
 };
 

@@ -12,7 +12,6 @@ import {
 import { Avatar, Button, Input, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import React, { useMemo, useState } from 'react';
-import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import {
   DANH_SACH_KHACH,
@@ -169,10 +168,8 @@ const KhachHang: React.FC = () => {
   ];
 
   return (
-    <div className={styles.adminLayout}>
-      <Sidebar />
-      <div className={styles.mainContent}>
-        <Topbar title="Khách hàng" subtitle="Nhân viên công ty đặt món tại căng tin" />
+    <>
+      <Topbar title="Khách hàng" subtitle="Nhân viên công ty đặt món tại căng tin" />
 
         <div className={styles.pageBody}>
           <div className={styles.statGrid}>
@@ -221,8 +218,7 @@ const KhachHang: React.FC = () => {
             />
           </div>
         </div>
-      </div>
-    </div>
+    </>
   );
 };
 

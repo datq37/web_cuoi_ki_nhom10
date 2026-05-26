@@ -6,7 +6,6 @@ import {
 } from '@ant-design/icons';
 import { Button, Input, Modal, message } from 'antd';
 import React, { useMemo, useState } from 'react';
-import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import { fmt } from '@/models/Quản Trị/Tổng Quan';
 import { mockData } from '@/services/Quản Trị/Tổng Quan';
@@ -171,10 +170,8 @@ const DonHang: React.FC = () => {
 
   // ── Render ──────────────────────────────────────────────────────
   return (
-    <div className={styles.adminLayout}>
-      <Sidebar />
-      <div className={styles.mainContent}>
-        <Topbar title="Quản lý đơn hàng" />
+    <>
+      <Topbar title="Quản lý đơn hàng" />
 
         <div className={styles.pageBody}>
 
@@ -275,7 +272,6 @@ const DonHang: React.FC = () => {
           )}
 
         </div>
-      </div>
 
       {/* ── Drawer ── */}
       <OrderDrawer
@@ -286,7 +282,7 @@ const DonHang: React.FC = () => {
         onCancel={handleCancelOrder}
         onPrint={handlePrint}
       />
-    </div>
+    </>
   );
 };
 

@@ -8,7 +8,6 @@ import {
 } from '@ant-design/icons';
 import { Button, Input, Switch } from 'antd';
 import React, { useState } from 'react';
-import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import styles from './index.less';
 
@@ -274,10 +273,8 @@ const CaiDat: React.FC = () => {
   const ContentComponent = CONTENT_MAP[activeTab];
 
   return (
-    <div className={styles.adminLayout}>
-      <Sidebar />
-      <div className={styles.mainContent}>
-        <Topbar title="Cài đặt" subtitle="Tuỳ chỉnh thông tin và cấu hình căng tin" />
+    <>
+      <Topbar title="Cài đặt" subtitle="Tuỳ chỉnh thông tin và cấu hình căng tin" />
 
         <div className={styles.pageBody}>
           <div className={styles.settingsWrap}>
@@ -301,8 +298,7 @@ const CaiDat: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+    </>
   );
 };
 

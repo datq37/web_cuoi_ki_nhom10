@@ -30,7 +30,6 @@ import {
 import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import React, { useEffect, useMemo, useState } from 'react';
-import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import {
   DANH_SACH_KHUYEN_MAI,
@@ -962,10 +961,8 @@ const KhuyenMai: React.FC = () => {
   );
 
   return (
-    <div className={styles.adminLayout}>
-      <Sidebar />
-      <div className={styles.mainContent}>
-        <Topbar title="Khuyến mãi" />
+    <>
+      <Topbar title="Khuyến mãi" />
 
         <div className={styles.pageBody}>
           {/* ── Stat cards ── */}
@@ -1086,7 +1083,6 @@ const KhuyenMai: React.FC = () => {
             </Tabs.TabPane>
           </Tabs>
         </div>
-      </div>
 
       {/* ── Modals ── */}
       <KhuyenMaiForm
@@ -1106,7 +1102,7 @@ const KhuyenMai: React.FC = () => {
         onCancel={() => { setComboFormOpen(false); setEditingCombo(null); }}
         onSubmit={handleComboSubmit}
       />
-    </div>
+    </>
   );
 };
 

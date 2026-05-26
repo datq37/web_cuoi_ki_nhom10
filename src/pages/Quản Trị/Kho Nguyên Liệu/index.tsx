@@ -30,7 +30,6 @@ import {
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import {
   DANH_SACH_NGUYEN_LIEU,
@@ -820,10 +819,8 @@ const KhoNguyenLieu: React.FC = () => {
   ];
 
   return (
-    <div className={styles.adminLayout}>
-      <Sidebar />
-      <div className={styles.mainContent}>
-        <Topbar title="Kho nguyên liệu" />
+    <>
+      <Topbar title="Kho nguyên liệu" />
 
         <div className={styles.pageBody}>
           {/* ── Stat cards ── */}
@@ -920,7 +917,6 @@ const KhoNguyenLieu: React.FC = () => {
             />
           </div>
         </div>
-      </div>
 
       {/* ── Modals ── */}
       <NguyenLieuForm
@@ -949,7 +945,7 @@ const KhoNguyenLieu: React.FC = () => {
         onEdit={() => { setEditing(viewing); setViewing(null); setFormOpen(true); }}
         onRestock={() => { setRestocking(viewing); setViewing(null); setRestockOpen(true); }}
       />
-    </div>
+    </>
   );
 };
 

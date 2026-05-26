@@ -43,11 +43,14 @@ export default function LoginPage() {
     } else {
       const DUMMY_PHONE = '0987654321';
       const DUMMY_PASSWORD = 'password123';
-      if (phone === DUMMY_PHONE && password === DUMMY_PASSWORD) {
+      if ((phone === 'admin' || phone === '0999999999') && password === 'admin') {
+        message.success('Đăng nhập Quản trị thành công! Chào mừng Admin.');
+        history.push('/quan-tri/tong-quan');
+      } else if (phone === DUMMY_PHONE && password === DUMMY_PASSWORD) {
         message.success('Đăng nhập thành công! Chào mừng bạn.');
         history.push('/trang-chinh');
       } else {
-        message.error('Số điện thoại hoặc mật khẩu không chính xác. Thử: 0987654321 / password123');
+        message.error('Số điện thoại hoặc mật khẩu không chính xác. Thử: 0987654321 / password123 hoặc admin / admin');
       }
     }
   };
@@ -108,7 +111,7 @@ export default function LoginPage() {
                 </div>
                 <input
                   type="text"
-                  placeholder="Số điện thoại (Test: 0987654321)"
+                  placeholder="Số điện thoại (Test: 0987654321 hoặc admin)"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
@@ -121,7 +124,7 @@ export default function LoginPage() {
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Mật khẩu (Test: password123)"
+                  placeholder="Mật khẩu (Test: password123 hoặc admin)"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />

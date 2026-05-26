@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useModel } from 'umi';
+import { message } from 'antd';
 import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
 import { Order, OrderStatus, PaymentMethod } from '@/services/Khách hàng/Đơn Hàng';
 
@@ -30,8 +31,50 @@ export function useGioHangModel() {
         }
     }, [cart.length, subtotal, selectedVoucher]);
 
+    // ── Claim voucher (đồng bộ) để tránh race condition ──────────────────────
+    // Trả về true nếu claim thành công, false nếu hết lượt
+    const claimVoucher = (voucherId: string): boolean => {
+        if (typeof window === 'undefined') return true;
+        const saved = localStorage.getItem('admin_vouchers');
+        if (!saved) return true;
+        try {
+            const list = JSON.parse(saved);
+            const idx = list.findIndex((k: any) => k.id === voucherId);
+            if (idx === -1) return true; // voucher không còn trong hệ thống
+            const k = list[idx];
+            // Kiểm tra lại lần cuối: đã hết lượt?
+            if (k.gioiHan && (k.daDung || 0) >= k.gioiHan) return false;
+            // Đã tắt hoặc hết hạn?
+            if (!k.hoatDong || k.trangThai === 'het_han' || k.trangThai === 'tam_dung') return false;
+            // Claim: tăng daDung ngay lập tức (đồng bộ, trước khi async xử lý)
+            const daDung = (k.daDung || 0) + 1;
+            const hetLuot = daDung >= k.gioiHan;
+            list[idx] = {
+                ...k,
+                daDung,
+                trangThai: hetLuot ? 'het_han' : k.trangThai,
+                hoatDong: hetLuot ? false : k.hoatDong,
+            };
+            localStorage.setItem('admin_vouchers', JSON.stringify(list));
+            return true;
+        } catch {
+            return true; // lỗi parse thì cho qua
+        }
+    };
+
     // ── Xác nhận đặt món ──────────────────────────────────────────────────────
     const handleConfirm = () => {
+        // 1. Claim voucher TRƯỚC (đồng bộ) — nếu 2 người cùng bấm, chỉ người đầu thành công
+        if (selectedVoucher) {
+            const claimed = claimVoucher(selectedVoucher.id);
+            if (!claimed) {
+                // Voucher hết lượt do người khác vừa dùng → báo lỗi, gỡ voucher
+                setSelectedVoucher(undefined);
+                message.error('Voucher này vừa hết lượt sử dụng! Vui lòng chọn voucher khác.');
+                return;
+            }
+        }
+
         setIsLoading(true);
         
         setTimeout(() => {
@@ -40,6 +83,9 @@ export function useGioHangModel() {
             const discount = (() => {
                 if (!selectedVoucher) return 0;
                 if (selectedVoucher.minOrder && subtotal < selectedVoucher.minOrder) return 0;
+                if (selectedVoucher.loai === 'phan_tram') {
+                    return Math.round(subtotal * selectedVoucher.discount / 100);
+                }
                 return selectedVoucher.discount;
             })();
             const total = Math.max(0, subtotal + serviceFee - discount);
@@ -64,6 +110,9 @@ export function useGioHangModel() {
             };
 
             addOrder(newOrder);
+            // Lưu ý: daDung đã được tăng đồng bộ ở claimVoucher() ở trên rồi,
+            // KHÔNG cần tăng lại ở đây nữa.
+
             const isQRPayment = payment === PaymentMethod.QR;
 
             if (isQRPayment) {

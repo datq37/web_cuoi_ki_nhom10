@@ -5,8 +5,25 @@ import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/cartoption/typ
 
 //  Chuyển đổi IKhuyenMai (Admin) → Voucher (Customer)
 function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     return adminList
-        .filter((k: any) => k.hoatDong && k.trangThai !== 'het_han' && k.trangThai !== 'tam_dung')
+        .filter((k: any) => {
+            if (!k.hoatDong) return false;
+            if (k.trangThai === 'het_han' || k.trangThai === 'tam_dung') return false;
+            // Lọc hết lượt dùng
+            if (k.gioiHan && (k.daDung || 0) >= k.gioiHan) return false;
+            // Lọc hết hạn theo ngày thực tế (format D/M/YYYY)
+            if (k.hetHan) {
+                const parts = k.hetHan.split('/');
+                if (parts.length === 3) {
+                    const expiry = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+                    if (expiry < today) return false;
+                }
+            }
+            return true;
+        })
         .map((k: any): Voucher => {
             let discount = 0;
             let valueLabel = '';

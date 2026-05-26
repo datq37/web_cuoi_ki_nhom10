@@ -242,9 +242,24 @@ const KhuyenMaiForm: React.FC<{
           <Form.Item
             label="Ngày hết hạn"
             name="hetHanDate"
-            rules={[{ required: true, message: 'Vui lòng chọn ngày' }]}
+            rules={[
+              { required: true, message: 'Vui lòng chọn ngày' },
+              {
+                validator: (_: any, value: Dayjs | undefined) => {
+                  if (!value) return Promise.resolve();
+                  if (value.isBefore(dayjs().startOf('day'))) {
+                    return Promise.reject(new Error('Ngày hết hạn không được là ngày trong quá khứ'));
+                  }
+                  return Promise.resolve();
+                },
+              },
+            ]}
           >
-            <DatePicker format="D/M/YYYY" style={{ width: '100%' }} />
+            <DatePicker
+              format="D/M/YYYY"
+              style={{ width: '100%' }}
+              disabledDate={(current) => current && current.isBefore(dayjs().startOf('day'))}
+            />
           </Form.Item>
         </div>
 

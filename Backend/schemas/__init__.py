@@ -2,7 +2,7 @@ from .auth import LoginRequest, LogoutRequest, RefreshRequest, Token, TokenData
 from .cosovatchat import CoSoVatChatCreate, CoSoVatChatResponse, CoSoVatChatUpdate
 from .daily_menu import DailyMenuCreate, DailyMenuResponse, DailyMenuUpdate
 from .danhmucmonan import DanhMucMonAnCreate, DanhMucMonAnResponse, DanhMucMonAnUpdate
-from .khachhang import KhachHangCreate, KhachHangResponse, KhachHangUpdate
+from .khachhang import KhachHangCreate, KhachHangResponse, KhachHangUpdate, KhachHangRegister, KhachHangListResponse, ProfileUpdate
 from .khohang import KhoHangCreate, KhoHangResponse, KhoHangUpdate
 from .khuyenmai import KhuyenMaiCreate, KhuyenMaiResponse, KhuyenMaiUpdate
 from .nhanvien import NhanVienCreate, NhanVienResponse, NhanVienUpdate
@@ -28,6 +28,9 @@ __all__ = [
     "KhachHangCreate",
     "KhachHangResponse",
     "KhachHangUpdate",
+    "KhachHangRegister",
+    "KhachHangListResponse",
+    "ProfileUpdate",
     "KhoHangCreate",
     "KhoHangResponse",
     "KhoHangUpdate",

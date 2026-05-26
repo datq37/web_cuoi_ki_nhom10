@@ -3,8 +3,8 @@ import uuid
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from model.menu import Category
-from schemas.category import CategoryCreate, CategoryUpdate
+from model.danhmucmonan import DanhMucMonAn as Category
+from schemas.danhmucmonan import DanhMucMonAnCreate as CategoryCreate, DanhMucMonAnUpdate as CategoryUpdate
 
 
 def get_category_by_id(db: Session, category_id: uuid.UUID) -> Category | None:

@@ -4,8 +4,10 @@ from datetime import date
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session, joinedload
 
-from model.menu import DailyMenu, MenuItem
-from schemas.menu import DailyMenuCreate, MenuItemCreate, MenuItemUpdate
+from model.daily_menu import DailyMenu
+from model.thucdon import ThucDon as MenuItem
+from schemas.daily_menu import DailyMenuCreate
+from schemas.thucdon import ThucDonCreate as MenuItemCreate, ThucDonUpdate as MenuItemUpdate
 
 
 def get_menu_item_by_id(db: Session, item_id: uuid.UUID) -> MenuItem | None:

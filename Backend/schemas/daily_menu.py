@@ -21,3 +21,8 @@ class DailyMenuResponse(DailyMenuBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+
+
+class DailyMenuListResponse(BaseModel):
+    date: date
+    items: list[DailyMenuResponse]

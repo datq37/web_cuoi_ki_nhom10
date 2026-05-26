@@ -7,8 +7,12 @@ from sqlalchemy.orm import Session
 from crud import category as category_crud
 from database import get_db
 from dependencies import get_current_active_admin, get_current_user
-from model.user import User
-from schemas.category import CategoryCreate, CategoryResponse, CategoryUpdate
+from model.khachhang import KhachHang
+from schemas.danhmucmonan import (
+    DanhMucMonAnCreate as CategoryCreate,
+    DanhMucMonAnResponse as CategoryResponse,
+    DanhMucMonAnUpdate as CategoryUpdate,
+)
 from service import menu as menu_service
 
 router = APIRouter(prefix="/categories", tags=["Danh mục món ăn"])
@@ -17,7 +21,7 @@ router = APIRouter(prefix="/categories", tags=["Danh mục món ăn"])
 @router.get("", response_model=list[CategoryResponse])
 def list_categories(
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_user)],
+    _: Annotated[KhachHang, Depends(get_current_user)],
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=200),
 ):
@@ -30,7 +34,7 @@ def list_categories(
 def get_category(
     category_id: uuid.UUID,
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_user)],
+    _: Annotated[KhachHang, Depends(get_current_user)],
 ):
     return menu_service.get_category_or_404(db, category_id)
 
@@ -39,7 +43,7 @@ def get_category(
 def create_category(
     data: CategoryCreate,
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_active_admin)],
+    _: Annotated[KhachHang, Depends(get_current_active_admin)],
 ):
     """Admin: tạo danh mục."""
     return menu_service.create_category(db, data)
@@ -50,7 +54,7 @@ def update_category(
     category_id: uuid.UUID,
     data: CategoryUpdate,
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_active_admin)],
+    _: Annotated[KhachHang, Depends(get_current_active_admin)],
 ):
     """Admin: cập nhật danh mục."""
     return menu_service.update_category(db, category_id, data)
@@ -60,7 +64,7 @@ def update_category(
 def delete_category(
     category_id: uuid.UUID,
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_active_admin)],
+    _: Annotated[KhachHang, Depends(get_current_active_admin)],
 ):
     """Admin: xóa danh mục."""
     menu_service.delete_category(db, category_id)

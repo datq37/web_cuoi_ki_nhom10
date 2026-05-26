@@ -6,9 +6,12 @@ from sqlalchemy.orm import Session
 
 from crud import category as category_crud
 from crud import menu as menu_crud
-from model.menu import Category, DailyMenu, MenuItem
-from schemas.category import CategoryCreate, CategoryUpdate
-from schemas.menu import DailyMenuCreate, MenuItemCreate, MenuItemUpdate
+from model.danhmucmonan import DanhMucMonAn as Category
+from model.daily_menu import DailyMenu
+from model.thucdon import ThucDon as MenuItem
+from schemas.danhmucmonan import DanhMucMonAnCreate as CategoryCreate, DanhMucMonAnUpdate as CategoryUpdate
+from schemas.daily_menu import DailyMenuCreate
+from schemas.thucdon import ThucDonCreate as MenuItemCreate, ThucDonUpdate as MenuItemUpdate
 from service.upload import save_menu_item_image
 
 

@@ -7,15 +7,17 @@ from sqlalchemy.orm import Session
 
 from database import get_db
 from dependencies import get_current_active_admin, get_current_user
-from model.user import User
-from schemas.menu import (
+from model.khachhang import KhachHang
+from schemas.daily_menu import (
     DailyMenuCreate,
     DailyMenuListResponse,
     DailyMenuResponse,
-    MenuItemCreate,
-    MenuItemListResponse,
-    MenuItemResponse,
-    MenuItemUpdate,
+)
+from schemas.thucdon import (
+    ThucDonCreate as MenuItemCreate,
+    ThucDonListResponse as MenuItemListResponse,
+    ThucDonResponse as MenuItemResponse,
+    ThucDonUpdate as MenuItemUpdate,
 )
 from service import menu as menu_service
 
@@ -28,7 +30,7 @@ router = APIRouter(prefix="/menus", tags=["Thực đơn"])
 @router.get("/items", response_model=MenuItemListResponse)
 def list_menu_items(
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_user)],
+    _: Annotated[KhachHang, Depends(get_current_user)],
     category_id: uuid.UUID | None = None,
     is_available: bool | None = None,
     skip: int = Query(0, ge=0),
@@ -47,7 +49,7 @@ def list_menu_items(
 def get_menu_item(
     item_id: uuid.UUID,
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_user)],
+    _: Annotated[KhachHang, Depends(get_current_user)],
 ):
     return menu_service.get_menu_item_or_404(db, item_id)
 
@@ -56,7 +58,7 @@ def get_menu_item(
 def create_menu_item(
     data: MenuItemCreate,
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_active_admin)],
+    _: Annotated[KhachHang, Depends(get_current_active_admin)],
 ):
     """Admin: thêm món ăn."""
     return menu_service.create_menu_item(db, data)
@@ -67,7 +69,7 @@ def update_menu_item(
     item_id: uuid.UUID,
     data: MenuItemUpdate,
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_active_admin)],
+    _: Annotated[KhachHang, Depends(get_current_active_admin)],
 ):
     """Admin: cập nhật món ăn."""
     return menu_service.update_menu_item(db, item_id, data)
@@ -77,7 +79,7 @@ def update_menu_item(
 def delete_menu_item(
     item_id: uuid.UUID,
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_active_admin)],
+    _: Annotated[KhachHang, Depends(get_current_active_admin)],
 ):
     """Admin: xóa món ăn."""
     menu_service.delete_menu_item(db, item_id)
@@ -87,7 +89,7 @@ def delete_menu_item(
 async def upload_menu_item_image(
     item_id: uuid.UUID,
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_active_admin)],
+    _: Annotated[KhachHang, Depends(get_current_active_admin)],
     file: UploadFile = File(...),
 ):
     """Admin: upload ảnh món ăn."""
@@ -98,7 +100,7 @@ async def upload_menu_item_image(
 def toggle_menu_item_status(
     item_id: uuid.UUID,
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_active_admin)],
+    _: Annotated[KhachHang, Depends(get_current_active_admin)],
 ):
     """Admin: bật/tắt món (hết món trong ngày)."""
     return menu_service.toggle_menu_item(db, item_id)
@@ -110,7 +112,7 @@ def toggle_menu_item_status(
 @router.get("/daily", response_model=DailyMenuListResponse)
 def get_daily_menu(
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_user)],
+    _: Annotated[KhachHang, Depends(get_current_user)],
     menu_date: date = Query(..., description="Ngày cần xem thực đơn (YYYY-MM-DD)"),
 ):
     """Xem thực đơn theo ngày."""
@@ -122,7 +124,7 @@ def get_daily_menu(
 def add_daily_menu_item(
     data: DailyMenuCreate,
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_active_admin)],
+    _: Annotated[KhachHang, Depends(get_current_active_admin)],
 ):
     """Admin: thêm món vào lịch phục vụ ngày."""
     return menu_service.add_to_daily_menu(db, data)
@@ -132,7 +134,7 @@ def add_daily_menu_item(
 def remove_daily_menu_item(
     entry_id: uuid.UUID,
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[User, Depends(get_current_active_admin)],
+    _: Annotated[KhachHang, Depends(get_current_active_admin)],
 ):
     """Admin: xóa món khỏi lịch ngày."""
     menu_service.remove_from_daily_menu(db, entry_id)

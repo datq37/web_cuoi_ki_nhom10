@@ -6,27 +6,32 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 import config
-from crud import user as user_crud
-from model.user import User
+from crud import khachhang as khachhang_crud
+from model.khachhang import KhachHang
 from schemas.auth import Token, TokenData, TokenPayload
 
-# Bcrypt hash mật khẩu
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+import bcrypt
 
+# Danh sách token jti đã thu hồi (logout) dạng stateless trong bộ nhớ
+REVOKED_JTIS = set()
 
+# Trực tiếp dùng thư viện bcrypt thay cho passlib để tránh lỗi không tương thích phiên bản trên python 3.12+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """So sánh mật khẩu plain với hash trong DB."""
-    return pwd_context.verify(plain_password, hashed_password)
+    try:
+        return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
+    except Exception:
+        return False
 
 
 def get_password_hash(password: str) -> str:
     """Mã hóa mật khẩu trước khi lưu."""
-    return pwd_context.hash(password)
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
 
 def _create_jwt(
     *,
-    subject: uuid.UUID,
+    subject: str,
     role: str,
     token_type: str,
     expires_delta: timedelta,
@@ -34,7 +39,7 @@ def _create_jwt(
 ) -> str:
     now = datetime.now(timezone.utc)
     payload: dict = {
-        "sub": str(subject),
+        "sub": subject,
         "role": role,
         "type": token_type,
         "exp": now + expires_delta,
@@ -45,21 +50,24 @@ def _create_jwt(
     return jwt.encode(payload, config.SECRET_KEY, algorithm=config.ALGORITHM)
 
 
-def create_access_token(user: User) -> str:
+def create_access_token(khachhang: KhachHang) -> str:
     """Access token — thời hạn ngắn."""
+    # Mặc định vai trò là 'Khách hàng' nếu chưa được chỉ định
+    role = khachhang.vaitro or "Khách hàng"
     return _create_jwt(
-        subject=user.id,
-        role=user.role.value,
+        subject=khachhang.makh,
+        role=role,
         token_type="access",
         expires_delta=timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES),
     )
 
 
-def create_refresh_token(user: User, jti: str) -> str:
+def create_refresh_token(khachhang: KhachHang, jti: str) -> str:
     """Refresh token — thời hạn dài, có jti để thu hồi khi logout."""
+    role = khachhang.vaitro or "Khách hàng"
     return _create_jwt(
-        subject=user.id,
-        role=user.role.value,
+        subject=khachhang.makh,
+        role=role,
         token_type="refresh",
         expires_delta=timedelta(days=config.REFRESH_TOKEN_EXPIRE_DAYS),
         jti=jti,
@@ -70,7 +78,7 @@ def decode_token(token: str) -> TokenPayload | None:
     try:
         payload = jwt.decode(token, config.SECRET_KEY, algorithms=[config.ALGORITHM])
         return TokenPayload(
-            sub=uuid.UUID(payload["sub"]),
+            sub=payload["sub"],
             role=payload["role"],
             type=payload["type"],
             jti=payload.get("jti"),
@@ -79,53 +87,49 @@ def decode_token(token: str) -> TokenPayload | None:
         return None
 
 
-def authenticate_user(db: Session, email: str, password: str) -> User | None:
-    user = user_crud.get_user_by_email(db, email)
-    if not user or not verify_password(password, user.hashed_password):
+def authenticate_user(db: Session, taikhoan: str, matkhau: str) -> KhachHang | None:
+    """Xác thực người dùng qua taikhoan và matkhau."""
+    khachhang = khachhang_crud.get_khachhang_by_taikhoan(db, taikhoan)
+    if not khachhang or not khachhang.matkhau or not verify_password(matkhau, khachhang.matkhau):
         return None
-    return user
+    return khachhang
 
 
-def issue_token_pair(db: Session, user: User) -> Token:
-    """Cấp cặp token và lưu refresh token vào DB."""
+def issue_token_pair(db: Session, khachhang: KhachHang) -> Token:
+    """Cấp cặp token (Access và Refresh token)."""
     jti = uuid.uuid4().hex
-    expires_at = datetime.now(timezone.utc) + timedelta(days=config.REFRESH_TOKEN_EXPIRE_DAYS)
-    user_crud.save_refresh_token(db, user_id=user.id, token_jti=jti, expires_at=expires_at)
     return Token(
-        access_token=create_access_token(user),
-        refresh_token=create_refresh_token(user, jti),
+        access_token=create_access_token(khachhang),
+        refresh_token=create_refresh_token(khachhang, jti),
     )
 
 
 def refresh_access_token(db: Session, refresh_token: str) -> Token | None:
-    """Rotation: thu hồi refresh cũ, cấp cặp mới."""
+    """Làm mới Access Token sử dụng Refresh Token hợp lệ."""
     payload = decode_token(refresh_token)
     if not payload or payload.type != "refresh" or not payload.jti:
         return None
 
-    stored = user_crud.get_refresh_token_by_jti(db, payload.jti)
-    if not stored or stored.revoked or stored.expires_at < datetime.now(timezone.utc):
+    # Kiểm tra xem token này đã bị thu hồi (logout) chưa
+    if payload.jti in REVOKED_JTIS:
         return None
 
-    user = user_crud.get_user_by_id(db, payload.sub)
-    if not user or not user.is_active:
+    khachhang = khachhang_crud.get_khachhang_by_makh(db, payload.sub)
+    if not khachhang:
         return None
 
-    user_crud.revoke_refresh_token(db, stored)
-    return issue_token_pair(db, user)
+    # Sau khi xác minh, cấp cặp token mới (rotation)
+    REVOKED_JTIS.add(payload.jti)
+    return issue_token_pair(db, khachhang)
 
 
 def logout(db: Session, refresh_token: str) -> bool:
-    """Thu hồi refresh token — client xóa token lưu local."""
+    """Thu hồi refresh token bằng cách thêm jti vào danh sách đen trong bộ nhớ."""
     payload = decode_token(refresh_token)
     if not payload or payload.type != "refresh" or not payload.jti:
         return False
 
-    stored = user_crud.get_refresh_token_by_jti(db, payload.jti)
-    if not stored or stored.revoked:
-        return False
-
-    user_crud.revoke_refresh_token(db, stored)
+    REVOKED_JTIS.add(payload.jti)
     return True
 
 
@@ -133,4 +137,4 @@ def get_token_data(access_token: str) -> TokenData | None:
     payload = decode_token(access_token)
     if not payload or payload.type != "access":
         return None
-    return TokenData(user_id=payload.sub, role=payload.role)
+    return TokenData(makh=payload.sub, role=payload.role)

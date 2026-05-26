@@ -15,3 +15,6 @@ class KhachHang(Base):
     taikhoan: Mapped[str | None] = mapped_column(String, nullable=True)
     matkhau: Mapped[str | None] = mapped_column(String, nullable=True)
     lichsudathang: Mapped[str | None] = mapped_column(String, nullable=True)
+    # Thêm trường vai trò để phục vụ phân quyền (Admin / Nhân viên / Khách hàng)
+    vaitro: Mapped[str | None] = mapped_column(String, nullable=True, default="Khách hàng")
+

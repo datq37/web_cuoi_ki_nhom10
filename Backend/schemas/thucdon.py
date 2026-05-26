@@ -33,3 +33,8 @@ class ThucDonResponse(ThucDonBase):
     model_config = ConfigDict(from_attributes=True)
 
     mamon: str
+
+
+class ThucDonListResponse(BaseModel):
+    items: list[ThucDonResponse]
+    total: int

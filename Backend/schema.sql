@@ -28,7 +28,8 @@ CREATE TABLE public.khachhang (
 	tuoi int4 NULL,
 	taikhoan varchar NULL,
 	matkhau varchar NULL,
-	lichsudathang varchar NULL
+	lichsudathang varchar NULL,
+	vaitro varchar NULL DEFAULT 'Khách hàng'
 );
 
 -- Permissions

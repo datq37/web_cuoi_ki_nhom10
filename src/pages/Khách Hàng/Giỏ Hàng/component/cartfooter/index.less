@@ -1,0 +1,232 @@
+.cart-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 2px 0 0;
+}
+
+.price-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 11px 13px;
+    background: linear-gradient(135deg, #fff, #fffaf0);
+    border: 1px solid #eadfbf;
+    border-radius: 14px;
+}
+
+.price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 12px;
+}
+
+.price-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #5f6673;
+}
+
+.price-value {
+    color: #111827;
+    font-weight: 750;
+
+    &.fee {
+        color: #111827;
+    }
+
+    &.discount {
+        color: #21743b;
+    }
+
+    &.warn {
+        color: #d97706;
+        font-weight: 700;
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+.voucher-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    color: #21743b;
+    background: #e9f7e8;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.voucher-row.disabled {
+    opacity: 0.75;
+}
+
+.price-divider {
+    height: 1px;
+    margin: 2px 0 1px;
+    background: repeating-linear-gradient(
+        90deg,
+        #e3dbc9 0,
+        #e3dbc9 7px,
+        transparent 7px,
+        transparent 13px
+    );
+}
+
+.total-row {
+    align-items: flex-end;
+}
+
+.total-label {
+    color: #111827;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.total-value {
+    color: #21743b;
+    font-size: 19px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.confirm-btn {
+    width: 100%;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #fff;
+    background: linear-gradient(90deg, #176f32, #1f8a42);
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 10px 20px rgba(23, 111, 50, 0.2);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0;
+    transition: transform 0.18s, filter 0.18s, box-shadow 0.18s;
+
+    &:hover:not(:disabled) {
+        filter: brightness(0.98);
+        box-shadow: 0 12px 22px rgba(23, 111, 50, 0.26);
+    }
+
+    svg {
+        width: 18px;
+        height: 18px;
+        stroke-width: 2.2;
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.98);
+    }
+
+    &.disabled,
+    &:disabled {
+        color: #8b938f;
+        background: #dfe5df;
+        box-shadow: none;
+        cursor: not-allowed;
+        transform: none;
+    }
+}
+
+.spin-icon {
+    animation: cart-spin 0.9s linear infinite;
+}
+
+@keyframes cart-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 576px) {
+    .price-breakdown {
+        padding: 11px 13px;
+    }
+
+    .price-row {
+        font-size: 12px;
+    }
+
+    .total-label {
+        font-size: 13px;
+    }
+
+    .total-value {
+        font-size: 19px;
+    }
+
+    .confirm-btn {
+        height: 46px;
+        font-size: 14px;
+    }
+}
+
+// ─── DARK MODE OVERRIDES ──────────────────────────────────────────────────────
+.main-page-container.theme-dark {
+    .price-breakdown {
+        background: var(--bg-soft);
+        border-color: var(--line);
+    }
+
+    .price-label {
+        color: var(--ink-2);
+    }
+
+    .price-value {
+        color: var(--ink);
+
+        &.fee {
+            color: var(--ink);
+        }
+
+        &.discount {
+            color: var(--accent);
+        }
+
+        &.warn {
+            color: #d97706; // Keep orange for warning
+        }
+    }
+
+    .voucher-badge {
+        color: var(--accent);
+        background: var(--accent-soft);
+    }
+
+    .price-divider {
+        background: repeating-linear-gradient(
+            90deg,
+            var(--line-strong) 0,
+            var(--line-strong) 7px,
+            transparent 7px,
+            transparent 13px
+        );
+    }
+
+    .total-label {
+        color: var(--ink);
+    }
+
+    .total-value {
+        color: var(--accent);
+    }
+
+    .confirm-btn {
+        &.disabled,
+        &:disabled {
+            color: var(--ink-4);
+            background: var(--bg-mute);
+        }
+    }
+}

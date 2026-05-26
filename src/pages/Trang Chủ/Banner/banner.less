@@ -1,0 +1,130 @@
+@primary-green: #1a5c40;
+@dark-grey: #1f1f1f;
+@text-grey: #595959;
+
+.banner-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: #f8f9fa; /* Light grey background */
+  font-family: 'Inter', 'Roboto', sans-serif;
+  height: calc(100vh - 80px); /* Full height minus Topbar */
+  min-height: 600px;
+  overflow: hidden; /* To contain the absolute right side */
+}
+
+.banner-content-left {
+  flex: 0 0 50%;
+  max-width: 600px;
+  padding: 60px 100px;
+  position: relative;
+  z-index: 2;
+}
+
+.banner-title {
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 24px;
+
+  .text-dark {
+    color: @dark-grey;
+  }
+
+  .text-green {
+    color: @primary-green;
+  }
+}
+
+.banner-description-box {
+  margin-bottom: 32px;
+}
+
+.banner-description {
+  font-size: 16px;
+  color: @text-grey;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 90%;
+}
+
+.btn-order-now {
+  background-color: @primary-green;
+  border-color: @primary-green;
+  color: white;
+  height: 48px;
+  padding: 0 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 24px; /* Pill shape */
+  box-shadow: 0 4px 14px rgba(26, 92, 64, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover, &:focus {
+    background-color: lighten(@primary-green, 10%);
+    border-color: lighten(@primary-green, 10%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26, 92, 64, 0.4);
+  }
+}
+
+.banner-content-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 55%;
+  height: 100%;
+  z-index: 1;
+  /* Đường cong từ phải xuống trái dần to dần */
+  border-top-left-radius: 60% 100%;
+  overflow: hidden;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05); /* Soft shadow on the curve */
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Add a slight scale to ensure the image covers perfectly */
+  transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .banner-container {
+    flex-direction: column;
+    height: auto;
+    min-height: auto;
+  }
+
+  .banner-content-left {
+    flex: none;
+    width: 100%;
+    padding: 60px 40px;
+    text-align: center;
+  }
+
+  .banner-description {
+    margin: 0 auto;
+  }
+
+  .banner-content-right {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    /* On mobile, curve from top to bottom */
+    border-top-left-radius: 50% 20%;
+    border-top-right-radius: 50% 20%;
+  }
+}
+
+@media (max-width: 576px) {
+  .banner-title {
+    font-size: 48px;
+  }
+  
+  .banner-content-right {
+    height: 300px;
+  }
+}

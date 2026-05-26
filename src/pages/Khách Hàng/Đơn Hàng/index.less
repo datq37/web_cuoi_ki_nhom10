@@ -1,0 +1,532 @@
+// ─── Trang Đơn Hàng — Full Layout ────────────────────────────────────────────
+
+.history-page-container {
+  width: calc(100% + 64px);
+  min-height: calc(100vh - 60px);
+  margin: -32px;
+  padding: 32px 40px;
+  box-sizing: border-box;
+  background-color: #fbfdf5;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  // ── Header ──────────────────────────────────────────────────────────────────
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #1a1a1a;
+      margin: 0 0 4px;
+      letter-spacing: -0.3px;
+    }
+
+    .page-subtitle {
+      color: #888;
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+
+  // ── Bộ lọc (seg-radio) ──────────────────────────────────────────────────────
+  .seg-radio {
+    display: inline-flex;
+    background: #edf0f2;
+    padding: 4px;
+    border-radius: 12px;
+    gap: 4px;
+
+    button {
+      border: none;
+      background: transparent;
+      padding: 9px 20px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        color: #222;
+      }
+
+      &.active {
+        background: #fff;
+        color: #2f8f4e;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+    }
+  }
+
+  // ── Danh sách đơn ───────────────────────────────────────────────────────────
+  .orders-grid {
+    display: grid;
+    gap: 18px;
+    width: 100%;
+  }
+
+  // ── Card đơn hàng ───────────────────────────────────────────────────────────
+  .order-card {
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 18px;
+    overflow: hidden;
+    transition: box-shadow 0.25s, transform 0.25s;
+    width: 100%;
+
+    &:hover {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
+      transform: translateY(-2px);
+    }
+
+    // ── Phần chính ────────────────────────────────────────────────────────────
+    .card-main {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      padding: 22px 28px;
+      gap: 28px;
+      align-items: flex-start;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    // ── Hàng meta (mã đơn, trạng thái, giờ nhận) ─────────────────────────────
+    .order-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+
+      .order-id {
+        font-family: 'JetBrains Mono', 'Courier New', monospace;
+        font-size: 13px;
+        font-weight: 700;
+        color: #999;
+        background: #f5f5f5;
+        padding: 2px 10px;
+        border-radius: 6px;
+      }
+
+      .pickup-time {
+        font-size: 12px;
+        color: #999;
+
+        strong {
+          color: #333;
+          font-weight: 700;
+        }
+      }
+    }
+
+    // ── Danh sách món ─────────────────────────────────────────────────────────
+    .order-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 18px;
+
+      .item-preview {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        color: #444;
+        padding: 6px 10px;
+        background: #fafafa;
+        border-radius: 8px;
+        border: 1px solid #f0f0f0;
+
+        .emoji {
+          font-size: 22px;
+        }
+
+        .name {
+          flex: 1;
+          font-weight: 500;
+        }
+
+        .qty {
+          color: #bbb;
+          font-family: monospace;
+          font-weight: 700;
+        }
+      }
+    }
+
+    // ── Cột bên phải: tổng tiền + phương thức thanh toán ─────────────────────
+    .card-side {
+      text-align: right;
+      min-width: 160px;
+
+      .total-label {
+        font-size: 10px;
+        font-weight: 700;
+        color: #bbb;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        margin-bottom: 6px;
+      }
+
+      .total-value {
+        font-size: 26px;
+        font-weight: 800;
+        color: #1a1a1a;
+        line-height: 1;
+
+        .unit {
+          font-size: 14px;
+          font-weight: 500;
+          color: #bbb;
+          margin-left: 2px;
+        }
+      }
+
+      .payment-method {
+        font-size: 12px;
+        color: #999;
+        margin-top: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: #f5f5f5;
+        padding: 4px 10px;
+        border-radius: 6px;
+      }
+    }
+
+    // ── Ghi chú đơn ──────────────────────────────────────────────────────────
+    .order-note {
+      padding: 12px 28px;
+      background: #fffbea;
+      border-top: 1px dashed #ffe58f;
+      font-size: 13px;
+      color: #7c6400;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    // ── Footer: nút hành động ─────────────────────────────────────────────────
+    .card-actions {
+      padding: 14px 28px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      align-items: center;
+      background: #fafafa;
+      border-top: 1px solid #f0f0f0;
+
+      .btn-rate-order {
+        border-color: #2f8f4e;
+        color: #2f8f4e;
+        font-weight: 600;
+        border-radius: 8px;
+        font-size: 13px;
+        height: 36px;
+        padding: 0 18px;
+
+        &:hover {
+          background: #dff2e4;
+          border-color: #2f8f4e;
+          color: #1f6b39;
+        }
+      }
+    }
+  }
+
+  // ── Chip trạng thái ──────────────────────────────────────────────────────────
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #f1f3f5;
+    color: #555;
+
+    &.green {
+      background: #dff2e4;
+      color: #1f6b39;
+    }
+
+    &.warn {
+      background: #fff9db;
+      color: #c47900;
+    }
+
+    &.err {
+      background: #fff0f0;
+      color: #c92a2a;
+    }
+
+    &.info {
+      background: #e8f4ff;
+      color: #1a6eb5;
+    }
+
+    .dot-status {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #adb5bd;
+
+      &.green {
+        background: #2f8f4e;
+      }
+
+      &.warn {
+        background: #f59f00;
+      }
+
+      &.err {
+        background: #fa5252;
+      }
+
+      &.info {
+        background: #228be6;
+      }
+    }
+  }
+
+  // ── Empty state ──────────────────────────────────────────────────────────────
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    color: #aaa;
+    text-align: center;
+
+    .icon-wrapper {
+      font-size: 56px;
+      color: #ddd;
+      margin-bottom: 20px;
+    }
+
+    h4 {
+      color: #555;
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    span {
+      font-size: 14px;
+      color: #aaa;
+    }
+  }
+}
+
+// ── Order Tracker ─────────────────────────────────────────────────────────────
+.tracker {
+  display: flex;
+  gap: 4px;
+  position: relative;
+  padding: 10px 0;
+}
+
+.tracker-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: #e9ecef;
+    z-index: 0;
+  }
+
+  &:last-child::before {
+    display: none;
+  }
+
+  &.done::before {
+    background: #2f8f4e;
+  }
+
+  .dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    display: grid;
+    place-items: center;
+    z-index: 2;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #adb5bd;
+    transition: all 0.3s;
+  }
+
+  &.done .dot {
+    background: #2f8f4e;
+    border-color: #2f8f4e;
+    color: white;
+  }
+
+  &.active .dot {
+    background: white;
+    border-color: #2f8f4e;
+    color: #2f8f4e;
+    box-shadow: 0 0 0 4px #dff2e4;
+  }
+
+  .label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #bbb;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  &.done .label,
+  &.active .label {
+    color: #333;
+  }
+}
+
+/* Responsive Đơn Hàng */
+@media (max-width: 768px) {
+  .history-page-container {
+    width: calc(100% + 48px);
+    margin: -24px;
+    padding: 24px;
+    
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+      
+      .page-title {
+        font-size: 22px;
+      }
+      
+      .seg-radio {
+        width: 100%;
+        display: flex;
+        
+        button {
+          flex: 1;
+          padding: 8px 0;
+          text-align: center;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .order-card {
+      .card-main {
+        grid-template-columns: 1fr; /* Một cột dọc duy nhất */
+        padding: 16px;
+        gap: 20px;
+      }
+
+      .order-meta {
+        gap: 8px;
+        margin-bottom: 12px;
+        
+        .pickup-time {
+          width: 100%;
+          margin-top: 4px;
+        }
+      }
+
+      .card-side {
+        text-align: left;
+        min-width: 100%;
+        border-top: 1px dashed var(--line, #ebebeb);
+        padding-top: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+
+        .total-label {
+          margin-bottom: 2px;
+          width: 100%; /* Đưa label lên dòng riêng biệt của cột thanh toán */
+        }
+
+        .total-value {
+          font-size: 22px;
+        }
+
+        .payment-method {
+          margin-top: 0;
+        }
+      }
+
+      .order-note {
+        padding: 10px 16px;
+        font-size: 12px;
+      }
+
+      .card-actions {
+        padding: 12px 16px;
+        
+        .ant-space {
+          width: 100%;
+          justify-content: flex-end;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .history-page-container {
+    width: calc(100% + 32px);
+    margin: -16px;
+    padding: 16px 12px;
+  }
+
+  .tracker {
+    padding: 6px 0;
+  }
+  
+  .tracker-step {
+    .dot {
+      width: 22px;
+      height: 22px;
+      font-size: 10px;
+      margin-bottom: 6px;
+    }
+    
+    &::before {
+      top: 11px;
+    }
+    
+    .label {
+      font-size: 9px;
+      letter-spacing: -0.3px;
+    }
+  }
+}
+
+@media (max-width: 380px) {
+  .history-page-container {
+    width: calc(100% + 24px);
+    margin: -12px;
+    padding: 12px;
+  }
+}

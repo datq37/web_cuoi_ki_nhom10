@@ -468,8 +468,8 @@ const NguyenLieuDetail: React.FC<{
   if (item) lastRef.current = item;
   const d = lastRef.current;
 
-  const pct        = d ? tinhPhanTram(d.tonKho, d.mucToiThieu) : 0;
-  const cfg        = d ? TRANG_THAI_CONFIG[d.trangThai] : null;
+  const pct = d ? tinhPhanTram(d.tonKho, d.mucToiThieu) : 0;
+  const cfg = d ? TRANG_THAI_CONFIG[d.trangThai] : null;
   const totalValue = d ? d.tonKho * d.giaNhap : 0;
   const canNhapBox = d && d.trangThai !== ETrangThaiNguyenLieu.DU_HANG
     ? Math.max(0, d.mucToiThieu * 2 - d.tonKho)
@@ -572,34 +572,34 @@ const NguyenLieuDetail: React.FC<{
 
 // ── KhoNguyenLieu page ────────────────────────────────────────────
 const KhoNguyenLieu: React.FC = () => {
-  const [items,           setItems]           = useState<INguyenLieu[]>(DANH_SACH_NGUYEN_LIEU);
-  const [tuKhoa,          setTuKhoa]          = useState('');
+  const [items, setItems] = useState<INguyenLieu[]>(DANH_SACH_NGUYEN_LIEU);
+  const [tuKhoa, setTuKhoa] = useState('');
   const [filterTrangThai, setFilterTrangThai] = useState<TrangThaiFilter>('all');
-  const [editing,         setEditing]         = useState<INguyenLieu | null>(null);
-  const [viewing,         setViewing]         = useState<INguyenLieu | null>(null);
-  const [formOpen,        setFormOpen]        = useState(false);
-  const [restocking,      setRestocking]      = useState<INguyenLieu | null>(null);
-  const [restockOpen,     setRestockOpen]     = useState(false);
+  const [editing, setEditing] = useState<INguyenLieu | null>(null);
+  const [viewing, setViewing] = useState<INguyenLieu | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
+  const [restocking, setRestocking] = useState<INguyenLieu | null>(null);
+  const [restockOpen, setRestockOpen] = useState(false);
   const [bulkRestockOpen, setBulkRestockOpen] = useState(false);
-  const [bulkPreSelectIds,setBulkPreSelectIds]= useState<string[]>([]);
+  const [bulkPreSelectIds, setBulkPreSelectIds] = useState<string[]>([]);
 
   // ── Dynamic stats ──────────────────────────────────────────────
   const stats = useMemo(() => {
     const tongNguyenLieu = items.length;
-    const sapHetHet      = items.filter(
+    const sapHetHet = items.filter(
       (n) => n.trangThai === ETrangThaiNguyenLieu.SAP_HET || n.trangThai === ETrangThaiNguyenLieu.HET_HANG,
     ).length;
-    const giaTri         = formatGia(items.reduce((s, n) => s + n.tonKho * n.giaNhap, 0));
-    const nhaCungCap     = new Set(items.map((n) => n.nhaCungCap)).size;
+    const giaTri = formatGia(items.reduce((s, n) => s + n.tonKho * n.giaNhap, 0));
+    const nhaCungCap = new Set(items.map((n) => n.nhaCungCap)).size;
     return { tongNguyenLieu, sapHetHet, giaTri, nhaCungCap };
   }, [items]);
 
   const statCards = useMemo(
     () => [
-      { label: 'TỔNG NGUYÊN LIỆU', value: String(stats.tongNguyenLieu), iconBg: '#dcfce7', iconColor: '#16a34a', Icon: InboxOutlined,       sub: null },
-      { label: 'SẮP HẾT / HẾT',   value: String(stats.sapHetHet),      iconBg: '#ffedd5', iconColor: '#ea580c', Icon: WarningFilled,        sub: '1 đã hết so với tuần trước', subTrend: 'down' as const },
-      { label: 'GIÁ TRỊ KHO',     value: stats.giaTri,                  iconBg: '#dcfce7', iconColor: '#16a34a', Icon: ShoppingCartOutlined, sub: null },
-      { label: 'NHÀ CUNG CẤP',    value: String(stats.nhaCungCap),      iconBg: '#dcfce7', iconColor: '#16a34a', Icon: ImportOutlined,       sub: null },
+      { label: 'TỔNG NGUYÊN LIỆU', value: String(stats.tongNguyenLieu), iconBg: '#dcfce7', iconColor: '#16a34a', Icon: InboxOutlined, sub: null },
+      { label: 'SẮP HẾT / HẾT', value: String(stats.sapHetHet), iconBg: '#ffedd5', iconColor: '#ea580c', Icon: WarningFilled, sub: '1 đã hết so với tuần trước', subTrend: 'down' as const },
+      { label: 'GIÁ TRỊ KHO', value: stats.giaTri, iconBg: '#dcfce7', iconColor: '#16a34a', Icon: ShoppingCartOutlined, sub: null },
+      { label: 'NHÀ CUNG CẤP', value: String(stats.nhaCungCap), iconBg: '#dcfce7', iconColor: '#16a34a', Icon: ImportOutlined, sub: null },
     ],
     [stats],
   );

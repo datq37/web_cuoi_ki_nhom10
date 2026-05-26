@@ -1,5 +1,7 @@
+import { keycloakClientID, keycloakAuthority } from './ip';
+
 export const oidcConfig = {
-  authority: '',
-  client_id: '',
+  authority: keycloakAuthority,
+  client_id: keycloakClientID,
   redirect_uri: window.location.origin,
 };

@@ -1,5 +1,6 @@
 import {
   DashboardOutlined,
+  HomeOutlined,
   InboxOutlined,
   LeftOutlined,
   RightOutlined,
@@ -28,6 +29,7 @@ const MENU_QUAN_LY = [
   { key: '/quan-tri/khuyen-mai',     icon: <TagOutlined />,          label: 'Khuyến mãi' },
   { key: '/quan-tri/khach-hang',     icon: <UserOutlined />,         label: 'Khách hàng' },
   { key: '/quan-tri/nhan-vien',      icon: <TeamOutlined />,         label: 'Nhân viên căng tin' },
+  { key: '/quan-tri/co-so-vat-chat', icon: <HomeOutlined />,          label: 'Cơ sở vật chất' },
 ];
 
 const MENU_KHAC = [

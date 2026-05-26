@@ -60,6 +60,10 @@ export default [
 				component: './Quản Trị/Nhân Viên Căng Tin',
 			},
 			{
+				path: '/quan-tri/co-so-vat-chat',
+				component: './Quản Trị/Cơ Sở Vật Chất',
+			},
+			{
 				path: '/quan-tri/cai-dat',
 				component: './Quản Trị/Cài Đặt',
 			},

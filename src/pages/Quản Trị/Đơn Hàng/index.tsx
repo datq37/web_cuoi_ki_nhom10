@@ -6,6 +6,7 @@
 } from '@ant-design/icons';
 import { Button, Input, Modal, message } from 'antd';
 import React, { useMemo, useState } from 'react';
+import { useNotif } from '@/context/NotifContext';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import { fmt } from '@/models/Quản Trị/Tổng Quan';
 import { mockData } from '@/services/Quản Trị/Tổng Quan';
@@ -28,6 +29,7 @@ const TABS: { key: TabKey; label: string }[] = [
 ];
 
 const DonHang: React.FC = () => {
+  const { addNotif } = useNotif();
   const [orders,       setOrders]       = useState<DonTrucTiep[]>(mockData.trucTiep.donHang);
   const [cancelledIds, setCancelledIds] = useState<Set<string>>(new Set());
   const [activeTab,    setActiveTab]    = useState<TabKey>('tat_ca');
@@ -77,7 +79,10 @@ const DonHang: React.FC = () => {
     if (newStatus === 'da_huy') {
       setCancelledIds((prev) => new Set([...prev, maDon]));
       setSelectedOrder((prev) => (prev?.maDon === maDon ? null : prev));
-      if (!silent) message.success(`Đã huỷ đơn ${maDon}`);
+      if (!silent) {
+        message.success(`Đã huỷ đơn ${maDon}`);
+        addNotif({ icon: '❌', title: `Đơn ${maDon} đã bị huỷ`, desc: 'Đơn hàng đã được huỷ bởi quản trị viên', type: 'order_cancelled' });
+      }
     } else {
       setOrders((prev) =>
         prev.map((o) => (o.maDon === maDon ? { ...o, trangThai: newStatus } : o)),
@@ -85,7 +90,16 @@ const DonHang: React.FC = () => {
       setSelectedOrder((prev) =>
         prev?.maDon === maDon ? { ...prev, trangThai: newStatus } : prev,
       );
-      if (!silent) message.success(`Đã cập nhật đơn ${maDon}`);
+      if (!silent) {
+        message.success(`Đã cập nhật đơn ${maDon}`);
+        const notifMap: Record<ETrangThaiTrucTiep, { icon: string; title: string; desc: string; type: any }> = {
+          [ETrangThaiTrucTiep.DANG_CHE_BIEN]: { icon: '🍳', title: `Đơn ${maDon} đang chế biến`, desc: 'Bếp đã nhận và bắt đầu chuẩn bị', type: 'order_cooking' },
+          [ETrangThaiTrucTiep.SAN_SANG]:      { icon: '📦', title: `Đơn ${maDon} sẵn sàng giao`, desc: 'Món ăn đã sẵn sàng, chờ giao cho khách', type: 'order_ready' },
+          [ETrangThaiTrucTiep.HOAN_THANH]:    { icon: '✅', title: `Đơn ${maDon} hoàn thành`, desc: 'Khách hàng đã nhận được đơn', type: 'order_done' },
+          [ETrangThaiTrucTiep.CHO_XAC_NHAN]: { icon: '🛒', title: `Đơn ${maDon} chờ xác nhận`, desc: 'Đơn hàng đang chờ xác nhận', type: 'order_pending' },
+        };
+        if (notifMap[newStatus]) addNotif(notifMap[newStatus]);
+      }
     }
   };
 

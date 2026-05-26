@@ -30,6 +30,7 @@ import {
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useNotif } from '@/context/NotifContext';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import {
   DANH_SACH_NGUYEN_LIEU,
@@ -439,7 +440,8 @@ const BulkRestockModal: React.FC<{
         dataSource={items}
         columns={bulkColumns}
         size="small"
-        pagination={{ pageSize: 8, showSizeChanger: false, size: 'small' }}
+        pagination={false}
+        scroll={{ y: 300 }}
         className={styles.bulkTable}
         rowSelection={{
           type: 'checkbox',
@@ -565,6 +567,7 @@ const NguyenLieuDetail: React.FC<{
 };
 
 const KhoNguyenLieu: React.FC = () => {
+  const { addNotif } = useNotif();
   const [items,           setItems]           = useState<INguyenLieu[]>(DANH_SACH_NGUYEN_LIEU);
   const [tuKhoa,          setTuKhoa]          = useState('');
   const [filterTrangThai, setFilterTrangThai] = useState<TrangThaiFilter>('all');
@@ -649,6 +652,12 @@ const KhoNguyenLieu: React.FC = () => {
       }),
     );
     message.success(`Đã nhập ${soLuongNhap} ${donVi} ${ten}`);
+    addNotif({
+      icon: '📦',
+      title: 'Đã nhập kho',
+      desc: `${ten}: +${soLuongNhap} ${donVi}`,
+      type: 'stock_refilled',
+    });
     setRestockOpen(false);
     setRestocking(null);
   };
@@ -667,6 +676,12 @@ const KhoNguyenLieu: React.FC = () => {
       }),
     );
     message.success(`Đã nhập kho ${updates.length} mặt hàng, tổng ${formatGia(totalAmount)}`);
+    addNotif({
+      icon: '📦',
+      title: 'Nhập kho hàng loạt',
+      desc: `${updates.length} mặt hàng đã được nhập kho · Tổng ${formatGia(totalAmount)}`,
+      type: 'stock_refilled',
+    });
     setBulkRestockOpen(false);
   };
 
@@ -894,6 +909,7 @@ const KhoNguyenLieu: React.FC = () => {
               pagination={false}
               className={styles.table}
               rowClassName={styles.tableRow}
+              locale={{ emptyText: 'Không tìm thấy nguyên liệu nào' }}
               onRow={(record) => ({
                 onClick: () => setViewing(record),
                 style: { cursor: 'pointer' },

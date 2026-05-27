@@ -10,23 +10,19 @@ from crud import khachhang as khachhang_crud
 from model.khachhang import KhachHang
 from schemas.auth import Token, TokenData, TokenPayload
 
-import bcrypt
 
 # Danh sách token jti đã thu hồi (logout) dạng stateless trong bộ nhớ
 REVOKED_JTIS = set()
 
-# Trực tiếp dùng thư viện bcrypt thay cho passlib để tránh lỗi không tương thích phiên bản trên python 3.12+
+# Trực tiếp so khớp và lưu trữ dưới dạng plain text theo yêu cầu
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """So sánh mật khẩu plain với hash trong DB."""
-    try:
-        return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
-    except Exception:
-        return False
+    """So sánh mật khẩu trực tiếp dưới dạng văn bản thuần."""
+    return plain_password == hashed_password
 
 
 def get_password_hash(password: str) -> str:
-    """Mã hóa mật khẩu trước khi lưu."""
-    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+    """Trả về mật khẩu gốc dạng plain text (không mã hóa)."""
+    return password
 
 
 def _create_jwt(

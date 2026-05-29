@@ -41,8 +41,8 @@ const Topbar: React.FC = () => {
               title={darkMode ? 'Chế độ sáng' : 'Chế độ tối'}
             >
               {darkMode
-                ? <BulbFilled style={{ fontSize: '20px', color: '#fbbf24' }} />
-                : <BulbOutlined style={{ fontSize: '20px', color: '#6b7280' }} />
+                ? <BulbFilled style={{ fontSize: '10px', color: '#fbbf24' }} />
+                : <BulbOutlined style={{ fontSize: '10px', color: '#6b7280' }} />
               }
             </button>
 

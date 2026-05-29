@@ -16,11 +16,13 @@ const getMessageTime = () => new Date().toLocaleTimeString('vi-VN', {
 const createMessage = (
   role: ChatMessage['role'],
   content: string,
+  image?: string,
 ): ChatMessage => ({
   id: `chat-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
   role,
   content,
   time: getMessageTime(),
+  image,
 });
 
 export default function useCustomerChatBoxModel() {
@@ -45,11 +47,11 @@ export default function useCustomerChatBoxModel() {
     setMode(nextMode);
   }, []);
 
-  const sendMessage = useCallback(async (content: string) => {
+  const sendMessage = useCallback(async (content: string, image?: string) => {
     const cleanContent = content.trim();
-    if (!cleanContent) return;
+    if (!cleanContent && !image) return;
 
-    const userMessage = createMessage('user', cleanContent);
+    const userMessage = createMessage('user', cleanContent, image);
     setMessageGroups(prev => ({
       ...prev,
       [mode]: [...prev[mode], userMessage],

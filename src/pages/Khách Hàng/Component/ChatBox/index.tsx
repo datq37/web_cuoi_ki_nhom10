@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Bot, Headphones, Send, Sparkles, X } from 'lucide-react';
+import { Bot, Headphones, Send, Sparkles, X, ImagePlus } from 'lucide-react';
 import { useModel } from 'umi';
 import robotImage from '@/assets/Khách Hàng/Chatbot/Chatbot.png';
 import { CHAT_SUGGESTIONS } from '@/services/Khách hàng/ChatBox';
@@ -19,17 +19,33 @@ const CustomerChatBox: React.FC = () => {
     sendSuggestion,
   } = useModel('Khách Hàng.ChatBox.index');
   const [messageText, setMessageText] = useState('');
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!isOpen) return;
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [isOpen, isSending, messages]);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    sendMessage(messageText);
+    if (!messageText.trim() && !selectedImage) return;
+    sendMessage(messageText, selectedImage || undefined);
     setMessageText('');
+    setSelectedImage(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const handleModeChange = (nextMode: ChatMode) => {
@@ -47,7 +63,7 @@ const CustomerChatBox: React.FC = () => {
               <img src={robotImage} alt="Chatbot" />
               <div>
                 <strong>Trợ lý căng tin</strong>
-                <span>Trò chuyện cùng mimi & liên hệ admin</span>
+                <span>Trò chuyện cùng mimi</span>
               </div>
             </div>
             <button onClick={closeChat} aria-label="Đóng chat">
@@ -55,27 +71,14 @@ const CustomerChatBox: React.FC = () => {
             </button>
           </header>
 
-          <div className="chat-mode-tabs">
-            <button
-              className={mode === 'ai' ? 'active' : ''}
-              onClick={() => handleModeChange('ai')}
-            >
-              <Sparkles size={16} />
-              Trò chuyện cùng mimi
-            </button>
-            <button
-              className={mode === 'admin' ? 'active' : ''}
-              onClick={() => handleModeChange('admin')}
-            >
-              <Headphones size={16} />
-              Admin
-            </button>
-          </div>
 
           <div className="chat-messages">
             {messages.map(message => (
               <div key={message.id} className={`chat-message ${message.role}`}>
-                <p>{message.content}</p>
+                {message.image && (
+                  <img src={message.image} alt="attachment" className="chat-image-attachment" />
+                )}
+                {message.content && <p>{message.content}</p>}
                 <span>{message.time}</span>
               </div>
             ))}
@@ -87,16 +90,26 @@ const CustomerChatBox: React.FC = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {mode === 'ai' && (
-            <div className="chat-suggestions">
-              {CHAT_SUGGESTIONS.map(suggestion => (
-                <button
-                  key={suggestion.id}
-                  onClick={() => sendSuggestion(suggestion.prompt)}
-                >
-                  {suggestion.label}
-                </button>
-              ))}
+          <div className="chat-suggestions">
+            {CHAT_SUGGESTIONS.map(suggestion => (
+              <button
+                key={suggestion.id}
+                onClick={() => sendSuggestion(suggestion.prompt)}
+              >
+                {suggestion.label}
+              </button>
+            ))}
+          </div>
+
+          {selectedImage && (
+            <div className="chat-image-preview">
+              <img src={selectedImage} alt="preview" />
+              <button type="button" onClick={() => {
+                setSelectedImage(null);
+                if (fileInputRef.current) fileInputRef.current.value = '';
+              }}>
+                <X size={14} />
+              </button>
             </div>
           )}
 
@@ -105,9 +118,9 @@ const CustomerChatBox: React.FC = () => {
               value={messageText}
               onChange={event => setMessageText(event.target.value)}
               disabled={isSending}
-              placeholder={mode === 'ai' ? 'Bạn muốn ăn món gì?' : 'Nhập nội dung cần hỗ trợ...'}
+              placeholder="Bạn muốn ăn món gì?"
             />
-            <button type="submit" aria-label="Gửi tin nhắn" disabled={isSending}>
+            <button type="submit" aria-label="Gửi tin nhắn" disabled={isSending || (!messageText.trim() && !selectedImage)}>
               <Send size={18} />
             </button>
           </form>

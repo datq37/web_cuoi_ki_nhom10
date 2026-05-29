@@ -4,7 +4,6 @@ import {
   ChevronDown,
   ClipboardList,
   Gift,
-  HelpCircle,
   Home,
   Settings,
   ShoppingCart,
@@ -105,12 +104,6 @@ const Sidebar: React.FC = () => {
       icon: <Settings size={17} />,
       active: page === 'settings',
       onClick: () => setPage('settings'),
-    },
-    {
-      id: 'help',
-      label: 'Trợ giúp',
-      icon: <HelpCircle size={17} />,
-      onClick: () => history.push('/lien-he'),
     },
   ];
 

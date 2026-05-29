@@ -5,6 +5,7 @@ export interface ChatMessage {
   role: 'bot' | 'user' | 'admin';
   content: string;
   time: string;
+  image?: string;
 }
 
 export interface ChatSuggestion {

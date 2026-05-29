@@ -104,9 +104,25 @@
     opacity: 0.5;
     color: #86efac;
   }
-  .leaf-1 { top: 96px; left: 80px; transform: rotate(-25deg); }
-  .leaf-2 { bottom: 112px; left: 48px; transform: rotate(25deg); }
-  .leaf-3 { bottom: 80px; left: 96px; transform: rotate(-10deg); color: #bef264; opacity: 0.4; }
+  .leaf-1 {
+    top: 96px;
+    left: 80px;
+    transform: rotate(-25deg);
+  }
+
+  .leaf-2 {
+    bottom: 112px;
+    left: 48px;
+    transform: rotate(25deg);
+  }
+
+  .leaf-3 {
+    bottom: 80px;
+    left: 96px;
+    color: #bef264;
+    opacity: 0.4;
+    transform: rotate(-10deg);
+  }
 
   .decor-dots {
     position: absolute;
@@ -692,6 +708,18 @@
       .green-border {
         background-color: #333;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+      }
+
+      .content {
+        .welcome-text,
+        .welcome-title {
+          color: #fff;
+          text-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+        }
+
+        .welcome-desc {
+          color: rgba(255, 255, 255, 0.92);
+        }
       }
     }
 

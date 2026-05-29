@@ -3,3 +3,8 @@ export type { DayTabsProps, WeekDay } from './DateTabs/typing';
 export type { Dish, DishCardProps } from './DishCard/typing';
 export type { DishDetailModalProps, Review } from './DishDetailModal/typing';
 export type { MenuHeroProps } from './Hero/typing';
+
+export interface EmployeeMenuProps {
+    onOpenCart: () => void;
+    ordersToday: number;
+}

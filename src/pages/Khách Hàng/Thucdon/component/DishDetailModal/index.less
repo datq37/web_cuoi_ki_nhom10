@@ -1,6 +1,6 @@
 // DishDetailModal/index.less — Modal chi tiết món ăn
 
-.ddm-backdrop {
+.nenMo {
     position: fixed;
     inset: 0;
     z-index: 1200;
@@ -17,7 +17,7 @@
     }
 }
 
-.ddm-sheet {
+.khungChiTiet {
     width: 100%;
     max-width: 560px;
     max-height: 92vh;
@@ -36,7 +36,7 @@
 }
 
 // ── Hero Section ──────────────────────────────────────────────
-.ddm-hero {
+.phanAnhBia {
     position: relative;
     height: 220px;
     background: linear-gradient(135deg, #dff2e4 0%, #b6e5c4 50%, #8fd5a8 100%);
@@ -58,7 +58,7 @@
     }
 }
 
-.ddm-hero-emoji {
+.bieuTuongAnhBia {
     font-size: 110px;
     line-height: 1;
     filter: drop-shadow(0 8px 24px rgba(0,0,0,0.15));
@@ -70,7 +70,7 @@
     }
 }
 
-.ddm-hero-tags {
+.theNhanAnhBia {
     position: absolute;
     top: 14px;
     left: 14px;
@@ -78,7 +78,7 @@
     gap: 6px;
 }
 
-.ddm-tag {
+.nhanChiTiet {
     padding: 4px 10px;
     border-radius: 999px;
     font-size: 10px;
@@ -89,7 +89,7 @@
     &.new { background: #7c3aed; }
 }
 
-.ddm-close {
+.nutDongChiTiet {
     position: absolute;
     top: 14px;
     right: 14px;
@@ -110,7 +110,7 @@
 }
 
 // ── Scrollable Body ───────────────────────────────────────────
-.ddm-body {
+.phanThanChiTiet {
     flex: 1;
     overflow-y: auto;
     padding: 20px 20px 8px;
@@ -119,7 +119,7 @@
     &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
 }
 
-.ddm-title-row {
+.hangTieuDe {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -127,7 +127,7 @@
     margin-bottom: 10px;
 }
 
-.ddm-name {
+.tenMonChiTiet {
     margin: 0;
     font-size: 20px;
     font-weight: 800;
@@ -136,7 +136,7 @@
     flex: 1;
 }
 
-.ddm-rating-badge {
+.nhanDanhGia {
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -150,7 +150,7 @@
     flex-shrink: 0;
 }
 
-.ddm-meta {
+.thongTinChiTiet {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -169,38 +169,38 @@
     }
 }
 
-.ddm-desc {
+.moTaChiTiet {
     font-size: 14px;
     color: #4d5046;
     line-height: 1.6;
     margin: 0 0 18px;
 }
 
-.ddm-ingredients {
+.thanhPhan {
     margin-bottom: 18px;
 }
 
-.ddm-section-label {
+.nhanPhanChiTiet {
     display: block;
     font-size: 13px;
     font-weight: 700;
     color: #1f211c;
     margin-bottom: 10px;
 
-    .ddm-review-count {
+    .soLuongDanhGia {
         font-weight: 400;
         color: #999b91;
         margin-left: 4px;
     }
 }
 
-.ddm-ing-chips {
+.cacNhanThanhPhan {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
 }
 
-.ddm-ing-chip {
+.nhanThanhPhan {
     padding: 4px 12px;
     background: #dff2e4;
     color: #1f6b39;
@@ -209,25 +209,25 @@
     font-weight: 600;
 }
 
-.ddm-divider {
+.duongChiaChiTiet {
     height: 1px;
     background: #f0f0ee;
     margin: 4px 0 18px;
 }
 
 // ── Reviews ───────────────────────────────────────────────────
-.ddm-reviews {
+.phanDanhGia {
     padding-bottom: 8px;
 }
 
-.ddm-no-review {
+.khongCoDanhGia {
     font-size: 13px;
     color: #999b91;
     text-align: center;
     padding: 16px 0;
 }
 
-.ddm-review-item {
+.mucDanhGia {
     display: flex;
     gap: 12px;
     margin-bottom: 18px;
@@ -235,7 +235,7 @@
     &:last-child { margin-bottom: 0; }
 }
 
-.ddm-review-avatar {
+.anhDaiDienDanhGia {
     font-size: 28px;
     width: 40px;
     height: 40px;
@@ -247,35 +247,35 @@
     border: 2px solid #dff2e4;
 }
 
-.ddm-review-content {
+.noiDungDanhGia {
     flex: 1;
 }
 
-.ddm-review-header {
+.phanDauDanhGia {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 4px;
 }
 
-.ddm-review-author {
+.tacGiaDanhGia {
     font-size: 13px;
     font-weight: 700;
     color: #1f211c;
 }
 
-.ddm-review-date {
+.ngayDanhGia {
     font-size: 11px;
     color: #999b91;
 }
 
-.ddm-review-stars {
+.saoDanhGia {
     display: flex;
     gap: 2px;
     margin-bottom: 6px;
 }
 
-.ddm-review-comment {
+.binhLuanDanhGia {
     font-size: 13px;
     color: #4d5046;
     line-height: 1.5;
@@ -287,7 +287,7 @@
 }
 
 // ── Sticky Footer ─────────────────────────────────────────────
-.ddm-footer {
+.phanChanChiTiet {
     padding: 16px 20px;
     background: #fff;
     border-top: 1px solid #f0f0ee;
@@ -299,25 +299,25 @@
     box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
 }
 
-.ddm-price-block {
+.khoiGia {
     display: flex;
     align-items: baseline;
     gap: 2px;
 }
 
-.ddm-price {
+.giaChiTiet {
     font-size: 24px;
     font-weight: 800;
     color: #1f211c;
 }
 
-.ddm-currency {
+.donViChiTiet {
     font-size: 13px;
     color: #777a6f;
     margin-left: 2px;
 }
 
-.ddm-btn-add {
+.nutThemChiTiet {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -342,7 +342,7 @@
     }
 }
 
-.ddm-qty-control {
+.dieuKhienSoLuong {
     display: flex;
     align-items: center;
     gap: 14px;
@@ -381,56 +381,56 @@
 
 /* DARK MODE OVERRIDES */
 [data-theme='dark'] {
-    .ddm-sheet {
+    .khungChiTiet {
         background: var(--bg-main, #141414);
         box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.6);
     }
 
-    .ddm-hero {
+    .phanAnhBia {
         background: linear-gradient(135deg, rgba(47, 143, 78, 0.3) 0%, rgba(47, 143, 78, 0.15) 100%);
     }
 
-    .ddm-close {
+    .nutDongChiTiet {
         background: rgba(0, 0, 0, 0.4);
         color: var(--ink);
         &:hover { background: rgba(0, 0, 0, 0.7); }
     }
 
-    .ddm-name { color: var(--ink); }
+    .tenMonChiTiet { color: var(--ink); }
     
     .ddm-meta span {
         background: var(--bg-elev);
         color: var(--ink-3);
     }
 
-    .ddm-desc { color: var(--ink-2); }
+    .moTaChiTiet { color: var(--ink-2); }
 
-    .ddm-section-label { color: var(--ink); }
+    .nhanPhanChiTiet { color: var(--ink); }
 
-    .ddm-divider { background: var(--line); }
+    .duongChiaChiTiet { background: var(--line); }
 
-    .ddm-review-avatar {
+    .anhDaiDienDanhGia {
         background: var(--bg-elev);
         border-color: var(--line);
     }
 
-    .ddm-review-author { color: var(--ink); }
+    .tacGiaDanhGia { color: var(--ink); }
 
-    .ddm-review-comment {
+    .binhLuanDanhGia {
         background: var(--bg-elev);
         color: var(--ink-2);
         border-left-color: var(--accent);
     }
 
-    .ddm-footer {
+    .phanChanChiTiet {
         background: var(--bg-elev);
         border-top-color: var(--line);
         box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
     }
 
-    .ddm-price { color: var(--ink); }
+    .giaChiTiet { color: var(--ink); }
     
-    .ddm-qty-control {
+    .dieuKhienSoLuong {
         background: var(--bg-soft);
         color: var(--accent);
         

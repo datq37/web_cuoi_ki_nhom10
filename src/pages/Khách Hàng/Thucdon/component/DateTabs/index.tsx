@@ -5,11 +5,11 @@ const DayTabs: React.FC<DayTabsProps> = ({ selected, onSelect }) => {
     const { days } = useModel('Khách Hàng.Thực đơn.index');
 
     return (
-        <div className="day-tabs">
+        <div className="thanhChonNgay">
             {days.map((d, i) => (
                 <button
                     key={i}
-                    className={`day-tab ${selected === i ? 'active' : ''} ${d.isToday ? 'today' : ''} ${d.isPast ? 'past' : ''}`}
+                    className={`theNgay ${selected === i ? 'dangChon' : ''} ${d.isToday ? 'homNay' : ''} ${d.isPast ? 'quaKhu' : ''}`}
                     disabled={d.isPast}
                     aria-disabled={d.isPast}
                     title={d.isPast ? 'Ngày đã qua' : undefined}
@@ -17,8 +17,8 @@ const DayTabs: React.FC<DayTabsProps> = ({ selected, onSelect }) => {
                         if (!d.isPast) onSelect(i);
                     }}
                 >
-                    <span className="day-name">{d.name}</span>
-                    <span className="day-num">{d.num}/{d.month}</span>
+                    <span className="tenNgay">{d.name}</span>
+                    <span className="soNgay">{d.num}/{d.month}</span>
                 </button>
             ))}
         </div>

@@ -28,88 +28,88 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
     };
 
     return (
-        <div className="ddm-backdrop" onClick={handleBackdrop}>
-            <div className="ddm-sheet">
-                <div className="ddm-hero">
+        <div className="nenMo" onClick={handleBackdrop}>
+            <div className="khungChiTiet">
+                <div className="phanAnhBia">
                     {dish.hinhAnh ? (
                         <img src={dish.hinhAnh} alt={dish.name} style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} />
                     ) : (
-                        <div className="ddm-hero-emoji">{dish.emoji}</div>
+                        <div className="bieuTuongAnhBia">{dish.emoji}</div>
                     )}
-                    <div className="ddm-hero-tags">
+                    <div className="theNhanAnhBia">
                         {dish.tags.map((t) => (
-                            <span key={t} className={`ddm-tag ${t}`}>{t.toUpperCase()}</span>
+                            <span key={t} className={`nhanChiTiet ${t}`}>{t.toUpperCase()}</span>
                         ))}
                     </div>
-                    <button className="ddm-close" onClick={onClose} style={{ zIndex: 10 }}>
+                    <button className="nutDongChiTiet" onClick={onClose} style={{ zIndex: 10 }}>
                         <CloseOutlined />
                     </button>
                 </div>
-                <div className="ddm-body">
-                    <div className="ddm-title-row">
-                        <h2 className="ddm-name">{dish.name}</h2>
-                        <span className="ddm-rating-badge">
+                <div className="phanThanChiTiet">
+                    <div className="hangTieuDe">
+                        <h2 className="tenMonChiTiet">{dish.name}</h2>
+                        <span className="nhanDanhGia">
                             <StarFilled /> {dish.rating.toFixed(1)}
                         </span>
                     </div>
 
-                    <div className="ddm-meta">
+                    <div className="thongTinChiTiet">
                         <span><ClockCircleOutlined /> {dish.prep} phút</span>
                         <span><ThunderboltOutlined /> {dish.kcal} kcal</span>
                         <span><FireOutlined /> {dish.sold} đã bán</span>
                     </div>
-                    <p className="ddm-desc">{dish.desc}</p>
-                    <div className="ddm-ingredients">
-                        <span className="ddm-section-label">Nguyên liệu</span>
-                        <div className="ddm-ing-chips">
+                    <p className="moTaChiTiet">{dish.desc}</p>
+                    <div className="thanhPhan">
+                        <span className="nhanPhanChiTiet">Nguyên liệu</span>
+                        <div className="cacNhanThanhPhan">
                             {dish.ingredients.map((ing) => (
-                                <span key={ing} className="ddm-ing-chip">{ing}</span>
+                                <span key={ing} className="nhanThanhPhan">{ing}</span>
                             ))}
                         </div>
                     </div>
-                    <div className="ddm-divider" />
-                    <div className="ddm-reviews">
-                        <span className="ddm-section-label">
+                    <div className="duongChiaChiTiet" />
+                    <div className="phanDanhGia">
+                        <span className="nhanPhanChiTiet">
                             Bình luận
-                            <span className="ddm-review-count">({reviews.length})</span>
+                            <span className="soLuongDanhGia">({reviews.length})</span>
                         </span>
 
                         {reviews.length === 0 ? (
-                            <p className="ddm-no-review">Chưa có đánh giá nào. Hãy là người đầu tiên!</p>
+                            <p className="khongCoDanhGia">Chưa có đánh giá nào. Hãy là người đầu tiên!</p>
                         ) : (
                             reviews.map((r) => (
-                                <div key={r.id} className="ddm-review-item">
-                                    <div className="ddm-review-avatar">{r.avatar}</div>
-                                    <div className="ddm-review-content">
-                                        <div className="ddm-review-header">
-                                            <span className="ddm-review-author">{r.author}</span>
-                                            <span className="ddm-review-date">{r.date}</span>
+                                <div key={r.id} className="mucDanhGia">
+                                    <div className="anhDaiDienDanhGia">{r.avatar}</div>
+                                    <div className="noiDungDanhGia">
+                                        <div className="phanDauDanhGia">
+                                            <span className="tacGiaDanhGia">{r.author}</span>
+                                            <span className="ngayDanhGia">{r.date}</span>
                                         </div>
-                                        <div className="ddm-review-stars">{renderStars(r.rating)}</div>
-                                        <p className="ddm-review-comment">{r.comment}</p>
+                                        <div className="saoDanhGia">{renderStars(r.rating)}</div>
+                                        <p className="binhLuanDanhGia">{r.comment}</p>
                                     </div>
                                 </div>
                             ))
                         )}
                     </div>
                 </div>
-                <div className="ddm-footer">
-                    <div className="ddm-price-block">
-                        <span className="ddm-price">{dish.price.toLocaleString('vi-VN')}</span>
-                        <span className="ddm-currency">đ</span>
+                <div className="phanChanChiTiet">
+                    <div className="khoiGia">
+                        <span className="giaChiTiet">{dish.price.toLocaleString('vi-VN')}</span>
+                        <span className="donViChiTiet">đ</span>
                     </div>
 
                     {isFuture ? (
-                        <button className="ddm-btn-add disabled" disabled style={{ background: '#f5f5f5', color: '#999', cursor: 'not-allowed', border: '1px solid #e9ecef', boxShadow: 'none' }}>
+                        <button className="nutThemChiTiet disabled" disabled style={{ background: '#f5f5f5', color: '#999', cursor: 'not-allowed', border: '1px solid #e9ecef', boxShadow: 'none' }}>
                             Chưa mở bán
                         </button>
                     ) : qty === 0 ? (
-                        <button className="ddm-btn-add" onClick={onAdd}>
+                        <button className="nutThemChiTiet" onClick={onAdd}>
                             <ShoppingCartOutlined />
                             Thêm vào giỏ
                         </button>
                     ) : (
-                        <div className="ddm-qty-control">
+                        <div className="dieuKhienSoLuong">
                             <button onClick={onDec}><MinusOutlined /></button>
                             <span>{qty}</span>
                             <button onClick={onInc}><PlusOutlined /></button>

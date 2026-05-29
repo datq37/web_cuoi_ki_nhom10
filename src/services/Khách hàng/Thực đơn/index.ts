@@ -8,6 +8,7 @@ export type {
   DishCardProps,
   DishDetailModalProps,
   MenuHeroProps,
+  EmployeeMenuProps,
   Review,
   WeekDay,
 } from './typing';

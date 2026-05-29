@@ -10,10 +10,7 @@ import menuBackground from '@/assets/Khách Hàng/Thực đơn/Backgroud.png';
 import { getPageBackground } from '../themeBackground';
 import './index.less';
 
-interface EmployeeMenuProps {
-    onOpenCart: () => void;
-    ordersToday: number;
-}
+import { EmployeeMenuProps } from '@/services/Khách hàng/Thực đơn';
 
 const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) => {
     const {
@@ -37,17 +34,17 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
 
     return (
         <div
-            className="employee-menu-container"
+            className="khungThucDonNhanVien"
             style={{ backgroundImage: getPageBackground(menuBackground, theme) }}
         >
 
-            <div className="page-header">
+            <div className="phanDauTrang">
                 <div>
-                    <h1 className="page-title">Thực đơn hôm nay</h1>
-                    <p className="page-subtitle">Chọn món, đặt trước - không cần xếp hàng.</p>
+                    <h1 className="tieuDeTrang">Thực đơn hôm nay</h1>
+                    <p className="tieuDePhuTrang">Chọn món, đặt trước - không cần xếp hàng.</p>
                 </div>
-                <div className="preorder-card">
-                    <div className="preorder-icon">
+                <div className="theDatTruoc">
+                    <div className="bieuTuongDatTruoc">
                         <CheckCircle2 size={24} />
                     </div>
                     <div>
@@ -57,11 +54,11 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
                 </div>
             </div>
             <MenuHero orders={ordersToday} totalDishes={filteredMenu.length} />
-            <div className="schedule-row">
+            <div className="hangLichTrinh">
                 <DayTabs selected={day} onSelect={setDay} />
             </div>
             <CategoryBar />
-            <div className="menu-grid">
+            <div className="luoiThucDon">
                 {filteredMenu.map((d: any) => (
                     <DishCard
                         key={d.id}

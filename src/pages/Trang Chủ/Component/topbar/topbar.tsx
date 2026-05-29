@@ -6,15 +6,12 @@ import {
   ShieldCheck,
   Clock3,
   ShoppingCart,
-  Users,
-  Utensils,
-  Building2,
   Menu,
-  Star,
   X,
 } from 'lucide-react';
 import { BulbOutlined, BulbFilled } from '@ant-design/icons';
 import './topbar.less';
+import bannerImage from '@/assets/trangchu/banner.png';
 
 const Topbar: React.FC = () => {
   const { theme, toggleTheme } = useModel('Khách Hàng.global');
@@ -122,7 +119,10 @@ const Topbar: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <main className={`landing-hero ${darkMode ? 'dark' : ''}`}>
+      <main
+        className={`landing-hero ${darkMode ? 'dark' : ''}`}
+        style={{ '--hero-mobile-image': `url(${bannerImage})` } as React.CSSProperties}
+      >
         {/* Background blobs */}
         <div className="hero-blob hero-blob-left" />
         <div className="hero-blob hero-blob-center" />
@@ -183,7 +183,7 @@ const Topbar: React.FC = () => {
           <div className="hero-right">
             <div className="hero-img-wrap">
               <img
-                src={require('@/assets/trangchu/banner.png')}
+                src={bannerImage}
                 alt="Ẩm thực căng tin"
                 className="hero-img"
                 draggable={false}
@@ -206,20 +206,6 @@ function MiniFeature({ icon, title, desc, darkMode }: { icon: React.ReactNode, t
       <div>
         <p className={`mini-feature-title ${darkMode ? 'dark' : ''}`}>{title}</p>
         <p className={`mini-feature-desc ${darkMode ? 'dark' : ''}`}>{desc}</p>
-      </div>
-    </div>
-  );
-}
-
-function StatItem({ icon, value, label, darkMode }: { icon: React.ReactNode, value: string, label: string, darkMode: boolean }) {
-  return (
-    <div className="stat-item">
-      <div className={`stat-icon-wrap ${darkMode ? 'dark' : ''}`}>
-        {icon}
-      </div>
-      <div>
-        <p className="stat-value">{value}</p>
-        <p className={`stat-label ${darkMode ? 'dark' : ''}`}>{label}</p>
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
-.payment-section {
+.phanThanhToan {
     display: flex;
     flex-direction: column;
     gap: 7px;
 }
 
-.section-label {
+.nhanPhan {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -22,13 +22,13 @@
     }
 }
 
-.payment-options {
+.tuyChonThanhToan {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
 }
 
-.pay-opt {
+.tuyChonTra {
     position: relative;
     height: 58px;
     display: flex;
@@ -43,7 +43,7 @@
     cursor: pointer;
     transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
 
-    .pay-icon {
+    .bieuTuongTra {
         display: grid;
         place-items: center;
         color: #4b5563;
@@ -56,30 +56,30 @@
         }
     }
 
-    .pay-label {
+    .nhanTra {
         color: #1f2937;
         font-size: 12px;
         font-weight: 750;
     }
 
-    &:hover:not(.active) {
+    &:hover:not(.hoatDong) {
         border-color: #71ad77;
         background: #fbfffb;
     }
 
-    &.active {
+    &.hoatDong {
         color: #21743b;
         background: #f3fbf2;
         border: 2px solid #21743b;
         box-shadow: 0 8px 20px rgba(33, 116, 59, 0.08);
 
-        .pay-icon {
+        .bieuTuongTra {
             color: #21743b;
         }
     }
 }
 
-.pay-check {
+.dauTichTra {
     position: absolute;
     top: 7px;
     right: 7px;
@@ -99,54 +99,54 @@
 }
 
 @media (max-width: 576px) {
-    .section-label {
+    .nhanPhan {
         font-size: 14px;
     }
 
-    .payment-options {
+    .tuyChonThanhToan {
         gap: 8px;
     }
 
-    .pay-opt {
+    .tuyChonTra {
         height: 58px;
     }
 
-    .pay-opt .pay-label {
+    .tuyChonTra .nhanTra {
         font-size: 12px;
     }
 }
 
 // ─── DARK MODE OVERRIDES ──────────────────────────────────────────────────────
 .main-page-container.theme-dark {
-    .section-label {
+    .nhanPhan {
         color: var(--ink);
     }
 
-    .pay-opt {
+    .tuyChonTra {
         background: var(--bg-elev);
         border-color: var(--line);
         color: var(--ink);
 
-        .pay-icon {
+        .bieuTuongTra {
             color: var(--ink-3);
         }
 
-        .pay-label {
+        .nhanTra {
             color: var(--ink);
         }
 
-        &:hover:not(.active) {
+        &:hover:not(.hoatDong) {
             border-color: var(--accent);
             background: var(--bg-soft);
         }
 
-        &.active {
+        &.hoatDong {
             color: var(--accent);
             background: var(--accent-soft);
             border-color: var(--accent);
             box-shadow: none;
 
-            .pay-icon {
+            .bieuTuongTra {
                 color: var(--accent);
             }
         }

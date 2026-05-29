@@ -1,10 +1,10 @@
-.cart-items-list {
+.danhSachMonGioHang {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.cart-item {
+.monGioHang {
     display: grid;
     grid-template-columns: 68px minmax(0, 1fr) auto;
     align-items: center;
@@ -17,7 +17,7 @@
     box-shadow: 0 6px 16px rgba(31, 41, 55, 0.04);
 }
 
-.cart-item-thumb {
+.anhNhoMonGioHang {
     width: 68px;
     height: 62px;
     object-fit: cover;
@@ -25,10 +25,10 @@
     background: #f4f7f2;
 }
 
-.cart-item-info {
+.thongTinMonGioHang {
     min-width: 0;
 
-    .info-name {
+    .tenThongTin {
         margin: 0;
         color: #141820;
         font-size: 13px;
@@ -36,7 +36,7 @@
         line-height: 1.18;
     }
 
-    .info-price {
+    .giaThongTin {
         margin: 6px 0 0;
         color: #21743b;
         font-size: 16px;
@@ -44,7 +44,7 @@
         line-height: 1;
     }
 
-    .info-meta {
+    .sieuThongTin {
         display: flex;
         align-items: center;
         gap: 5px;
@@ -62,7 +62,7 @@
     }
 }
 
-.cart-item-qty {
+.soLuongMonGioHang {
     height: 34px;
     display: inline-flex;
     align-items: center;
@@ -71,15 +71,15 @@
     border-radius: 16px;
     background: #fbfffa;
 
-    .qty-btn,
-    .qty-num {
+    .nutSoLuong,
+    .soLuong {
         width: 31px;
         height: 100%;
         display: grid;
         place-items: center;
     }
 
-    .qty-btn {
+    .nutSoLuong {
         border: none;
         background: transparent;
         color: #1f2937;
@@ -97,7 +97,7 @@
         }
     }
 
-    .qty-num {
+    .soLuong {
         border-right: 1px solid #d6e6d7;
         border-left: 1px solid #d6e6d7;
         color: #111827;
@@ -107,15 +107,15 @@
     }
 }
 
-.cart-empty {
+.gioHangTrong {
     min-height: 200px;
     display: grid;
     place-items: center;
-    text-align: center;
+    vanBan-align: center;
     color: #6b7280;
     font-size: 12px;
 
-    .cart-empty-icon {
+    .bieuTuongGioHangTrong {
         width: 62px;
         height: 62px;
         display: grid;
@@ -126,55 +126,55 @@
         border-radius: 50%;
     }
 
-    .cart-empty-title {
+    .tieuDeGioHangTrong {
         margin-bottom: 5px;
         color: #111827;
         font-size: 15px;
         font-weight: 900;
     }
 
-    .cart-empty-sub {
+    .phuDeGioHangTrong {
         color: #6b7280;
         font-size: 12px;
     }
 }
 
 @media (max-width: 576px) {
-    .cart-item {
+    .monGioHang {
         grid-template-columns: 64px minmax(0, 1fr) auto;
         gap: 8px;
         padding: 8px;
     }
 
-    .cart-item-thumb {
+    .anhNhoMonGioHang {
         width: 64px;
         height: 58px;
     }
 
-    .cart-item-info .info-name {
+    .thongTinMonGioHang .tenThongTin {
         font-size: 13px;
     }
 
-    .cart-item-info .info-price {
+    .thongTinMonGioHang .giaThongTin {
         font-size: 16px;
     }
 
-    .cart-item-info .info-meta {
+    .thongTinMonGioHang .sieuThongTin {
         font-size: 10px;
     }
 
-    .cart-item-qty {
+    .soLuongMonGioHang {
         grid-column: auto;
         justify-self: start;
         height: 32px;
         margin-top: 0;
 
-        .qty-btn,
-        .qty-num {
+        .nutSoLuong,
+        .soLuong {
             width: 29px;
         }
 
-        .qty-num {
+        .soLuong {
             font-size: 13px;
         }
     }
@@ -182,57 +182,57 @@
 
 // ─── DARK MODE OVERRIDES ──────────────────────────────────────────────────────
 .main-page-container.theme-dark {
-    .cart-item {
+    .monGioHang {
         background: var(--bg-elev);
         border-color: var(--line);
         box-shadow: none;
     }
 
-    .cart-item-thumb {
+    .anhNhoMonGioHang {
         background: var(--bg-soft);
     }
 
-    .cart-item-info {
-        .info-name {
+    .thongTinMonGioHang {
+        .tenThongTin {
             color: var(--ink);
         }
-        .info-price {
+        .giaThongTin {
             color: var(--accent);
         }
-        .info-meta {
+        .sieuThongTin {
             color: var(--ink-3);
         }
     }
 
-    .cart-item-qty {
+    .soLuongMonGioHang {
         background: var(--bg-soft);
         border-color: var(--line);
 
-        .qty-btn {
+        .nutSoLuong {
             color: var(--ink-2);
             &:hover {
                 background: var(--bg-elev);
                 color: var(--ink);
             }
         }
-        .qty-num {
+        .soLuong {
             color: var(--ink);
             border-left-color: var(--line);
             border-right-color: var(--line);
         }
     }
 
-    .cart-empty {
+    .gioHangTrong {
         color: var(--ink-3);
 
-        .cart-empty-icon {
+        .bieuTuongGioHangTrong {
             background: var(--bg-soft);
             color: var(--accent);
         }
-        .cart-empty-title {
+        .tieuDeGioHangTrong {
             color: var(--ink);
         }
-        .cart-empty-sub {
+        .phuDeGioHangTrong {
             color: var(--ink-3);
         }
     }

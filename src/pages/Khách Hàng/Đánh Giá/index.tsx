@@ -4,74 +4,22 @@ import {
     StarFilled,
     CameraFilled
 } from '@ant-design/icons';
-import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
-import { useModel } from 'umi';
-import { message } from 'antd';
 import './index.less';
 
-interface RatingPageProps {
-    order?: any;
-    onClose: () => void;
-}
+import type { RatingPageProps } from '@/services/Khách hàng/Đánh giá/typing';
+import useDanhGiaModel from '@/models/Khách Hàng/Đánh giá';
 
 const RatingPage: React.FC<RatingPageProps> = ({ order, onClose }) => {
-    const { currentUser } = useModel('Khách Hàng.user');
-    const { addReview } = useModel('Khách Hàng.Thực đơn.index');
-    const { markAsReviewed } = useModel('Khách Hàng.Orders');
-    const [rating, setRating] = useState(0);
-    const [comment, setComment] = useState('');
-    const [images, setImages] = useState<string[]>([]);
+    const {
+        rating, setRating,
+        comment, setComment,
+        images,
+        handleImageChange, handleRemoveImage,
+        handleSubmit, handleBackdropClick,
+        dishDetails, dishNames
+    } = useDanhGiaModel(order, onClose);
+
     const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(e.target.files || []);
-        files.forEach((file) => {
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                if (ev.target?.result) {
-                    setImages((prev) => [...prev, ev.target!.result as string]);
-                }
-            };
-            reader.readAsDataURL(file);
-        });
-        e.target.value = '';
-    };
-
-    const handleRemoveImage = (idx: number) => {
-        setImages((prev) => prev.filter((_, i) => i !== idx));
-    };
-    const firstItem = order?.items?.[0];
-    const dishDetails = SEED_MENU.find(d => d.id === firstItem?.id);
-    const dishNames = order?.items?.map((it: any) => it.name).join(' + ');
-
-    const handleSubmit = () => {
-        if (rating === 0) return;
-        
-        // Thêm đánh giá động cho từng món ăn có trong đơn hàng
-        if (order?.items) {
-            order.items.forEach((item: any) => {
-                addReview({
-                    dishId: item.id,
-                    author: currentUser?.name || 'Khách hàng',
-                    avatar: '😋', // Emoji ăn ngon siêu dễ thương làm avatar đại diện
-                    rating: rating,
-                    comment: comment.trim() || 'Món ăn ngon, đóng gói rất cẩn thận và sạch sẽ!',
-                });
-            });
-        }
-        
-        if (order?.id) {
-            markAsReviewed(order.id);
-        }
-        message.success("Cảm ơn bạn đã gửi đánh giá món ăn!");
-        onClose();
-    };
-
-    const handleBackdropClick = (e: React.MouseEvent) => {
-        if (e.target === e.currentTarget) {
-            onClose();
-        }
-    };
 
     return (
         <div className="rating-modal-wrapper" onClick={handleBackdropClick}>

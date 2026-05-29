@@ -16,7 +16,8 @@ import {
 } from 'lucide-react';
 import { Modal } from 'antd';
 import { useModel } from 'umi';
-import type { CartOptionProps } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
+import type { CartOptionProps, Voucher } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
+import { VoucherLoai, VoucherTheme } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
 import { useCartOptionModel } from '@/models/Khách Hàng/Giỏ hàng/cartoption';
 import voucherBanner from '@/assets/Khách Hàng/Vourcher/bannervourcher.png';
 import './index.less';
@@ -54,83 +55,83 @@ const CartOption: React.FC<CartOptionProps> = ({
     );
 
     return (
-        <div className="cart-options-container">
+        <div className="thungChuaTuyChonGioHang">
             {/* 1. Giờ nhận món — chỉ đọc, do hệ thống tính */}
-            <div className="option-section">
-                <div className="section-header">
+            <div className="phanTuyChon">
+                <div className="tieuDePhan">
                     <Clock3 size={25} />
                     <span>Giờ nhận món (dự kiến)</span>
                 </div>
-                <div className="pickup-time-display">
-                    <div className="pickup-time-value">
-                        <div className="pickup-icon-wrap">
-                            <Zap size={36} className="pickup-icon" fill="currentColor" />
+                <div className="hienThiThoiGianLay">
+                    <div className="giaTriThoiGianLay">
+                        <div className="bocBieuTuongLay">
+                            <Zap size={36} className="bieuTuongLay" fill="currentColor" />
                         </div>
-                        <span className="pickup-hhmm">{pickup.timeStr}</span>
+                        <span className="gioPhutLay">{pickup.timeStr}</span>
                     </div>
                     {pickup.prepMin > 0 && (
-                        <span className="pickup-note">
+                        <span className="ghiChuLay">
                             Khoảng {pickup.prepMin} phút kể từ lúc đặt
                         </span>
                     )}
-                    <div className="pickup-leaf" aria-hidden="true">❧</div>
+                    <div className="laLay" aria-hidden="true">❧</div>
                 </div>
             </div>
 
             {/* 2. Voucher */}
-            <div className="option-section">
-                <div className="section-header">
+            <div className="phanTuyChon">
+                <div className="tieuDePhan">
                     <Tag size={25} />
                     <span>Voucher giảm giá</span>
                 </div>
                 <div
-                    className={`voucher-selector ${selectedVoucher ? 'has-value' : ''}`}
+                    className={`boChonPhieuGiamGia ${selectedVoucher ? 'coGiaTri' : ''}`}
                     onClick={() => setIsVoucherModalOpen(true)}
                 >
                     {cart.length === 0 ? (
-                        <div className="placeholder">
+                        <div className="giuCho">
                             <TicketPercent size={34} />
                             <span>Chọn Voucher</span>
                         </div>
                     ) : selectedVoucher ? (
-                        <div className="selected-info">
-                            <CheckCircle size={28} className="success-icon" />
-                            <div className="text">
+                        <div className="thongTinDaChon">
+                            <CheckCircle size={28} className="bieuTuongThanhCong" />
+                            <div className="vanBan">
                                 <strong>{selectedVoucher.code}</strong>
                                 <span>
-                                    {selectedVoucher.loai === 'phan_tram'
-                                        ? `- Giảm ${selectedVoucher.discount}% đơn hàng`
-                                        : selectedVoucher.loai === 'mien_ship'
+                                    {selectedVoucher.loai === VoucherLoai.PhanTram
+                                        ? `- Giảm ${selectedVoucher.giamGia}% đơn hàng`
+                                        : selectedVoucher.loai === VoucherLoai.MienShip
                                         ? '- Miễn phí phục vụ'
-                                        : `- Đã áp dụng giảm ${selectedVoucher.discount.toLocaleString()}đ`}
+                                        : `- Đã áp dụng giảm ${selectedVoucher.giamGia.toLocaleString()}đ`}
                                 </span>
                             </div>
                         </div>
                     ) : (
-                        <div className="placeholder">
+                        <div className="giuCho">
                             <TicketPercent size={34} />
                             <span>Chọn Voucher</span>
                         </div>
                     )}
-                    <ChevronRight size={28} className="arrow" />
+                    <ChevronRight size={28} className="muiTen" />
                 </div>
             </div>
 
             {/* 3. Ghi chú */}
-            <div className="option-section">
-                <div className="section-header">
+            <div className="phanTuyChon">
+                <div className="tieuDePhan">
                     <PencilLine size={25} />
                     <span>Ghi chú cho bếp</span>
                 </div>
-                <div className="note-wrap">
+                <div className="bocGhiChu">
                     <textarea
-                        className="note-textarea"
+                        className="vungVanBanGhiChu"
                         placeholder="Ví dụ: Ít cay, không hành, thêm cơm..."
                         value={note}
                         onChange={(e) => onChangeNote(e.target.value)}
                         rows={2}
                     />
-                    <div className="note-leaf" aria-hidden="true">❧</div>
+                    <div className="laGhiChu" aria-hidden="true">❧</div>
                 </div>
             </div>
 
@@ -141,63 +142,63 @@ const CartOption: React.FC<CartOptionProps> = ({
                 onCancel={() => setIsVoucherModalOpen(false)}
                 footer={null}
                 width={520}
-                className={`voucher-modal-custom theme-${theme}`}
+                className={`moDanPhieuGiamGiaTuyChinh theme-${theme}`}
                 centered
                 getContainer={() => document.body}
                 closable={false}
             >
-                <div className="vm-header">
-                    <button className="vm-back" onClick={() => setIsVoucherModalOpen(false)}>
+                <div className="phanDauMoDanPhieu">
+                    <button className="quayLaiMoDanPhieu" onClick={() => setIsVoucherModalOpen(false)}>
                         <ArrowLeft size={21} />
                     </button>
                     <h2>Chọn Voucher</h2>
-                    <button className="vm-close" onClick={() => setIsVoucherModalOpen(false)}>
+                    <button className="dongMoDanPhieu" onClick={() => setIsVoucherModalOpen(false)}>
                         <X size={21} />
                     </button>
                 </div>
 
-                <div className="vm-body">
-                    <div className="vm-banner">
+                <div className="phanThanMoDanPhieu">
+                    <div className="bangRonMoDanPhieu">
                         <img src={voucherBanner} alt="Voucher khả dụng" />
                     </div>
 
                     {availableVouchers.length > 0 && (
-                        <div className="vm-section">
-                            <div className="vm-section-head">
-                                <h3 className="vm-section-title">Danh sách voucher</h3>
+                        <div className="phanMoDanPhieu">
+                            <div className="dauPhanMoDanPhieu">
+                                <h3 className="tieuDePhanMoDanPhieu">Danh sách voucher</h3>
                                 <span>{availableVouchers.length} khả dụng</span>
                             </div>
                             {availableVouchers.map(v => (
                                 <button
                                     key={v.id}
                                     type="button"
-                                    className={`vm-ticket vm-ticket-${v.theme || 'green'} ${tempSelectedId === v.id ? 'selected' : ''}`}
+                                    className={`veMoDanPhieu ${v.theme === VoucherTheme.Orange ? 'veMoDanPhieuCam' : v.theme === VoucherTheme.Lime ? 'veMoDanPhieuChanh' : ''} ${tempSelectedId === v.id ? 'daChon' : ''}`}
                                     onClick={() => setTempSelectedId(v.id)}
                                 >
-                                    <div className="vmt-left">
-                                        <div className="vmt-left-mark" aria-hidden="true" />
-                                        <div className="vmt-icon">
-                                            {v.theme === 'orange' ? (
+                                    <div className="traiVeMoDanPhieu">
+                                        <div className="dauTraiVeMoDanPhieu" aria-hidden="true" />
+                                        <div className="bieuTuongVeMoDanPhieu">
+                                            {v.theme === VoucherTheme.Orange ? (
                                                 <Timer size={22} />
                                             ) : (
                                                 <Tag size={22} />
                                             )}
-                                            <strong>{v.valueLabel || `${v.discount.toLocaleString()}đ`}</strong>
+                                            <strong>{v.valueLabel || `${v.giamGia.toLocaleString()}đ`}</strong>
                                             <span>{v.typeLabel || 'GIẢM GIÁ'}</span>
                                         </div>
                                     </div>
-                                    <div className="vmt-right">
-                                        <div className="vmt-info">
+                                    <div className="phaiVeMoDanPhieu">
+                                        <div className="thongTinVeMoDanPhieu">
                                             <h4>{v.desc}</h4>
                                             <p>{formatCondition(v.minOrder)}</p>
-                                            <div className="vmt-tags">
-                                                <span className="badge">
+                                            <div className="theVeMoDanPhieu">
+                                                <span className="huyHieu">
                                                     <Timer size={11} />
-                                                    {v.badge || 'Ưu đãi có hạn'}
+                                                    {v.huyHieu || 'Ưu đãi có hạn'}
                                                 </span>
                                                 <span className="code">{v.code}</span>
                                             </div>
-                                            <div className="vmt-date">
+                                            <div className="ngayVeMoDanPhieu">
                                                 <span>
                                                     <CalendarDays size={11} />
                                                     HSD: {v.expire || '31.05.2026'}
@@ -206,7 +207,7 @@ const CartOption: React.FC<CartOptionProps> = ({
                                                 <a>Điều kiện</a>
                                             </div>
                                         </div>
-                                        <div className="vmt-radio">
+                                        <div className="tuyChonVeMoDanPhieu">
                                             {tempSelectedId === v.id ? (
                                                 <CheckCircle2 size={20} />
                                             ) : (
@@ -220,30 +221,30 @@ const CartOption: React.FC<CartOptionProps> = ({
                     )}
 
                     {unavailableVouchers.length > 0 && (
-                        <div className="vm-section">
-                            <h3 className="vm-section-title">Voucher không khả dụng</h3>
+                        <div className="phanMoDanPhieu">
+                            <h3 className="tieuDePhanMoDanPhieu">Voucher không khả dụng</h3>
                             {unavailableVouchers.map(v => (
-                                <div key={v.id} className={`vm-ticket vm-ticket-${v.theme || 'green'} disabled`}>
-                                    <div className="vmt-left">
-                                        <div className="vmt-left-mark" aria-hidden="true" />
-                                        <div className="vmt-icon">
+                                <div key={v.id} className={`veMoDanPhieu ${v.theme === VoucherTheme.Orange ? 'veMoDanPhieuCam' : v.theme === VoucherTheme.Lime ? 'veMoDanPhieuChanh' : ''} voHieuHoa`}>
+                                    <div className="traiVeMoDanPhieu">
+                                        <div className="dauTraiVeMoDanPhieu" aria-hidden="true" />
+                                        <div className="bieuTuongVeMoDanPhieu">
                                             <Tag size={22} />
-                                            <strong>{v.valueLabel || `${v.discount.toLocaleString()}đ`}</strong>
+                                            <strong>{v.valueLabel || `${v.giamGia.toLocaleString()}đ`}</strong>
                                             <span>{v.typeLabel || 'GIẢM GIÁ'}</span>
                                         </div>
                                     </div>
-                                    <div className="vmt-right">
-                                        <div className="vmt-info">
+                                    <div className="phaiVeMoDanPhieu">
+                                        <div className="thongTinVeMoDanPhieu">
                                             <h4>{v.desc}</h4>
                                             <p>{formatCondition(v.minOrder)}</p>
-                                            <div className="vmt-tags">
-                                                <span className="badge">
+                                            <div className="theVeMoDanPhieu">
+                                                <span className="huyHieu">
                                                     <Timer size={11} />
-                                                    {v.badge || 'Ưu đãi có hạn'}
+                                                    {v.huyHieu || 'Ưu đãi có hạn'}
                                                 </span>
                                                 <span className="code">{v.code}</span>
                                             </div>
-                                            <div className="vmt-date">
+                                            <div className="ngayVeMoDanPhieu">
                                                 <span>
                                                     <CalendarDays size={11} />
                                                     HSD: {v.expire || '31.05.2026'}
@@ -252,11 +253,11 @@ const CartOption: React.FC<CartOptionProps> = ({
                                                 <a>Điều kiện</a>
                                             </div>
                                         </div>
-                                        <div className="vmt-radio">
+                                        <div className="tuyChonVeMoDanPhieu">
                                             <Circle size={20} />
                                         </div>
                                     </div>
-                                    <div className="vmt-warning">
+                                    <div className="canhBaoVeMoDanPhieu">
                                         <span>Chưa đạt giá trị đơn hàng tối thiểu</span>
                                     </div>
                                 </div>
@@ -265,8 +266,8 @@ const CartOption: React.FC<CartOptionProps> = ({
                     )}
                 </div>
 
-                <div className="vm-footer">
-                    <button className="vm-ok-btn" onClick={confirmSelection}>
+                <div className="phanChanMoDanPhieu">
+                    <button className="nutDongYMoDanPhieu" onClick={confirmSelection}>
                         <TicketPercent size={18} />
                         Áp dụng Voucher
                     </button>

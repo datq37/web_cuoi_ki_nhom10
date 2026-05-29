@@ -1,6 +1,7 @@
 import { useModel } from 'umi';
 import { SERVICE_FEE_RATE } from '@/services/Khách hàng/Giỏ hàng/cartfooter';
 import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
+import { VoucherLoai } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
 
 function getActiveCombos() {
     if (typeof window === 'undefined') return [];
@@ -98,7 +99,7 @@ export function useCartFooterModel(selectedVoucher: Voucher | undefined) {
         if (!selectedVoucher) return 0;
         if (selectedVoucher.minOrder && subtotal < selectedVoucher.minOrder) return 0;
         // Nếu loại giảm là phần trăm, tính theo % của subtotal
-        if (selectedVoucher.loai === 'phan_tram') {
+        if (selectedVoucher.loai === VoucherLoai.PhanTram) {
             return Math.round(subtotal * selectedVoucher.discount / 100);
         }
         // Ngược lại dùng số tiền cố định

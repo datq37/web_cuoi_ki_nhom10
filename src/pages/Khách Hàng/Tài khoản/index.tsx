@@ -5,7 +5,6 @@ import accountBackground from '@/assets/Khách Hàng/Tài khoản/Backgroud.png'
 import { getPageBackground } from '../themeBackground';
 import useTaiKhoanModel from '@/models/Khách Hàng/Tài Khoản';
 
-// ── Components con ──────────────────────────────────────────────────────────
 import PhanHero    from './Component/Phần Hero';
 import ThanhTrai  from './Component/Thanh Trái';
 import BieuMau    from './Component/Biểu Mẫu';
@@ -14,39 +13,36 @@ import PhanChan   from './Component/Phần Chân';
 import './index.less';
 
 const TaiKhoan: React.FC = () => {
-    // ── Models ───────────────────────────────────────────────────────────────
-    const { currentUser, updateProfile, rankInfo } = useModel('Khách Hàng.user');
-    const { theme } = useModel('Khách Hàng.global');
-    const { avatarUrl, syncAvatar, beforeUpload, onFinish, isAvatarImage } = useTaiKhoanModel();
+    const { currentUser: nguoiDungHienTai, updateProfile: capNhatHoSo, rankInfo: thongTinHang } = useModel('Khách Hàng.user');
+    const { theme: giaoDien } = useModel('Khách Hàng.global');
+    const { duongDanAnhDaiDien, dongBoAnhDaiDien, truocKhiTaiLen, khiHoanThanh, laAnhDaiDien } = useTaiKhoanModel();
 
-    const [form] = Form.useForm();
+    const [bieuMau] = Form.useForm();
 
-    // Sync form + avatar khi currentUser thay đổi
     useEffect(() => {
-        form.setFieldsValue(currentUser);
-        syncAvatar(currentUser.avatar);
-    }, [currentUser, form]);
+        bieuMau.setFieldsValue(nguoiDungHienTai);
+        dongBoAnhDaiDien(nguoiDungHienTai.avatar);
+    }, [nguoiDungHienTai, bieuMau]);
 
-    // ── Render ───────────────────────────────────────────────────────────────
     return (
         <div
-            className="profile-settings-page fade-in"
-            style={{ backgroundImage: getPageBackground(accountBackground, theme) }}
+            className="trang-cai-dat-tai-khoan fade-in"
+            style={{ backgroundImage: getPageBackground(accountBackground, giaoDien) }}
         >
             <PhanHero />
 
-            <div className="profile-layout">
+            <div className="bo-cuc-tai-khoan">
                 <ThanhTrai
-                    currentUser={currentUser}
-                    avatarUrl={avatarUrl}
-                    isAvatarImage={isAvatarImage}
-                    beforeUpload={beforeUpload}
-                    rankInfo={rankInfo}
+                    nguoiDungHienTai={nguoiDungHienTai}
+                    duongDanAnhDaiDien={duongDanAnhDaiDien}
+                    laAnhDaiDien={laAnhDaiDien}
+                    truocKhiTaiLen={truocKhiTaiLen}
+                    thongTinHang={thongTinHang}
                 />
                 <BieuMau
-                    form={form}
-                    onFinish={onFinish}
-                    updateProfile={updateProfile}
+                    bieuMau={bieuMau}
+                    khiHoanThanh={khiHoanThanh}
+                    capNhatHoSo={capNhatHoSo}
                 />
             </div>
 

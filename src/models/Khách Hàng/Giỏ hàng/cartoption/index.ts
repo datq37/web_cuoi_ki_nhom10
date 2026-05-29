@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
 import { SEED_VOUCHERS, BUFFER_MIN } from '@/services/Khách hàng/Giỏ hàng/cartoption';
 import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
+import { VoucherLoai, VoucherTheme } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
 
 //  Chuyển đổi IKhuyenMai (Admin) → Voucher (Customer)
 function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
@@ -28,31 +29,31 @@ function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
             let discount = 0;
             let valueLabel = '';
             let typeLabel = 'GIẢM GIÁ';
-            let theme: 'green' | 'orange' | 'lime' = 'green';
+            let theme: VoucherTheme = VoucherTheme.Green;
 
-            if (k.loai === 'phan_tram') {
+            if (k.loai === VoucherLoai.PhanTram) {
                 // Sẽ tính theo % đơn hàng; lưu giá trị % vào discount tạm
                 discount = k.giaTriGiam;
                 valueLabel = `${k.giaTriGiam}%`;
                 typeLabel = 'GIẢM %';
-                theme = 'lime';
-            } else if (k.loai === 'so_tien') {
+                theme = VoucherTheme.Lime;
+            } else if (k.loai === VoucherLoai.SoTien) {
                 discount = k.giaTriGiam;
                 valueLabel = `${Number(k.giaTriGiam).toLocaleString('vi-VN')}đ`;
                 typeLabel = 'GIẢM GIÁ';
-                theme = 'green';
-            } else if (k.loai === 'mien_ship') {
+                theme = VoucherTheme.Green;
+            } else if (k.loai === VoucherLoai.MienShip) {
                 discount = 2000;
                 valueLabel = 'MIỄN PHÍ';
                 typeLabel = 'PHỤC VỤ';
-                theme = 'orange';
+                theme = VoucherTheme.Orange;
             }
 
             return {
                 id: k.id,
                 code: k.ma,
                 discount,
-                loai: k.loai as 'phan_tram' | 'so_tien' | 'mien_ship',
+                loai: k.loai as VoucherLoai,
                 desc: k.ten || k.moTa || k.ma,
                 minOrder: k.donToiThieu || 0,
                 badge: k.trangThai === 'sap_het' ? 'Sắp hết' : 'Ưu đãi có hạn',

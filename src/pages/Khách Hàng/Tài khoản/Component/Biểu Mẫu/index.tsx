@@ -11,17 +11,16 @@ import type { BieuMauProps } from '@/services/Khách hàng/Tài khoản/typing';
 
 const { Option } = Select;
 
-const BieuMau: React.FC<BieuMauProps> = ({ form, onFinish, updateProfile }) => {
+const BieuMau: React.FC<BieuMauProps> = ({ bieuMau, khiHoanThanh, capNhatHoSo }) => {
     return (
-        <section className="profile-content profile-card">
+        <section className="noi-dung-tai-khoan the-tai-khoan">
             <Form
-                form={form}
+                form={bieuMau}
                 layout="vertical"
-                onFinish={(values) => onFinish(values, updateProfile)}
-                className="profile-form"
+                onFinish={(values) => khiHoanThanh(values, capNhatHoSo)}
+                className="bieu-mau-tai-khoan"
             >
-                {/* ── Thông tin cơ bản ── */}
-                <div className="form-section-title">
+                <div className="tieu-de-phan-bieu-mau">
                     <span><UserOutlined /></span>
                     <h3>Thông tin cơ bản</h3>
                 </div>
@@ -34,7 +33,7 @@ const BieuMau: React.FC<BieuMauProps> = ({ form, onFinish, updateProfile }) => {
                     <Input prefix={<UserOutlined />} placeholder="Nhập họ và tên" size="large" />
                 </Form.Item>
 
-                <div className="form-row">
+                <div className="hang-bieu-mau">
                     <Form.Item
                         name="phone"
                         label="Số điện thoại"
@@ -51,15 +50,13 @@ const BieuMau: React.FC<BieuMauProps> = ({ form, onFinish, updateProfile }) => {
                     </Form.Item>
                 </div>
 
-                <div className="form-divider" />
-
-                {/* ── Thông tin giao hàng nội bộ ── */}
-                <div className="form-section-title">
+                <div className="duong-chia-bieu-mau" />
+                <div className="tieu-de-phan-bieu-mau">
                     <span><HomeOutlined /></span>
                     <h3>Thông tin giao hàng nội bộ</h3>
                 </div>
 
-                <div className="form-row">
+                <div className="hang-bieu-mau">
                     <Form.Item
                         name="dept"
                         label="Phòng ban"
@@ -85,7 +82,7 @@ const BieuMau: React.FC<BieuMauProps> = ({ form, onFinish, updateProfile }) => {
                     </Form.Item>
                 </div>
 
-                <div className="form-row">
+                <div className="hang-bieu-mau">
                     <Form.Item
                         name="floor"
                         label="Tầng"
@@ -107,13 +104,13 @@ const BieuMau: React.FC<BieuMauProps> = ({ form, onFinish, updateProfile }) => {
                     </Form.Item>
                 </div>
 
-                <div className="form-actions">
+                <div className="hanh-dong-bieu-mau">
                     <Button
                         type="primary"
                         htmlType="submit"
                         size="large"
                         icon={<SaveOutlined />}
-                        className="btn-save"
+                        className="nut-luu"
                     >
                         Lưu thay đổi
                     </Button>

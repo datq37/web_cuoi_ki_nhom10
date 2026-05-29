@@ -1,7 +1,7 @@
 @primary-green: #2D6A4F;
 @hover-green: #1b4332;
 
-.auth-body {
+.phanThanXacThuc {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10,7 +10,7 @@
   font-family: 'Inter', sans-serif;
 }
 
-.auth-container {
+.khungXacThuc {
   background-color: #fff;
   border-radius: 20px;
   box-shadow: 0 14px 28px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.1);
@@ -21,31 +21,31 @@
   min-height: 600px;
 }
 
-.form-container {
+.khungBieuMau {
   position: absolute;
   top: 0;
   height: 100%;
   transition: all 0.6s ease-in-out;
 }
 
-.sign-in-container {
+.khungDangNhap {
   left: 0;
   width: 50%;
   z-index: 2;
 }
 
-.auth-container.right-panel-active .sign-in-container {
+.khungXacThuc.kichHoatBangPhai .khungDangNhap {
   transform: translateX(100%);
 }
 
-.sign-up-container {
+.khungDangKy {
   left: 0;
   width: 50%;
   opacity: 0;
   z-index: 1;
 }
 
-.auth-container.right-panel-active .sign-up-container {
+.khungXacThuc.kichHoatBangPhai .khungDangKy {
   transform: translateX(100%);
   opacity: 1;
   z-index: 5;
@@ -57,7 +57,7 @@
   50%, 100% { opacity: 1; z-index: 5; }
 }
 
-.overlay-container {
+.khungLopPhu {
   position: absolute;
   top: 0;
   left: 50%;
@@ -69,12 +69,12 @@
   border-radius: ~"100px 0 0 100px / 50% 0 0 50%";
 }
 
-.auth-container.right-panel-active .overlay-container {
+.khungXacThuc.kichHoatBangPhai .khungLopPhu {
   transform: translateX(-100%);
   border-radius: ~"0 100px 100px 0 / 0 50% 50% 0";
 }
 
-.overlay {
+.lopPhu {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -87,11 +87,11 @@
   transition: transform 0.6s ease-in-out;
 }
 
-.auth-container.right-panel-active .overlay {
+.khungXacThuc.kichHoatBangPhai .lopPhu {
   transform: translateX(50%);
 }
 
-.overlay-panel {
+.bangLopPhu {
   position: absolute;
   display: flex;
   align-items: center;
@@ -106,7 +106,7 @@
   transition: transform 0.6s ease-in-out;
   z-index: 2;
 
-  .welcome-text {
+  .chuChaoMung {
     font-size: 44px;
     font-weight: 900;
     color: #ffd700; // Gold color for prominence
@@ -124,20 +124,20 @@
   }
 }
 
-.overlay-left {
+.lopPhuTrai {
   transform: translateX(-20%);
 }
 
-.auth-container.right-panel-active .overlay-left {
+.khungXacThuc.kichHoatBangPhai .lopPhuTrai {
   transform: translateX(0);
 }
 
-.overlay-right {
+.lopPhuPhai {
   right: 0;
   transform: translateX(0);
 }
 
-.auth-container.right-panel-active .overlay-right {
+.khungXacThuc.kichHoatBangPhai .lopPhuPhai {
   transform: translateX(20%);
 }
 
@@ -173,7 +173,7 @@ input {
   }
 }
 
-.forgot-password {
+.quenMatKhau {
   color: #555;
   font-size: 14px;
   text-decoration: none;
@@ -183,7 +183,7 @@ input {
   }
 }
 
-.submit-btn, .ghost-btn {
+.nutXacNhan, .nutTrongSuot {
   border-radius: 30px;
   border: 1px solid @primary-green;
   color: #FFFFFF;
@@ -197,7 +197,7 @@ input {
   margin-top: 20px;
 }
 
-.submit-btn {
+.nutXacNhan {
   background-color: @primary-green;
   box-shadow: 0 4px 10px rgba(45, 106, 79, 0.3);
 
@@ -211,7 +211,7 @@ input {
   }
 }
 
-.ghost-btn {
+.nutTrongSuot {
   background-color: transparent;
   border: 2px solid #FFFFFF;
   &:hover {
@@ -223,19 +223,19 @@ input {
   }
 }
 
-.social-login {
+.dangNhapMangXaHoi {
   margin-top: 30px;
   font-size: 14px;
   color: #888;
   width: 100%;
 
-  .social-container {
+  .khungMangXaHoi {
     display: flex;
     justify-content: center;
     margin-top: 15px;
   }
 
-  .social-btn {
+  .nutMangXaHoi {
     position: relative;
     display: flex;
     align-items: center;
@@ -253,14 +253,14 @@ input {
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: pointer;
 
-    .icon {
+    .bieuTuong {
       font-size: 18px;
       min-width: 18px;
       display: flex;
       justify-content: center;
     }
 
-    .text {
+    .vanBan {
       margin-left: 12px;
       font-size: 15px;
       font-weight: 600;
@@ -277,7 +277,7 @@ input {
       background: #df4b37;
       color: #fff;
 
-      .text {
+      .vanBan {
         opacity: 1;
         transition-delay: 0.1s;
       }
@@ -287,12 +287,12 @@ input {
 
 /* Responsive auth layout for mobile */
 @media (max-width: 768px) {
-  .auth-body {
+  .phanThanXacThuc {
     padding: 16px;
     background: #f8f9fa;
   }
 
-  .auth-container {
+  .khungXacThuc {
     width: 100%;
     max-width: 450px;
     min-height: auto;
@@ -302,11 +302,11 @@ input {
     overflow: visible;
   }
 
-  .overlay-container {
+  .khungLopPhu {
     display: none !important; /* Tuyệt đối ẩn khung ảnh trượt trên di động */
   }
 
-  .form-container {
+  .khungBieuMau {
     position: relative;
     width: 100%;
     height: auto;
@@ -316,11 +316,11 @@ input {
   }
 
   /* Chỉ hiển thị khung tương ứng với trạng thái */
-  .auth-container:not(.right-panel-active) .sign-in-container {
+  .khungXacThuc:not(.kichHoatBangPhai) .khungDangNhap {
     display: block;
   }
 
-  .auth-container.right-panel-active .sign-up-container {
+  .khungXacThuc.kichHoatBangPhai .khungDangKy {
     display: block;
     opacity: 1;
     z-index: 5;
@@ -343,21 +343,21 @@ input {
     margin: 6px 0;
   }
 
-  .submit-btn {
+  .nutXacNhan {
     width: 100%;
     padding: 14px 0;
     margin-top: 16px;
     font-size: 15px;
   }
 
-  .social-login {
+  .dangNhapMangXaHoi {
     margin-top: 24px;
     
-    .social-btn {
+    .nutMangXaHoi {
       width: 100% !important;
       justify-content: center;
       
-      .text {
+      .vanBan {
         opacity: 1 !important;
       }
       
@@ -368,7 +368,7 @@ input {
   }
 
   /* Hiển thị liên kết chuyển đổi trên điện thoại */
-  .mobile-toggle {
+  .chuyenDoiDiDong {
     display: block !important;
     margin-top: 24px;
     font-size: 14px;

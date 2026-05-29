@@ -8,30 +8,30 @@ const SignUpPage: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(true);
 
   return (
-    <div className="auth-body">
-      <div className={`auth-container ${isSignUp ? 'right-panel-active' : ''}`}>
-        
-        <div className="form-container sign-up-container">
+    <div className="phanXacThuc">
+      <div className={`khungXacThuc ${isSignUp ? 'kichHoatBangPhai' : ''}`}>
+
+        <div className="khungDangKy">
           <RegisterForm />
         </div>
 
-        <div className="form-container sign-in-container">
+        <div className="khungDangNhap">
           <LoginForm />
         </div>
 
-        <div className="overlay-container">
-          <div className="overlay" style={{ backgroundImage: `url(${dangKiImg})` }}>
-            <div className="overlay-panel overlay-left">
-              <h1 className="welcome-text">Chào mừng trở lại!</h1>
+        <div className="khungPhu">
+          <div className="lopPhu" style={{ backgroundImage: `url(${dangKiImg})` }}>
+            <div className="Trai">
+              <h1 className="ChaoMung">Chào mừng trở lại!</h1>
               <p>Để tiếp tục kết nối với chúng tôi, vui lòng đăng nhập bằng thông tin cá nhân của bạn</p>
-              <button className="ghost-btn" onClick={() => setIsSignUp(false)}>
+              <button className="nutdangnhap" onClick={() => setIsSignUp(false)}>
                 Đăng nhập
               </button>
             </div>
-            <div className="overlay-panel overlay-right">
-              <h1 className="welcome-text">Xin chào, Bạn!</h1>
+            <div className="Phai">
+              <h1 className="ChaoMung">Xin chào, Bạn!</h1>
               <p>Nhập thông tin cá nhân của bạn và bắt đầu hành trình với chúng tôi</p>
-              <button className="ghost-btn" onClick={() => setIsSignUp(true)}>
+              <button className="nutdangki" onClick={() => setIsSignUp(true)}>
                 Đăng ký
               </button>
             </div>

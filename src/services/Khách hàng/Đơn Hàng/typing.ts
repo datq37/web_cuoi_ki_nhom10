@@ -21,3 +21,7 @@ export interface Order {
     note?: string;
     isReviewed?: boolean;
 }
+
+export interface OrderTrackerProps {
+    status: OrderStatus;
+}

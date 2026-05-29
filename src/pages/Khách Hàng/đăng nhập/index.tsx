@@ -23,7 +23,7 @@ export default function LoginPage() {
   const isRegisterRoute = history.location.pathname === '/dang-ky';
   const [showPassword, setShowPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(isRegisterRoute);
-  
+
   const { theme } = useModel('Khách Hàng.global');
   const darkMode = theme === 'dark';
   const [phone, setPhone] = useState("");
@@ -56,57 +56,50 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={`new-login-page ${isSignUp ? 'is-sign-up' : ''} ${darkMode ? 'theme-dark' : ''}`}>
-      <div className="login-card">
+    <div className={`trangDangNhapMoi ${isSignUp ? 'laDangKy' : ''} ${darkMode ? 'giaoDienToi' : ''}`}>
+      <div className="theDangNhap">
+        {/* Bên trái*/}
 
-        {/* PHẦN TRÁI: FORM */}
-        <div className="left-panel">
-          {/* NỀN TRANG TRÍ PHẦN TRẮNG */}
-          <div className="decor-blob-1"></div>
-          <div className="decor-blob-2"></div>
-          <div className="decor-blob-3"></div>
+        <div className="bangTrai">
 
-          {/* Lá trang trí */}
-          <Leaf className="decor-leaf leaf-1" size={34} />
-          <Leaf className="decor-leaf leaf-2" size={42} />
-          <Leaf className="decor-leaf leaf-3" size={30} />
+          <div className="hinhTrangTri1"></div>
+          <div className="hinhTrangTri2"></div>
+          <div className="hinhTrangTri3"></div>
 
-          {/* Chấm trang trí */}
-          <div className="decor-dots">
+          <Leaf className="laTrangTri la1" size={34} />
+          <Leaf className="laTrangTri la2" size={42} />
+          <Leaf className="laTrangTri la3" size={30} />
+
+          <div className="chamTrangTri">
             {Array.from({ length: 24 }).map((_, index) => (
-              <span key={index} className="dot" />
+              <span key={index} className="cham" />
             ))}
           </div>
-
-          {/* Logo */}
-          <div className="logo-header">
+          <div className="logoDangNhap">
             <img src="/logo.webp" alt="Logo căng tin" />
             <div>
-              <h2 className="brand-title">Căng tin</h2>
-              <p className="brand-subtitle">DOANH NGHIỆP</p>
+              <h2 className="tieuDeThuongHieu">Căng tin</h2>
+              <p className="tieuDePhuThuongHieu">DOANH NGHIỆP</p>
             </div>
           </div>
-
-          {/* Nội dung form */}
-          <div className="form-content">
-            <div className="shield-icon-wrapper">
-              <div className="shield-icon-bg">
+          <div className="khungForm">
+            <div className="khungBieuTuongKhien">
+              <div className="nenBieuTuongKhien">
                 <ShieldCheck size={42} />
               </div>
             </div>
 
-            <h1 className="title">
+            <h1 className="tieuDe">
               {isSignUp ? "Tạo tài khoản" : "Đăng nhập"}
             </h1>
 
-            <p className="subtitle">
+            <p className="tieuDePhu">
               {isSignUp ? "Bắt đầu trải nghiệm tiện ích đặt món ngay hôm nay!" : "Chào mừng bạn quay trở lại 👋"}
             </p>
 
-            <form onSubmit={handleSubmit} className="form">
-              {/* Số điện thoại */}
-              <div className="input-group">
-                <div className="icon-box">
+            <form onSubmit={handleSubmit} className="bieuMau">
+              <div className="nhomNhapLieu">
+                <div className="hopBieuTuong">
                   <Phone size={22} />
                 </div>
                 <input
@@ -117,9 +110,8 @@ export default function LoginPage() {
                 />
               </div>
 
-              {/* Mật khẩu */}
-              <div className="input-group">
-                <div className="icon-box">
+              <div className="nhomNhapLieu">
+                <div className="hopBieuTuong">
                   <Lock size={22} />
                 </div>
                 <input
@@ -131,27 +123,25 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="toggle-password"
+                  className="anHienMatKhau"
                 >
                   {showPassword ? <EyeOff size={23} /> : <Eye size={23} />}
                 </button>
               </div>
 
-              {/* Ghi nhớ / Quên mật khẩu */}
               {!isSignUp && (
-                <div className="form-options">
+                <div className="bieuMau-options">
                   <label>
                     <input type="checkbox" defaultChecked />
                     <span>Ghi nhớ đăng nhập</span>
                   </label>
-                  <button type="button" className="forgot-btn">
+                  <button type="button" className="nutQuenMatKhau">
                     Quên mật khẩu?
                   </button>
                 </div>
               )}
 
-              {/* Button */}
-              <button type="submit" className="submit-btn">
+              <button type="submit" className="nutXacNhan">
                 {isSignUp ? (
                   <>
                     <UserPlus size={26} />
@@ -168,18 +158,18 @@ export default function LoginPage() {
               </button>
             </form>
 
-            <div className="divider">
-              <div className="line"></div>
+            <div className="duongChia">
+              <div className="duongKe"></div>
               <span>Hoặc {isSignUp ? "đăng ký" : "đăng nhập"} bằng</span>
-              <div className="line"></div>
+              <div className="duongKe"></div>
             </div>
 
-            <button className="google-btn">
-              <span className="g-icon">G</span>
+            <button className="nutGoogle">
+              <span className="bieuTuongG">G</span>
               Tiếp tục với Google
             </button>
 
-            <p className="signup-text">
+            <p className="chuDangKy">
               {isSignUp ? "Đã có tài khoản?" : "Chưa có tài khoản?"}{" "}
               <button onClick={() => setIsSignUp(!isSignUp)}>
                 {isSignUp ? "Đăng nhập ngay →" : "Đăng ký ngay →"}
@@ -188,25 +178,25 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* PHẦN PHẢI: ẢNH CĂN TIN */}
-        <div className="right-panel">
-          <img src={bgImage} alt="Ảnh căn tin" className="bg-image" />
+        {/* bên phải */}
+        <div className="bangPhai">
+          <img src={bgImage} alt="Ảnh căn tin" className="anhNen" />
 
-          <div className="overlay-gradient"></div>
-          <div className="overlay-dark"></div>
+          <div className="lopPhuChuyenMau"></div>
+          <div className="lopPhuToi"></div>
 
-          <div className="green-border"></div>
+          <div className="vienXanh"></div>
 
-          <div className="decor-leaf-top">🍃</div>
+          <div className="laTrangTri-top">🍃</div>
 
-          <div className="paper-plane">
-            <div className="wrapper">
-              <span className="line-icon">⌁</span>
-              <div className="plane-icon">🛩️</div>
+          <div className="mayBayGiay">
+            <div className="khungBao">
+              <span className="duongKe-icon">⌁</span>
+              <div className="bieuTuongMayBay">🛩️</div>
             </div>
           </div>
 
-          <svg className="dashed-line" viewBox="0 0 260 100" fill="none">
+          <svg className="dashed-duongKe" viewBox="0 0 260 100" fill="none">
             <path
               d="M10 70 C60 20, 100 90, 140 40 C170 5, 205 35, 240 10"
               stroke="white"
@@ -216,25 +206,25 @@ export default function LoginPage() {
             />
           </svg>
 
-          <div className="heart-icon-box">
+          <div className="heart-hopBieuTuong">
             <Heart size={38} />
           </div>
 
-          <div className="decor-leaf-bottom">🌿</div>
+          <div className="laTrangTri-bottom">🌿</div>
 
-          <div className="content">
-            <div className="welcome-wrapper">
-              <p className="welcome-text">
+          <div className="noiDung">
+            <div className="welcome-khungBao">
+              <p className="chuChaoMung">
                 {isSignUp ? "Khởi đầu," : "Xin chào,"}
               </p>
-              <h2 className="welcome-title">
+              <h2 className="welcome-tieuDe">
                 {isSignUp ? "Mới!" : "Bạn!"}
-                <span className="underline-1"></span>
-                <span className="underline-2"></span>
+                <span className="duongGachChan1"></span>
+                <span className="duongGachChan2"></span>
               </h2>
             </div>
 
-            <p className="welcome-desc">
+            <p className="moTaChaoMung">
               {isSignUp ? (
                 <>
                   Hãy tạo tài khoản ngay <br />
@@ -248,7 +238,7 @@ export default function LoginPage() {
               )}
             </p>
 
-            <div className="features">
+            <div className="cacTinhNang">
               <FeatureCardRight icon={<ShieldCheck size={16} />} title="Bảo mật" desc="An toàn tuyệt đối" />
               <FeatureCardRight icon={<Zap size={16} />} title="Nhanh chóng" desc="Đăng nhập chỉ 1s" />
               <FeatureCardRight icon={<Leaf size={16} />} title="Tiện lợi" desc="Mọi lúc, mọi nơi" />
@@ -264,8 +254,8 @@ export default function LoginPage() {
 
 function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) {
   return (
-    <div className="feature-card">
-      <div className="icon-wrapper">
+    <div className="theTinhNang">
+      <div className="icon-khungBao">
         {icon}
       </div>
       <h3>{title}</h3>
@@ -276,8 +266,8 @@ function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: stri
 
 function FeatureCardRight({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) {
   return (
-    <div className="feature-card-right">
-      <div className="icon-wrapper">
+    <div className="theTinhNang-right">
+      <div className="icon-khungBao">
         {icon}
       </div>
       <h3>{title}</h3>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { history, useModel } from 'umi';
 import {
   ArrowRight,
@@ -9,7 +9,9 @@ import {
   Users,
   Utensils,
   Building2,
+  Menu,
   Star,
+  X,
 } from 'lucide-react';
 import { BulbOutlined, BulbFilled } from '@ant-design/icons';
 import './topbar.less';
@@ -17,6 +19,22 @@ import './topbar.less';
 const Topbar: React.FC = () => {
   const { theme, toggleTheme } = useModel('Khách Hàng.global');
   const darkMode = theme === 'dark';
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const goToLogin = () => {
+    setMobileMenuOpen(false);
+    history.push('/dang-nhap');
+  };
+
+  const goToRegister = () => {
+    setMobileMenuOpen(false);
+    history.push('/dang-ky');
+  };
+
+  const handleToggleTheme = () => {
+    toggleTheme();
+    setMobileMenuOpen(false);
+  };
 
   return (
     <div className={`landing-page ${darkMode ? 'dark' : 'light'}`}>
@@ -48,18 +66,58 @@ const Topbar: React.FC = () => {
 
             <button
               className={`lt-btn-login ${darkMode ? 'dark' : ''}`}
-              onClick={() => history.push('/dang-nhap')}
+              onClick={goToLogin}
             >
               Đăng nhập
             </button>
 
             <button
               className="lt-btn-register"
-              onClick={() => history.push('/dang-ky')}
+              onClick={goToRegister}
             >
               Đăng kí
             </button>
           </div>
+
+          <button
+            className={`lt-menu-toggle ${darkMode ? 'dark' : ''}`}
+            onClick={() => setMobileMenuOpen(open => !open)}
+            aria-label="Mở menu"
+            aria-expanded={mobileMenuOpen}
+          >
+            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+
+          {mobileMenuOpen && (
+            <div className={`lt-mobile-menu ${darkMode ? 'dark' : ''}`}>
+              <button
+                className={`lt-mobile-theme ${darkMode ? 'dark' : ''}`}
+                onClick={handleToggleTheme}
+              >
+                <span className="lt-mobile-theme-icon">
+                  {darkMode
+                    ? <BulbFilled style={{ fontSize: '10px', color: '#fbbf24' }} />
+                    : <BulbOutlined style={{ fontSize: '10px', color: '#6b7280' }} />
+                  }
+                </span>
+                {darkMode ? 'Chế độ sáng' : 'Chế độ tối'}
+              </button>
+
+              <button
+                className={`lt-mobile-login ${darkMode ? 'dark' : ''}`}
+                onClick={goToLogin}
+              >
+                Đăng nhập
+              </button>
+
+              <button
+                className="lt-mobile-register"
+                onClick={goToRegister}
+              >
+                Đăng kí
+              </button>
+            </div>
+          )}
         </div>
       </header>
 

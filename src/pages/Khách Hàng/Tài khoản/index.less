@@ -281,6 +281,41 @@
         font-weight: 600;
     }
 
+    .rank-info {
+        position: relative;
+        z-index: 1;
+        margin: 16px 0;
+        text-align: center;
+        background: #f5f5f5;
+        padding: 12px;
+        border-radius: 12px;
+
+        .rank-title {
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .rank-points {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+
+            strong {
+                color: #ff4d4f;
+            }
+        }
+
+        .rank-spent {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+    }
+
     .avatar-upload-block {
         position: relative;
         z-index: 1;
@@ -582,6 +617,19 @@
 
         .user-dept {
             color: var(--ink-3);
+        }
+
+        .rank-info {
+            background: rgba(22, 22, 22, 0.4);
+            border: 1px solid var(--line);
+
+            .rank-points {
+                color: var(--ink-2);
+            }
+
+            .rank-spent {
+                color: var(--ink-3);
+            }
         }
 
         .profile-avatar {

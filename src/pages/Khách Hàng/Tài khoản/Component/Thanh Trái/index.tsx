@@ -34,14 +34,14 @@ const ThanhBen: React.FC<ThanhBenProps> = ({ currentUser, avatarUrl, isAvatarIma
             <h2>{currentUser.name}</h2>
             <p className="user-dept">{currentUser.dept}</p>
 
-            <div className="rank-info" style={{ marginTop: 16, marginBottom: 16, textAlign: 'center', background: '#f5f5f5', padding: 12, borderRadius: 12 }}>
-                <div style={{ fontWeight: 600, fontSize: 16, color: rankInfo?.color || '#cd7f32', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+            <div className="rank-info">
+                <div className="rank-title" style={{ color: rankInfo?.color || '#cd7f32' }}>
                     <CrownFilled /> Hạng {rankInfo?.name || 'Đồng'}
                 </div>
-                <div style={{ fontSize: 14, color: '#666', marginTop: 4 }}>
-                    Điểm thưởng: <strong style={{ color: '#ff4d4f' }}>{fmt(currentUser.points || 0)}</strong>
+                <div className="rank-points">
+                    Điểm thưởng: <strong>{fmt(currentUser.points || 0)}</strong>
                 </div>
-                <div style={{ fontSize: 12, color: '#999', marginTop: 4 }}>
+                <div className="rank-spent">
                     Đã chi tiêu: {fmt(currentUser.totalSpent || 0)}đ
                 </div>
             </div>

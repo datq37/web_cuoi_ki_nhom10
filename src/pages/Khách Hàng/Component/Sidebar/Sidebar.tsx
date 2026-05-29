@@ -3,7 +3,7 @@ import {
   Bell,
   ChevronDown,
   ClipboardList,
-  Gift,
+  Award,
   Home,
   Settings,
   ShoppingCart,
@@ -175,7 +175,7 @@ const Sidebar: React.FC = () => {
         <div className="sidebar-bottom">
           <div className="reward-card" style={{ cursor: 'pointer' }} onClick={() => setPage('settings')}>
             <div className="reward-icon" style={{ background: currentRank.color, color: '#fff' }}>
-              <Gift size={28} />
+              <Award size={28} />
             </div>
             <p>Điểm thưởng ({currentRank.name})</p>
             <h3>{fmt(currentPoints)} điểm</h3>

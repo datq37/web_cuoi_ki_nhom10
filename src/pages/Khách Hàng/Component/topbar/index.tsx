@@ -107,7 +107,7 @@ const Topbar: React.FC = () => {
                     onVisibleChange={setIsNotifOpen}
                     trigger="click"
                     placement="bottomRight"
-                    arrow={false}
+                    overlayClassName={theme === ThemeType.DARK ? 'notif-popover-dark' : ''}
                     overlayInnerStyle={{ padding: 0, borderRadius: 12, overflow: 'hidden' }}
                     content={
                         <div className="notifPopup">

@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
 import { useModel } from 'umi';
-import type { ChatMessage, ChatMode } from '@/services/Khách hàng/ChatBox';
+import type { ChatMessage } from '@/services/Khách hàng/ChatBox';
 import {
-  ADMIN_WELCOME_MESSAGE,
+  EChatMode,
+  EChatRole,
   buildLocalChatReply,
   CHAT_WELCOME_MESSAGE,
   sendCustomerChatMessage,
@@ -16,87 +17,55 @@ const getMessageTime = () => new Date().toLocaleTimeString('vi-VN', {
 const createMessage = (
   role: ChatMessage['role'],
   content: string,
-  image?: string,
 ): ChatMessage => ({
   id: `chat-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
   role,
   content,
   time: getMessageTime(),
-  image,
 });
-
 export default function useCustomerChatBoxModel() {
   const { addToCart, dishes } = useModel('Khách Hàng.Thực đơn.index');
   const [isOpen, setIsOpen] = useState(false);
-  const [mode, setMode] = useState<ChatMode>('ai');
-  const [messageGroups, setMessageGroups] = useState<Record<ChatMode, ChatMessage[]>>({
-    ai: [CHAT_WELCOME_MESSAGE],
-    admin: [ADMIN_WELCOME_MESSAGE],
-  });
+  const [messages, setMessages] = useState<ChatMessage[]>([CHAT_WELCOME_MESSAGE]);
   const [isSending, setIsSending] = useState(false);
-
   const toggleChat = useCallback(() => {
     setIsOpen(prev => !prev);
   }, []);
-
   const closeChat = useCallback(() => {
     setIsOpen(false);
   }, []);
-
-  const changeMode = useCallback((nextMode: ChatMode) => {
-    setMode(nextMode);
-  }, []);
-
-  const sendMessage = useCallback(async (content: string, image?: string) => {
+  const sendMessage = useCallback(async (content: string) => {
     const cleanContent = content.trim();
-    if (!cleanContent && !image) return;
-
-    const userMessage = createMessage('user', cleanContent, image);
-    setMessageGroups(prev => ({
-      ...prev,
-      [mode]: [...prev[mode], userMessage],
-    }));
+    if (!cleanContent) return;
+    // hiện thị tin nhắn ng dùng
+    const userMessage = createMessage(EChatRole.USER, cleanContent);
+    setMessages(prev => [...prev, userMessage]);
 
     setIsSending(true);
-
+    // add món ăn giỏ hàng
     try {
-      const currentMessages = messageGroups[mode];
-      // Truyền live dishes để Gemini nhận đúng ID khớp với model state
-      const response = await sendCustomerChatMessage(cleanContent, mode, currentMessages, dishes || []);
-
-      // Xử lý action từ AI (ví dụ: thêm món vào giỏ)
+      const response = await sendCustomerChatMessage(cleanContent, EChatMode.AI, messages, dishes || []);
       if (response.action?.type === 'ADD_TO_CART') {
         const dish = (dishes || []).find((d: any) => d.id === response.action!.dishId);
         if (dish) {
           addToCart(dish);
         }
       }
-
-      const responseMessage = createMessage(
-        mode === 'ai' ? 'bot' : 'admin',
-        response.reply,
-      );
-
-      setMessageGroups(prev => ({
-        ...prev,
-        [mode]: [...prev[mode], responseMessage],
-      }));
+      // hiện thi câu trả lời của au
+      const responseMessage = createMessage(EChatRole.BOT, response.reply);
+      setMessages(prev => [...prev, responseMessage]);
     } catch (error) {
+      // báo lỗi
       const fallbackMessage = createMessage(
-        mode === 'ai' ? 'bot' : 'admin',
-        mode === 'ai'
-          ? (error instanceof Error ? error.message : buildLocalChatReply(cleanContent))
-          : 'Tin nhắn đã được ghi nhận. Cần backend admin để phản hồi realtime.',
+        EChatRole.BOT,
+        error instanceof Error ? error.message : buildLocalChatReply(cleanContent)
       );
 
-      setMessageGroups(prev => ({
-        ...prev,
-        [mode]: [...prev[mode], fallbackMessage],
-      }));
+      setMessages(prev => [...prev, fallbackMessage]);
     } finally {
       setIsSending(false);
     }
-  }, [messageGroups, mode, dishes, addToCart]);
+  }, [messages, dishes, addToCart]);
 
   const sendSuggestion = useCallback((prompt: string) => {
     sendMessage(prompt);
@@ -104,14 +73,11 @@ export default function useCustomerChatBoxModel() {
 
   return {
     isOpen,
-    mode,
-    messages: messageGroups[mode],
-    messageGroups,
+    messages,
     isSending,
     setIsOpen,
     toggleChat,
     closeChat,
-    changeMode,
     sendMessage,
     sendSuggestion,
   };

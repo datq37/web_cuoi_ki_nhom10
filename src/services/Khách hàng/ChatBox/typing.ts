@@ -1,11 +1,19 @@
-export type ChatMode = 'ai' | 'admin';
+export enum EChatMode {
+  AI = 'ai',
+  ADMIN = 'admin',
+}
+
+export enum EChatRole {
+  BOT = 'bot',
+  USER = 'user',
+  ADMIN = 'admin',
+}
 
 export interface ChatMessage {
   id: string;
-  role: 'bot' | 'user' | 'admin';
+  role: EChatRole;
   content: string;
   time: string;
-  image?: string;
 }
 
 export interface ChatSuggestion {
@@ -36,7 +44,7 @@ export interface ChatContextVoucher {
 
 export interface CustomerChatRequest {
   message: string;
-  mode: ChatMode;
+  mode: EChatMode;
   history?: Pick<ChatMessage, 'role' | 'content'>[];
   dishes: ChatContextDish[];
   vouchers: ChatContextVoucher[];
@@ -49,8 +57,13 @@ export interface ChatAction {
   qty: number;         // Số lượng (mặc định 1)
 }
 
+export enum EChatProvider {
+  GEMINI = 'gemini',
+  LOCAL = 'local',
+}
+
 export interface CustomerChatResponse {
   reply: string;
-  provider: 'gemini' | 'local';
+  provider: EChatProvider;
   action?: ChatAction; // Hành động kèm theo (nếu có)
 }

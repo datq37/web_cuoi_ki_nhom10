@@ -1,6 +1,10 @@
 from fastapi import FastAPI, Depends
 from sqlalchemy import text
 from sqlalchemy.orm import Session
+from model import (
+    ThucDon,
+    Payment,
+)
 
 # Import get_db từ file database.py bạn vừa tạo
 from database import get_db 

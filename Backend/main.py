@@ -16,8 +16,8 @@ from model import (  # noqa: F401 — đăng ký metadata theo schema.sql
     KhuyenMai,
     NhanVien,
     Order,
-    Review,
     ThucDon,
+    Payment,
 )
 from routes import api_router
 

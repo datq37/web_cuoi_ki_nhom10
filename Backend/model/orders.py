@@ -25,6 +25,12 @@ class Order(Base):
         cascade="all, delete-orphan",
         lazy="joined"
     )
+    payments: Mapped[list["Payment"]] = relationship(
+        "Payment",
+        back_populates="order",
+        cascade="all, delete-orphan",
+        lazy="select"
+    )
 
 
 class OrderDetail(Base):

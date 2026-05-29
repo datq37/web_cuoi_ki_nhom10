@@ -201,3 +201,29 @@ CREATE TABLE public.danhmucmonan (
 
 ALTER TABLE public.danhmucmonan OWNER TO postgres;
 GRANT ALL ON TABLE public.danhmucmonan TO postgres;
+
+
+-- public.payments definition
+
+-- Drop table
+
+-- DROP TABLE public.payments;
+
+CREATE TABLE public.payments (
+	id varchar NOT NULL,
+	order_id varchar NULL,
+	method varchar NULL,
+	status varchar NULL,
+	created_at timestamp NULL
+);
+
+-- Permissions
+
+ALTER TABLE public.payments OWNER TO postgres;
+GRANT ALL ON TABLE public.payments TO postgres;
+
+ALTER TABLE ONLY public.payments
+    ADD CONSTRAINT payments_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY public.payments
+    ADD CONSTRAINT payments_order_id_fkey FOREIGN KEY (order_id) REFERENCES public.orders(id) ON DELETE CASCADE;

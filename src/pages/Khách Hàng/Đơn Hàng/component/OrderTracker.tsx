@@ -1,12 +1,8 @@
 import React from 'react';
 import { CheckOutlined, BellOutlined, LoadingOutlined } from '@ant-design/icons';
-import { OrderStatus } from '@/services/Khách hàng/Đơn Hàng';
+import { OrderStatus, OrderTrackerProps } from '@/services/Khách hàng/Đơn Hàng';
 
-interface Props {
-    status: OrderStatus;
-}
-
-const OrderTracker: React.FC<Props> = ({ status }) => {
+const OrderTracker: React.FC<OrderTrackerProps> = ({ status }) => {
     const steps = [
         { key: OrderStatus.Pending, label: 'Đã đặt', icon: <CheckOutlined /> },
         { key: OrderStatus.Preparing, label: 'Đang nấu', icon: <LoadingOutlined /> },
@@ -18,18 +14,18 @@ const OrderTracker: React.FC<Props> = ({ status }) => {
     const idx = order.indexOf(status === OrderStatus.Cancelled ? OrderStatus.Pending : status);
 
     return (
-        <div className="tracker">
+        <div className="thanhTheoDoi">
             {steps.map((s, i) => {
                 const isDone = i < idx || status === OrderStatus.Done;
                 const isActive = i === idx && status !== OrderStatus.Done && status !== OrderStatus.Cancelled;
-                const cls = isDone ? 'done' : isActive ? 'active' : '';
+                const cls = isDone ? 'hoanThanh' : isActive ? 'dangChon' : '';
 
                 return (
-                    <div key={s.key} className={`tracker-step ${cls}`}>
-                        <div className="dot">
+                    <div key={s.key} className={`buocTheoDoi ${cls}`}>
+                        <div className="cham">
                             {isDone ? <CheckOutlined style={{ fontSize: 12 }} /> : s.icon}
                         </div>
-                        <div className="label">{s.label}</div>
+                        <div className="nhan">{s.label}</div>
                     </div>
                 );
             })}

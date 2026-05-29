@@ -13,22 +13,20 @@ export interface UserProfile {
   points?: number;
   totalSpent?: number;
 }
-
-/** Props của component Thanh Bên (sidebar) */
+// sidebar
 export interface ThanhBenProps {
-  currentUser: UserProfile;
-  avatarUrl: string;
-  isAvatarImage: () => boolean;
-  beforeUpload: (file: File) => boolean | string;
-  rankInfo?: any;
+  nguoiDungHienTai: UserProfile;
+  duongDanAnhDaiDien: string;
+  laAnhDaiDien: () => boolean;
+  truocKhiTaiLen: (file: File) => boolean | string;
+  thongTinHang?: any;
 }
-
-/** Props của component Biểu Mẫu (form chính) */
+// from thông tin
 export interface BieuMauProps {
-  form: FormInstance;
-  onFinish: (
+  bieuMau: FormInstance;
+  khiHoanThanh: (
     values: Partial<UserProfile>,
-    updateProfile: (data: Partial<UserProfile>) => void,
+    capNhatHoSo: (data: Partial<UserProfile>) => void,
   ) => void;
-  updateProfile: (data: Partial<UserProfile>) => void;
+  capNhatHoSo: (data: Partial<UserProfile>) => void;
 }

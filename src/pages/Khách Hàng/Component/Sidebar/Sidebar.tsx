@@ -3,10 +3,8 @@ import {
   Bell,
   ChevronDown,
   ClipboardList,
-  Gift,
-  HelpCircle,
+  Award,
   Home,
-  LogOut,
   Settings,
   ShoppingCart,
   User,
@@ -17,10 +15,10 @@ import { defaultUser } from '@/services/Khách hàng/Component/Sidebar';
 import { useModel, history } from 'umi';
 
 const Sidebar: React.FC = () => {
-  const { page, setPage, isSidebarOpen, setIsSidebarOpen } = useModel('Khách Hàng.global');
-  const { currentUser, rankInfo } = useModel('Khách Hàng.user');
+  const { page, setPage, isSidebarOpen, setIsSidebarOpen } = useModel('Khách Hàng.GlobalState.index');
+  const { currentUser } = useModel('Khách Hàng.Tài Khoản.thanghang');
   const { cart, setCartOpen } = useModel('Khách Hàng.Thực đơn.index');
-  const { unreadCount, setIsNotificationOpen } = useModel('Khách Hàng.Notifications');
+  const { unreadCount, setIsNotificationOpen } = useModel('Khách Hàng.Thông Báo.index');
 
   const user = currentUser || defaultUser;
   const cartQty = cart.reduce((sum: number, item: any) => sum + item.qty, 0);
@@ -93,25 +91,11 @@ const Sidebar: React.FC = () => {
 
   const otherItems = [
     {
-      id: 'notifications',
-      label: 'Thông báo',
-      icon: <Bell size={17} />,
-      badge: unreadCount > 0 ? unreadCount : undefined,
-      badgeTone: 'red' as const,
-      onClick: () => setIsNotificationOpen(true),
-    },
-    {
       id: 'settings',
       label: 'Cài đặt',
       icon: <Settings size={17} />,
       active: page === 'settings',
       onClick: () => setPage('settings'),
-    },
-    {
-      id: 'help',
-      label: 'Trợ giúp',
-      icon: <HelpCircle size={17} />,
-      onClick: () => history.push('/lien-he'),
     },
   ];
 
@@ -183,7 +167,7 @@ const Sidebar: React.FC = () => {
         <div className="sidebar-bottom">
           <div className="reward-card" style={{ cursor: 'pointer' }} onClick={() => setPage('settings')}>
             <div className="reward-icon" style={{ background: currentRank.color, color: '#fff' }}>
-              <Gift size={28} />
+              <Award size={28} />
             </div>
             <p>Điểm thưởng ({currentRank.name})</p>
             <h3>{fmt(currentPoints)} điểm</h3>
@@ -197,22 +181,6 @@ const Sidebar: React.FC = () => {
             </div>
           </div>
 
-          <div className="user-pill">
-            <div className="avatar">
-              {user.avatar && user.avatar.length > 2 ? (
-                <img src={user.avatar} alt="Avatar" />
-              ) : (
-                user.avatar || 'U'
-              )}
-            </div>
-            <div className="meta">
-              <span className="name">{user.name}</span>
-              <span className="role">{user.dept}</span>
-            </div>
-            <button className="logout-btn" onClick={() => history.push('/')} aria-label="Đăng xuất">
-              <LogOut size={17} />
-            </button>
-          </div>
         </div>
       </aside>
     </>

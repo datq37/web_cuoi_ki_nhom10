@@ -1,6 +1,6 @@
 import { EDinhDangFile } from '@/services/base/constant';
 import type { IFile } from '@/services/base/typing';
-import { getFileInfo } from '@/services/uploadFile';
+import { getFileInfo } from '@/services/Tiện ích/uploadFile';
 import { ip3 } from '@/utils/ip';
 import { getFileType, getNameFile } from '@/utils/utils';
 import { CopyOutlined, DownloadOutlined, FullscreenExitOutlined } from '@ant-design/icons';

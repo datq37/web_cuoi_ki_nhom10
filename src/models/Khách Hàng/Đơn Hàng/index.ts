@@ -3,9 +3,9 @@ import { useModel } from 'umi';
 import { OrderStatus } from '@/services/Khách hàng/Đơn Hàng';
 
 export default function useDonHangModel() {
-    const { orders, advanceOrder } = useModel('Khách Hàng.Orders');
+    const { orders, advanceOrder } = useModel('Khách Hàng.Đơn Hàng.Orders');
     const { setSearchQuery, setActiveCategory } = useModel('Khách Hàng.Thực đơn.index');
-    const { setPage, theme } = useModel('Khách Hàng.global');
+    const { setPage, theme } = useModel('Khách Hàng.GlobalState.index');
     
     const [filter, setFilter] = useState('active');
     const [ratingOrder, setRatingOrder] = useState<any>(null);

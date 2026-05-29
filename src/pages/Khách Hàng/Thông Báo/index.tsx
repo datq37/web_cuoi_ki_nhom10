@@ -65,9 +65,9 @@ const ThongBao: React.FC = () => {
         setIsNotificationOpen, 
         markAsRead, 
         markAllAsRead 
-    } = useModel('Khách Hàng.Notifications');
+    } = useModel('Khách Hàng.Thông Báo.index');
     
-    const { theme } = useModel('Khách Hàng.global');
+    const { theme } = useModel('Khách Hàng.GlobalState.index');
 
     return (
         <Drawer

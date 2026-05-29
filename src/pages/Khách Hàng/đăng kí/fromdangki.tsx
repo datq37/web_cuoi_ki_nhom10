@@ -18,36 +18,36 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onToggle }) => {
         }
         message.success('Tạo tài khoản thành công! Bạn có thể đăng nhập ngay.');
         setTimeout(() => {
-            window.location.reload(); 
+            window.location.reload();
         }, 1500);
     };
 
     return (
         <form action="#" onSubmit={(e) => e.preventDefault()}>
             <h1>Tạo tài khoản</h1>
-            <input 
-                type="text" 
-                placeholder="Số điện thoại" 
+            <input
+                type="text"
+                placeholder="Số điện thoại"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
             />
-            <input 
-                type="password" 
-                placeholder="Mật khẩu" 
+            <input
+                type="password"
+                placeholder="Mật khẩu"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <button className="submit-btn" type="button" onClick={handleRegister}>Đăng ký</button>
-            <div className="social-login">
+            <button className="nutXacNhan" type="button" onClick={handleRegister}>Đăng ký</button>
+            <div className="dangNhapMangXaHoi">
                 <span>Hoặc đăng ký bằng</span>
-                <div className="social-container">
-                    <a href="#" className="social-btn google" onClick={(e) => e.preventDefault()}>
-                        <GoogleOutlined className="icon" />
-                        <span className="text">Google</span>
+                <div className="khungMangXaHoi">
+                    <a href="#" className="nutMangXaHoi google" onClick={(e) => e.preventDefault()}>
+                        <GoogleOutlined className="bieuTuong" />
+                        <span className="vanBan">Google</span>
                     </a>
                 </div>
             </div>
-            <div className="mobile-toggle">
+            <div className="chuyenDoi">
                 Đã có tài khoản? <span onClick={onToggle}>Đăng nhập ngay</span>
             </div>
         </form>

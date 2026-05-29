@@ -32,35 +32,35 @@ const CategoryBar: React.FC = () => {
     } = useModel('Khách Hàng.Thực đơn.index');
 
     return (
-        <div className="filter-section">
-            <div className="search-box">
-                <Search className="search-icon" size={18} />
+        <div className="phanBoLoc">
+            <div className="hopTimKiem">
+                <Search className="bieuTuongTimKiem" size={18} />
                 <input
                     type="text"
-                    className="search-input"
+                    className="oNhapTimKiem"
                     placeholder="Tìm kiếm món ăn..."
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                 />
                 {searchQuery && (
                     <button
-                        className="search-clear"
+                        className="nutXoaTimKiem"
                         onClick={() => setSearchQuery('')}
                     >
                         <X size={14} />
                     </button>
                 )}
             </div>
-            <div className="category-bar">
+            <div className="thanhDanhMuc">
                 {MENU_CATEGORIES.map(cat => (
                     <button
                         key={cat.id}
-                        className={`cat-chip ${activeCategory === cat.id ? 'active' : ''}`}
+                        className={`theDanhMuc ${activeCategory === cat.id ? 'dangChon' : ''}`}
                         onClick={() => setActiveCategory(cat.id)}
                     >
                         {IconMap[cat.icon] || <Utensils size={15} />}
                         {cat.name}
-                        <span className="count">{categoryCounts[cat.id] || 0}</span>
+                        <span className="soLuong">{categoryCounts[cat.id] || 0}</span>
                     </button>
                 ))}
             </div>

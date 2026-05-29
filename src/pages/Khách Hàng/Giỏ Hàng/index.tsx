@@ -28,17 +28,17 @@ const GioHang: React.FC = () => {
         <>
             {/* ── Overlay backdrop ─────────────────────────────────────────── */}
             <div
-                className={`cart-overlay ${cartOpen ? 'visible' : ''}`}
+                className={`lopPhuGioHang ${cartOpen ? 'hienThi' : ''}`}
                 onClick={() => setCartOpen(false)}
                 aria-hidden="true"
             />
 
             {/* ── Drawer giỏ hàng ──────────────────────────────────────────── */}
-            <aside className={`cart-drawer ${cartOpen ? 'open' : ''}`} aria-label="Giỏ hàng">
+            <aside className={`nganKeoGioHang ${cartOpen ? 'mo' : ''}`} aria-label="Giỏ hàng">
                 {/* Header */}
-                <div className="cart-drawer-header">
+                <div className="phanDauNganKeoGioHang">
                     <button
-                        className="cart-back-btn"
+                        className="nutQuayLaiGioHang"
                         onClick={() => {
                             setCartOpen(false);
                             setPage('menu');
@@ -48,16 +48,16 @@ const GioHang: React.FC = () => {
                         <ArrowLeft size={28} />
                     </button>
 
-                    <div className="cart-drawer-title">
+                    <div className="tieuDeNganKeoGioHang">
                         <ShoppingCart size={34} strokeWidth={2.4} />
                         <span>Giỏ hàng</span>
                         {cartQty > 0 && (
-                            <span className="cart-badge">{cartQty}</span>
+                            <span className="huyHieuGioHang">{cartQty}</span>
                         )}
                     </div>
                     <button
                         id="btn-close-cart"
-                        className="cart-close-btn"
+                        className="nutDongGioHang"
                         onClick={() => setCartOpen(false)}
                         aria-label="Đóng giỏ hàng"
                     >
@@ -66,14 +66,14 @@ const GioHang: React.FC = () => {
                 </div>
 
                 {/* Nội dung cuộn được */}
-                <div className="cart-drawer-body">
+                <div className="phanThanNganKeoGioHang">
                     {/* 1. Danh sách món */}
-                    <section className="cart-section">
+                    <section className="phanGioHang">
                         <DanhSachMon />
                     </section>
 
                     {/* 2. Tuỳ chọn (giờ nhận, voucher, ghi chú) */}
-                    <section className="cart-section">
+                    <section className="phanGioHang">
                         <CartOption
                             note={note}
                             onChangeNote={setNote}
@@ -84,13 +84,13 @@ const GioHang: React.FC = () => {
                     </section>
 
                     {/* 3. Phương thức thanh toán */}
-                    <section className="cart-section">
+                    <section className="phanGioHang">
                         <ThanhToan payment={payment} onSelect={setPayment} />
                     </section>
                 </div>
 
                 {/* Footer cố định: giá + nút xác nhận */}
-                <div className="cart-drawer-footer">
+                <div className="phanChanNganKeoGioHang">
                     <CartFooter
                         selectedVoucher={selectedVoucher}
                         onConfirm={handleConfirm}

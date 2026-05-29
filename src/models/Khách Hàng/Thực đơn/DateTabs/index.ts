@@ -2,6 +2,7 @@ import type { WeekDay } from '@/services/Khách hàng/Thực đơn/DateTabs/typi
 
 export const getWeekDays = (baseDate = new Date()): WeekDay[] => {
   const today = new Date(baseDate);
+  today.setHours(0, 0, 0, 0);
   const dow = today.getDay();
   const mondayOffset = dow === 0 ? -6 : 1 - dow;
   const monday = new Date(today);
@@ -11,11 +12,13 @@ export const getWeekDays = (baseDate = new Date()): WeekDay[] => {
   return dayNames.map((name, i) => {
     const d = new Date(monday);
     d.setDate(monday.getDate() + i);
+    d.setHours(0, 0, 0, 0);
     return {
       name,
       num: d.getDate(),
       month: d.getMonth() + 1,
-      isToday: d.toDateString() === today.toDateString(),
+      isToday: d.getTime() === today.getTime(),
+      isPast: d.getTime() < today.getTime(),
     };
   });
 };

@@ -175,5 +175,6 @@ export default function useCartModel() {
     setCartOpen,
     reviews,
     addReview,
+    dishes,
   };
 }

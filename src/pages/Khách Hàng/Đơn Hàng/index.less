@@ -1,6 +1,6 @@
 // ─── Trang Đơn Hàng — Full Layout ────────────────────────────────────────────
 
-.history-page-container {
+.khungTrangLichSu {
   width: calc(100% + 64px);
   min-height: calc(100vh - 60px);
   margin: -32px;
@@ -12,7 +12,7 @@
   background-size: cover;
 
   // ── Header ──────────────────────────────────────────────────────────────────
-  .page-header {
+  .phanDauTrang {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -20,7 +20,7 @@
     flex-wrap: wrap;
     gap: 16px;
 
-    .page-title {
+    .tieuDeTrang {
       font-size: 26px;
       font-weight: 800;
       color: #1a1a1a;
@@ -28,7 +28,7 @@
       letter-spacing: -0.3px;
     }
 
-    .page-subtitle {
+    .tieuDePhuTrang {
       color: #888;
       font-size: 14px;
       margin: 0;
@@ -36,7 +36,7 @@
   }
 
   // ── Bộ lọc (seg-radio) ──────────────────────────────────────────────────────
-  .seg-radio {
+  .boLocPhanDoan {
     display: inline-flex;
     background: #edf0f2;
     padding: 4px;
@@ -58,7 +58,7 @@
         color: #222;
       }
 
-      &.active {
+      &.dangChon {
         background: #fff;
         color: #2f8f4e;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -67,14 +67,14 @@
   }
 
   // ── Danh sách đơn ───────────────────────────────────────────────────────────
-  .orders-grid {
+  .luoiDonHang {
     display: grid;
     gap: 18px;
     width: 100%;
   }
 
   // ── Card đơn hàng ───────────────────────────────────────────────────────────
-  .order-card {
+  .theDonHang {
     background: #fff;
     border: 1px solid #ebebeb;
     border-radius: 18px;
@@ -88,7 +88,7 @@
     }
 
     // ── Phần chính ────────────────────────────────────────────────────────────
-    .card-main {
+    .phanChinhThe {
       display: grid;
       grid-template-columns: 1fr auto;
       padding: 22px 28px;
@@ -98,14 +98,14 @@
     }
 
     // ── Hàng meta (mã đơn, trạng thái, giờ nhận) ─────────────────────────────
-    .order-meta {
+    .thongTinDon {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
       margin-bottom: 16px;
 
-      .order-id {
+      .maDon {
         font-family: 'JetBrains Mono', 'Courier New', monospace;
         font-size: 13px;
         font-weight: 700;
@@ -115,7 +115,7 @@
         border-radius: 6px;
       }
 
-      .pickup-time {
+      .thoiGianNhan {
         font-size: 12px;
         color: #999;
 
@@ -127,13 +127,13 @@
     }
 
     // ── Danh sách món ─────────────────────────────────────────────────────────
-    .order-items {
+    .danhSachMonAn {
       display: flex;
       flex-direction: column;
       gap: 8px;
       margin-bottom: 18px;
 
-      .item-preview {
+      .monAnThuGon {
         display: flex;
         align-items: center;
         gap: 10px;
@@ -144,16 +144,16 @@
         border-radius: 8px;
         border: 1px solid #f0f0f0;
 
-        .emoji {
+        .bieuTuongMon {
           font-size: 22px;
         }
 
-        .name {
+        .tenMon {
           flex: 1;
           font-weight: 500;
         }
 
-        .qty {
+        .soLuong {
           color: #bbb;
           font-family: monospace;
           font-weight: 700;
@@ -162,11 +162,11 @@
     }
 
     // ── Cột bên phải: tổng tiền + phương thức thanh toán ─────────────────────
-    .card-side {
+    .phanBenThe {
       text-align: right;
       min-width: 160px;
 
-      .total-label {
+      .nhanTongTien {
         font-size: 10px;
         font-weight: 700;
         color: #bbb;
@@ -175,13 +175,13 @@
         margin-bottom: 6px;
       }
 
-      .total-value {
+      .giaTriTongTien {
         font-size: 26px;
         font-weight: 800;
         color: #1a1a1a;
         line-height: 1;
 
-        .unit {
+        .donVi {
           font-size: 14px;
           font-weight: 500;
           color: #bbb;
@@ -189,7 +189,7 @@
         }
       }
 
-      .payment-method {
+      .phuongThucThanhToan {
         font-size: 12px;
         color: #999;
         margin-top: 10px;
@@ -203,7 +203,7 @@
     }
 
     // ── Ghi chú đơn ──────────────────────────────────────────────────────────
-    .order-note {
+    .ghiChuDon {
       padding: 12px 28px;
       background: #fffbea;
       border-top: 1px dashed #ffe58f;
@@ -215,7 +215,7 @@
     }
 
     // ── Footer: nút hành động ─────────────────────────────────────────────────
-    .card-actions {
+    .hanhDongThe {
       padding: 14px 28px;
       display: flex;
       gap: 10px;
@@ -224,7 +224,7 @@
       background: #fafafa;
       border-top: 1px solid #f0f0f0;
 
-      .btn-rate-order {
+      .nutDanhGiaDon {
         border-color: #2f8f4e;
         color: #2f8f4e;
         font-weight: 600;
@@ -243,7 +243,7 @@
   }
 
   // ── Chip trạng thái ──────────────────────────────────────────────────────────
-  .status-chip {
+  .nhanTrangThai {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -274,7 +274,7 @@
       color: #1a6eb5;
     }
 
-    .dot-status {
+    .chamTrangThai {
       width: 7px;
       height: 7px;
       border-radius: 50%;
@@ -299,7 +299,7 @@
   }
 
   // ── Empty state ──────────────────────────────────────────────────────────────
-  .empty-state {
+  .trangThaiTrong {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -308,7 +308,7 @@
     color: #aaa;
     text-align: center;
 
-    .icon-wrapper {
+    .khungBieuTuong {
       font-size: 56px;
       color: #ddd;
       margin-bottom: 20px;
@@ -328,14 +328,14 @@
 }
 
 // ── Order Tracker ─────────────────────────────────────────────────────────────
-.tracker {
+.thanhTheoDoi {
   display: flex;
   gap: 4px;
   position: relative;
   padding: 10px 0;
 }
 
-.tracker-step {
+.thanhTheoDoi-step {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -358,11 +358,11 @@
     display: none;
   }
 
-  &.done::before {
+  &.hoanThanh::before {
     background: #2f8f4e;
   }
 
-  .dot {
+  .cham {
     width: 28px;
     height: 28px;
     border-radius: 50%;
@@ -377,20 +377,20 @@
     transition: all 0.3s;
   }
 
-  &.done .dot {
+  &.hoanThanh .cham {
     background: #2f8f4e;
     border-color: #2f8f4e;
     color: white;
   }
 
-  &.active .dot {
+  &.dangChon .cham {
     background: white;
     border-color: #2f8f4e;
     color: #2f8f4e;
     box-shadow: 0 0 0 4px #dff2e4;
   }
 
-  .label {
+  .nhan {
     font-size: 11px;
     font-weight: 600;
     color: #bbb;
@@ -398,30 +398,30 @@
     white-space: nowrap;
   }
 
-  &.done .label,
-  &.active .label {
+  &.hoanThanh .nhan,
+  &.dangChon .nhan {
     color: #333;
   }
 }
 
 /* Responsive Đơn Hàng */
 @media (max-width: 768px) {
-  .history-page-container {
+  .khungTrangLichSu {
     width: calc(100% + 48px);
     margin: -24px;
     padding: 24px;
     
-    .page-header {
+    .phanDauTrang {
       flex-direction: column;
       align-items: flex-start;
       gap: 16px;
       margin-bottom: 20px;
       
-      .page-title {
+      .tieuDeTrang {
         font-size: 22px;
       }
       
-      .seg-radio {
+      .boLocPhanDoan {
         width: 100%;
         display: flex;
         
@@ -434,24 +434,24 @@
       }
     }
 
-    .order-card {
-      .card-main {
+    .theDonHang {
+      .phanChinhThe {
         grid-template-columns: 1fr; /* Một cột dọc duy nhất */
         padding: 16px;
         gap: 20px;
       }
 
-      .order-meta {
+      .thongTinDon {
         gap: 8px;
         margin-bottom: 12px;
         
-        .pickup-time {
+        .thoiGianNhan {
           width: 100%;
           margin-top: 4px;
         }
       }
 
-      .card-side {
+      .phanBenThe {
         text-align: left;
         min-width: 100%;
         border-top: 1px dashed var(--line, #ebebeb);
@@ -462,26 +462,26 @@
         flex-wrap: wrap;
         gap: 12px;
 
-        .total-label {
+        .nhanTongTien {
           margin-bottom: 2px;
           width: 100%; /* Đưa label lên dòng riêng biệt của cột thanh toán */
         }
 
-        .total-value {
+        .giaTriTongTien {
           font-size: 22px;
         }
 
-        .payment-method {
+        .phuongThucThanhToan {
           margin-top: 0;
         }
       }
 
-      .order-note {
+      .ghiChuDon {
         padding: 10px 16px;
         font-size: 12px;
       }
 
-      .card-actions {
+      .hanhDongThe {
         padding: 12px 16px;
         
         .ant-space {
@@ -494,18 +494,18 @@
 }
 
 @media (max-width: 576px) {
-  .history-page-container {
+  .khungTrangLichSu {
     width: calc(100% + 32px);
     margin: -16px;
     padding: 16px 12px;
   }
 
-  .tracker {
+  .thanhTheoDoi {
     padding: 6px 0;
   }
   
-  .tracker-step {
-    .dot {
+  .thanhTheoDoi-step {
+    .cham {
       width: 22px;
       height: 22px;
       font-size: 10px;
@@ -516,7 +516,7 @@
       top: 11px;
     }
     
-    .label {
+    .nhan {
       font-size: 9px;
       letter-spacing: -0.3px;
     }
@@ -524,7 +524,7 @@
 }
 
 @media (max-width: 380px) {
-  .history-page-container {
+  .khungTrangLichSu {
     width: calc(100% + 24px);
     margin: -12px;
     padding: 12px;

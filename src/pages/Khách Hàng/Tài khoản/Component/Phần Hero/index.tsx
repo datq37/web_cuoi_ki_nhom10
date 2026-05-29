@@ -3,9 +3,9 @@ import { SettingOutlined, UserOutlined } from '@ant-design/icons';
 
 const PhanHero: React.FC = () => {
     return (
-        <div className="account-hero">
-            <div className="hero-title-row">
-                <span className="hero-icon">
+        <div className="phan-anh-bia">
+            <div className="hang-tieu-de-anh-bia">
+                <span className="bieu-tuong-anh-bia">
                     <SettingOutlined />
                 </span>
                 <div>
@@ -14,13 +14,13 @@ const PhanHero: React.FC = () => {
                 </div>
             </div>
 
-            <div className="hero-card-illustration" aria-hidden="true">
-                <div className="plant-pot">
+            <div className="minh-hoa-anh-bia" aria-hidden="true">
+                <div className="chau-cay">
                     <span />
                 </div>
-                <div className="id-card">
-                    <div className="clip" />
-                    <div className="id-avatar">
+                <div className="the-ten">
+                    <div className="kep-the" />
+                    <div className="anh-dai-dien-the">
                         <UserOutlined />
                     </div>
                     <i />

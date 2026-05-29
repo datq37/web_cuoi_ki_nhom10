@@ -6,24 +6,24 @@ import './index.less';
 
 const ThanhToan: React.FC<ThanhToanProps> = ({ payment, onSelect }) => {
     return (
-        <div className="payment-section">
-            <div className="section-label">
+        <div className="phanThanhToan">
+            <div className="nhanPhan">
                 <CreditCard size={25} />
                 <span>Phương thức thanh toán</span>
             </div>
 
-            <div className="payment-options">
+            <div className="tuyChonThanhToan">
                 {PAYMENT_METHODS.map(m => (
                     <button
                         key={m.key}
-                        className={`pay-opt ${payment === m.key ? 'active' : ''}`}
+                        className={`tuyChonTra ${payment === m.key ? 'hoatDong' : ''}`}
                         onClick={() => onSelect(m.key)}
                         aria-pressed={payment === m.key}
                     >
-                        <span className="pay-icon">{m.icon}</span>
-                        <span className="pay-label">{m.label}</span>
+                        <span className="bieuTuongTra">{m.icon}</span>
+                        <span className="nhanTra">{m.label}</span>
                         {payment === m.key && (
-                            <span className="pay-check">
+                            <span className="dauTichTra">
                                 <Check size={22} />
                             </span>
                         )}

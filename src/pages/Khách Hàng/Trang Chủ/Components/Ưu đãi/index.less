@@ -222,10 +222,11 @@
 }
 
 .combo-items {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr auto 1fr;
+  display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-top: 16px;
 
   & > span {
@@ -235,6 +236,9 @@
 }
 
 .combo-item {
+  flex: 1;
+  min-width: 64px;
+  max-width: 130px;
   height: 64px;
   display: grid;
   place-items: center;

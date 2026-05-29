@@ -17,7 +17,7 @@ const CartFooter: React.FC<CartFooterProps> = ({
     const {
         subtotal,
         serviceFee,
-        discount,
+        giamGia,
         voucherDiscount,
         comboDiscount,
         total,
@@ -26,70 +26,70 @@ const CartFooter: React.FC<CartFooterProps> = ({
     } = useCartFooterModel(selectedVoucher);
 
     return (
-        <div className="cart-footer">
+        <div className="chanGioHang">
             {/* ── Bảng chi tiết giá ─────────────────────────────────────── */}
-            <div className="price-breakdown">
+            <div className="chiTietGia">
                 {/* Tạm tính */}
-                <div className="price-row">
-                    <span className="price-label">Tạm tính</span>
-                    <span className="price-value">{fmtVND(subtotal)}</span>
+                <div className="hangGia">
+                    <span className="nhanGia">Tạm tính</span>
+                    <span className="giaTriGia">{fmtVND(subtotal)}</span>
                 </div>
 
                 {/* Phụ phí phục vụ */}
-                <div className="price-row">
-                    <span className="price-label">{SERVICE_FEE_LABEL}</span>
-                    <span className="price-value fee">+{fmtVND(serviceFee)}</span>
+                <div className="hangGia">
+                    <span className="nhanGia">{SERVICE_FEE_LABEL}</span>
+                    <span className="giaTriGia phi">+{fmtVND(serviceFee)}</span>
                 </div>
 
                 {/* Giảm giá Combo */}
                 {comboDiscount > 0 && (
-                    <div className="price-row voucher-row">
-                        <span className="price-label">
+                    <div className="hangGia hangPhieuGiamGia">
+                        <span className="nhanGia">
                             Combo Nổi Bật
                         </span>
-                        <span className="price-value discount">-{fmtVND(comboDiscount)}</span>
+                        <span className="giaTriGia giamGia">-{fmtVND(comboDiscount)}</span>
                     </div>
                 )}
 
                 {/* Khuyến mãi / Voucher */}
                 {selectedVoucher && (
-                    <div className={`price-row voucher-row ${voucherNotMet ? 'disabled' : ''}`}>
-                        <span className="price-label">
+                    <div className={`hangGia hangPhieuGiamGia ${voucherNotMet ? 'voHieuHoa' : ''}`}>
+                        <span className="nhanGia">
                             Mã Giảm Giá
-                            <span className="voucher-badge">{selectedVoucher.code}</span>
+                            <span className="huyHieuPhieuGiamGia">{selectedVoucher.code}</span>
                         </span>
                         {voucherNotMet ? (
-                            <span className="price-value warn">
+                            <span className="giaTriGia canhBao">
                                 <CircleAlert size={15} />
                                 &nbsp;Chưa đủ {fmtVND(selectedVoucher.minOrder!)}
                             </span>
                         ) : (
-                            <span className="price-value discount">-{fmtVND(voucherDiscount)}</span>
+                            <span className="giaTriGia giamGia">-{fmtVND(voucherDiscount)}</span>
                         )}
                     </div>
                 )}
 
                 {/* Đường kẻ phân cách */}
-                <div className="price-divider" />
+                <div className="duongChiaGia" />
 
                 {/* Tổng thanh toán */}
-                <div className="price-row total-row">
-                    <span className="total-label">Tổng thanh toán</span>
-                    <span className="total-value">{fmtVND(total)}</span>
+                <div className="hangGia hangTongCong">
+                    <span className="nhanTongCong">Tổng thanh toán</span>
+                    <span className="giaTriTongCong">{fmtVND(total)}</span>
                 </div>
             </div>
 
             {/* ── Nút xác nhận ──────────────────────────────────────────── */}
             <button
                 id="btn-confirm-order"
-                className={`confirm-btn ${isEmpty ? 'disabled' : ''}`}
+                className={`nutXacNhan ${isEmpty ? 'voHieuHoa' : ''}`}
                 onClick={onConfirm}
                 disabled={isEmpty || isLoading}
                 aria-label="Xác nhận đặt món"
             >
                 {isLoading ? (
                     <>
-                        <LoaderCircle className="spin-icon" size={24} />
+                        <LoaderCircle className="bieuTuongXoay" size={24} />
                         <span>Đang xử lý...</span>
                     </>
                 ) : (

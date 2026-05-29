@@ -3,14 +3,14 @@ import { Button, Avatar, Upload, Progress } from 'antd';
 import { CameraOutlined, SafetyOutlined, UploadOutlined, CrownFilled } from '@ant-design/icons';
 import type { ThanhBenProps } from '@/services/Khách hàng/Tài khoản/typing';
 
-const ThanhBen: React.FC<ThanhBenProps> = ({ currentUser, avatarUrl, isAvatarImage, beforeUpload, rankInfo }) => {
+const ThanhBen: React.FC<ThanhBenProps> = ({ nguoiDungHienTai, duongDanAnhDaiDien, laAnhDaiDien, truocKhiTaiLen, thongTinHang }) => {
     const renderAvatar = () => {
-        if (isAvatarImage()) {
-            return <Avatar size={128} src={avatarUrl} className="profile-avatar" />;
+        if (laAnhDaiDien()) {
+            return <Avatar size={128} src={duongDanAnhDaiDien} className="anh-dai-dien-tai-khoan" />;
         }
         return (
-            <Avatar size={128} className="profile-avatar profile-avatar-text">
-                {avatarUrl || 'U'}
+            <Avatar size={128} className="anh-dai-dien-tai-khoan anh-dai-dien-chu">
+                {duongDanAnhDaiDien || 'U'}
             </Avatar>
         );
     };
@@ -18,50 +18,50 @@ const ThanhBen: React.FC<ThanhBenProps> = ({ currentUser, avatarUrl, isAvatarIma
     const fmt = (n: number) => new Intl.NumberFormat('vi-VN').format(n);
 
     return (
-        <section className="profile-sidebar profile-card">
-            <div className="avatar-art" aria-hidden="true">
-                <span className="leaf leaf-a" />
-                <span className="leaf leaf-b" />
+        <section className="thanh-ben-tai-khoan the-tai-khoan">
+            <div className="nghe-thuat-anh-dai-dien" aria-hidden="true">
+                <span className="chiec-la chiec-la-a" />
+                <span className="chiec-la chiec-la-b" />
             </div>
 
-            <div className="avatar-preview">
+            <div className="xem-truoc-anh-dai-dien">
                 {renderAvatar()}
-                <span className="camera-badge">
+                <span className="huy-hieu-may-anh">
                     <CameraOutlined />
                 </span>
             </div>
 
-            <h2>{currentUser.name}</h2>
-            <p className="user-dept">{currentUser.dept}</p>
+            <h2>{nguoiDungHienTai.name}</h2>
+            <p className="phong-ban-nguoi-dung">{nguoiDungHienTai.dept}</p>
 
-            <div className="rank-info" style={{ marginTop: 16, marginBottom: 16, textAlign: 'center', background: '#f5f5f5', padding: 12, borderRadius: 12 }}>
-                <div style={{ fontWeight: 600, fontSize: 16, color: rankInfo?.color || '#cd7f32', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-                    <CrownFilled /> Hạng {rankInfo?.name || 'Đồng'}
+            <div className="thong-tin-hang">
+                <div className="tieu-de-hang" style={{ color: thongTinHang?.color || '#cd7f32' }}>
+                    <CrownFilled /> Hạng {thongTinHang?.name || 'Đồng'}
                 </div>
-                <div style={{ fontSize: 14, color: '#666', marginTop: 4 }}>
-                    Điểm thưởng: <strong style={{ color: '#ff4d4f' }}>{fmt(currentUser.points || 0)}</strong>
+                <div className="diem-hang">
+                    Điểm thưởng: <strong>{fmt(nguoiDungHienTai.points || 0)}</strong>
                 </div>
-                <div style={{ fontSize: 12, color: '#999', marginTop: 4 }}>
-                    Đã chi tiêu: {fmt(currentUser.totalSpent || 0)}đ
+                <div className="chi-tieu-hang">
+                    Đã chi tiêu: {fmt(nguoiDungHienTai.totalSpent || 0)}đ
                 </div>
             </div>
 
-            <div className="avatar-upload-block">
+            <div className="khoi-tai-anh-dai-dien">
                 <strong>Ảnh đại diện</strong>
                 <span>JPG, PNG tối đa 2MB</span>
                 <Upload
                     name="avatar"
                     showUploadList={false}
-                    beforeUpload={beforeUpload}
+                    beforeUpload={truocKhiTaiLen}
                     accept="image/*"
                 >
-                    <Button icon={<UploadOutlined />} className="upload-btn">
+                    <Button icon={<UploadOutlined />} className="nut-tai-len">
                         Tải ảnh lên
                     </Button>
                 </Upload>
             </div>
 
-            <div className="privacy-note">
+            <div className="ghi-chu-bao-mat">
                 <SafetyOutlined />
                 <span>Thông tin của bạn được bảo mật và chỉ hiển thị nội bộ.</span>
             </div>

@@ -1,4 +1,4 @@
-.employee-menu-container {
+.khungThucDonNhanVien {
   --bg: #f8faf8;
   --bg-elev: #fff;
   --bg-soft: #f5f7f4;
@@ -33,7 +33,7 @@
   background-position: center;
   background-size: cover;
 
-  .page-header {
+  .phanDauTrang {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -41,7 +41,7 @@
     margin-bottom: 22px;
   }
 
-  .page-title {
+  .tieuDeTrang {
     margin: 0 0 8px;
     color: var(--ink);
     font-size: 30px;
@@ -50,14 +50,14 @@
     letter-spacing: 0;
   }
 
-  .page-subtitle {
+  .tieuDePhuTrang {
     margin: 0;
     color: var(--ink-2);
     font-size: 15px;
     line-height: 1.35;
   }
 
-  .preorder-card {
+  .theDatTruoc {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -68,7 +68,7 @@
     border-radius: 20px;
     box-shadow: none;
 
-    .preorder-icon {
+    .bieuTuongDatTruoc {
       display: grid;
       flex-shrink: 0;
       width: 40px;
@@ -196,7 +196,7 @@
     }
   }
 
-  .schedule-row {
+  .hangLichTrinh {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -204,7 +204,7 @@
     margin-bottom: 22px;
   }
 
-  .day-tabs {
+  .thanhChonNgay {
     display: flex;
     gap: 12px;
     min-width: 0;
@@ -221,7 +221,7 @@
     }
   }
 
-  .day-tab {
+  .theNgay {
     display: flex;
     flex: 0 0 auto;
     flex-direction: column;
@@ -237,49 +237,65 @@
     cursor: pointer;
     transition: background 0.2s, color 0.2s, transform 0.2s;
 
-    .day-name {
+    .tenNgay {
       color: var(--ink-3);
       font-size: 12px;
       font-weight: 650;
       line-height: 1.2;
     }
 
-    .day-num {
+    .soNgay {
       margin-top: 5px;
       font-size: 20px;
       font-weight: 850;
       line-height: 1;
     }
 
-    &.active {
+    &.dangChon {
       color: var(--accent-ink);
       background: var(--accent);
       box-shadow: none;
 
-      .day-name {
+      .tenNgay {
         color: rgb(255 255 255 / 78%);
       }
     }
 
-    &:hover:not(.active) {
+    &.quaKhu,
+    &:disabled {
+      position: relative;
+      overflow: hidden;
+      color: var(--ink-4);
+      background: var(--bg-soft);
+      cursor: not-allowed;
+      opacity: 0.48;
+      transform: none;
+
+      .tenNgay,
+      .soNgay {
+        color: var(--ink-4);
+      }
+    }
+
+    &:hover:not(.active):not(:disabled) {
       background: var(--bg-soft);
       transform: translateY(-1px);
     }
   }
 
-  .filter-section {
+  .phanBoLoc {
     display: flex;
     flex-direction: column;
     gap: 12px;
     margin-bottom: 20px;
   }
 
-  .search-box {
+  .hopTimKiem {
     position: relative;
     display: flex;
     align-items: center;
 
-    .search-icon {
+    .bieuTuongTimKiem {
       position: absolute;
       left: 16px;
       color: var(--ink-4);
@@ -287,7 +303,7 @@
       stroke-width: 2;
     }
 
-    .search-input {
+    .oNhapTimKiem {
       width: 100%;
       min-height: 50px;
       padding: 0 46px;
@@ -310,7 +326,7 @@
       }
     }
 
-    .search-clear {
+    .nutXoaTimKiem {
       position: absolute;
       right: 14px;
       display: grid;
@@ -331,13 +347,13 @@
     }
   }
 
-  .category-bar {
+  .thanhDanhMuc {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
   }
 
-  .cat-chip {
+  .theDanhMuc {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -357,7 +373,7 @@
       stroke-width: 2.2;
     }
 
-    .count {
+    .soLuong {
       display: inline-grid;
       min-width: 22px;
       height: 20px;
@@ -370,11 +386,11 @@
       border-radius: 999px;
     }
 
-    &.active {
+    &.dangChon {
       color: var(--accent-ink);
       background: var(--accent);
 
-      .count {
+      .soLuong {
         color: var(--accent);
         background: rgb(255 255 255 / 72%);
       }
@@ -387,14 +403,14 @@
     }
   }
 
-  .menu-grid {
+  .luoiThucDon {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
     gap: 20px;
     margin-bottom: 40px;
   }
 
-  .dish-card {
+  .theMonAn {
     display: flex;
     min-width: 0;
     overflow: hidden;
@@ -411,7 +427,7 @@
     }
   }
 
-  .dish-image {
+  .hinhAnhMon {
     position: relative;
     height: 166px;
     overflow: hidden;
@@ -426,11 +442,11 @@
     }
   }
 
-  .dish-card:hover .dish-image img {
+  .theMonAn:hover .dish-image img {
     transform: scale(1.035);
   }
 
-  .dish-tags {
+  .danhSachNhan {
     position: absolute;
     top: 12px;
     left: 12px;
@@ -438,7 +454,7 @@
     gap: 6px;
   }
 
-  .dish-tag {
+  .nhanMon {
     padding: 5px 11px;
     color: #fff;
     font-size: 10px;
@@ -460,7 +476,7 @@
     }
   }
 
-  .dish-body {
+  .thanTheMon {
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -468,7 +484,7 @@
     padding: 14px 16px 16px;
   }
 
-  .dish-name {
+  .tenMon {
     margin: 0;
     color: var(--ink);
     font-size: 16px;
@@ -476,7 +492,7 @@
     line-height: 1.22;
   }
 
-  .dish-desc {
+  .moTaMon {
     display: -webkit-box;
     min-height: 39px;
     margin: 0;
@@ -488,7 +504,7 @@
     -webkit-line-clamp: 2;
   }
 
-  .dish-meta {
+  .thongTinMon {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -507,14 +523,14 @@
       stroke-width: 2;
     }
 
-    .dish-rating {
+    .danhGiaMon {
       margin-left: auto;
       color: var(--warn-500);
       font-weight: 800;
     }
   }
 
-  .dish-foot {
+  .phanChanThe {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -524,13 +540,13 @@
     border-top: none;
   }
 
-  .dish-price {
+  .giaMon {
     color: var(--ink);
     font-size: 20px;
     font-weight: 900;
     line-height: 1;
 
-    .currency {
+    .donViTien {
       margin-left: 2px;
       color: var(--ink-3);
       font-size: 12px;
@@ -538,7 +554,7 @@
     }
   }
 
-  .dish-add {
+  .nutThemMon {
     display: grid;
     width: 38px;
     height: 32px;
@@ -557,7 +573,7 @@
     }
   }
 
-  .dish-qty {
+  .soLuongMon {
     display: flex;
     align-items: center;
     gap: 9px;
@@ -593,7 +609,7 @@
     }
   }
 
-  .future-tag {
+  .nhanChuaBan {
     display: inline-flex;
     align-items: center;
     padding: 7px 14px;
@@ -609,8 +625,8 @@
 }
 
 @media (max-width: 1200px) {
-  .employee-menu-container {
-    .menu-grid {
+  .khungThucDonNhanVien {
+    .luoiThucDon {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 18px;
     }
@@ -618,17 +634,17 @@
 }
 
 @media (max-width: 900px) {
-  .employee-menu-container {
+  .khungThucDonNhanVien {
     width: calc(100% + 48px);
     margin: -24px;
     padding: 24px;
 
-    .page-header {
+    .phanDauTrang {
       align-items: flex-start;
       flex-direction: column;
     }
 
-    .preorder-card {
+    .theDatTruoc {
       width: 100%;
       min-width: 0;
     }
@@ -647,13 +663,13 @@
       padding: 26px 24px;
     }
 
-    .schedule-row {
+    .hangLichTrinh {
       align-items: stretch;
       flex-direction: column;
     }
 
-    .day-tabs,
-    .category-bar {
+    .thanhChonNgay,
+    .thanhDanhMuc {
       flex-wrap: nowrap;
       width: 100%;
       overflow-x: auto;
@@ -665,7 +681,7 @@
       }
     }
 
-    .cat-chip {
+    .theDanhMuc {
       flex: 0 0 auto;
       min-height: 42px;
     }
@@ -674,17 +690,17 @@
 }
 
 @media (max-width: 768px) {
-  .employee-menu-container {
-    .page-header {
+  .khungThucDonNhanVien {
+    .phanDauTrang {
       gap: 14px;
       margin-bottom: 16px;
     }
 
-    .page-title {
+    .tieuDeTrang {
       font-size: 27px;
     }
 
-    .page-subtitle {
+    .tieuDePhuTrang {
       font-size: 14px;
     }
 
@@ -726,33 +742,33 @@
       }
     }
 
-    .schedule-row,
-    .filter-section {
+    .hangLichTrinh,
+    .phanBoLoc {
       margin-bottom: 16px;
     }
 
-    .menu-grid {
+    .luoiThucDon {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
     }
 
-    .dish-image {
+    .hinhAnhMon {
       height: 142px;
     }
 
-    .dish-body {
+    .thanTheMon {
       padding: 12px 13px 14px;
     }
 
-    .dish-name {
+    .tenMon {
       font-size: 15px;
     }
 
-    .dish-meta {
+    .thongTinMon {
       flex-wrap: wrap;
       row-gap: 6px;
 
-      .dish-rating {
+      .danhGiaMon {
         margin-left: 0;
       }
     }
@@ -760,16 +776,16 @@
 }
 
 @media (max-width: 576px) {
-  .employee-menu-container {
+  .khungThucDonNhanVien {
     width: calc(100% + 32px);
     margin: -16px;
     padding: 16px;
 
-    .page-title {
+    .tieuDeTrang {
       font-size: 25px;
     }
 
-    .preorder-card {
+    .theDatTruoc {
       display: none;
     }
 
@@ -821,33 +837,33 @@
       }
     }
 
-    .day-tab {
+    .theNgay {
       width: 76px;
       height: 68px;
     }
 
-    .menu-grid {
+    .luoiThucDon {
       grid-template-columns: 1fr;
       gap: 14px;
     }
 
-    .search-input {
+    .oNhapTimKiem {
       min-height: 46px;
     }
 
-    .dish-image {
+    .hinhAnhMon {
       height: 176px;
     }
   }
 }
 
 @media (max-width: 380px) {
-  .employee-menu-container {
+  .khungThucDonNhanVien {
     width: calc(100% + 24px);
     margin: -12px;
     padding: 12px;
 
-    .page-title {
+    .tieuDeTrang {
       font-size: 23px;
     }
 
@@ -875,23 +891,23 @@
       padding: 8px;
     }
 
-    .day-tab {
+    .theNgay {
       width: 70px;
       height: 64px;
 
-      .day-num {
+      .soNgay {
         font-size: 18px;
       }
     }
 
-    .dish-image {
+    .hinhAnhMon {
       height: 158px;
     }
   }
 }
 
 @media (max-width: 340px) {
-  .employee-menu-container {
+  .khungThucDonNhanVien {
     .menu-hero {
       min-height: 232px;
       background-position: 82% center;

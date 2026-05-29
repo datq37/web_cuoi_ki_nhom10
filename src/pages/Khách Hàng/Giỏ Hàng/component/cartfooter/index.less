@@ -1,11 +1,11 @@
-.cart-footer {
+.chanGioHang {
     display: flex;
     flex-direction: column;
     gap: 9px;
     padding: 2px 0 0;
 }
 
-.price-breakdown {
+.chiTietGia {
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -15,7 +15,7 @@
     border-radius: 14px;
 }
 
-.price-row {
+.hangGia {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -23,26 +23,26 @@
     font-size: 12px;
 }
 
-.price-label {
+.nhanGia {
     display: flex;
     align-items: center;
     gap: 6px;
     color: #5f6673;
 }
 
-.price-value {
+.giaTriGia {
     color: #111827;
     font-weight: 750;
 
-    &.fee {
+    &.phi {
         color: #111827;
     }
 
-    &.discount {
+    &.giamGia {
         color: #21743b;
     }
 
-    &.warn {
+    &.canhBao {
         color: #d97706;
         font-weight: 700;
         font-size: 11px;
@@ -51,7 +51,7 @@
     }
 }
 
-.voucher-badge {
+.huyHieuPhieuGiamGia {
     display: inline-block;
     padding: 2px 6px;
     color: #21743b;
@@ -60,14 +60,14 @@
     font-size: 9px;
     font-weight: 900;
     letter-spacing: 0.04em;
-    text-transform: uppercase;
+    vanBan-transform: uppercase;
 }
 
-.voucher-row.disabled {
+.hangPhieuGiamGia.voHieuHoa {
     opacity: 0.75;
 }
 
-.price-divider {
+.duongChiaGia {
     height: 1px;
     margin: 2px 0 1px;
     background: repeating-linear-gradient(
@@ -79,24 +79,24 @@
     );
 }
 
-.total-row {
+.hangTongCong {
     align-items: flex-end;
 }
 
-.total-label {
+.nhanTongCong {
     color: #111827;
     font-size: 13px;
     font-weight: 800;
 }
 
-.total-value {
+.giaTriTongCong {
     color: #21743b;
     font-size: 19px;
     font-weight: 800;
     line-height: 1;
 }
 
-.confirm-btn {
+.nutXacNhan {
     width: 100%;
     height: 46px;
     display: flex;
@@ -114,7 +114,7 @@
     letter-spacing: 0;
     transition: transform 0.18s, filter 0.18s, box-shadow 0.18s;
 
-    &:hover:not(:disabled) {
+    &:hover:not(:voHieuHoa) {
         filter: brightness(0.98);
         box-shadow: 0 12px 22px rgba(23, 111, 50, 0.26);
     }
@@ -125,12 +125,12 @@
         stroke-width: 2.2;
     }
 
-    &:active:not(:disabled) {
+    &:hoatDong:not(:voHieuHoa) {
         transform: scale(0.98);
     }
 
-    &.disabled,
-    &:disabled {
+    &.voHieuHoa,
+    &:voHieuHoa {
         color: #8b938f;
         background: #dfe5df;
         box-shadow: none;
@@ -139,7 +139,7 @@
     }
 }
 
-.spin-icon {
+.bieuTuongXoay {
     animation: cart-spin 0.9s linear infinite;
 }
 
@@ -150,23 +150,23 @@
 }
 
 @media (max-width: 576px) {
-    .price-breakdown {
+    .chiTietGia {
         padding: 11px 13px;
     }
 
-    .price-row {
+    .hangGia {
         font-size: 12px;
     }
 
-    .total-label {
+    .nhanTongCong {
         font-size: 13px;
     }
 
-    .total-value {
+    .giaTriTongCong {
         font-size: 19px;
     }
 
-    .confirm-btn {
+    .nutXacNhan {
         height: 46px;
         font-size: 14px;
     }
@@ -174,37 +174,37 @@
 
 // ─── DARK MODE OVERRIDES ──────────────────────────────────────────────────────
 .main-page-container.theme-dark {
-    .price-breakdown {
+    .chiTietGia {
         background: var(--bg-soft);
         border-color: var(--line);
     }
 
-    .price-label {
+    .nhanGia {
         color: var(--ink-2);
     }
 
-    .price-value {
+    .giaTriGia {
         color: var(--ink);
 
-        &.fee {
+        &.phi {
             color: var(--ink);
         }
 
-        &.discount {
+        &.giamGia {
             color: var(--accent);
         }
 
-        &.warn {
+        &.canhBao {
             color: #d97706; // Keep orange for warning
         }
     }
 
-    .voucher-badge {
+    .huyHieuPhieuGiamGia {
         color: var(--accent);
         background: var(--accent-soft);
     }
 
-    .price-divider {
+    .duongChiaGia {
         background: repeating-linear-gradient(
             90deg,
             var(--line-strong) 0,
@@ -214,17 +214,17 @@
         );
     }
 
-    .total-label {
+    .nhanTongCong {
         color: var(--ink);
     }
 
-    .total-value {
+    .giaTriTongCong {
         color: var(--accent);
     }
 
-    .confirm-btn {
-        &.disabled,
-        &:disabled {
+    .nutXacNhan {
+        &.voHieuHoa,
+        &:voHieuHoa {
             color: var(--ink-4);
             background: var(--bg-mute);
         }

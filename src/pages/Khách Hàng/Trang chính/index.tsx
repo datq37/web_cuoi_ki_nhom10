@@ -6,15 +6,15 @@ import CustomerHome from '../Trang Chủ';
 import EmployeeMenu from '../Thucdon';
 import HistoryPage from '../Đơn Hàng';
 import GioHang from '../Giỏ Hàng';
-import ThongBao from '../Thông Báo';
 import TaiKhoan from '../Tài khoản';
 import QRPaymentPage from '../Thanh Toán QR';
+import CustomerChatBox from '../Component/ChatBox';
 import './index.less';
 
 const MainPage: React.FC = () => {
-  const { page, theme, isSidebarOpen } = useModel('Khách Hàng.global');
+  const { page, theme, isSidebarOpen } = useModel('Khách Hàng.GlobalState.index');
   const { cartOpen, setCartOpen } = useModel('Khách Hàng.Thực đơn.index');
-  const { isNotificationOpen } = useModel('Khách Hàng.Notifications');
+  const { isNotificationOpen } = useModel('Khách Hàng.Thông Báo.index');
 
   const isLockScroll = isNotificationOpen || cartOpen || isSidebarOpen;
 
@@ -44,12 +44,9 @@ const MainPage: React.FC = () => {
           {renderContent()}
         </section>
       </main>
-
-      {/* Giỏ hàng — drawer trượt từ phải, tự quản lý qua cartOpen */}
       <GioHang />
-      
-      {/* Thông báo — drawer trượt từ phải */}
-      <ThongBao />
+
+      <CustomerChatBox />
     </div>
   );
 };

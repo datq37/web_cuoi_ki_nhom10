@@ -9,8 +9,13 @@ const DayTabs: React.FC<DayTabsProps> = ({ selected, onSelect }) => {
             {days.map((d, i) => (
                 <button
                     key={i}
-                    className={`day-tab ${selected === i ? 'active' : ''} ${d.isToday ? 'today' : ''}`}
-                    onClick={() => onSelect(i)}
+                    className={`day-tab ${selected === i ? 'active' : ''} ${d.isToday ? 'today' : ''} ${d.isPast ? 'past' : ''}`}
+                    disabled={d.isPast}
+                    aria-disabled={d.isPast}
+                    title={d.isPast ? 'Ngày đã qua' : undefined}
+                    onClick={() => {
+                        if (!d.isPast) onSelect(i);
+                    }}
                 >
                     <span className="day-name">{d.name}</span>
                     <span className="day-num">{d.num}/{d.month}</span>

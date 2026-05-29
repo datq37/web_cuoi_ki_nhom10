@@ -3,6 +3,7 @@ export interface WeekDay {
   num: number;
   month: number;
   isToday: boolean;
+  isPast: boolean;
 }
 
 export interface DayTabsProps {

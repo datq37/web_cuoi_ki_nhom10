@@ -261,7 +261,23 @@
       }
     }
 
-    &:hover:not(.active) {
+    &.past,
+    &:disabled {
+      position: relative;
+      overflow: hidden;
+      color: var(--ink-4);
+      background: var(--bg-soft);
+      cursor: not-allowed;
+      opacity: 0.48;
+      transform: none;
+
+      .day-name,
+      .day-num {
+        color: var(--ink-4);
+      }
+    }
+
+    &:hover:not(.active):not(:disabled) {
       background: var(--bg-soft);
       transform: translateY(-1px);
     }

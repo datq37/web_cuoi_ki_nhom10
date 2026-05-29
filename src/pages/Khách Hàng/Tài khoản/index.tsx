@@ -2,18 +2,18 @@ import React, { useEffect } from 'react';
 import { Form } from 'antd';
 import { useModel } from 'umi';
 import accountBackground from '@/assets/Khách Hàng/Tài khoản/Backgroud.png';
-import { getPageBackground } from '../themeBackground';
+import { getPageBackground } from '../Chế độ sáng tôi/themeBackground';
 import useTaiKhoanModel from '@/models/Khách Hàng/Tài Khoản';
 
-import PhanHero    from './Component/Phần Hero';
-import ThanhTrai  from './Component/Thanh Trái';
-import BieuMau    from './Component/Biểu Mẫu';
-import PhanChan   from './Component/Phần Chân';
+import PhanHero from './Component/Phần Hero';
+import ThanhTrai from './Component/Thanh Trái';
+import BieuMau from './Component/Biểu Mẫu';
+import PhanChan from './Component/Phần Chân';
 
 import './index.less';
 
 const TaiKhoan: React.FC = () => {
-    const { currentUser: nguoiDungHienTai, updateProfile: capNhatHoSo, rankInfo: thongTinHang } = useModel('Khách Hàng.user');
+    const { currentUser: nguoiDungHienTai, updateProfile: capNhatHoSo, rankInfo: thongTinHang } = useModel('Khách Hàng.Tài Khoản.thanghang');
     const { theme: giaoDien } = useModel('Khách Hàng.global');
     const { duongDanAnhDaiDien, dongBoAnhDaiDien, truocKhiTaiLen, khiHoanThanh, laAnhDaiDien } = useTaiKhoanModel();
 

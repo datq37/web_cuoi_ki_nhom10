@@ -34,22 +34,7 @@ export default [
 		component: './Khách Hàng/Trang chính',
 		layout: false,
 	},
-	{
-		path: '/user',
-		layout: false,
-		routes: [
-			{
-				path: '/user/login',
-				layout: false,
-				name: 'login',
-				component: './user/Login',
-			},
-			{
-				path: '/user',
-				redirect: '/user/login',
-			},
-		],
-	},
+
 	{
 		path: '/dashboard',
 		redirect: '/quan-tri/tong-quan',

@@ -4,9 +4,9 @@ import { useModel } from 'umi';
 import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
 
 export default function useDanhGiaModel(order: any, onClose: () => void) {
-    const { currentUser } = useModel('Khách Hàng.user');
+    const { currentUser } = useModel('Khách Hàng.Tài Khoản.thanghang');
     const { addReview } = useModel('Khách Hàng.Thực đơn.index');
-    const { markAsReviewed } = useModel('Khách Hàng.Orders');
+    const { markAsReviewed } = useModel('Khách Hàng.Đơn Hàng.Orders');
 
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');

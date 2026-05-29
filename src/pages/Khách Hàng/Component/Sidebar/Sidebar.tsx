@@ -16,9 +16,9 @@ import { useModel, history } from 'umi';
 
 const Sidebar: React.FC = () => {
   const { page, setPage, isSidebarOpen, setIsSidebarOpen } = useModel('Khách Hàng.global');
-  const { currentUser } = useModel('Khách Hàng.user');
+  const { currentUser } = useModel('Khách Hàng.Tài Khoản.thanghang');
   const { cart, setCartOpen } = useModel('Khách Hàng.Thực đơn.index');
-  const { unreadCount, setIsNotificationOpen } = useModel('Khách Hàng.Notifications');
+  const { unreadCount, setIsNotificationOpen } = useModel('Khách Hàng.Thông Báo.index');
 
   const user = currentUser || defaultUser;
   const cartQty = cart.reduce((sum: number, item: any) => sum + item.qty, 0);

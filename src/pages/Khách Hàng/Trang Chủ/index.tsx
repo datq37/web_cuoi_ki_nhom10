@@ -6,7 +6,7 @@ import MenuAndBestSellers from './Components/Danh mục và Bán chạy';
 import OrderSteps from './Components/Quy trình';
 import OffersAndCombos from './Components/Ưu đãi';
 import homeBackground from '@/assets/Khách Hàng/Trang chủ/Backgroud.png';
-import { getPageBackground } from '../themeBackground';
+import { getPageBackground } from '../Chế độ sáng tôi/themeBackground';
 import './index.less';
 
 const CustomerHome: React.FC = () => {

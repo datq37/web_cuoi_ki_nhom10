@@ -12,7 +12,7 @@ import chaySalad from '@/assets/Khách Hàng/Trang chủ/chay_salad_no_text.png'
 export default function useTrangChuModel() {
     const { setPage } = useModel('Khách Hàng.global') as any;
     const { cart, addToCart, incCart, decCart } = useModel('Khách Hàng.Thực đơn.index') as any;
-    const { orders } = useModel('Khách Hàng.Orders') as any;
+    const { orders } = useModel('Khách Hàng.Đơn Hàng.Orders') as any;
     const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
 
     const bestSellingDishes = useMemo(

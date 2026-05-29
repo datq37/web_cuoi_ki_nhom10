@@ -1,32 +1,32 @@
 import React from 'react';
 import { useModel } from 'umi';
 import { Button, Space } from 'antd';
-import { 
-    FileTextOutlined, 
-    InfoCircleOutlined, 
-    CheckOutlined, 
-    ReloadOutlined 
+import {
+    FileTextOutlined,
+    InfoCircleOutlined,
+    CheckOutlined,
+    ReloadOutlined
 } from '@ant-design/icons';
 import { ORDER_STATUSES, PAYMENT_METHODS, OrderStatus, Order } from '@/services/Khách hàng/Đơn Hàng';
 import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
 import OrderTracker from './component/OrderTracker';
 import RatingPage from '../Đánh Giá';
 import orderBackground from '@/assets/Khách Hàng/Đơn hàng/Backgroud.png';
-import { getPageBackground } from '../themeBackground';
+import { getPageBackground } from '../Chế độ sáng tôi/themeBackground';
 import './index.less';
 
 const formatVND = (n: number) => new Intl.NumberFormat('vi-VN').format(n);
 const getDish = (id: string) => SEED_MENU.find(d => d.id === id);
 
 const HistoryPage: React.FC = () => {
-    const { 
-        theme, 
-        filter, 
-        setFilter, 
-        ratingOrder, 
-        setRatingOrder, 
-        filters, 
-        visibleOrders, 
+    const {
+        theme,
+        filter,
+        setFilter,
+        ratingOrder,
+        setRatingOrder,
+        filters,
+        visibleOrders,
         handleReorder,
         advanceOrder
     } = useModel('Khách Hàng.Đơn Hàng.index');
@@ -117,27 +117,27 @@ const HistoryPage: React.FC = () => {
                                 <div className="hanhDongThe">
                                     <Space size="middle">
                                         {o.status === OrderStatus.Ready && (
-                                            <Button 
-                                                type="primary" 
-                                                icon={<CheckOutlined />} 
+                                            <Button
+                                                type="primary"
+                                                icon={<CheckOutlined />}
                                                 onClick={() => advanceOrder(o.id)}
                                             >
                                                 Đã nhận món
                                             </Button>
                                         )}
-                                        
+
                                         {o.status === OrderStatus.Done && (
                                             <>
                                                 {!o.isReviewed && (
-                                                    <Button 
+                                                    <Button
                                                         className="nutDanhGiaDon"
                                                         onClick={() => setRatingOrder(o)}
                                                     >
                                                         Đánh giá
                                                     </Button>
                                                 )}
-                                                <Button 
-                                                    icon={<ReloadOutlined />} 
+                                                <Button
+                                                    icon={<ReloadOutlined />}
                                                     type="text"
                                                     onClick={() => handleReorder(o)}
                                                 >
@@ -154,9 +154,9 @@ const HistoryPage: React.FC = () => {
             )}
 
             {ratingOrder && (
-                <RatingPage 
-                    order={ratingOrder} 
-                    onClose={() => setRatingOrder(null)} 
+                <RatingPage
+                    order={ratingOrder}
+                    onClose={() => setRatingOrder(null)}
                 />
             )}
         </div>

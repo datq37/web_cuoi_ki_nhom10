@@ -71,8 +71,8 @@ const Topbar: React.FC = () => {
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isNotifOpen, setIsNotifOpen] = useState(false);
     const { theme, toggleTheme, breadcrumbs, isSidebarOpen, setIsSidebarOpen } = useModel('Khách Hàng.global');
-    const { currentUser } = useModel('Khách Hàng.user');
-    const { notifications, unreadCount, markAsRead, markAllAsRead } = useModel('Khách Hàng.Notifications');
+    const { currentUser } = useModel('Khách Hàng.Tài Khoản.thanghang');
+    const { notifications, unreadCount, markAsRead, markAllAsRead } = useModel('Khách Hàng.Thông Báo.index');
 
     const user = currentUser || defaultUser;
     const avatarText = user.avatar && user.avatar.length <= 2 ? user.avatar : 'U';

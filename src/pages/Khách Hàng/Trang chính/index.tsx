@@ -14,7 +14,7 @@ import './index.less';
 const MainPage: React.FC = () => {
   const { page, theme, isSidebarOpen } = useModel('Khách Hàng.global');
   const { cartOpen, setCartOpen } = useModel('Khách Hàng.Thực đơn.index');
-  const { isNotificationOpen } = useModel('Khách Hàng.Notifications');
+  const { isNotificationOpen } = useModel('Khách Hàng.Thông Báo.index');
 
   const isLockScroll = isNotificationOpen || cartOpen || isSidebarOpen;
 
@@ -44,11 +44,8 @@ const MainPage: React.FC = () => {
           {renderContent()}
         </section>
       </main>
-
-      {/* Giỏ hàng — drawer trượt từ phải, tự quản lý qua cartOpen */}
       <GioHang />
 
-      {/* Chatbot hỗ trợ khách hàng — nổi góc phải dưới */}
       <CustomerChatBox />
     </div>
   );

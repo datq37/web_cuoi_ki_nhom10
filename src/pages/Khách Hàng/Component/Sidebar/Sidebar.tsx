@@ -6,7 +6,6 @@ import {
   Gift,
   HelpCircle,
   Home,
-  LogOut,
   Settings,
   ShoppingCart,
   User,
@@ -18,7 +17,7 @@ import { useModel, history } from 'umi';
 
 const Sidebar: React.FC = () => {
   const { page, setPage, isSidebarOpen, setIsSidebarOpen } = useModel('Khách Hàng.global');
-  const { currentUser, rankInfo } = useModel('Khách Hàng.user');
+  const { currentUser } = useModel('Khách Hàng.user');
   const { cart, setCartOpen } = useModel('Khách Hàng.Thực đơn.index');
   const { unreadCount, setIsNotificationOpen } = useModel('Khách Hàng.Notifications');
 
@@ -197,22 +196,6 @@ const Sidebar: React.FC = () => {
             </div>
           </div>
 
-          <div className="user-pill">
-            <div className="avatar">
-              {user.avatar && user.avatar.length > 2 ? (
-                <img src={user.avatar} alt="Avatar" />
-              ) : (
-                user.avatar || 'U'
-              )}
-            </div>
-            <div className="meta">
-              <span className="name">{user.name}</span>
-              <span className="role">{user.dept}</span>
-            </div>
-            <button className="logout-btn" onClick={() => history.push('/')} aria-label="Đăng xuất">
-              <LogOut size={17} />
-            </button>
-          </div>
         </div>
       </aside>
     </>

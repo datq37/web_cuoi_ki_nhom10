@@ -1,24 +1,25 @@
 import React from 'react';
 import {
     RightOutlined,
-    SearchOutlined,
     BulbOutlined,
     BulbFilled,
     BellOutlined,
-    ShoppingCartOutlined,
     MenuOutlined
 } from '@ant-design/icons';
+import { ChevronDown } from 'lucide-react';
 import './index.less';
-import { useModel } from 'umi';
+import { history, useModel } from 'umi';
+import { defaultUser } from '@/services/Khách hàng/Component/Sidebar';
 import { ThemeType } from '@/services/Khách hàng/Component/topbar/typing';
 
 const Topbar: React.FC = () => {
+    const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
     const { theme, toggleTheme, breadcrumbs, isSidebarOpen, setIsSidebarOpen } = useModel('Khách Hàng.global');
-    const { cart, setCartOpen } = useModel('Khách Hàng.Thực đơn.index');
-    const { role } = useModel('Khách Hàng.user');
+    const { currentUser } = useModel('Khách Hàng.user');
     const { unreadCount, setIsNotificationOpen } = useModel('Khách Hàng.Notifications');
 
-    const cartCount = role === 'employee' ? cart.length : undefined;
+    const user = currentUser || defaultUser;
+    const avatarText = user.avatar && user.avatar.length <= 2 ? user.avatar : 'U';
 
     return (
         <header className="topbar" style={{ position: 'relative' }}>
@@ -49,6 +50,40 @@ const Topbar: React.FC = () => {
                     <BellOutlined style={{ fontSize: '16px' }} />
                     {unreadCount > 0 && <span className="dot" />}
                 </button>
+
+                <div className="topbar-user-wrap">
+                    <button
+                        className={`topbar-user-pill ${isUserMenuOpen ? 'open' : ''}`}
+                        title={user.name}
+                        onClick={() => setIsUserMenuOpen(open => !open)}
+                    >
+                        <span className="topbar-user-avatar">
+                            {user.avatar && user.avatar.length > 2 ? (
+                                <img src={user.avatar} alt="Avatar" />
+                            ) : (
+                                avatarText
+                            )}
+                        </span>
+                        <span className="topbar-user-meta">
+                            <strong>{user.name}</strong>
+                            <small>{user.dept}</small>
+                        </span>
+                        <ChevronDown size={16} />
+                    </button>
+
+                    {isUserMenuOpen && (
+                        <div className="topbar-user-menu">
+                            <button
+                                onClick={() => {
+                                    setIsUserMenuOpen(false);
+                                    history.push('/');
+                                }}
+                            >
+                                Đăng xuất
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
         </header>
     );

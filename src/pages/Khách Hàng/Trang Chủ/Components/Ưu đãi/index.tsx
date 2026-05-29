@@ -324,7 +324,7 @@ const OffersAndCombos: React.FC<OffersAndCombosProps> = ({ setPage }) => {
                 {bestCombo.loaiGia === 'phan_tram' ? `${bestCombo.giaTriGiam}%` : `${Number(bestCombo.giaTriGiam / 1000).toLocaleString('vi-VN')}k`}
               </div>
             </div>
-            <div className="combo-items" style={{ gridTemplateColumns: `repeat(${bestCombo.dishImages.length * 2 - 1}, auto)`}}>
+            <div className="combo-items">
               {bestCombo.dishImages.map((img, idx) => (
                 <React.Fragment key={idx}>
                   <ComboItem img={img} />

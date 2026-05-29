@@ -14,7 +14,7 @@ import './topbar.less';
 import bannerImage from '@/assets/trangchu/banner.png';
 
 const Topbar: React.FC = () => {
-  const { theme, toggleTheme } = useModel('Khách Hàng.global');
+  const { theme, toggleTheme } = useModel('Khách Hàng.GlobalState.index');
   const darkMode = theme === 'dark';
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 

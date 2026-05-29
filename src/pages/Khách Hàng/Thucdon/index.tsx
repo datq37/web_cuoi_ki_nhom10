@@ -21,7 +21,7 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
         filteredMenu,
         todayTabIndex,
     } = useModel('Khách Hàng.Thực đơn.index');
-    const { theme } = useModel('Khách Hàng.global');
+    const { theme } = useModel('Khách Hàng.GlobalState.index');
     const [day, setDay] = useState(todayTabIndex);
     const [selectedDish, setSelectedDish] = useState<any>(null);
 

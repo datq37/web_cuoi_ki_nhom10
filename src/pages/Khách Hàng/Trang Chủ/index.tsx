@@ -10,7 +10,7 @@ import { getPageBackground } from '../Chế độ sáng tôi/themeBackground';
 import './index.less';
 
 const CustomerHome: React.FC = () => {
-  const { theme } = useModel('Khách Hàng.global');
+  const { theme } = useModel('Khách Hàng.GlobalState.index');
   const {
     setPage,
     addToCart,

@@ -7,7 +7,7 @@ import { Order, OrderStatus, PaymentMethod } from '@/services/Khách hàng/Đơn
 export function useGioHangModel() {
     const { cart, cartOpen, setCartOpen, clearCart } = useModel('Khách Hàng.Thực đơn.index');
     const { addOrder } = useModel('Khách Hàng.Đơn Hàng.Orders');
-    const { setPage } = useModel('Khách Hàng.global');
+    const { setPage } = useModel('Khách Hàng.GlobalState.index');
     const { addNotification } = useModel('Khách Hàng.Thông Báo.index');
     const { setPendingOrder } = useModel('Khách Hàng.Thanh toán QR.index');
     const [note, setNote] = useState('');

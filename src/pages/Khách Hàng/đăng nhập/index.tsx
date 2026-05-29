@@ -24,7 +24,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(isRegisterRoute);
 
-  const { theme } = useModel('Khách Hàng.global');
+  const { theme } = useModel('Khách Hàng.GlobalState.index');
   const darkMode = theme === 'dark';
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");

@@ -36,7 +36,7 @@ const CartOption: React.FC<CartOptionProps> = ({
 }) => {
     const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
     const { cart } = useModel('Khách Hàng.Thực đơn.index');
-    const { theme } = useModel('Khách Hàng.global');
+    const { theme } = useModel('Khách Hàng.GlobalState.index');
 
     const {
         pickup,

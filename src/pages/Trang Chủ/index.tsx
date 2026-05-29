@@ -8,7 +8,7 @@ import Footer from './Component/footer';
 import './index.less';
 
 const HomePage: React.FC = () => {
-  const { theme } = useModel('Khách Hàng.global');
+  const { theme } = useModel('Khách Hàng.GlobalState.index');
 
   const revealVariants = {
     hidden: { opacity: 0, y: 80 },

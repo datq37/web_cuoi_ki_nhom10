@@ -67,7 +67,7 @@ const ThongBao: React.FC = () => {
         markAllAsRead 
     } = useModel('Khách Hàng.Thông Báo.index');
     
-    const { theme } = useModel('Khách Hàng.global');
+    const { theme } = useModel('Khách Hàng.GlobalState.index');
 
     return (
         <Drawer

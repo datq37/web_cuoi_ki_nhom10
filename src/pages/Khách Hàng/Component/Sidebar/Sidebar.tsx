@@ -15,7 +15,7 @@ import { defaultUser } from '@/services/Khách hàng/Component/Sidebar';
 import { useModel, history } from 'umi';
 
 const Sidebar: React.FC = () => {
-  const { page, setPage, isSidebarOpen, setIsSidebarOpen } = useModel('Khách Hàng.global');
+  const { page, setPage, isSidebarOpen, setIsSidebarOpen } = useModel('Khách Hàng.GlobalState.index');
   const { currentUser } = useModel('Khách Hàng.Tài Khoản.thanghang');
   const { cart, setCartOpen } = useModel('Khách Hàng.Thực đơn.index');
   const { unreadCount, setIsNotificationOpen } = useModel('Khách Hàng.Thông Báo.index');

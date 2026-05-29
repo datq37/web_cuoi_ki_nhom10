@@ -12,7 +12,7 @@ import CustomerChatBox from '../Component/ChatBox';
 import './index.less';
 
 const MainPage: React.FC = () => {
-  const { page, theme, isSidebarOpen } = useModel('Khách Hàng.global');
+  const { page, theme, isSidebarOpen } = useModel('Khách Hàng.GlobalState.index');
   const { cartOpen, setCartOpen } = useModel('Khách Hàng.Thực đơn.index');
   const { isNotificationOpen } = useModel('Khách Hàng.Thông Báo.index');
 

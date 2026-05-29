@@ -70,7 +70,7 @@ const getNotificationIcon = (id: string) => {
 const Topbar: React.FC = () => {
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isNotifOpen, setIsNotifOpen] = useState(false);
-    const { theme, toggleTheme, breadcrumbs, isSidebarOpen, setIsSidebarOpen } = useModel('Khách Hàng.global');
+    const { theme, toggleTheme, breadcrumbs, isSidebarOpen, setIsSidebarOpen } = useModel('Khách Hàng.GlobalState.index');
     const { currentUser } = useModel('Khách Hàng.Tài Khoản.thanghang');
     const { notifications, unreadCount, markAsRead, markAllAsRead } = useModel('Khách Hàng.Thông Báo.index');
 

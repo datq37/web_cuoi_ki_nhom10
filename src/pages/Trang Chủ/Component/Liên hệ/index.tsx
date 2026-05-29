@@ -40,7 +40,7 @@ const contactItems = [
 ];
 
 export default function ContactPage() {
-  const { theme } = useModel('Khách Hàng.global');
+  const { theme } = useModel('Khách Hàng.GlobalState.index');
 
   useEffect(() => {
     window.scrollTo(0, 0);

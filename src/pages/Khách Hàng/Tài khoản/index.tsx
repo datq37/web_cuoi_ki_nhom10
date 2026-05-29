@@ -14,7 +14,7 @@ import './index.less';
 
 const TaiKhoan: React.FC = () => {
     const { currentUser: nguoiDungHienTai, updateProfile: capNhatHoSo, rankInfo: thongTinHang } = useModel('Khách Hàng.Tài Khoản.thanghang');
-    const { theme: giaoDien } = useModel('Khách Hàng.global');
+    const { theme: giaoDien } = useModel('Khách Hàng.GlobalState.index');
     const { duongDanAnhDaiDien, dongBoAnhDaiDien, truocKhiTaiLen, khiHoanThanh, laAnhDaiDien } = useTaiKhoanModel();
 
     const [bieuMau] = Form.useForm();

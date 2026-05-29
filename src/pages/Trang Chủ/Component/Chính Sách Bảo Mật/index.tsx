@@ -38,7 +38,7 @@ const menuItems = [
 ];
 
 export default function PrivacyPage() {
-  const { theme } = useModel('Khách Hàng.global');
+  const { theme } = useModel('Khách Hàng.GlobalState.index');
   const [activeSection, setActiveSection] = React.useState(menuItems[0].id);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 

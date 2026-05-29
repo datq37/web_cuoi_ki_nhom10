@@ -91,14 +91,6 @@ const Sidebar: React.FC = () => {
 
   const otherItems = [
     {
-      id: 'notifications',
-      label: 'Thông báo',
-      icon: <Bell size={17} />,
-      badge: unreadCount > 0 ? unreadCount : undefined,
-      badgeTone: 'red' as const,
-      onClick: () => setIsNotificationOpen(true),
-    },
-    {
       id: 'settings',
       label: 'Cài đặt',
       icon: <Settings size={17} />,

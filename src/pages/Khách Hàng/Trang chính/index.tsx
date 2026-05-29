@@ -6,7 +6,6 @@ import CustomerHome from '../Trang Chủ';
 import EmployeeMenu from '../Thucdon';
 import HistoryPage from '../Đơn Hàng';
 import GioHang from '../Giỏ Hàng';
-import ThongBao from '../Thông Báo';
 import TaiKhoan from '../Tài khoản';
 import QRPaymentPage from '../Thanh Toán QR';
 import CustomerChatBox from '../Component/ChatBox';
@@ -48,9 +47,6 @@ const MainPage: React.FC = () => {
 
       {/* Giỏ hàng — drawer trượt từ phải, tự quản lý qua cartOpen */}
       <GioHang />
-      
-      {/* Thông báo — drawer trượt từ phải */}
-      <ThongBao />
 
       {/* Chatbot hỗ trợ khách hàng — nổi góc phải dưới */}
       <CustomerChatBox />

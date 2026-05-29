@@ -1,34 +1,19 @@
-@bg: #f8fafc;
-@sidebar-w: 260px;
+﻿@bg: #f8fafc;
 @primary: #16a34a;
 @radius: 14px;
 @border: #f1f5f9;
-
-// ── Layout ──────────────────────────────────────────────────────
-.adminLayout { display: flex; min-height: 100vh; background: @bg; }
-
-.mainContent {
-  margin-left: @sidebar-w;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  min-width: 0;
-}
 
 .pageBody {
   padding: 20px 24px 32px;
   flex: 1;
 }
 
-// ── Settings wrapper ─────────────────────────────────────────────
 .settingsWrap {
   display: flex;
   gap: 16px;
   align-items: flex-start;
 }
 
-// ── Left nav ─────────────────────────────────────────────────────
 .leftNav {
   width: 240px;
   flex-shrink: 0;
@@ -79,7 +64,6 @@
   transition: color 0.12s;
 }
 
-// ── Right content ────────────────────────────────────────────────
 .rightContent {
   flex: 1;
   background: #fff;
@@ -108,7 +92,6 @@
   margin-top: -14px;
 }
 
-// ── Logo section ─────────────────────────────────────────────────
 .logoSection {
   display: flex;
   align-items: center;
@@ -153,7 +136,6 @@
   white-space: nowrap;
 }
 
-// ── Form fields ───────────────────────────────────────────────────
 .fieldGroup {
   display: flex;
   flex-direction: column;
@@ -192,7 +174,6 @@
   :global(.ant-input-password) { font-size: 13.5px; }
 }
 
-// ── Save row ──────────────────────────────────────────────────────
 .saveRow {
   display: flex;
   justify-content: flex-end;
@@ -213,7 +194,6 @@
   }
 }
 
-// ── Operating hours ───────────────────────────────────────────────
 .dayList {
   display: flex;
   flex-direction: column;
@@ -271,7 +251,6 @@
   flex-shrink: 0;
 }
 
-// ── Payment ───────────────────────────────────────────────────────
 .payList {
   display: flex;
   flex-direction: column;
@@ -319,7 +298,6 @@
   margin-top: 2px;
 }
 
-// ── Notifications ─────────────────────────────────────────────────
 .notifList {
   display: flex;
   flex-direction: column;
@@ -355,7 +333,6 @@
   margin-top: 2px;
 }
 
-// ── Security ──────────────────────────────────────────────────────
 .securityList {
   display: flex;
   flex-direction: column;
@@ -391,15 +368,11 @@
   margin-top: 2px;
 }
 
-// ── Global switch color ───────────────────────────────────────────
 :global(.ant-switch-checked) {
   background: @primary !important;
 }
 
-// ── Dark mode overrides ─────────────────────────────────────────
 :global([data-theme="dark"]) {
-  .adminLayout { background: #0f172a; }
-
   .leftNav { background: #1e293b; border-color: #334155; }
   .navItem { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
   .navActive { background: rgba(22,163,74,.15) !important; color: #4ade80 !important; .navIcon { color: #4ade80 !important; } }
@@ -408,6 +381,7 @@
   .rightContent { background: #1e293b; border-color: #334155; }
   .contentTitle { color: #f1f5f9; }
   .contentSub   { color: #64748b; }
+  .btnOutline   { background: #0f172a !important; border-color: #334155 !important; color: #94a3b8 !important; }
 
   .logoSection { background: #0f172a; }
   .logoName { color: #f1f5f9; }

@@ -1,4 +1,4 @@
-@primary:       #16a34a;
+﻿@primary:       #16a34a;
 @primary-hover: #15803d;
 @border:        #f0f0f0;
 @divider:       #f3f4f6;
@@ -7,7 +7,6 @@
 @text-muted:    #6b7280;
 @ease:          cubic-bezier(0.22, 0.61, 0.36, 1);
 
-// ── Drawer shell overrides ───────────────────────────────────
 .orderDrawer {
   :global(.ant-drawer-content) {
     display: flex;
@@ -40,7 +39,6 @@
   }
 }
 
-// ── Header ───────────────────────────────────────────────────
 .drawerHeader {
   display: flex;
   align-items: center;
@@ -107,7 +105,6 @@
   &:hover { border-color: #d1d5db; color: @text-dark; background: #f9fafb; }
 }
 
-// ── Footer ───────────────────────────────────────────────────
 .drawerFooter {
   display: flex;
   align-items: center;
@@ -121,13 +118,11 @@
   margin-left: auto;
 }
 
-// ── Body ─────────────────────────────────────────────────────
 .drawerBody {
   display: flex;
   flex-direction: column;
 }
 
-// ── Status row ───────────────────────────────────────────────
 .statusRow {
   display: flex;
   align-items: center;
@@ -143,6 +138,12 @@
   border-radius: 99px;
   font-size: 13px;
   font-weight: 600;
+
+  &[data-status="cho_xac_nhan"]  { background: #fff7ed; }
+  &[data-status="dang_che_bien"] { background: #eff6ff; }
+  &[data-status="san_sang"]      { background: #f5f3ff; }
+  &[data-status="hoan_thanh"]    { background: #f0fdf4; }
+  &[data-status="huy"]           { background: #f3f4f6; }
 }
 
 .statusDot {
@@ -159,7 +160,6 @@
   color: @text-muted;
 }
 
-// ── Steps ────────────────────────────────────────────────────
 .stepsWrap {
   display: flex;
   align-items: center;
@@ -243,14 +243,12 @@
   50%       { box-shadow: 0 0 0 7px rgba(22, 163, 74, 0.1); }
 }
 
-// ── Divider ──────────────────────────────────────────────────
 .divider {
   height: 6px;
   background: @divider;
   flex-shrink: 0;
 }
 
-// ── Section ──────────────────────────────────────────────────
 .section {
   padding: 16px 20px;
   display: flex;
@@ -280,7 +278,6 @@
   letter-spacing: 0;
 }
 
-// ── Customer ─────────────────────────────────────────────────
 .customerCard {
   display: flex;
   align-items: center;
@@ -332,7 +329,6 @@
   &:hover { border-color: @primary; color: @primary; background: rgba(22, 163, 74, 0.06); }
 }
 
-// ── Items ────────────────────────────────────────────────────
 .itemList {
   display: flex;
   flex-direction: column;
@@ -371,7 +367,6 @@
   flex-shrink: 0;
 }
 
-// ── Note ─────────────────────────────────────────────────────
 .noteBox {
   display: flex;
   align-items: center;
@@ -400,9 +395,12 @@
   padding: 2px 8px;
   border-radius: 99px;
   flex-shrink: 0;
+
+  &[data-ghichu="it_cay"],
+  &[data-ghichu="khong_hanh"] { background: #fff7ed; }
+  &[data-ghichu="mang_di"]    { background: #f5f3ff; }
 }
 
-// ── Pricing ──────────────────────────────────────────────────
 .priceList {
   display: flex;
   flex-direction: column;
@@ -464,7 +462,6 @@
   color: @text-muted;
 }
 
-// ── Dark mode ─────────────────────────────────────────────────
 :global([data-theme="dark"]) {
   .orderDrawer {
     :global(.ant-drawer-content) { background: #1e293b; }
@@ -498,4 +495,16 @@
   .paymentRow { background: #0f172a; }
   .payLabel { color: #64748b; }
   .priceDivider { background: #334155; }
+  .statusBadge {
+    &[data-status="cho_xac_nhan"]  { background: rgba(249,115,22,0.15); }
+    &[data-status="dang_che_bien"] { background: rgba(59,130,246,0.15); }
+    &[data-status="san_sang"]      { background: rgba(139,92,246,0.15); }
+    &[data-status="hoan_thanh"]    { background: rgba(22,163,74,0.15); }
+    &[data-status="huy"]           { background: rgba(107,114,128,0.15); }
+  }
+  .gcTag {
+    &[data-ghichu="it_cay"],
+    &[data-ghichu="khong_hanh"] { background: rgba(249,115,22,0.15); }
+    &[data-ghichu="mang_di"]    { background: rgba(139,92,246,0.15); }
+  }
 }

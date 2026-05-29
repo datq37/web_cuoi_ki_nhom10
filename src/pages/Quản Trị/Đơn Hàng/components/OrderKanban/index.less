@@ -1,4 +1,4 @@
-@primary: #16a34a;
+﻿@primary: #16a34a;
 @ease:    cubic-bezier(0.22, 0.61, 0.36, 1);
 
 .kanbanWrap {
@@ -9,7 +9,6 @@
   min-height: 0;
 }
 
-// ── Column ───────────────────────────────────────────────────
 .kanbanCol {
   background: #f8fafc;
   border-radius: 12px;
@@ -46,6 +45,11 @@
   font-weight: 700;
   padding: 2px 8px;
   border-radius: 99px;
+
+  &[data-col="cho_xac_nhan"]  { background: #fff7ed; }
+  &[data-col="dang_che_bien"] { background: #eff6ff; }
+  &[data-col="san_sang"]      { background: #f5f3ff; }
+  &[data-col="hoan_thanh"]    { background: #f0fdf4; }
 }
 
 .colBody {
@@ -60,7 +64,6 @@
   &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
 }
 
-// ── Card ─────────────────────────────────────────────────────
 .donCard {
   background: #fff;
   border-radius: 10px;
@@ -161,6 +164,10 @@
   padding: 2px 8px;
   border-radius: 99px;
   align-self: flex-start;
+
+  &[data-ghichu="it_cay"],
+  &[data-ghichu="khong_hanh"] { background: #fff7ed; }
+  &[data-ghichu="mang_di"]    { background: #f5f3ff; }
 }
 
 .cardFooter {
@@ -190,7 +197,6 @@
   &:hover { opacity: 0.85; }
 }
 
-// ── Empty col ─────────────────────────────────────────────────
 .emptyCol {
   display: flex;
   align-items: center;
@@ -203,7 +209,6 @@
   color: #d1d5db;
 }
 
-// ── Dark mode ─────────────────────────────────────────────────
 :global([data-theme="dark"]) {
   .kanbanCol  { background: #1e293b; }
   .colHeader  { border-bottom-color: #334155; }
@@ -215,13 +220,26 @@
     &:hover { border-color: #475569; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3); }
   }
   .maDon    { color: #f1f5f9; }
+  .thoiGian { color: #64748b; }
   .tenKH    { color: #e2e8f0; }
   .monRow   { color: #94a3b8; }
   .soLuong  { color: #64748b; }
   .conLai   { color: #64748b; }
   .tongTien { color: #4ade80; }
   .cardFooter { border-top-color: #334155; }
+  .emptyText  { color: #475569; }
   .colBody {
     &::-webkit-scrollbar-thumb { background: #334155; }
+  }
+  .colBadge {
+    &[data-col="cho_xac_nhan"]  { background: rgba(249,115,22,0.15); }
+    &[data-col="dang_che_bien"] { background: rgba(59,130,246,0.15); }
+    &[data-col="san_sang"]      { background: rgba(139,92,246,0.15); }
+    &[data-col="hoan_thanh"]    { background: rgba(22,163,74,0.15); }
+  }
+  .ghiChuTag {
+    &[data-ghichu="it_cay"],
+    &[data-ghichu="khong_hanh"] { background: rgba(249,115,22,0.15); }
+    &[data-ghichu="mang_di"]    { background: rgba(139,92,246,0.15); }
   }
 }

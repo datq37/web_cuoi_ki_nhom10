@@ -1,4 +1,4 @@
-@primary: #16a34a;
+﻿@primary: #16a34a;
 @primary-light: #f0fdf4;
 @border: #f0f0f0;
 @text-dark: #111827;
@@ -10,7 +10,6 @@
 
 .tnWrap { display: flex; flex-direction: column; gap: 14px; }
 
-// ── Stat cards ──────────────────────────────────────────────
 .tnStatGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -49,7 +48,6 @@
 .tnUp   { color: @primary; }
 .tnDown { color: #ef4444; }
 
-// ── Info cards ──────────────────────────────────────────────
 .tnInfoGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -123,7 +121,6 @@
 .tnSatisfyScore { font-size: 20px; font-weight: 800; color: @text-dark; line-height: 1.1; }
 .tnSatisfyDesc  { font-size: 11px; color: @text-muted; margin-bottom: 4px; }
 
-// ── Charts ──────────────────────────────────────────────────
 .tnChartRow {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
@@ -159,7 +156,6 @@
   &:hover { color: #15803d; }
 }
 
-// ── Data row ────────────────────────────────────────────────
 .tnDataRow {
   display: grid;
   grid-template-columns: 1.7fr 1fr;
@@ -209,7 +205,21 @@
 .tnTien  { font-size: 13px; font-weight: 700; color: @text-dark; white-space: nowrap; }
 .tnGio   { font-size: 12px; color: @text-muted; }
 
-// ── Top list ────────────────────────────────────────────────
+.tnStatusBadge {
+  display: inline-block;
+  border: none;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 12px;
+  padding: 3px 10px;
+
+  &[data-status="cho_xac_nhan"]  { background: #fff7ed; }
+  &[data-status="dang_chuan_bi"] { background: #eff6ff; }
+  &[data-status="dang_giao"]     { background: #ecfeff; }
+  &[data-status="hoan_thanh"]    { background: #f0fdf4; }
+  &[data-status="da_huy"]        { background: #f9fafb; }
+}
+
 .tnTopList { display: flex; flex-direction: column; gap: 10px; }
 
 .tnTopRow {
@@ -227,10 +237,59 @@
 }
 .tnTopSuat { font-size: 12.5px; font-weight: 700; white-space: nowrap; }
 
-// ── Responsive ──────────────────────────────────────────────
 @media (max-width: 1200px) {
   .tnStatGrid  { grid-template-columns: repeat(2, 1fr); }
   .tnInfoGrid  { grid-template-columns: repeat(2, 1fr); }
   .tnChartRow  { grid-template-columns: 1fr; }
   .tnDataRow   { grid-template-columns: 1fr; }
+}
+
+:global([data-theme="dark"]) {
+  .tnStatCard, .tnInfoCard, .tnChartCard, .tnTableCard, .tnTopCard {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .tnStatLabel  { color: #94a3b8; }
+  .tnStatValue  { color: #f1f5f9; }
+
+  .tnInfoTitle  { color: #94a3b8; }
+  .tnDishName   { color: #f1f5f9; }
+  .tnDishSold   { color: #94a3b8; }
+  .tnTopBadge   { background: rgba(239,68,68,.15); color: #f87171; }
+  .tnPromoIcon  { background: rgba(22,163,74,.15); }
+  .tnPromoName  { color: #f1f5f9; }
+  .tnPromoLeft  { color: #94a3b8; }
+  .tnSatisfyIcon  { background: rgba(234,179,8,.12); }
+  .tnSatisfyScore { color: #f1f5f9; }
+  .tnSatisfyDesc  { color: #94a3b8; }
+
+  .tnChartTitle { color: #f1f5f9; }
+  .tnChartSub   { color: #94a3b8; }
+  .tnLegLabel   { color: #cbd5e1; }
+  .tnLegVal     { color: #f1f5f9; }
+
+  .tnTableTitle { color: #f1f5f9; }
+  .tnTable {
+    th { color: #64748b; border-bottom-color: #334155; }
+    td { color: #94a3b8; border-bottom-color: #334155; }
+    tr:last-child td { border-bottom: none; }
+  }
+  .tnMaDon { color: #f1f5f9; }
+  .tnKH    { color: #f1f5f9; }
+  .tnPhong { color: #64748b; }
+  .tnMon   { color: #94a3b8; }
+  .tnTien  { color: #f1f5f9; }
+  .tnGio   { color: #64748b; }
+
+  .tnTopRow  { border-bottom-color: #334155; }
+  .tnTopName { color: #f1f5f9; }
+
+  .tnStatusBadge {
+    &[data-status="cho_xac_nhan"]  { background: rgba(234,88,12,0.15); }
+    &[data-status="dang_chuan_bi"] { background: rgba(37,99,235,0.15); }
+    &[data-status="dang_giao"]     { background: rgba(8,145,178,0.15); }
+    &[data-status="hoan_thanh"]    { background: rgba(22,163,74,0.15); }
+    &[data-status="da_huy"]        { background: rgba(107,114,128,0.15); }
+  }
 }

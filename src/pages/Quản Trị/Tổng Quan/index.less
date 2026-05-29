@@ -1,4 +1,4 @@
-@primary: #16a34a;
+﻿@primary: #16a34a;
 @primary-light: #f0fdf4;
 @border: #f0f0f0;
 @text-dark: #111827;
@@ -6,25 +6,10 @@
 @text-muted: #6b7280;
 @text-light: #9ca3af;
 @bg: #f8fafc;
-@sidebar-w: 260px;
 @radius: 12px;
 @shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
 
-// ── Layout ──────────────────────────────────────────────────
-.adminLayout { display: flex; min-height: 100vh; background: @bg; }
-
-.mainContent {
-  margin-left: @sidebar-w;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  min-width: 0;
-}
-
 .pageBody { padding: 16px 20px 24px; flex: 1; display: flex; flex-direction: column; gap: 14px; }
-
-// ── Header tabs ──────────────────────────────────────────────
 .pageHeader {
   display: flex;
   align-items: center;
@@ -83,12 +68,8 @@
   &:hover { background: #15803d !important; border-color: #15803d !important; }
 }
 
-// ────────────────────────────────────────────────────────────
-// TAB TRỰC TIẾP
-// ────────────────────────────────────────────────────────────
 .trucTiepWrap { display: flex; flex-direction: column; gap: 12px; flex: 1; }
 
-// Live status bar
 .liveBar {
   background: #fff;
   border: 1px solid @border;
@@ -158,7 +139,6 @@
   &:hover { background: #15803d; }
 }
 
-// Kanban
 .kanbanBoard {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -209,7 +189,6 @@
   text-align: center;
 }
 
-// Don card
 .donCard {
   background: #fff;
   border-radius: 10px;
@@ -295,7 +274,6 @@
 .trophyLabel { font-size: 12px; color: @text-muted; margin-bottom: 4px; }
 .trophyValue { font-size: 15px; font-weight: 700; color: @primary; }
 
-// Summary bar
 .summaryBar {
   background: #fff;
   border: 1px solid @border;
@@ -329,12 +307,8 @@
   &:hover { color: #15803d; }
 }
 
-// ────────────────────────────────────────────────────────────
-// TAB PHÂN TÍCH
-// ────────────────────────────────────────────────────────────
 .phanTichWrap { display: flex; flex-direction: column; gap: 14px; }
 
-// Banner
 .statBanner {
   background: linear-gradient(135deg, #14532d 0%, #166534 60%, #15803d 100%);
   border-radius: @radius;
@@ -364,7 +338,6 @@
   flex-shrink: 0;
 }
 
-// Charts row
 .chartRow2 {
   display: grid;
   grid-template-columns: 1.65fr 1fr;
@@ -411,7 +384,6 @@
 
 .donutLegPct { font-size: 13px; font-weight: 600; color: @text-dark; }
 
-// Bottom 3 cols
 .bottomRow {
   display: grid;
   grid-template-columns: 2fr 1.6fr 1.2fr;
@@ -439,7 +411,6 @@
   &:hover { color: #15803d; }
 }
 
-// Top món table
 .topMonTable {
   width: 100%;
   border-collapse: collapse;
@@ -577,12 +548,8 @@
 
 .hdArrow { font-size: 11px; color: @text-light; margin-top: 3px; flex-shrink: 0; }
 
-// ────────────────────────────────────────────────────────────
-// TAB TÁC NGHIỆP
-// ────────────────────────────────────────────────────────────
 .tnWrap { display: flex; flex-direction: column; gap: 14px; }
 
-// Stat cards grid
 .tnStatGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -622,7 +589,6 @@
 .tnUp { color: @primary; }
 .tnDown { color: #ef4444; }
 
-// Info cards grid
 .tnInfoGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -692,7 +658,6 @@
 
 .tnSatisfyDesc { font-size: 11px; color: @text-muted; margin-bottom: 4px; }
 
-// Charts row
 .tnChartRow {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
@@ -734,7 +699,6 @@
   &:hover { color: #15803d; }
 }
 
-// Data row (table + top list)
 .tnDataRow {
   display: grid;
   grid-template-columns: 1.7fr 1fr;
@@ -788,7 +752,6 @@
 .tnTien { font-size: 13px; font-weight: 700; color: @text-dark; white-space: nowrap; }
 .tnGio { font-size: 12px; color: @text-muted; }
 
-// Top list
 .tnTopList { display: flex; flex-direction: column; gap: 10px; }
 
 .tnTopRow {
@@ -808,7 +771,6 @@
 
 .tnTopSuat { font-size: 12.5px; font-weight: 700; white-space: nowrap; }
 
-// Placeholder tab
 .placeholderTab {
   display: flex;
   flex-direction: column;
@@ -819,7 +781,6 @@
   p { font-size: 15px; color: @text-muted; }
 }
 
-// ── Responsive ──────────────────────────────────────────────
 @media (max-width: 1200px) {
   .kanbanBoard { grid-template-columns: repeat(2, 1fr); }
   .chartRow2 { grid-template-columns: 1fr; }
@@ -830,16 +791,13 @@
   .tnDataRow { grid-template-columns: 1fr; }
 }
 
-// ── Dark mode overrides ─────────────────────────────────────────
 :global([data-theme="dark"]) {
-  .adminLayout { background: #0f172a; }
-
   .tabsRow { background: #1e293b; border-color: #334155; }
   .tabBtn { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
+  .tabCount { background: rgba(255,255,255,0.08); color: #94a3b8; }
 
   .dateChip { background: #1e293b; border-color: #334155; color: #94a3b8; }
 
-  // Kanban
   .liveBar, .summaryBar { background: #1e293b; border-color: #334155; }
   .liveTxt { color: #f1f5f9; }
   .liveDesc { color: #94a3b8; }
@@ -848,6 +806,7 @@
   .kanbanCot { background: #1e293b; border-color: #334155; }
   .cotHeader { border-bottom-color: #334155; }
   .cotTitle { color: #f1f5f9; }
+  .cotBody { &::-webkit-scrollbar-thumb { background: #334155; } }
   .cotFooter { border-top-color: #334155; color: #94a3b8; }
   .donCard { background: #0f172a; border-color: #334155; }
   .maDon { color: #f1f5f9; }
@@ -861,7 +820,6 @@
   .summaryDiv { background: #334155; }
   .summaryStat { strong { color: #f1f5f9; } span { color: #94a3b8; } }
 
-  // Phân tích
   .barChartCard, .donutCard, .bottomCard, .hoatDongCard { background: #1e293b; border-color: #334155; }
   .chartTitle2 { color: #f1f5f9; }
   .chartLegend { color: #94a3b8; }
@@ -887,7 +845,6 @@
   .hdMota { color: #94a3b8; }
   .hdTime, .hdArrow { color: #64748b; }
 
-  // Tác nghiệp
   .tnStatCard, .tnInfoCard, .tnChartCard, .tnTableCard, .tnTopCard { background: #1e293b; border-color: #334155; }
   .tnStatLabel { color: #94a3b8; }
   .tnStatValue { color: #f1f5f9; }
@@ -907,8 +864,24 @@
   .tnInfoTitle { color: #94a3b8; }
   .tnDishName { color: #f1f5f9; }
   .tnDishSold { color: #94a3b8; }
+  .tnTopBadge { background: rgba(239,68,68,.15); color: #f87171; }
+  .tnPromoIcon { background: rgba(22,163,74,.15); }
   .tnPromoName { color: #f1f5f9; }
   .tnPromoLeft { color: #94a3b8; }
+  .tnSatisfyIcon { background: rgba(234,179,8,.12); }
   .tnSatisfyScore { color: #f1f5f9; }
   .tnSatisfyDesc { color: #94a3b8; }
+
+  .trophyCard  { background: rgba(22,163,74,.1); border-color: rgba(22,163,74,.3); }
+  .trophyLabel { color: #94a3b8; }
+  .trophyValue { color: #4ade80; }
+
+  .emptyText { color: #64748b; }
+
+  .hieuSuatItem  { border-bottom-color: #334155; }
+  .hieuSuatLabel { color: #94a3b8; }
+  .hieuSuatValue { color: #f1f5f9; }
+  .hieuSuatUnit  { color: #94a3b8; }
+  .changeDetail  { color: #64748b; }
+  .donutSubtitle { color: #94a3b8; }
 }

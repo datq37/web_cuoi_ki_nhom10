@@ -1,4 +1,4 @@
-import {
+﻿import {
   ArrowLeftOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -51,7 +51,6 @@ const NEXT_ACTION: Partial<
 
 const HUY_CFG = { tieuDe: 'Đã huỷ', mau: '#6b7280', bgLight: '#f3f4f6' };
 
-// ── DrawerContent — renders only when order is non-null ──────────
 interface ContentProps {
   order: DonTrucTiep;
   cancelledIds: Set<string>;
@@ -81,7 +80,8 @@ const DrawerContent: React.FC<ContentProps> = ({
       <div className={styles.statusRow}>
         <span
           className={styles.statusBadge}
-          style={{ background: cfg.bgLight, color: cfg.mau }}
+          data-status={isCancelled ? 'huy' : order.trangThai}
+          style={{ color: cfg.mau }}
         >
           <span className={styles.statusDot} style={{ background: cfg.mau }} />
           {cfg.tieuDe}
@@ -208,7 +208,7 @@ const DrawerContent: React.FC<ContentProps> = ({
               {order.loaiGhiChu && (() => {
                 const gc = GHI_CHU_CONFIG[order.loaiGhiChu!];
                 return (
-                  <span className={styles.gcTag} style={{ color: gc.mau, background: gc.bg }}>
+                  <span className={styles.gcTag} data-ghichu={order.loaiGhiChu!} style={{ color: gc.mau }}>
                     {gc.label}
                   </span>
                 );
@@ -252,7 +252,6 @@ const DrawerContent: React.FC<ContentProps> = ({
   );
 };
 
-// ── OrderDrawer ──────────────────────────────────────────────────
 const OrderDrawer: React.FC<OrderDrawerProps> = ({
   order,
   cancelledIds,

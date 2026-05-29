@@ -1,4 +1,4 @@
-import {
+﻿import {
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleOutlined,
@@ -30,7 +30,6 @@ import {
 import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import React, { useEffect, useMemo, useState } from 'react';
-import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import {
   DANH_SACH_KHUYEN_MAI,
@@ -50,7 +49,6 @@ import styles from './index.less';
 
 dayjs.extend(customParseFormat);
 
-// ── Helpers ──────────────────────────────────────────────────────
 const fmtVnd = (n: number) => n.toLocaleString('vi-VN') + 'đ';
 
 const LOAI_LABEL: Record<ELoaiGiamGia, string> = {
@@ -94,7 +92,6 @@ type StatCard = {
   subSuffix?: string;
 };
 
-// ── KhuyenMaiForm ─────────────────────────────────────────────────
 const KhuyenMaiForm: React.FC<{
   open: boolean;
   initial: IKhuyenMai | null;
@@ -282,7 +279,6 @@ const KhuyenMaiForm: React.FC<{
   );
 };
 
-// ── KhuyenMaiDetail ───────────────────────────────────────────────
 const KhuyenMaiDetail: React.FC<{
   item: IKhuyenMai | null;
   onClose: () => void;
@@ -315,7 +311,7 @@ const KhuyenMaiDetail: React.FC<{
         <div className={styles.detailBody}>
           <div className={styles.detailHeader}>
             <span className={styles.detailCode}>{d.ma}</span>
-            <span className={styles.detailStatusTag} style={{ color: cfg.color, background: cfg.bg }}>
+            <span className={styles.detailStatusTag} data-status={d.trangThai} style={{ color: cfg.color }}>
               {cfg.label}
             </span>
           </div>
@@ -372,7 +368,6 @@ const KhuyenMaiDetail: React.FC<{
   );
 };
 
-// ── ComboForm ─────────────────────────────────────────────────────
 const ComboForm: React.FC<{
   open: boolean;
   initial: ICombo | null;
@@ -492,7 +487,6 @@ const ComboForm: React.FC<{
           <Input.TextArea rows={2} showCount maxLength={120} placeholder="Mô tả ngắn..." />
         </Form.Item>
 
-        {/* ── Dish picker ── */}
         <div className={styles.dishPicker}>
           {/* Header */}
           <div className={styles.dishPickerHead}>
@@ -579,7 +573,6 @@ const ComboForm: React.FC<{
           </div>
         </div>
 
-        {/* ── Cấu hình giá ── */}
         <Form.Item label="Loại giá combo" name="loaiGia" rules={[{ required: true }]}>
           <Radio.Group>
             <Radio value={ELoaiGiaCombo.PHAN_TRAM}>Giảm %</Radio>
@@ -593,7 +586,7 @@ const ComboForm: React.FC<{
           rules={[
             { required: true, message: 'Vui lòng nhập giá trị' },
             ...(loaiGiaWatch === ELoaiGiaCombo.PHAN_TRAM
-              ? [{ type: 'number' as const, min: 1, max: 99, message: 'Nhập 1–99%' }]
+              ? [{ type: 'number' as const, min: 1, max: 99, message: 'Vui lòng nhập từ 1–99%' }]
               : [{ type: 'number' as const, min: 1000, message: 'Tối thiểu 1.000đ' }]),
           ]}
         >
@@ -670,7 +663,6 @@ const ComboForm: React.FC<{
   );
 };
 
-// ── KhuyenMaiRow ──────────────────────────────────────────────────
 const KhuyenMaiRow: React.FC<{
   item: IKhuyenMai;
   onClick: () => void;
@@ -693,7 +685,7 @@ const KhuyenMaiRow: React.FC<{
       <div className={styles.promoLeft}>
         <div className={styles.promoBadges}>
           <span className={styles.promoCode}>{item.ma}</span>
-          <span className={styles.promoStatus} style={{ color: cfg.color, background: cfg.bg }}>
+          <span className={styles.promoStatus} data-status={item.trangThai} style={{ color: cfg.color }}>
             {cfg.label}
           </span>
         </div>
@@ -734,7 +726,6 @@ const KhuyenMaiRow: React.FC<{
   );
 };
 
-// ── ComboRow ──────────────────────────────────────────────────────
 const ComboRow: React.FC<{
   item: ICombo;
   onClick: () => void;
@@ -762,7 +753,7 @@ const ComboRow: React.FC<{
         <div className={styles.comboCardLeft}>
           <div className={styles.comboCardTitle}>
             <span className={styles.comboCardName}>{item.ten}</span>
-            <span className={styles.promoStatus} style={{ color: cfg.color, background: cfg.bg }}>
+            <span className={styles.promoStatus} data-status={item.trangThai} style={{ color: cfg.color }}>
               {cfg.label}
             </span>
           </div>
@@ -809,7 +800,6 @@ const ComboRow: React.FC<{
   );
 };
 
-// ── KhuyenMai page ────────────────────────────────────────────────
 const KhuyenMai: React.FC = () => {
   const [items, setItems] = useState<IKhuyenMai[]>(() => {
     if (typeof window !== 'undefined') {
@@ -833,7 +823,6 @@ const KhuyenMai: React.FC = () => {
   const [viewing,        setViewing]        = useState<IKhuyenMai | null>(null);
   const [formOpen,       setFormOpen]       = useState(false);
 
-  // ── Combo state ────────────────────────────────────────────────
   const [activeTab,     setActiveTab]     = useState<'ma-giam-gia' | 'combo'>('ma-giam-gia');
   const [comboItems, setComboItems] = useState<ICombo[]>(() => {
     if (typeof window !== 'undefined') {
@@ -854,7 +843,6 @@ const KhuyenMai: React.FC = () => {
   const [editingCombo,  setEditingCombo]  = useState<ICombo | null>(null);
   const [comboTuKhoa,   setComboTuKhoa]   = useState('');
 
-  // ── Dynamic stats ──────────────────────────────────────────────
   const stats = useMemo(() => ({
     dangHoatDong: items.filter((k) => k.hoatDong && k.trangThai === ETrangThaiKhuyenMai.DANG_CHAY).length,
     luotSuDung:   items.reduce((s, k) => s + k.daDung, 0),
@@ -898,7 +886,6 @@ const KhuyenMai: React.FC = () => {
     },
   ], [stats]);
 
-  // ── Filtered list ──────────────────────────────────────────────
   const danhSachLoc = useMemo(() => {
     let list = items;
     if (filterTrangThai) {
@@ -913,7 +900,6 @@ const KhuyenMai: React.FC = () => {
     return list;
   }, [items, tuKhoa, filterTrangThai]);
 
-  // ── Handlers ──────────────────────────────────────────────────
   const handleToggleHoatDong = (id: string, v: boolean) => {
     setItems((prev) => prev.map((k) => (k.id === id ? { ...k, hoatDong: v } : k)));
     message.success(v ? 'Đã kích hoạt khuyến mãi' : 'Đã tạm dừng khuyến mãi');
@@ -959,7 +945,6 @@ const KhuyenMai: React.FC = () => {
     setEditing(null);
   };
 
-  // ── Combo handlers ────────────────────────────────────────────
   const handleComboToggle = (id: string, v: boolean) => {
     setComboItems((prev) => prev.map((c) => (c.id === id ? { ...c, hoatDong: v } : c)));
     message.success(v ? 'Đã kích hoạt combo' : 'Đã tạm dừng combo');
@@ -1013,7 +998,6 @@ const KhuyenMai: React.FC = () => {
     return comboItems.filter((c) => c.ten.toLowerCase().includes(kw));
   }, [comboItems, comboTuKhoa]);
 
-  // ── Filter dropdown ────────────────────────────────────────────
   const filterMenu = (
     <Menu
       selectedKeys={[filterTrangThai ?? 'tat_ca']}
@@ -1030,13 +1014,10 @@ const KhuyenMai: React.FC = () => {
   );
 
   return (
-    <div className={styles.adminLayout}>
-      <Sidebar />
-      <div className={styles.mainContent}>
-        <Topbar title="Khuyến mãi" />
+    <>
+      <Topbar title="Khuyến mãi" />
 
-        <div className={styles.pageBody}>
-          {/* ── Stat cards ── */}
+      <div className={styles.pageBody}>
           <div className={styles.statGrid}>
             {statCards.map((card) => (
               <div key={card.label} className={styles.statCard}>
@@ -1064,7 +1045,6 @@ const KhuyenMai: React.FC = () => {
             ))}
           </div>
 
-          {/* ── Tabs ── */}
           <Tabs
             activeKey={activeTab}
             onChange={(key) => setActiveTab(key as 'ma-giam-gia' | 'combo')}
@@ -1153,10 +1133,8 @@ const KhuyenMai: React.FC = () => {
               </div>
             </Tabs.TabPane>
           </Tabs>
-        </div>
       </div>
 
-      {/* ── Modals ── */}
       <KhuyenMaiForm
         open={formOpen}
         initial={editing}
@@ -1174,7 +1152,7 @@ const KhuyenMai: React.FC = () => {
         onCancel={() => { setComboFormOpen(false); setEditingCombo(null); }}
         onSubmit={handleComboSubmit}
       />
-    </div>
+    </>
   );
 };
 

@@ -59,6 +59,7 @@ export default [
 	{
 		path: '/quan-tri',
 		layout: false,
+		component: './Quản Trị/AdminLayout',
 		routes: [
 			{
 				path: '/quan-tri/tong-quan',
@@ -87,6 +88,10 @@ export default [
 			{
 				path: '/quan-tri/nhan-vien',
 				component: './Quản Trị/Nhân Viên Căng Tin',
+			},
+			{
+				path: '/quan-tri/co-so-vat-chat',
+				component: './Quản Trị/Cơ Sở Vật Chất',
 			},
 			{
 				path: '/quan-tri/cai-dat',

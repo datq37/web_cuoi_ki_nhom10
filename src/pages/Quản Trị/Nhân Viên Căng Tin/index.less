@@ -1,27 +1,13 @@
-@bg: #f8fafc;
-@sidebar-w: 260px;
+﻿@bg: #f8fafc;
 @primary: #16a34a;
 @radius: 16px;
 @border: #f1f5f9;
-
-// ── Layout ──────────────────────────────────────────────────────
-.adminLayout { display: flex; min-height: 100vh; background: @bg; }
-
-.mainContent {
-  margin-left: @sidebar-w;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  min-width: 0;
-}
 
 .pageBody {
   padding: 20px 24px 32px;
   flex: 1;
 }
 
-// ── Grid ─────────────────────────────────────────────────────────
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -31,7 +17,6 @@
   @media (max-width: 700px)  { grid-template-columns: 1fr; }
 }
 
-// ── Staff card ───────────────────────────────────────────────────
 .card {
   background: #fff;
   border-radius: @radius;
@@ -49,7 +34,6 @@
   }
 }
 
-// Header
 .cardHeader {
   display: flex;
   align-items: center;
@@ -83,7 +67,6 @@
   color: #9ca3af;
 }
 
-// Meta row
 .cardMeta {
   display: flex;
   align-items: center;
@@ -98,6 +81,12 @@
   padding: 3px 12px;
   border-radius: 20px;
   white-space: nowrap;
+
+  &[data-vaitro="quan_tri_vien"],
+  &[data-vaitro="bep_truong"],
+  &[data-vaitro="thu_ngan"]        { background: #dcfce7; }
+  &[data-vaitro="nhan_vien_bep"]   { background: #dbeafe; }
+  &[data-vaitro="nhan_vien_phuc_vu"] { background: #fef3c7; }
 }
 
 .lastActive {
@@ -105,7 +94,6 @@
   color: #9ca3af;
 }
 
-// Action buttons
 .cardActions {
   display: flex;
   gap: 10px;
@@ -139,7 +127,6 @@
   font-size: 13px;
 }
 
-// ── Add member card ──────────────────────────────────────────────
 .addCard {
   background: transparent;
   border-radius: @radius;
@@ -198,10 +185,127 @@
   text-align: center;
 }
 
-// ── Dark mode overrides ─────────────────────────────────────────
-:global([data-theme="dark"]) {
-  .adminLayout { background: #0f172a; }
+.card {
+  cursor: pointer;
+}
 
+.detailModal {
+  :global(.ant-modal-content) {
+    border-radius: 16px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.14);
+    overflow: hidden;
+  }
+  :global(.ant-modal-body) {
+    padding: 0;
+  }
+  :global(.ant-modal-footer) {
+    padding: 12px 24px 16px;
+    border-top: 1px solid @border;
+  }
+  :global(.ant-modal-footer .ant-btn) {
+    border-radius: 8px;
+    height: 36px;
+    font-weight: 500;
+    font-size: 13.5px;
+  }
+  :global(.ant-modal-footer .ant-btn-primary) {
+    background: @primary;
+    border-color: @primary;
+    &:hover { background: #15803d; border-color: #15803d; }
+  }
+  :global(.ant-modal-close) {
+    top: 12px;
+    right: 12px;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.detailHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 24px 20px;
+  background: linear-gradient(160deg, #f0fdf4 0%, #f8fafc 100%);
+  gap: 10px;
+}
+
+.detailHeroName  { font-size: 18px; font-weight: 700; color: #111827; text-align: center; }
+.detailHeroEmail { font-size: 13px; color: #9ca3af; text-align: center; margin-top: -4px; }
+
+.detailBody {
+  padding: 20px 24px 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.detailRow { display: flex; flex-direction: column; gap: 3px; }
+
+.detailLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detailValue { font-size: 14px; font-weight: 500; color: #374151; }
+
+.adminModal {
+  :global(.ant-modal-content) {
+    border-radius: 16px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.14);
+    overflow: hidden;
+  }
+  :global(.ant-modal-header) {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid @border;
+  }
+  :global(.ant-modal-title) {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+  }
+  :global(.ant-modal-body) {
+    padding: 20px 24px;
+    max-height: 72vh;
+    overflow-y: auto;
+    &::-webkit-scrollbar { width: 4px; }
+    &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+  }
+  :global(.ant-modal-footer) {
+    padding: 12px 24px 16px;
+    border-top: 1px solid @border;
+  }
+  :global(.ant-modal-footer .ant-btn) {
+    border-radius: 8px;
+    height: 36px;
+    font-weight: 500;
+    font-size: 13.5px;
+  }
+  :global(.ant-modal-footer .ant-btn-primary) {
+    background: @primary;
+    border-color: @primary;
+    &:hover { background: #15803d; border-color: #15803d; }
+  }
+  :global(.ant-modal-close) {
+    top: 14px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+:global([data-theme="dark"]) {
   .card {
     background: #1e293b;
     border-color: #334155;
@@ -222,6 +326,54 @@
     border-color: #334155;
     &:hover { border-color: #16a34a; background: rgba(22,163,74,.08); .addTitle { color: #4ade80; } }
   }
+  .addIconWrap { background: rgba(22,163,74,.15); }
   .addTitle { color: #cbd5e1; }
   .addSub   { color: #64748b; }
+
+  .roleBadge {
+    &[data-vaitro="quan_tri_vien"],
+    &[data-vaitro="bep_truong"],
+    &[data-vaitro="thu_ngan"]          { background: rgba(22,163,74,0.15); }
+    &[data-vaitro="nhan_vien_bep"]     { background: rgba(30,64,175,0.15); }
+    &[data-vaitro="nhan_vien_phuc_vu"] { background: rgba(146,64,14,0.15); }
+  }
+
+  .detailModal {
+    :global(.ant-modal-content) { background: #1e293b; }
+    :global(.ant-modal-footer)  { border-top-color: #334155; }
+    :global(.ant-modal-footer .ant-btn:not(.ant-btn-primary)) {
+      background: #0f172a; border-color: #334155; color: #94a3b8;
+      &:hover { background: #1e293b; color: #f1f5f9; border-color: #475569; }
+    }
+    :global(.ant-modal-close) { color: rgba(255,255,255,0.7); }
+  }
+
+  .detailHero {
+    background: linear-gradient(160deg, rgba(22,163,74,0.12) 0%, #1e293b 100%);
+  }
+  .detailHeroName  { color: #f1f5f9; }
+  .detailHeroEmail { color: #64748b; }
+  .detailLabel     { color: #64748b; }
+  .detailValue     { color: #cbd5e1; }
+
+  .adminModal {
+    :global(.ant-modal-content) { background: #1e293b; }
+    :global(.ant-modal-header)  { background: #1e293b; border-bottom-color: #334155; }
+    :global(.ant-modal-title)   { color: #f1f5f9; }
+    :global(.ant-modal-footer)  { border-top-color: #334155; }
+    :global(.ant-modal-footer .ant-btn:not(.ant-btn-primary)) {
+      background: #0f172a;
+      border-color: #334155;
+      color: #94a3b8;
+      &:hover { background: #1e293b; color: #f1f5f9; border-color: #475569; }
+    }
+    :global(.ant-modal-close)   { color: #64748b; &:hover { background: #0f172a; } }
+    :global(.ant-form-item-label > label) { color: #94a3b8; }
+    :global(.ant-input)         { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+    :global(.ant-input-affix-wrapper) { background: #0f172a; border-color: #334155; }
+    :global(.ant-select-selector) { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+    :global(.ant-select-selection-item) { color: #f1f5f9; }
+    :global(.ant-form-item-explain-error) { color: #f87171; }
+    :global(.ant-modal-body)::-webkit-scrollbar-thumb { background: #334155; }
+  }
 }

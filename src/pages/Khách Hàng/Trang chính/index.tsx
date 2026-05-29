@@ -9,6 +9,7 @@ import GioHang from '../Giỏ Hàng';
 import ThongBao from '../Thông Báo';
 import TaiKhoan from '../Tài khoản';
 import QRPaymentPage from '../Thanh Toán QR';
+import CustomerChatBox from '../Component/ChatBox';
 import './index.less';
 
 const MainPage: React.FC = () => {
@@ -50,6 +51,9 @@ const MainPage: React.FC = () => {
       
       {/* Thông báo — drawer trượt từ phải */}
       <ThongBao />
+
+      {/* Chatbot hỗ trợ khách hàng — nổi góc phải dưới */}
+      <CustomerChatBox />
     </div>
   );
 };

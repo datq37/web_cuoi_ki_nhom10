@@ -8,6 +8,7 @@ import doUong from '@/assets/Khách Hàng/Trang chủ/do_uong_no_text.png';
 import anNhe from '@/assets/Khách Hàng/Trang chủ/an_nhe_no_text.png';
 import chayImg from '@/assets/Khách Hàng/Trang chủ/chay_salad_no_text.png';
 import { OffersAndCombosProps } from '@/services/Khách hàng/Trang Chủ/typing';
+import { formatCurrency, formatNumberViVN } from '@/utils/format';
 import './index.less';
 
 interface BestVoucher {
@@ -78,11 +79,11 @@ function getBestVoucher(): BestVoucher | null {
         ? `Giảm ngay ${best.giaTriGiam}%`
         : best.loai === 'mien_ship'
         ? 'Miễn phí phục vụ'
-        : `Giảm ngay ${Number(best.giaTriGiam).toLocaleString('vi-VN')}đ`;
+        : `Giảm ngay ${formatCurrency(Number(best.giaTriGiam))}`;
 
     const conditionLabel =
       best.donToiThieu > 0
-        ? `Áp dụng cho đơn hàng từ ${Number(best.donToiThieu).toLocaleString('vi-VN')}đ`
+        ? `Áp dụng cho đơn hàng từ ${formatCurrency(Number(best.donToiThieu))}`
         : 'Áp dụng cho mọi đơn hàng';
 
     return {
@@ -314,13 +315,13 @@ const OffersAndCombos: React.FC<OffersAndCombosProps> = ({ setPage }) => {
               <div>
                 <p>{bestCombo.ten}</p>
                 <div>
-                  <strong>{Number(bestCombo.discountedPrice).toLocaleString('vi-VN')}đ</strong>
-                  <span>{Number(bestCombo.originalPrice).toLocaleString('vi-VN')}đ</span>
+                  <strong>{formatCurrency(Number(bestCombo.discountedPrice))}</strong>
+                  <span>{formatCurrency(Number(bestCombo.originalPrice))}</span>
                 </div>
               </div>
               <div className="combo-sale" style={bestCombo.loaiGia !== 'phan_tram' ? { fontSize: '12px' } : undefined}>
                 <small>Giảm</small>
-                {bestCombo.loaiGia === 'phan_tram' ? `${bestCombo.giaTriGiam}%` : `${Number(bestCombo.giaTriGiam / 1000).toLocaleString('vi-VN')}k`}
+                {bestCombo.loaiGia === 'phan_tram' ? `${bestCombo.giaTriGiam}%` : `${formatNumberViVN(Number(bestCombo.giaTriGiam / 1000))}k`}
               </div>
             </div>
             <div className="combo-items">

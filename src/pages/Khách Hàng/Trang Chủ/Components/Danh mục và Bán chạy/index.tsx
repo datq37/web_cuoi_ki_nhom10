@@ -6,6 +6,7 @@ import doUong from '@/assets/Khách Hàng/Trang chủ/do_uong_no_text.png';
 import anNhe from '@/assets/Khách Hàng/Trang chủ/an_nhe_no_text.png';
 import chaySalad from '@/assets/Khách Hàng/Trang chủ/chay_salad_no_text.png';
 import type { CategoryCardProps, FoodCardProps, MenuAndBestSellersProps } from '@/services/Khách hàng/Trang Chủ/typing';
+import { formatCurrency } from '@/utils/format';
 import './index.less';
 
 
@@ -46,7 +47,7 @@ const FoodCard: React.FC<FoodCardProps> = ({ dish, img, qty, onAdd, onInc, onDec
         </span>
       </div>
       <div className="food-bottom">
-        <strong>{dish.price.toLocaleString('vi-VN')}đ</strong>
+        <strong>{formatCurrency(dish.price)}</strong>
         {qty === 0 ? (
           <button aria-label="Thêm món" onClick={(e) => { e.stopPropagation(); onAdd(); }}>
             <Plus size={20} />

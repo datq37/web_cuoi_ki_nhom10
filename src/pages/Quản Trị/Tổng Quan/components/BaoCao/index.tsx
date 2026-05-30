@@ -3,6 +3,7 @@ import { Button, Modal } from 'antd';
 import moment from 'moment';
 import React, { useRef } from 'react';
 import { mockData } from '@/services/Quản Trị/Tổng Quan';
+import { formatCurrency } from '@/utils/format';
 import styles from './index.less';
 
 interface Props {
@@ -133,7 +134,7 @@ const BaoCaoModal: React.FC<Props> = ({ open, onClose }) => {
                       <td className="td-rank">{m.rank}</td>
                       <td className="td-bold">{m.ten}</td>
                       <td className="td-c">{m.daBan} {m.donVi}</td>
-                      <td className="td-r td-green">{m.doanhThu.toLocaleString('vi-VN')}đ</td>
+                      <td className="td-r td-green">{formatCurrency(m.doanhThu)}</td>
                     </tr>
                   ))}
                 </tbody>

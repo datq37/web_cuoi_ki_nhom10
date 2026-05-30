@@ -4,6 +4,7 @@ import { message } from 'antd';
 import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
 import { VoucherLoai } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
 import { Order, OrderStatus, PaymentMethod } from '@/services/Khách hàng/Đơn Hàng';
+import { formatDateTimeViVN, formatTimeHHMM } from '@/utils/format';
 export function useGioHangModel() {
     const { cart, cartOpen, setCartOpen, clearCart } = useModel('Khách Hàng.Thực đơn.index');
     const { addOrder } = useModel('Khách Hàng.Đơn Hàng.Orders');
@@ -93,7 +94,7 @@ export function useGioHangModel() {
             total: total,
             status: OrderStatus.Pending,
             payment: payment,
-            created: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
+            created: formatTimeHHMM(),
             pickup: '15 phút nữa',
             note: note
         };
@@ -115,7 +116,7 @@ export function useGioHangModel() {
             message: isQRPayment
                 ? `Đơn hàng ${newOrder.id} đã được tạo. Vui lòng quét mã QR để hoàn tất thanh toán.`
                 : `Đơn hàng ${newOrder.id} của bạn đã được xác nhận và bếp đang bắt đầu chuẩn bị.`,
-            time: new Date().toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+            time: formatDateTimeViVN(),
             isRead: false,
             image: 'https://cdn-icons-png.flaticon.com/512/1046/1046784.png'
         });

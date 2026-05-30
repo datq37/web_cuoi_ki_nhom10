@@ -15,6 +15,7 @@ import type { ColumnsType } from 'antd/es/table';
 import React, { useMemo, useState } from 'react';
 import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
+import { formatCurrency } from '@/utils/format';
 import {
   DANH_SACH_KHACH,
   STAT_KHACH,
@@ -23,10 +24,6 @@ import {
 } from '@/services/Quản Trị/Người Dùng';
 import { IKhachHang } from '@/services/Quản Trị/Người Dùng/typing';
 import styles from './index.less';
-
-function formatChiTieu(val: number): string {
-  return new Intl.NumberFormat('vi-VN').format(val) + 'đ';
-}
 
 const STAT_CARDS = [
   {
@@ -137,7 +134,7 @@ const KhachHang: React.FC = () => {
       key: 'chiTieu',
       width: 130,
       align: 'right',
-      render: (val) => <span className={styles.chiTieu}>{formatChiTieu(val)}</span>,
+      render: (val) => <span className={styles.chiTieu}>{formatCurrency(val)}</span>,
     },
     {
       title: 'THAM GIA',

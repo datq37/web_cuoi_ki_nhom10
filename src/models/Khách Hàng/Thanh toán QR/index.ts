@@ -1,16 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Order } from '@/services/Khách hàng/Đơn Hàng';
 import { QR_PAYMENT_EXPIRE_SECONDS } from '@/services/Khách hàng/Thanh toán QR';
-
-const formatVND = (value: number) => new Intl.NumberFormat('vi-VN').format(value);
-
-const formatCountdown = (seconds: number) => {
-  const safeSeconds = Math.max(0, seconds);
-  const minutes = Math.floor(safeSeconds / 60).toString().padStart(2, '0');
-  const remainSeconds = (safeSeconds % 60).toString().padStart(2, '0');
-
-  return `${minutes}:${remainSeconds}`;
-};
+import { formatCountdownMMSS, formatCurrency } from '@/utils/format';
 
 const buildQRPayload = (order: Order | null) => {
   if (!order) return '';
@@ -50,12 +41,12 @@ export default function useQRPaymentModel() {
   }, [pendingOrder, startedAt]);
 
   const formattedAmount = useMemo(
-    () => (pendingOrder ? `${formatVND(pendingOrder.total)}đ` : '0đ'),
+    () => (pendingOrder ? formatCurrency(pendingOrder.total) : '0đ'),
     [pendingOrder],
   );
 
   const formattedCountdown = useMemo(
-    () => formatCountdown(secondsLeft),
+    () => formatCountdownMMSS(secondsLeft),
     [secondsLeft],
   );
 

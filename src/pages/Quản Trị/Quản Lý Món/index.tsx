@@ -27,6 +27,7 @@ import {
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
+import { formatCurrency } from '@/utils/format';
 import { DANH_SACH_NGUYEN_LIEU } from '@/services/Quản Trị/Kho Nguyên Liệu';
 import { DANH_SACH_MON } from '@/services/Quản Trị/Quản Lý Món';
 import { EDanhMuc, IMonAn } from '@/services/Quản Trị/Quản Lý Món/typing';
@@ -36,11 +37,6 @@ import styles from './index.less';
 interface IMonAnLocal extends IMonAn {
   hinhAnh?: string;
   nguyenLieu?: string[];
-}
-
-// ── Helpers ──────────────────────────────────────────────────────
-function formatGia(gia: number): string {
-  return new Intl.NumberFormat('vi-VN').format(gia) + 'đ';
 }
 
 const PRESET_GRADIENTS = [
@@ -107,7 +103,7 @@ const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete }) => 
       </div>
 
       <div className={styles.cardFooter}>
-        <span className={styles.cardGia}>{formatGia(mon.giaBan)}</span>
+        <span className={styles.cardGia}>{formatCurrency(mon.giaBan)}</span>
         <div className={styles.cardActions}>
           <button
             className={styles.actionBtn}
@@ -400,7 +396,7 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
             <div style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>{mon.moTa}</div>
           </div>
           <div style={{ fontSize: 26, fontWeight: 700, color: '#16a34a', flexShrink: 0, marginLeft: 16 }}>
-            {formatGia(mon.giaBan)}
+            {formatCurrency(mon.giaBan)}
           </div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginTop: 18 }}>

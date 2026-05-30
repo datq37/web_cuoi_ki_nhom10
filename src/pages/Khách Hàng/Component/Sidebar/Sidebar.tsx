@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import './Sidebar.less';
 import { defaultUser } from '@/services/Khách hàng/Component/Sidebar';
+import { formatNumberViVN } from '@/utils/format';
 import { useModel, history } from 'umi';
 
 const Sidebar: React.FC = () => {
@@ -55,8 +56,6 @@ const Sidebar: React.FC = () => {
   // Hoặc ta có thể quy đổi ngược ra điểm tương đối.
   const spentNeeded = nextRank.min - currentSpent;
   const progressPercent = isMaxRank ? 100 : ((currentSpent - currentRank.min) / (nextRank.min - currentRank.min)) * 100;
-  const fmt = (n: number) => new Intl.NumberFormat('vi-VN').format(n);
-
   const orderItems = [
     {
       id: 'home',
@@ -170,11 +169,11 @@ const Sidebar: React.FC = () => {
               <Award size={28} />
             </div>
             <p>Điểm thưởng ({currentRank.name})</p>
-            <h3>{fmt(currentPoints)} điểm</h3>
+            <h3>{formatNumberViVN(currentPoints)} điểm</h3>
             {isMaxRank ? (
               <span>Bạn đang ở hạng cao nhất!</span>
             ) : (
-              <span>Cần thêm <strong>{fmt(spentNeeded)}đ</strong> chi tiêu để lên hạng {nextRank.name}</span>
+              <span>Cần thêm <strong>{formatNumberViVN(spentNeeded)}đ</strong> chi tiêu để lên hạng {nextRank.name}</span>
             )}
             <div className="reward-progress">
               <div style={{ width: `${Math.min(100, Math.max(0, progressPercent))}%`, background: nextRank.color }} />
@@ -192,12 +191,14 @@ interface SidebarSectionProps {
   children: React.ReactNode;
 }
 
-const SidebarSection: React.FC<SidebarSectionProps> = ({ title, children }) => (
-  <nav className="nav-section">
-    {title && <div className="nav-label">{title}</div>}
-    <div className="nav-list">{children}</div>
-  </nav>
-);
+function SidebarSection({ title, children }: SidebarSectionProps) {
+  return (
+    <nav className="nav-section">
+      {title && <div className="nav-label">{title}</div>}
+      <div className="nav-list">{children}</div>
+    </nav>
+  );
+}
 
 interface SidebarItemProps {
   active?: boolean;
@@ -208,23 +209,25 @@ interface SidebarItemProps {
   onClick: () => void;
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = ({
+function SidebarItem({
   active,
   icon,
   label,
   badge,
   badgeTone = 'green',
   onClick,
-}) => (
-  <button className={`nav-item ${active ? 'active' : ''}`} onClick={onClick}>
-    <span className="nav-item-main">
-      <span className="nav-icon">{icon}</span>
-      <span className="nav-text">{label}</span>
-    </span>
-    {badge !== undefined && (
-      <span className={`badge badge-${badgeTone}`}>{badge}</span>
-    )}
-  </button>
-);
+}: SidebarItemProps) {
+  return (
+    <button className={`nav-item ${active ? 'active' : ''}`} onClick={onClick}>
+      <span className="nav-item-main">
+        <span className="nav-icon">{icon}</span>
+        <span className="nav-text">{label}</span>
+      </span>
+      {badge !== undefined && (
+        <span className={`badge badge-${badgeTone}`}>{badge}</span>
+      )}
+    </button>
+  );
+}
 
 export default Sidebar;

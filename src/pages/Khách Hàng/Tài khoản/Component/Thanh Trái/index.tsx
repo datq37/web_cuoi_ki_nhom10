@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Avatar, Upload, Progress } from 'antd';
 import { CameraOutlined, SafetyOutlined, UploadOutlined, CrownFilled } from '@ant-design/icons';
 import type { ThanhBenProps } from '@/services/Khách hàng/Tài khoản/typing';
+import { formatNumberViVN } from '@/utils/format';
 
 const ThanhBen: React.FC<ThanhBenProps> = ({ nguoiDungHienTai, duongDanAnhDaiDien, laAnhDaiDien, truocKhiTaiLen, thongTinHang }) => {
     const renderAvatar = () => {
@@ -14,8 +15,6 @@ const ThanhBen: React.FC<ThanhBenProps> = ({ nguoiDungHienTai, duongDanAnhDaiDie
             </Avatar>
         );
     };
-
-    const fmt = (n: number) => new Intl.NumberFormat('vi-VN').format(n);
 
     return (
         <section className="thanh-ben-tai-khoan the-tai-khoan">
@@ -39,10 +38,10 @@ const ThanhBen: React.FC<ThanhBenProps> = ({ nguoiDungHienTai, duongDanAnhDaiDie
                     <CrownFilled /> Hạng {thongTinHang?.name || 'Đồng'}
                 </div>
                 <div className="diem-hang">
-                    Điểm thưởng: <strong>{fmt(nguoiDungHienTai.points || 0)}</strong>
+                    Điểm thưởng: <strong>{formatNumberViVN(nguoiDungHienTai.points || 0)}</strong>
                 </div>
                 <div className="chi-tieu-hang">
-                    Đã chi tiêu: {fmt(nguoiDungHienTai.totalSpent || 0)}đ
+                    Đã chi tiêu: {formatNumberViVN(nguoiDungHienTai.totalSpent || 0)}đ
                 </div>
             </div>
 

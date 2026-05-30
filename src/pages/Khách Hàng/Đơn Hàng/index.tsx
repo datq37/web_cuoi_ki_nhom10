@@ -9,13 +9,13 @@ import {
 } from '@ant-design/icons';
 import { ORDER_STATUSES, PAYMENT_METHODS, OrderStatus, Order } from '@/services/Khách hàng/Đơn Hàng';
 import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
+import { formatNumberViVN } from '@/utils/format';
 import OrderTracker from './component/OrderTracker';
 import RatingPage from '../Đánh Giá';
 import orderBackground from '@/assets/Khách Hàng/Đơn hàng/Backgroud.png';
 import { getPageBackground } from '../Chế độ sáng tôi/themeBackground';
 import './index.less';
 
-const formatVND = (n: number) => new Intl.NumberFormat('vi-VN').format(n);
 const getDish = (id: string) => SEED_MENU.find(d => d.id === id);
 
 const HistoryPage: React.FC = () => {
@@ -98,7 +98,7 @@ const HistoryPage: React.FC = () => {
                                     <div className="phanBenThe">
                                         <div className="nhanTongTien">Tổng thanh toán</div>
                                         <div className="giaTriTongTien">
-                                            {formatVND(o.total)}
+                                            {formatNumberViVN(o.total)}
                                             <span className="donVi">đ</span>
                                         </div>
                                         <div className="phuongThucThanhToan">

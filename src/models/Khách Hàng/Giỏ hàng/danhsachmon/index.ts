@@ -4,9 +4,9 @@ import bunPho from '@/assets/Khách Hàng/Trang chủ/bun_pho_no_text.png';
 import doUong from '@/assets/Khách Hàng/Trang chủ/do_uong_no_text.png';
 import anNhe from '@/assets/Khách Hàng/Trang chủ/an_nhe_no_text.png';
 import chaySalad from '@/assets/Khách Hàng/Trang chủ/chay_salad_no_text.png';
+import { formatNumberViVN } from '@/utils/format';
 
-export const formatVND = (amount: number) =>
-    amount.toLocaleString('vi-VN');
+export const formatVND = formatNumberViVN;
 
 export const getDish = (id: string) => SEED_MENU.find(d => d.id === id);
 

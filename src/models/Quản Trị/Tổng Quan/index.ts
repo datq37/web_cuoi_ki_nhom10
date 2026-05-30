@@ -1,9 +1,10 @@
 import type { DoanhThuNgay } from '@/services/Quản Trị/Tổng Quan/typing';
 import { ELoaiGhiChu, ETrangThaiDon, ETrangThaiTrucTiep } from '@/services/Quản Trị/Tổng Quan/typing';
 import type { DonTrucTiep } from '@/services/Quản Trị/Tổng Quan/typing';
+import { formatCurrency } from '@/utils/format';
 
 // ─── Formatter ─────────────────────────────────────────────
-export const fmt = (v: number) => new Intl.NumberFormat('vi-VN').format(v) + 'đ';
+export const fmt = formatCurrency;
 export const fmtShort = (v: number) => {
   if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}tr`;
   if (v >= 1_000) return `${Math.round(v / 1_000)}k`;

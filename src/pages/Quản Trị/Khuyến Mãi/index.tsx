@@ -32,6 +32,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import React, { useEffect, useMemo, useState } from 'react';
 import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
+import { formatCurrency, formatDateTimeViVN } from '@/utils/format';
 import {
   DANH_SACH_KHUYEN_MAI,
   DANH_SACH_COMBO,
@@ -50,9 +51,6 @@ import styles from './index.less';
 
 dayjs.extend(customParseFormat);
 
-// ── Helpers ──────────────────────────────────────────────────────
-const fmtVnd = (n: number) => n.toLocaleString('vi-VN') + 'đ';
-
 const LOAI_LABEL: Record<ELoaiGiamGia, string> = {
   [ELoaiGiamGia.PHAN_TRAM]: 'Theo %',
   [ELoaiGiamGia.SO_TIEN]:   'Số tiền cố định',
@@ -61,7 +59,7 @@ const LOAI_LABEL: Record<ELoaiGiamGia, string> = {
 
 const fmtGiaTri = (item: IKhuyenMai) => {
   if (item.loai === ELoaiGiamGia.PHAN_TRAM) return `${item.giaTriGiam}%`;
-  if (item.loai === ELoaiGiamGia.SO_TIEN)   return fmtVnd(item.giaTriGiam);
+  if (item.loai === ELoaiGiamGia.SO_TIEN)   return formatCurrency(item.giaTriGiam);
   return '—';
 };
 
@@ -359,7 +357,7 @@ const KhuyenMaiDetail: React.FC<{
           <div className={styles.detailGrid2}>
             <div className={styles.detailGridItem}>
               <div className={styles.detailGridLabel}>ĐƠN TỐI THIỂU</div>
-              <div className={styles.detailGridValue}>{fmtVnd(d.donToiThieu)}</div>
+              <div className={styles.detailGridValue}>{formatCurrency(d.donToiThieu)}</div>
             </div>
             <div className={styles.detailGridItem}>
               <div className={styles.detailGridLabel}>NGÀY HẾT HẠN</div>
@@ -521,7 +519,7 @@ const ComboForm: React.FC<{
                 >
                   <span className={styles.dishDot} style={{ background: mon.mauNen }} />
                   <span className={styles.dishRowName}>{mon.ten}</span>
-                  <span className={styles.dishRowPrice}>{fmtVnd(mon.giaBan)}</span>
+                  <span className={styles.dishRowPrice}>{formatCurrency(mon.giaBan)}</span>
                   <button
                     className={`${styles.dishToggleBtn} ${added ? styles.dishToggleBtnAdded : ''}`}
                     onClick={() => added ? handleRemove(mon.id) : handleAdd(mon.id)}
@@ -551,7 +549,7 @@ const ComboForm: React.FC<{
                   <div key={mon.id} className={styles.dishSelectedRow}>
                     <span className={styles.dishDot} style={{ background: mon.mauNen }} />
                     <span className={styles.dishSelectedName}>{mon.ten}</span>
-                    <span className={styles.dishSelectedPrice}>{fmtVnd(mon.giaBan)}</span>
+                    <span className={styles.dishSelectedPrice}>{formatCurrency(mon.giaBan)}</span>
                     <button
                       className={styles.dishRemoveBtn}
                       onClick={() => handleRemove(mon.id)}
@@ -563,7 +561,7 @@ const ComboForm: React.FC<{
                 ))}
                 <div className={styles.dishSelectedTotal}>
                   <span>Tổng giá lẻ</span>
-                  <strong>{fmtVnd(tongLe)}</strong>
+                  <strong>{formatCurrency(tongLe)}</strong>
                 </div>
               </>
             )}
@@ -607,23 +605,23 @@ const ComboForm: React.FC<{
           <div className={styles.comboFormPreview}>
             <div className={styles.previewRow}>
               <span className={styles.previewRowLabel}>Tổng giá lẻ</span>
-              <span>{fmtVnd(tongLe)}</span>
+              <span>{formatCurrency(tongLe)}</span>
             </div>
             {loaiGiaWatch === ELoaiGiaCombo.PHAN_TRAM && (
               <div className={styles.previewRow}>
                 <span className={styles.previewRowLabel}>Giảm ({giaTriWatch}%)</span>
-                <span style={{ color: '#dc2626' }}>−{fmtVnd(tongLe - giaComboPreview)}</span>
+                <span style={{ color: '#dc2626' }}>−{formatCurrency(tongLe - giaComboPreview)}</span>
               </div>
             )}
             <div className={styles.previewDivider} />
             <div className={styles.previewFinalRow}>
               <span className={styles.previewFinalLabel}>Giá combo</span>
-              <span className={styles.previewFinalValue}>{fmtVnd(giaComboPreview)}</span>
+              <span className={styles.previewFinalValue}>{formatCurrency(giaComboPreview)}</span>
             </div>
             {tietKiemPreview !== null && tietKiemPreview > 0 && (
               <div className={styles.previewSavingRow}>
                 <span>Tiết kiệm</span>
-                <span>{fmtVnd(tietKiemPreview)}</span>
+                <span>{formatCurrency(tietKiemPreview)}</span>
               </div>
             )}
             {previewError && <div className={styles.previewError}>{previewError}</div>}
@@ -783,10 +781,10 @@ const ComboRow: React.FC<{
       </div>
 
       <div className={styles.comboPriceRow}>
-        <span className={styles.comboOriginalPrice}>{fmtVnd(tongLe)}</span>
+        <span className={styles.comboOriginalPrice}>{formatCurrency(tongLe)}</span>
         <span className={styles.comboArrow}>→</span>
-        <span className={styles.comboFinalPrice}>{fmtVnd(giaCombo)}</span>
-        <span className={styles.comboSaving}>Tiết kiệm {fmtVnd(tietKiem)}</span>
+        <span className={styles.comboFinalPrice}>{formatCurrency(giaCombo)}</span>
+        <span className={styles.comboSaving}>Tiết kiệm {formatCurrency(tietKiem)}</span>
         <div className={styles.comboExpiry}>
           <span className={styles.comboExpiryLabel}>Hết hạn</span>
           <span className={styles.comboExpiryDate}>{item.hetHan}</span>
@@ -936,7 +934,7 @@ const KhuyenMai: React.FC = () => {
             id: `notif_voucher_${Date.now()}`,
             title: 'Mã khuyến mãi mới!',
             message: `Admin vừa tung mã giảm giá mới: ${data.ma}. Nhanh tay đặt món ngay kẻo lỡ!`,
-            time: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }),
+            time: formatDateTimeViVN(),
             isRead: false,
             image: 'https://cdn-icons-png.flaticon.com/512/879/879859.png'
         }
@@ -984,7 +982,7 @@ const KhuyenMai: React.FC = () => {
             id: `notif_combo_${Date.now()}`,
             title: 'Combo Mới Cực Hời!',
             message: `Vừa ra mắt combo mới: ${data.ten}. Tiết kiệm hơn khi đặt chung nha bạn ơi!`,
-            time: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }),
+            time: formatDateTimeViVN(),
             isRead: false,
             image: 'https://cdn-icons-png.flaticon.com/512/3480/3480823.png'
         }

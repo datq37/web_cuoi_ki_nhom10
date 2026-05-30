@@ -15,6 +15,7 @@ import drinkImg from '@/assets/Khách Hàng/Trang chủ/do_uong_no_text.png';
 import phoImg from '@/assets/trangchu/pho.png';
 import bunChaImg from '@/assets/trangchu/buncha.png';
 import xoiImg from '@/assets/trangchu/xoi.png';
+import { formatNumberViVN } from '@/utils/format';
 
 const dishImages: Record<string, string> = {
     m1: riceImg,
@@ -60,7 +61,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, qty, onAdd, onInc, onDec, onC
             </div>
             <div className="phanChanThe">
                 <div className="giaMon">
-                    {dish.price.toLocaleString()} <span className="donViTien">đ</span>
+                    {formatNumberViVN(dish.price)} <span className="donViTien">đ</span>
                 </div>
                 {isFuture ? (
                     <span className="nhanChuaBan" onClick={(e) => e.stopPropagation()}>Chưa mở bán</span>

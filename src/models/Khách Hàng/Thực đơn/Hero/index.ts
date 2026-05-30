@@ -1,3 +1,5 @@
+import { formatTimeHHMM } from '@/utils/format';
+
 export const getGreeting = (date = new Date()): string => {
   const hour = date.getHours();
   if (hour >= 5 && hour < 11) return 'Chào buổi sáng! ☀️';
@@ -7,7 +9,7 @@ export const getGreeting = (date = new Date()): string => {
 };
 
 export const formatMenuTime = (date: Date): string =>
-  date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+  formatTimeHHMM(date);
 
 export const formatMenuDate = (date: Date): string =>
   date.toLocaleDateString('vi-VN', {

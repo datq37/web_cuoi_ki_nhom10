@@ -20,6 +20,7 @@ import type { CartOptionProps, Voucher } from '@/services/Khách hàng/Giỏ hà
 import { VoucherLoai, VoucherTheme } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
 import { useCartOptionModel } from '@/models/Khách Hàng/Giỏ hàng/cartoption';
 import voucherBanner from '@/assets/Khách Hàng/Vourcher/bannervourcher.png';
+import { formatCurrency } from '@/utils/format';
 import './index.less';
 
 const formatCondition = (minOrder?: number) => {
@@ -100,7 +101,7 @@ const CartOption: React.FC<CartOptionProps> = ({
                                         ? `- Giảm ${selectedVoucher.giamGia}% đơn hàng`
                                         : selectedVoucher.loai === VoucherLoai.MienShip
                                         ? '- Miễn phí phục vụ'
-                                        : `- Đã áp dụng giảm ${selectedVoucher.giamGia.toLocaleString()}đ`}
+                                        : `- Đã áp dụng giảm ${formatCurrency(selectedVoucher.giamGia)}`}
                                 </span>
                             </div>
                         </div>
@@ -176,7 +177,7 @@ const CartOption: React.FC<CartOptionProps> = ({
                                             ) : (
                                                 <Tag size={22} />
                                             )}
-                                            <strong>{v.valueLabel || `${v.giamGia.toLocaleString()}đ`}</strong>
+                                            <strong>{v.valueLabel || formatCurrency(v.giamGia)}</strong>
                                             <span>{v.typeLabel || 'GIẢM GIÁ'}</span>
                                         </div>
                                     </div>
@@ -222,7 +223,7 @@ const CartOption: React.FC<CartOptionProps> = ({
                                         <div className="dauTraiVeMoDanPhieu" aria-hidden="true" />
                                         <div className="bieuTuongVeMoDanPhieu">
                                             <Tag size={22} />
-                                            <strong>{v.valueLabel || `${v.giamGia.toLocaleString()}đ`}</strong>
+                                            <strong>{v.valueLabel || formatCurrency(v.giamGia)}</strong>
                                             <span>{v.typeLabel || 'GIẢM GIÁ'}</span>
                                         </div>
                                     </div>

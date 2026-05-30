@@ -32,6 +32,7 @@ import dayjs from 'dayjs';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
+import { formatCurrency } from '@/utils/format';
 import {
   DANH_SACH_NGUYEN_LIEU,
   TRANG_THAI_CONFIG,
@@ -44,11 +45,6 @@ import styles from './index.less';
 
 // ── Constants ─────────────────────────────────────────────────────
 const DON_VI_OPTIONS = ['kg', 'g', 'L', 'lít', 'ml', 'thùng', 'gói', 'hộp', 'chai', 'quả', 'cái'];
-
-// ── Helpers ──────────────────────────────────────────────────────
-function formatGia(gia: number): string {
-  return new Intl.NumberFormat('vi-VN').format(gia) + 'đ';
-}
 
 function tinhPhanTram(tonKho: number, mucToiThieu: number): number {
   if (mucToiThieu === 0) return 100;
@@ -403,7 +399,7 @@ const BulkRestockModal: React.FC<{
       render: (_, r) => {
         const qty = quantities[r.id] ?? 0;
         return qty > 0 ? (
-          <span style={{ color: '#16a34a', fontWeight: 600 }}>{formatGia(qty * r.giaNhap)}</span>
+          <span style={{ color: '#16a34a', fontWeight: 600 }}>{formatCurrency(qty * r.giaNhap)}</span>
         ) : (
           <span style={{ color: '#d1d5db' }}>—</span>
         );
@@ -423,7 +419,7 @@ const BulkRestockModal: React.FC<{
             <div style={{ fontSize: 11, color: '#9ca3af', fontWeight: 700, letterSpacing: '0.4px', marginBottom: 2 }}>
               TỔNG TIỀN
             </div>
-            <div className={styles.bulkTotalValue}>{formatGia(bulkTotal)}</div>
+            <div className={styles.bulkTotalValue}>{formatCurrency(bulkTotal)}</div>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
             <Button onClick={onCancel}>Huỷ</Button>
@@ -543,11 +539,11 @@ const NguyenLieuDetail: React.FC<{
           <div className={styles.detailGrid2}>
             <div className={styles.detailGridItem}>
               <div className={styles.detailGridLabel}>GIÁ NHẬP</div>
-              <div className={styles.detailGridValue}>{formatGia(d.giaNhap)}</div>
+              <div className={styles.detailGridValue}>{formatCurrency(d.giaNhap)}</div>
             </div>
             <div className={styles.detailGridItem}>
               <div className={styles.detailGridLabel}>TỔNG GIÁ TRỊ</div>
-              <div className={styles.detailGridValue}>{formatGia(totalValue)}</div>
+              <div className={styles.detailGridValue}>{formatCurrency(totalValue)}</div>
             </div>
           </div>
           {canNhapBox > 0 && (
@@ -580,7 +576,7 @@ const KhoNguyenLieu: React.FC = () => {
     const sapHetHet = items.filter(
       (n) => n.trangThai === ETrangThaiNguyenLieu.SAP_HET || n.trangThai === ETrangThaiNguyenLieu.HET_HANG,
     ).length;
-    const giaTri = formatGia(items.reduce((s, n) => s + n.tonKho * n.giaNhap, 0));
+    const giaTri = formatCurrency(items.reduce((s, n) => s + n.tonKho * n.giaNhap, 0));
     const nhaCungCap = new Set(items.map((n) => n.nhaCungCap)).size;
     return { tongNguyenLieu, sapHetHet, giaTri, nhaCungCap };
   }, [items]);
@@ -669,7 +665,7 @@ const KhoNguyenLieu: React.FC = () => {
         return { ...n, tonKho: tonKhoMoi, trangThai: tinhTrangThai(tonKhoMoi, n.mucToiThieu) };
       }),
     );
-    message.success(`Đã nhập kho ${updates.length} mặt hàng, tổng ${formatGia(totalAmount)}`);
+    message.success(`Đã nhập kho ${updates.length} mặt hàng, tổng ${formatCurrency(totalAmount)}`);
     setBulkRestockOpen(false);
   };
 
@@ -759,7 +755,7 @@ const KhoNguyenLieu: React.FC = () => {
       dataIndex: 'giaNhap',
       key: 'giaNhap',
       width: 120,
-      render: (val) => <span className={styles.giaNhap}>{formatGia(val)}</span>,
+      render: (val) => <span className={styles.giaNhap}>{formatCurrency(val)}</span>,
     },
     {
       title: 'TRẠNG THÁI',

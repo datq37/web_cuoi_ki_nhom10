@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { message } from 'antd';
 import { Order, OrderStatus, SEED_ORDERS } from '@/services/Khách hàng/Đơn Hàng';
+import { formatDateTimeViVN } from '@/utils/format';
 
 export default function useOrderModel() {
     const [orders, setOrders] = useState<Order[]>(() => {
@@ -62,7 +63,7 @@ export default function useOrderModel() {
                                         id: `notif_${Date.now()}_${co.id}`,
                                         title: 'Trạng thái đơn hàng cập nhật',
                                         message: `Đơn hàng ${co.id} của bạn đã chuyển sang trạng thái: ${co.status}`,
-                                        time: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }),
+                                        time: formatDateTimeViVN(),
                                         isRead: false,
                                         image: 'https://cdn-icons-png.flaticon.com/512/2830/2830305.png'
                                     }
@@ -134,7 +135,7 @@ export default function useOrderModel() {
                         id: `notif_${Date.now()}`,
                         title: 'Đơn hàng đã được đặt thành công',
                         message: `Đơn hàng ${newOrder.id} của bạn đã được xác nhận. Bếp đang chuẩn bị!`,
-                        time: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }),
+                        time: formatDateTimeViVN(),
                         isRead: false,
                         image: 'https://cdn-icons-png.flaticon.com/512/1046/1046784.png'
                     }
@@ -170,7 +171,7 @@ export default function useOrderModel() {
                                 id: `notif_received_${Date.now()}`,
                                 title: 'Đã nhận món thành công',
                                 message: `Bạn đã xác nhận nhận món cho đơn hàng ${o.id}. Chúc bạn ngon miệng! Đừng quên đánh giá nhé.`,
-                                time: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }),
+                                time: formatDateTimeViVN(),
                                 isRead: false,
                                 image: 'https://cdn-icons-png.flaticon.com/512/1046/1046784.png'
                             }

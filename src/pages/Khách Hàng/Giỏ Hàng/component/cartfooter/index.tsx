@@ -3,10 +3,8 @@ import { Check, CircleAlert, LoaderCircle } from 'lucide-react';
 import type { CartFooterProps } from '@/services/Khách hàng/Giỏ hàng/cartfooter/typing';
 import { SERVICE_FEE_LABEL } from '@/services/Khách hàng/Giỏ hàng/cartfooter';
 import { useCartFooterModel } from '@/models/Khách Hàng/Giỏ hàng/cartfooter';
+import { formatCurrency } from '@/utils/format';
 import './index.less';
-
-// ─── Helper format tiền VND ───────────────────────────────────────────────────
-const fmtVND = (n: number) => n.toLocaleString('vi-VN') + 'đ';
 
 // ─── Component ────────────────────────────────────────────────────────────────
 const CartFooter: React.FC<CartFooterProps> = ({
@@ -30,18 +28,18 @@ const CartFooter: React.FC<CartFooterProps> = ({
             <div className="chiTietGia">
                 <div className="hangGia">
                     <span className="nhanGia">Tạm tính</span>
-                    <span className="giaTriGia">{fmtVND(subtotal)}</span>
+                    <span className="giaTriGia">{formatCurrency(subtotal)}</span>
                 </div>
                 <div className="hangGia">
                     <span className="nhanGia">{SERVICE_FEE_LABEL}</span>
-                    <span className="giaTriGia phi">+{fmtVND(serviceFee)}</span>
+                    <span className="giaTriGia phi">+{formatCurrency(serviceFee)}</span>
                 </div>
                 {comboDiscount > 0 && (
                     <div className="hangGia hangPhieuGiamGia">
                         <span className="nhanGia">
                             Combo Nổi Bật
                         </span>
-                        <span className="giaTriGia giamGia">-{fmtVND(comboDiscount)}</span>
+                        <span className="giaTriGia giamGia">-{formatCurrency(comboDiscount)}</span>
                     </div>
                 )}
                 {selectedVoucher && (
@@ -53,17 +51,17 @@ const CartFooter: React.FC<CartFooterProps> = ({
                         {voucherNotMet ? (
                             <span className="giaTriGia canhBao">
                                 <CircleAlert size={15} />
-                                &nbsp;Chưa đủ {fmtVND(selectedVoucher.minOrder!)}
+                                &nbsp;Chưa đủ {formatCurrency(selectedVoucher.minOrder!)}
                             </span>
                         ) : (
-                            <span className="giaTriGia giamGia">-{fmtVND(voucherDiscount)}</span>
+                            <span className="giaTriGia giamGia">-{formatCurrency(voucherDiscount)}</span>
                         )}
                     </div>
                 )}
                 <div className="duongChiaGia" />
                 <div className="hangGia hangTongCong">
                     <span className="nhanTongCong">Tổng thanh toán</span>
-                    <span className="giaTriTongCong">{fmtVND(total)}</span>
+                    <span className="giaTriTongCong">{formatCurrency(total)}</span>
                 </div>
             </div>
             <button
@@ -81,7 +79,7 @@ const CartFooter: React.FC<CartFooterProps> = ({
                 ) : (
                     <>
                         <Check size={32} />
-                        <span>{isEmpty ? 'Giỏ hàng trống' : `Xác nhận · ${fmtVND(total)}`}</span>
+                        <span>{isEmpty ? 'Giỏ hàng trống' : `Xác nhận · ${formatCurrency(total)}`}</span>
                     </>
                 )}
             </button>

@@ -173,7 +173,7 @@ const TacNghiepView: React.FC = () => {
             <div>
               <div className={styles.tnChartTitle}>Doanh thu 7 ngày qua</div>
               <div className={styles.tnChartSub}>
-                Tổng: <strong>{new Intl.NumberFormat('vi-VN').format(tongDoanhThu)}đ</strong>
+                Tổng: <strong>{fmt(tongDoanhThu)}</strong>
               </div>
             </div>
           </div>

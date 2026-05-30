@@ -8,11 +8,7 @@ import {
   CHAT_WELCOME_MESSAGE,
   sendCustomerChatMessage,
 } from '@/services/Khách hàng/ChatBox';
-
-const getMessageTime = () => new Date().toLocaleTimeString('vi-VN', {
-  hour: '2-digit',
-  minute: '2-digit',
-});
+import { formatTimeHHMM } from '@/utils/format';
 
 const createMessage = (
   role: ChatMessage['role'],
@@ -21,7 +17,7 @@ const createMessage = (
   id: `chat-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
   role,
   content,
-  time: getMessageTime(),
+  time: formatTimeHHMM(),
 });
 export default function useCustomerChatBoxModel() {
   const { addToCart, dishes } = useModel('Khách Hàng.Thực đơn.index');

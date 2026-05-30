@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { TimeSlot } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
+import { formatTimeHHMM } from '@/utils/format';
 //  tính  giờ nhận món 
 const generateTimeSlots = (): TimeSlot[] => {
   const slots = [];
@@ -11,7 +12,7 @@ const generateTimeSlots = (): TimeSlot[] => {
   }
   now.setSeconds(0);
   for (let i = 0; i < 5; i++) {
-    const timeStr = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
+    const timeStr = formatTimeHHMM(now);
     slots.push({
       time: timeStr,
       label: i === 0 ? 'Sớm nhất' : i === 2 ? 'Cao điểm' : ''

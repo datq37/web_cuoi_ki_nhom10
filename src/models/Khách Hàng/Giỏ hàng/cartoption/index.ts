@@ -3,6 +3,7 @@ import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
 import { SEED_VOUCHERS, BUFFER_MIN } from '@/services/Khách hàng/Giỏ hàng/cartoption';
 import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
 import { VoucherLoai, VoucherTheme } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
+import { formatCurrency, formatTimeHHMM } from '@/utils/format';
 
 //  Chuyển đổi IKhuyenMai (Admin) → Voucher (Customer)
 function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
@@ -39,7 +40,7 @@ function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
                 theme = VoucherTheme.Lime;
             } else if (k.loai === VoucherLoai.SoTien) {
                 discount = k.giaTriGiam;
-                valueLabel = `${Number(k.giaTriGiam).toLocaleString('vi-VN')}đ`;
+                valueLabel = formatCurrency(Number(k.giaTriGiam));
                 typeLabel = 'GIẢM GIÁ';
                 theme = VoucherTheme.Green;
             } else if (k.loai === VoucherLoai.MienShip) {
@@ -90,10 +91,7 @@ export function calcPickupTime(cart: any[]): { timeStr: string; prepMin: number 
     const totalMin = maxPrep + BUFFER_MIN;
     const ready = new Date(Date.now() + totalMin * 60 * 1000);
 
-    const timeStr = ready.toLocaleTimeString('vi-VN', {
-        hour: '2-digit',
-        minute: '2-digit',
-    });
+    const timeStr = formatTimeHHMM(ready);
 
     return { timeStr, prepMin: totalMin };
 }

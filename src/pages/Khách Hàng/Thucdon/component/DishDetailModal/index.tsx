@@ -11,6 +11,7 @@ import {
 } from '@ant-design/icons';
 import type { DishDetailModalProps } from '@/services/Khách hàng/Thực đơn/DishDetailModal/typing';
 import { getReviewsByDish } from '@/models/Khách Hàng/Thực đơn/DishDetailModal';
+import { formatNumberViVN } from '@/utils/format';
 import { useModel } from 'umi';
 import './index.less';
 
@@ -95,7 +96,7 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
                 </div>
                 <div className="phanChanChiTiet">
                     <div className="khoiGia">
-                        <span className="giaChiTiet">{dish.price.toLocaleString('vi-VN')}</span>
+                        <span className="giaChiTiet">{formatNumberViVN(dish.price)}</span>
                         <span className="donViChiTiet">đ</span>
                     </div>
 

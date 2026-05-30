@@ -8,7 +8,7 @@ import HistoryPage from '../Đơn Hàng';
 import GioHang from '../Giỏ Hàng';
 import TaiKhoan from '../Tài khoản';
 import QRPaymentPage from '../Thanh Toán QR';
-import CustomerChatBox from '../Component/ChatBox';
+import CustomerChatBox from '../ChatBox';
 import './index.less';
 
 const MainPage: React.FC = () => {

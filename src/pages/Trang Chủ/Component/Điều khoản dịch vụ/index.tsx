@@ -18,7 +18,8 @@ import {
   ChevronDown,
 } from 'lucide-react';
 
-import '../Chính Sách Bảo Mật/index.less'; // Import chung CSS đã được chuẩn hóa
+// phần dùng chung giao diện chính sách
+import '../Chính Sách Bảo Mật/index.less';
 
 // phần mục lục
 const menuItems = [
@@ -119,7 +120,8 @@ export default function TermsPage() {
                   key={item.id}
                   onClick={() => {
                     scrollToSection(item.id);
-                    setIsMenuOpen(false); // Đóng menu khi click trên mobile
+                    // phần đóng menu trên điện thoại
+                    setIsMenuOpen(false);
                   }}
                   className={`pp-nav-item ${activeSection === item.id ? 'active' : ''}`}
                 >

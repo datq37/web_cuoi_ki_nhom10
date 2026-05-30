@@ -2,6 +2,7 @@ html, body {
   scroll-behavior: smooth;
 }
 
+// phần khung trang chủ
 .home-page-container {
   display: flex;
   flex-direction: column;
@@ -9,7 +10,7 @@ html, body {
   background-color: var(--bg-main, #f7f9f8);
   color: var(--ink, #111827);
   transition: background-color 0.3s, color 0.3s;
-// chế đọh sáng tối
+  // phần giao diện tối
   &.theme-dark {
 
     --bg-main: #141414;
@@ -22,7 +23,7 @@ html, body {
     --ink-3: #999999;
     --accent: #22c55e;
     
-// món ăn nổi bật
+    // phần món ăn nổi bật
     .featured-section { background: var(--bg-main); }
     .featured-title { color: var(--ink); }
     .feature-badge { 
@@ -34,7 +35,7 @@ html, body {
     .food-mini-card { background: var(--bg-elev); }
     .food-mini-card-name { color: var(--ink); }
     .featured-nav-btn { background: var(--bg-elev); color: var(--ink); }
-// tại sao chọn chúng tôi
+    // phần vì sao chọn chúng tôi
     .why-section { background: var(--bg-main); }
     .why-title { color: var(--ink); }
     .why-subtitle { color: var(--ink-3); }

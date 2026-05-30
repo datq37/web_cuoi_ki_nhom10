@@ -110,7 +110,8 @@ export default function PrivacyPage() {
                   key={item.id}
                   onClick={() => {
                     scrollToSection(item.id);
-                    setIsMenuOpen(false); // Đóng menu khi click trên mobile
+                    // phần đóng menu trên điện thoại
+                    setIsMenuOpen(false);
                   }}
                   className={`pp-nav-item ${activeSection === item.id ? 'active' : ''}`}
                 >

@@ -43,7 +43,7 @@ const FoodSlider: React.FC = () => {
           src={activeFood.image}
           initial={{ opacity: 0.5 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
         />
       </AnimatePresence>
       
@@ -68,7 +68,7 @@ const FoodSlider: React.FC = () => {
                   layoutId={`image-${item.id}`}
                   src={item.image} 
                   alt={item.name} 
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
+                  transition={{ duration: 0.8, ease: 'easeInOut' }}
                 />
                 <div className={styles.thumbnailInfo}>
                   <h5>{item.name.replace('\n', ' ')}</h5>

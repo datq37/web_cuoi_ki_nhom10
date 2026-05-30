@@ -40,7 +40,7 @@ const ContentSection: React.FC = () => {
             <div className={styles.imageWrapper}>
               <img src={activeContent.image} alt={activeContent.title} className={styles.image} />
             </div>
-            <div className={styles.divider}></div>
+            <div className={styles.divider} />
             <div className={styles.textWrapper}>
               <h3 className={styles.contentTitle}>{activeContent.title}</h3>
               <p className={styles.description}>{activeContent.description}</p>

@@ -2,7 +2,7 @@
 @green-dark: #166534;
 @font: 'Inter', 'Roboto', sans-serif;
 
-// ─── Section wrapper ──────────────────────────────────────────────────────────
+// phần khung chính
 .featured-section {
   position: relative;
   background: linear-gradient(180deg, #f7f9f8 0%, #fff 100%);
@@ -11,7 +11,7 @@
   font-family: @font;
 }
 
-// ─── Title ────────────────────────────────────────────────────────────────────
+// phần tiêu đề
 .featured-title-wrap {
   text-align: center;
   margin-bottom: 32px;
@@ -50,14 +50,14 @@
   margin: 0;
 }
 
-// ─── Banner wrapper ───────────────────────────────────────────────────────────
+// phần bọc banner
 .featured-banner-wrap {
   max-width: 1500px;
   margin: 0 auto;
   padding: 0 32px;
 }
 
-// ─── Banner ───────────────────────────────────────────────────────────────────
+// phần banner
 .featured-banner {
   position: relative;
   height: 560px;
@@ -93,7 +93,7 @@
   background: linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 50%);
 }
 
-// Decorative leaves
+// phần lá trang trí
 .featured-deco-leaf {
   position: absolute;
   z-index: 20;
@@ -116,7 +116,7 @@
   }
 }
 
-// ─── Left content ─────────────────────────────────────────────────────────────
+// phần nội dung món chính
 .featured-content {
   position: relative;
   z-index: 10;
@@ -195,7 +195,7 @@
   display: none;
 }
 
-// Feature badges
+// phần huy hiệu thông tin
 .featured-badges {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -238,7 +238,7 @@
   }
 }
 
-// ─── Food mini cards ──────────────────────────────────────────────────────────
+// phần thẻ món nhỏ
 .featured-food-cards {
   position: absolute;
   z-index: 20;
@@ -307,7 +307,7 @@
   margin: 10px 0 0;
 }
 
-// ─── Bottom dots ──────────────────────────────────────────────────────────────
+// phần chấm chuyển món
 .featured-dots {
   position: absolute;
   z-index: 30;
@@ -333,7 +333,7 @@
   }
 }
 
-// ─── Bottom nav arrows ────────────────────────────────────────────────────────
+// phần nút điều hướng
 .featured-bottom-arrows {
   position: absolute;
   z-index: 30;
@@ -368,7 +368,7 @@
   display: none;
 }
 
-// ─── Responsive ───────────────────────────────────────────────────────────────
+// phần giao diện tablet
 @media (max-width: 1024px) {
   .featured-banner {
     height: auto;
@@ -404,6 +404,7 @@
 }
 
 @media (max-width: 768px) {
+  // phần giao diện điện thoại
   .featured-section {
     padding: 42px 0 54px;
     background: linear-gradient(180deg, #fff 0%, #f7f9f8 100%);
@@ -647,6 +648,7 @@
 }
 
 @media (max-width: 380px) {
+  // phần giao diện điện thoại nhỏ
   .featured-banner-wrap {
     padding: 0 12px;
   }

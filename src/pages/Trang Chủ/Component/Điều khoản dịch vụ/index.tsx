@@ -20,6 +20,7 @@ import {
 
 import '../Chính Sách Bảo Mật/index.less'; // Import chung CSS đã được chuẩn hóa
 
+// phần mục lục
 const menuItems = [
   {
     id: 'section-1',
@@ -43,15 +44,19 @@ const menuItems = [
   },
 ];
 
+// phần trang điều khoản dịch vụ
 export default function TermsPage() {
+  // phần trạng thái giao diện
   const { theme } = useModel('Khách Hàng.GlobalState.index');
   const [activeSection, setActiveSection] = React.useState(menuItems[0].id);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
+  // phần cuộn lên đầu trang
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  // phần cuộn tới mục nội dung
   const scrollToSection = (id: string) => {
     setActiveSection(id);
     const element = document.getElementById(id);
@@ -61,6 +66,7 @@ export default function TermsPage() {
     }
   };
 
+  // phần giao diện chính
   return (
     <div className={`privacy-page-wrapper theme-${theme}`}>
       <header className="pp-header">
@@ -278,10 +284,12 @@ export default function TermsPage() {
   );
 }
 
+// phần đường phân cách
 function Divider() {
   return <div className="pp-divider" />;
 }
 
+// phần nội dung điều khoản
 function TermsSection({ id, number, icon, title, children }: any) {
   return (
     <section id={id} className="pp-section">
@@ -301,6 +309,7 @@ function TermsSection({ id, number, icon, title, children }: any) {
   );
 }
 
+// phần thẻ thông tin
 function InfoCard({ icon, title, desc }: any) {
   return (
     <div className="pp-security-card">
@@ -311,6 +320,7 @@ function InfoCard({ icon, title, desc }: any) {
   );
 }
 
+// phần mục kiểm tra
 function CheckItem({ text }: any) {
   return (
     <div className="pp-check-item">

@@ -1,11 +1,11 @@
-// ─── Variables ───────────────────────────────────────────────────────────────
+// phần biến màu
 @green: #15803d;
 @green-dark: #166534;
 @green-light: #f0fdf4;
 @topbar-height: 82px;
 @font-family: 'Inter', 'Roboto', sans-serif;
 
-// ─── Wrapper ─────────────────────────────────────────────────────────────────
+// phần khung trang
 .landing-page {
   min-height: 100vh;
   overflow: hidden;
@@ -20,7 +20,7 @@
   }
 }
 
-// ─── Topbar ──────────────────────────────────────────────────────────────────
+// phần đầu trang
 .landing-topbar {
   position: fixed;
   top: 0;
@@ -49,7 +49,7 @@
   }
 }
 
-// Logo
+// phần logo
 .lt-logo {
   display: flex;
   align-items: center;
@@ -83,14 +83,14 @@
   }
 }
 
-// Nav right
+// phần điều hướng phải
 .lt-nav-right {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-// Theme toggle
+// phần đổi giao diện
 .lt-theme-toggle {
   width: 21px;
   height: 21px;
@@ -118,7 +118,7 @@
   }
 }
 
-// Buttons
+// phần nút
 .lt-btn-login {
   background: none;
   border: none;
@@ -257,7 +257,7 @@
   }
 }
 
-// ─── Hero ─────────────────────────────────────────────────────────────────────
+// phần hero
 .landing-hero {
   position: relative;
   min-height: 100vh;
@@ -300,7 +300,7 @@
   min-height: calc(100vh - @topbar-height);
 }
 
-// ─── Left side ───────────────────────────────────────────────────────────────
+// phần nội dung trái
 .hero-left {
   display: flex;
   flex-direction: column;
@@ -352,7 +352,7 @@
   &.dark { color: #9ca3af; }
 }
 
-// Mini features
+// phần tính năng nhỏ
 .hero-features {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -401,7 +401,7 @@
   }
 }
 
-// CTA
+// phần nút đặt món
 .hero-cta {
   margin-top: 32px;
 }
@@ -426,7 +426,7 @@
   &:active { transform: scale(0.97); }
 }
 
-// Trust
+// phần niềm tin khách hàng
 .hero-trust {
   display: flex;
   align-items: center;
@@ -465,12 +465,12 @@
   &.dark { color: #9ca3af; }
 }
 
-// ─── Right side ──────────────────────────────────────────────────────────────
+// phần ảnh bên phải
 .hero-right {
   position: relative;
   z-index: 1;
 
-  // Inner wrapper handles curve + clip
+  // phần khung ảnh cong
   .hero-img-wrap {
     position: absolute;
     top: 0;
@@ -496,7 +496,7 @@
   }
 }
 
-// ─── Responsive ────────────────────────────────────────────────────────────────
+// phần responsive
 @media (max-width: 1024px) {
   .hero-grid {
     grid-template-columns: 1fr;

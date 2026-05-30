@@ -11,6 +11,7 @@ import {
 
 import './index.less';
 
+// phần dữ liệu liên hệ
 const contactItems = [
   {
     icon: <Phone size={24} />,
@@ -39,13 +40,17 @@ const contactItems = [
   },
 ];
 
+// phần trang liên hệ
 export default function ContactPage() {
+  // phần lấy giao diện sáng tối
   const { theme } = useModel('Khách Hàng.GlobalState.index');
 
+  // phần cuộn lên đầu trang
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  // phần giao diện chính
   return (
     <div className={`contact-page-wrapper theme-${theme}`}>
       <header className="cp-header">
@@ -116,6 +121,7 @@ export default function ContactPage() {
   );
 }
 
+// phần thẻ liên hệ
 function ContactCard({ item }: any) {
   return (
     <div className={`cp-contact-card ${item.active ? 'active' : ''}`}>

@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import styles from './index.less';
 import { contentData } from '@/services/Trangchu/content';
 
+// phần nội dung giới thiệu
 const ContentSection: React.FC = () => {
+  // phần trạng thái tab đang chọn
   const [activeId, setActiveId] = useState('thuantien');
 
+  // phần dữ liệu đang hiển thị
   const activeIndex = contentData.findIndex((item) => item.id === activeId);
   const activeContent = contentData[activeIndex];
 
+  // phần giao diện chính
   return (
     <section className={styles.contentSection}>
       <div className={styles.container}>

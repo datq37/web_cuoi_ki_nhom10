@@ -19,6 +19,7 @@ const whyFast = require('@/assets/trangchu/nhanhchong.png');
 const whyConvenient = require('@/assets/trangchu/thuantien.png');
 const whyClean = require('@/assets/trangchu/sachse.png');
 
+// phần dữ liệu lý do chọn
 const whyData = [
   {
     key: 'fast',
@@ -70,12 +71,16 @@ const whyData = [
   },
 ];
 
+// phần chấm trang trí
 const decorationDots = Array.from({ length: 9 }, (_, index) => `why-dot-${index + 1}`);
 
+// phần vì sao chọn chúng tôi
 export default function WhyChooseUs() {
+  // phần trạng thái tab đang chọn
   const [activeIndex, setActiveIndex] = useState(1);
   const activeData = whyData[activeIndex];
 
+  // phần giao diện chính
   return (
     <section className="why-section">
       <div className="why-dots why-dots-left">

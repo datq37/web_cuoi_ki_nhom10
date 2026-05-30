@@ -18,6 +18,8 @@ import {
 import { FacebookOutlined, InstagramOutlined } from '@ant-design/icons';
 import './index.less';
 const logo = '/logo.webp';
+
+// phần chân trang
 export default function HomeFooter() {
   return (
     <footer className="home-footer-wrapper">
@@ -122,6 +124,8 @@ export default function HomeFooter() {
     </footer>
   );
 }
+
+// phần cột nội dung
 function FooterColumn({ title, children }: { title: string, children: ReactNode }) {
   return (
     <div>
@@ -134,6 +138,7 @@ function FooterColumn({ title, children }: { title: string, children: ReactNode 
 }
 
 
+// phần tiêu đề cột
 function FooterTitle({ title }: { title: string }) {
   return (
     <div className="home-footer-title">
@@ -143,6 +148,7 @@ function FooterTitle({ title }: { title: string }) {
   );
 }
 
+// phần liên kết chân trang
 function FooterLink({ icon, text, onClick }: { icon: ReactNode, text: string, onClick?: () => void }) {
   return (
     <button className="home-footer-link" onClick={onClick}>
@@ -159,6 +165,7 @@ function FooterLink({ icon, text, onClick }: { icon: ReactNode, text: string, on
   );
 }
 
+// phần thông tin liên hệ
 function InfoItem({ icon, text }: { icon: ReactNode, text: string }) {
   return (
     <div className="home-footer-info-item">
@@ -172,6 +179,7 @@ function InfoItem({ icon, text }: { icon: ReactNode, text: string }) {
   );
 }
 
+// phần huy hiệu thương hiệu
 function FeatureBadge({ icon, text }: { icon: ReactNode, text: string }) {
   return (
     <div className="home-footer-badge">

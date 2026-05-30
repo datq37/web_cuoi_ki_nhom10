@@ -1,4 +1,4 @@
-/* --- Hệ màu sắc & phong cách đặc trưng cho trang Điều khoản dịch vụ --- */
+// phần màu sắc và phong cách
 .terms-of-service-page {
   --primary-color: #2d6a4f;
   --primary-light: rgba(45, 106, 79, 0.08);
@@ -18,7 +18,7 @@
   display: flex;
   flex-direction: column;
 
-  /* --- Header --- */
+  // phần đầu trang
   .terms-header {
     background: var(--card-bg);
     border-bottom: 1px solid var(--border-color);
@@ -90,7 +90,7 @@
     }
   }
 
-  /* --- Main Content --- */
+  // phần nội dung chính
   .terms-main {
     flex: 1;
     padding: 40px 24px;
@@ -105,7 +105,7 @@
     align-items: start;
   }
 
-  /* --- Sidebar Mục Lục --- */
+  // phần mục lục
   .terms-sidebar {
     position: sticky;
     top: 90px;
@@ -196,7 +196,7 @@
     }
   }
 
-  /* --- Article Content --- */
+  // phần bài viết
   .terms-content {
     .content-card {
       background: var(--card-bg);
@@ -312,7 +312,7 @@
     }
   }
 
-  /* --- Footer Simple --- */
+  // phần chân trang
   .terms-footer-simple {
     background: var(--card-bg);
     border-top: 1px solid var(--border-color);
@@ -322,7 +322,7 @@
     color: var(--text-mute);
   }
 
-  /* --- Responsive Rất Đẹp Cho Di Động --- */
+  // phần responsive
   @media (max-width: 992px) {
     .terms-container {
       grid-template-columns: 1fr;

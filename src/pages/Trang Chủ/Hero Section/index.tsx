@@ -4,29 +4,35 @@ import { motion, AnimatePresence } from 'framer-motion';
 import styles from './index.less';
 import { foodData } from '@/services/Trangchu/herosection';
 
+// phần slider món nổi bật
 const FoodSlider: React.FC = () => {
+  // phần trạng thái slide hiện tại
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // phần chuyển slide tiếp theo
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => 
       prevIndex === foodData.length - 1 ? 0 : prevIndex + 1
     );
   };
 
+  // phần chuyển slide trước
   const prevSlide = () => {
     setCurrentIndex((prevIndex) => 
       prevIndex === 0 ? foodData.length - 1 : prevIndex - 1
     );
   };
 
+  // phần dữ liệu món đang chọn
   const activeFood = foodData[currentIndex];
 
-  // All other items except current
+  // phần danh sách món phụ
   const thumbnails = [
     ...foodData.slice(currentIndex + 1),
     ...foodData.slice(0, currentIndex)
   ];
 
+  // phần giao diện chính
   return (
     <div className={styles.sliderContainer}>
       <AnimatePresence>

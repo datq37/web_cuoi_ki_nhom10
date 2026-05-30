@@ -13,26 +13,32 @@ import { BulbOutlined, BulbFilled } from '@ant-design/icons';
 import './topbar.less';
 import bannerImage from '@/assets/trangchu/banner.png';
 
+// phần đầu trang
 const Topbar: React.FC = () => {
+  // phần trạng thái giao diện
   const { theme, toggleTheme } = useModel('Khách Hàng.GlobalState.index');
   const darkMode = theme === 'dark';
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // phần chuyển tới đăng nhập
   const goToLogin = () => {
     setMobileMenuOpen(false);
     history.push('/dang-nhap');
   };
 
+  // phần chuyển tới đăng ký
   const goToRegister = () => {
     setMobileMenuOpen(false);
     history.push('/dang-ky');
   };
 
+  // phần đổi giao diện sáng tối
   const handleToggleTheme = () => {
     toggleTheme();
     setMobileMenuOpen(false);
   };
 
+  // phần giao diện chính
   return (
     <div className={`landing-page ${darkMode ? 'dark' : 'light'}`}>
       <header className={`landing-topbar ${darkMode ? 'dark' : ''}`}>
@@ -180,6 +186,7 @@ const Topbar: React.FC = () => {
   );
 };
 
+// phần tính năng nhỏ
 function MiniFeature({ icon, title, desc, darkMode }: { icon: React.ReactNode, title: string, desc: string, darkMode: boolean }) {
   return (
     <div className="mini-feature">

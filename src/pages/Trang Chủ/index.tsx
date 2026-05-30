@@ -7,14 +7,18 @@ import WhyChooseUs from './Component/WhyChooseUs';
 import Footer from './Component/footer';
 import './index.less';
 
+// phần trang chủ
 const HomePage: React.FC = () => {
+  // phần lấy giao diện sáng tối
   const { theme } = useModel('Khách Hàng.GlobalState.index');
 
+  // phần hiệu ứng hiện nội dung
   const revealVariants = {
     hidden: { opacity: 0, y: 80 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } }
   };
 
+  // phần giao diện chính
   return (
     <div className={`home-page-container theme-${theme}`}>
       <Topbar />

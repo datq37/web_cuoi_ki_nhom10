@@ -4,7 +4,9 @@ import { history } from 'umi';
 import './banner.less';
 import bannerImg from '@/assets/trangchu/banner.png';
 
+// phần banner
 const Banner: React.FC = () => {
+    // phần giao diện chính
     return (
         <div className="banner-container">
             <div className="banner-content-left">
@@ -29,6 +31,6 @@ const Banner: React.FC = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Banner;

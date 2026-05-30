@@ -47,7 +47,7 @@ export interface StepCardProps {
   desc: string;
 }
 
-/* Banner */
+
 export interface BannerProps {
   setPage: (page: string) => void;
   todayDishCount: number;
@@ -55,7 +55,7 @@ export interface BannerProps {
   placedOrderCount: number;
 }
 
-/* Danh mục và Bán chạy */
+
 export interface MenuAndBestSellersProps {
   setPage: (page: string) => void;
   bestSellingDishes: Dish[];
@@ -67,7 +67,7 @@ export interface MenuAndBestSellersProps {
   getDishImage: (dish: Dish) => string;
 }
 
-/* Ưu đãi */
+
 export interface OffersAndCombosProps {
   setPage: (page: string) => void;
 }

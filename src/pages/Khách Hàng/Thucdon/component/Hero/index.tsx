@@ -3,8 +3,6 @@ import { useModel } from 'umi';
 import { CalendarDays, Clock3 } from 'lucide-react';
 import type { MenuHeroProps } from '@/services/Khách hàng/Thực đơn/Hero/typing';
 import menuBanner from '@/assets/Khách Hàng/Thực đơn/thucdon.png';
-
-// ─── Banner chào mừng — lấy lời chào và giờ hiện tại từ model ───────────────
 const MenuHero: React.FC<MenuHeroProps> = ({ orders, totalDishes }) => {
     const { greeting, timeStr, dateStr } = useModel('Khách Hàng.Thực đơn.index');
 

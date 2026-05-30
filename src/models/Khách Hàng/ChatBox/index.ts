@@ -48,7 +48,7 @@ export default function useCustomerChatBoxModel() {
       if (response.action?.type === 'ADD_TO_CART') {
         const dish = (dishes || []).find((d: any) => d.id === response.action!.dishId);
         if (dish) {
-          addToCart(dish);
+          addToCart(dish, response.action!.qty);
         }
       }
       // hiện thi câu trả lời của au

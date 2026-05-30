@@ -1,23 +1,23 @@
-// Load .env.local từ thư mục gốc project (mock/../.env.local)
+// Nạp cấu hình từ tệp .env.local trong thư mục gốc của dự án
 const path = require('path');
 const dotenv = require('dotenv');
 
-// Load .env.local trước (ưu tiên cao hơn), rồi .env
+// Ưu tiên nạp cấu hình từ .env.local trước, sau đó mới nạp từ .env
 dotenv.config({ path: path.resolve(__dirname, '../.env.local') });
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-// Chuyển sang dùng Groq với Llama 3.3 70B
+// Khai báo model AI được sử dụng
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
 const MAX_RETRIES = 3;       // Số lần thử lại
 const RETRY_DELAY_MS = 2000; // Chờ 2 giây
 
 const getApiKey = (): string | undefined => {
-  const key = process.env.GROQ_API_KEY || process.env.GEMINI_API_KEY; // Fallback nếu đổi tên biến
+  const key = process.env.GROQ_API_KEY || process.env.GEMINI_API_KEY; // Dự phòng trong trường hợp thay đổi tên biến môi trường
   if (key && key.trim()) return key.trim();
   return undefined;
 };
 
-// Parse body an toàn: hỗ trợ cả string (chưa parse) và object (đã parse sẵn)
+// Phân tích dữ liệu đầu vào (body) một cách an toàn, hỗ trợ cả định dạng chuỗi và đối tượng
 const parseBody = (req: any): any => {
   try {
     if (!req.body) return {};
@@ -44,7 +44,7 @@ const buildErrorReply = (detail?: string) => {
   return `Lỗi hệ thống AI: ${detail}`;
 };
 
-// Tên danh mục tiếng Việt
+// Định nghĩa tên các danh mục thực đơn bằng tiếng Việt
 const CATEGORY_LABEL: Record<string, string> = {
   rice: 'Cơm',
   noodle: 'Bún/Phở/Mỳ',
@@ -58,7 +58,7 @@ const buildPrompt = (body: any) => {
   const dishList: any[] = Array.isArray(body.dishes) ? body.dishes : [];
   const voucherList: any[] = Array.isArray(body.vouchers) ? body.vouchers : [];
 
-  // Tách riêng thức ăn và đồ uống
+  // Phân loại riêng danh sách thức ăn và đồ uống
   const foodList = dishList.filter((d: any) => d.category !== 'drink');
   const drinkList = dishList.filter((d: any) => d.category === 'drink');
 
@@ -68,7 +68,7 @@ const buildPrompt = (body: any) => {
     const rating = dish.rating ? `⭐${dish.rating}` : '';
     const sold = dish.sold ? `bán ${dish.sold}` : '';
     const meta = [cat, kcal, rating, sold].filter(Boolean).join(' | ');
-    // Bao gồm ID để Mimi tham chiếu khi cần thêm vào giỏ
+    // Đính kèm mã ID ngầm để AI sử dụng khi cần chốt đơn thêm vào giỏ hàng
     return `• [id:${dish.id}] ${dish.name} — ${dish.price.toLocaleString('vi-VN')}đ (${meta})\n  ${dish.desc}`;
   };
 
@@ -92,24 +92,20 @@ const buildPrompt = (body: any) => {
   console.log(`[MIMI] foods: ${foodList.length}, drinks: ${drinkList.length}, vouchers: ${voucherList.length}, msg: "${body.message}"`);
 
   return [
-    '=== VAI TRÒ ===',
-    'Bạn là Mimi, trợ lý AI của căng tin doanh nghiệp. Nhiệm vụ: tư vấn món ăn, đồ uống, ưu đãi cho khách.',
+    '=== VAI TRÒ CHUNG ===',
+    'Bạn là một AI siêu thông minh (tương tự ChatGPT) đang đóng vai Mimi - trợ lý thân thiện tại căng tin doanh nghiệp.',
+    'Bạn có thể nói chuyện tự nhiên, thoải mái về MỌI CHỦ ĐỀ khách hàng muốn (công việc, tâm sự, giải trí, đồ ăn...) giống như một người bạn thực sự.',
     '',
-    '=== CÁCH TRẢ LỜI ===',
-    '- Tự nhiên, thân thiện, ngắn gọn như đang nhắn tin.',
-    '- Khi khách hỏi về THỨC ĂN (cơm, bún, phở, món chính, ăn vặt...): chỉ gợi ý từ mục THỨC ĂN HÔM NAY bên dưới.',
-    '- Khi khách hỏi về ĐỒ UỐNG (nước, trà, cà phê, sinh tố...): chỉ gợi ý từ mục ĐỒ UỐNG HÔM NAY bên dưới.',
-    '- Luôn nêu rõ: tên món, giá, calo (nếu có), lý do phù hợp với câu hỏi.',
-    '- Nếu gợi ý nhiều món, dùng danh sách gạch đầu dòng.',
-    '- KHÔNG bịa món ngoài danh sách. KHÔNG trộn lẫn thức ăn và đồ uống trừ khi khách hỏi cả hai.',
-    '- Khi khách hỏi ưu đãi/voucher: nêu từ mục ƯU ĐÃI.',
-    '- TƯ VẤN & HỎI Ý KIẾN: Khi gợi ý món, LUÔN chủ động hỏi khách có muốn thêm vào đơn không (ví dụ: "Bạn có muốn mình thêm món này vào đơn không?").',
-    '- THÊM VÀO GIỎ HÀNG: CHỈ KHI khách xác nhận ĐỒNG Ý ("có", "thêm", "ok", "được"...) thì bạn mới thêm dòng: [ACTION:ADD_TO_CART:dishId] (với dishId là id của món đó). TUYỆT ĐỐI KHÔNG tự động thêm khi khách chỉ mới hỏi thông tin.',
-    '- HỖ TRỢ CHUNG: Trả lời các câu hỏi về thanh toán, nhận món, giờ giấc... dựa trên mục THÔNG TIN CĂNG TIN.',
+    '=== HƯỚNG DẪN GIAO TIẾP & BÁN HÀNG ===',
+    '- NGÔN NGỮ TỰ NHIÊN: Cực kỳ linh hoạt, vui vẻ, không bao giờ dùng văn mẫu hay nói chuyện rập khuôn. Có thể xưng "mình" - "bạn" và dùng emoji cho sinh động.',
+    '- TRÒ CHUYỆN ĐA NĂNG: Khách hỏi gì đáp nấy. Nếu khách nhờ tư vấn đồ ăn, hãy xem "THỨC ĂN HÔM NAY" để gợi ý. Nếu khách hỏi chuyện ngoài lề, cứ thoải mái chém gió.',
+    '- CÔNG CỤ THÊM GIỎ HÀNG (RẤT QUAN TRỌNG): Bất cứ khi nào bạn nhận thấy khách đã quyết định MUA một món (vd: "lấy 2 trà đào", "cho mình món đó", "ok lấy đi"), bạn hãy tự động chốt đơn bằng cách lén chèn mã lệnh này vào câu trả lời: [ACTION:ADD_TO_CART:mã_món:số_lượng]. (Ví dụ: [ACTION:ADD_TO_CART:m2:2]). Mặc định số lượng là 1.',
+    '- XÁC NHẬN TINH TẾ: Khi đã dùng lệnh thêm giỏ hàng, hãy nói một câu xác nhận thật tự nhiên (vd: "Okie, mình bỏ vào giỏ cho bạn rồi nha!"). Đừng hỏi lại khách nếu họ đã chốt.',
+    '- QUY TẮC BẢO MẬT: Bạn chỉ dùng mã [id:xxx] để lấy ID cho lệnh ADD_TO_CART. Tuyệt đối không in chữ [id:xxx] ra cho khách xem. Khách chỉ cần nhận được lời lẽ tự nhiên của bạn.',
     '',
     '=== THÔNG TIN CĂNG TIN ===',
     '- Thanh toán: Hỗ trợ tiền mặt (Cash) và Chuyển khoản (QR / Bank transfer).',
-    '- Cách thức: Khách đặt món trên web, thanh toán, rồi nhận món tại quầy căng tin.',
+    '- Cách thức: Khách đặt món trên web, thanh toán, rồi hệ thống sẽ GIAO TẬN NƠI (không phải đến quầy nhận món).',
     '- Thời gian chuẩn bị: Trung bình 10-15 phút tùy món.',
     '',
     '=== LỊCH SỬ HỘI THOẠI ===',
@@ -154,7 +150,7 @@ export default {
     const axios = require('axios');
     const endpoint = 'https://api.groq.com/openai/v1/chat/completions';
     
-    // Định dạng payload chuẩn OpenAI tương thích với Groq
+    // Cấu hình dữ liệu gửi đi theo chuẩn OpenAI để tương thích với API của Groq
     const payload = {
       model: GROQ_MODEL,
       messages: [{ role: 'user', content: buildPrompt(body) }],
@@ -184,17 +180,19 @@ export default {
           return;
         }
 
-        // Tách action [ACTION:ADD_TO_CART:dishId]
-        const actionMatch = rawReply.match(/\[ACTION:ADD_TO_CART:([^\]]+)\]/);
-        const reply = rawReply.replace(/\[ACTION:ADD_TO_CART:[^\]]+\]/g, '').trim();
+        // Trích xuất lệnh thêm vào giỏ hàng từ câu trả lời của AI
+        const actionMatch = rawReply.match(/\[ACTION:ADD_TO_CART:([^\]:]+)(?::(\d+))?\]/);
+        let reply = rawReply.replace(/\[ACTION:ADD_TO_CART:[^\]]+\]/g, '').trim();
+        reply = reply.replace(/\[id:[^\]]+\]/g, '').trim(); // Xoá bỏ mã ID nếu AI vô tình in ra văn bản
 
         let action = undefined;
         if (actionMatch) {
           const dishId = actionMatch[1].trim();
+          const qty = actionMatch[2] ? parseInt(actionMatch[2], 10) : 1;
           const dish = (body.dishes || []).find((d: any) => d.id === dishId);
           if (dish) {
-            action = { type: 'ADD_TO_CART', dishId, dishName: dish.name, qty: 1 };
-            console.log(`[MIMI] 🛒 Thêm vào giỏ: ${dish.name} (${dishId})`);
+            action = { type: 'ADD_TO_CART', dishId, dishName: dish.name, qty: qty };
+            console.log(`[MIMI] 🛒 Thêm vào giỏ: ${dish.name} (${dishId}) x ${qty}`);
           }
         }
 
@@ -220,7 +218,7 @@ export default {
       }
     }
 
-    // Hết lần thử
+    // Xử lý thông báo lỗi khi đã hết số lần thử kết nối
     const detail: string = lastError?.response?.data?.error?.message || lastError?.message || '';
     const status429 = lastError?.response?.status === 429;
 

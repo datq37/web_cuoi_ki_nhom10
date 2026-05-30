@@ -122,8 +122,8 @@ export default function useCartModel() {
     };
   }, []);
 
-  const addToCart = useCallback((dish: Dish) => {
-    setCart(prev => addDishToCart(prev, dish));
+  const addToCart = useCallback((dish: Dish, qty?: number) => {
+    setCart(prev => addDishToCart(prev, dish, qty));
   }, []);
 
   const incCart = useCallback((id: string) => {

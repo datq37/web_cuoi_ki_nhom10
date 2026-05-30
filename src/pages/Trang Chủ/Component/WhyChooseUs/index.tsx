@@ -6,8 +6,6 @@ import {
   Clock3,
   Bell,
   ThumbsUp,
-  ChevronLeft,
-  ChevronRight,
   CreditCard,
   Smartphone,
   ShieldCheck,
@@ -72,24 +70,18 @@ const whyData = [
   },
 ];
 
+const decorationDots = Array.from({ length: 9 }, (_, index) => `why-dot-${index + 1}`);
+
 export default function WhyChooseUs() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(1);
   const activeData = whyData[activeIndex];
-
-  const handlePrev = () => {
-    setActiveIndex((prev) => (prev === 0 ? whyData.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev === whyData.length - 1 ? 0 : prev + 1));
-  };
 
   return (
     <section className="why-section">
       {/* Background decorations */}
       <div className="why-dots why-dots-left">
-        {Array.from({ length: 9 }).map((_, i) => (
-          <span key={i} className="why-dot" />
+        {decorationDots.map((dot) => (
+          <span key={`left-${dot}`} className="why-dot" />
         ))}
       </div>
       <div className="why-leaf-deco">❧</div>
@@ -125,8 +117,8 @@ export default function WhyChooseUs() {
 
         {/* Dots decoration right */}
         <div className="why-dots why-dots-right">
-          {Array.from({ length: 9 }).map((_, i) => (
-            <span key={i} className="why-dot" />
+          {decorationDots.map((dot) => (
+            <span key={`right-${dot}`} className="why-dot" />
           ))}
         </div>
 

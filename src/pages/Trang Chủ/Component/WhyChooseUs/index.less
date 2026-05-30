@@ -1,6 +1,6 @@
 .why-section {
   position: relative;
-  background: linear-gradient(180deg, #ffffff 0%, #f4f6f3 100%);
+  background: linear-gradient(180deg, #fff 0%, #f4f6f3 100%);
   padding: 60px 0 80px;
   overflow: hidden;
   font-family: 'Inter', 'Roboto', sans-serif;
@@ -429,7 +429,14 @@
     text-align: center;
     border-radius: 20px;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: 4px;
+
+    svg {
+      display: block;
+      margin: 0 auto;
+    }
   }
   .why-card {
     padding: 20px;
@@ -442,8 +449,25 @@
   }
   .why-card-title {
     font-size: 1.4rem;
+    text-align: center;
   }
   .why-text-side {
     padding-left: 0;
+    text-align: center;
+  }
+  .why-icon-wrap {
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .why-underline {
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .why-desc {
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .why-features {
+    text-align: center;
   }
 }

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import {
+  ArrowRight,
   ChevronLeft,
   ChevronRight,
   Heart,
   Leaf,
+  ShoppingCart,
   Soup,
 } from 'lucide-react';
+import { history } from 'umi';
 import './index.less';
 
 const featuredPho = require('@/assets/trangchu/pho.png');
@@ -77,43 +80,58 @@ export default function FeaturedMenu() {
       {/* Big banner */}
       <div className="featured-banner-wrap">
         <div className="featured-banner">
-          {/* Background image */}
-          <img
-            src={active.image}
-            alt={active.name}
-            className="featured-bg-img"
-          />
+          <div className="featured-main-card">
+            {/* Background image */}
+            <img
+              src={active.image}
+              alt={active.name}
+              className="featured-bg-img"
+            />
 
-          {/* Overlays */}
-          <div className="featured-overlay-lr" />
-          <div className="featured-overlay-tb" />
+            {/* Overlays */}
+            <div className="featured-overlay-lr" />
+            <div className="featured-overlay-tb" />
 
-          {/* Decorative leaves */}
-          <div className="featured-deco-leaf featured-deco-leaf-right">🌿</div>
-          <div className="featured-deco-leaf featured-deco-leaf-left">🌱</div>
+            {/* Decorative leaves */}
+            <div className="featured-deco-leaf featured-deco-leaf-right">🌿</div>
+            <div className="featured-deco-leaf featured-deco-leaf-left">🌱</div>
 
-          {/* Left text */}
-          <div className="featured-content">
-            <h3 className="featured-dish-title">
-              {active.name}
-              <br />
-              <span className="featured-dish-subtitle">{active.subtitle}</span>
-            </h3>
+            {/* Left text */}
+            <div className="featured-content">
+              <h3 className="featured-dish-title">
+                {active.name}
+                <br />
+                <span className="featured-dish-subtitle">{active.subtitle}</span>
+              </h3>
 
-            <div className="featured-divider">
-              <span className="featured-divider-line" />
-              <Leaf size={18} className="featured-divider-leaf" />
-              <span className="featured-divider-line" />
+              <div className="featured-divider">
+                <span className="featured-divider-line" />
+                <Leaf size={18} className="featured-divider-leaf" />
+                <span className="featured-divider-line" />
+              </div>
+
+              <p className="featured-dish-desc">{active.desc}</p>
+
+              <button
+                className="featured-mobile-cta-btn"
+                onClick={() => history.push('/dang-nhap')}
+              >
+                <ShoppingCart size={18} />
+                <span>Đặt món ngay</span>
+                <ArrowRight size={18} />
+              </button>
+
+              {/* Feature badges */}
+              <div className="featured-badges">
+                <FeatureBadge icon={<Leaf size={22} />} value="100%" label="Nguyên liệu tươi" />
+                <FeatureBadge icon={<Soup size={22} />} value="Ngon" label="Chuẩn vị" />
+                <FeatureBadge icon={<Heart size={22} />} value="500+" label="Khách yêu thích" />
+              </div>
             </div>
+          </div>
 
-            <p className="featured-dish-desc">{active.desc}</p>
-
-            {/* Feature badges */}
-            <div className="featured-badges">
-              <FeatureBadge icon={<Leaf size={22} />} value="100%" label="Nguyên liệu tươi" />
-              <FeatureBadge icon={<Soup size={22} />} value="Ngon" label="Chuẩn vị" />
-              <FeatureBadge icon={<Heart size={22} />} value="500+" label="Khách yêu thích" />
-            </div>
+          <div className="featured-mobile-other-head">
+            <h3>MÓN NGON KHÁC</h3>
           </div>
 
           {/* Food mini cards — click to switch */}
@@ -129,9 +147,9 @@ export default function FeaturedMenu() {
 
           {/* Bottom dots */}
           <div className="featured-dots">
-            {allDishes.map((_, i) => (
+            {allDishes.map((dish, i) => (
               <span
-                key={i}
+                key={dish.name}
                 className={`featured-dot ${i === activeIndex ? 'featured-dot-active' : ''}`}
                 onClick={() => setActiveIndex(i)}
               />

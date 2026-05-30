@@ -12,6 +12,7 @@ import {
   Building2,
   Mail,
   Truck,
+  TicketPercent,
   History,
   CheckCircle2,
   ChevronDown,

@@ -9,63 +9,25 @@ import {
   Soup,
 } from 'lucide-react';
 import { history } from 'umi';
+import { foodData } from '@/services/Trangchu/herosection';
 import './index.less';
-
-const featuredPho = require('@/assets/trangchu/pho.png');
-const bunCha = require('@/assets/trangchu/buncha.png');
-const xoiXeo = require('@/assets/trangchu/xoi.png');
-const nemNuong = require('@/assets/trangchu/nemnuong.png');
-
-const allDishes = [
-  {
-    name: 'PHỞ BÒ',
-    subtitle: 'GIA TRUYỀN',
-    image: featuredPho,
-    desc: 'Nước dùng thanh ngọt, bánh phở mềm dai, thịt bò tươi ngon mang đậm đà bản sắc tinh hoa ẩm thực Việt Nam.',
-    price: '45.000đ',
-  },
-  {
-    name: 'BÚN CHẢ',
-    subtitle: 'HƯƠNG LIÊN',
-    image: bunCha,
-    desc: 'Bún chả thơm ngon với chả nướng than hoa đặc trưng, nước chấm chua ngọt đậm đà.',
-    price: '35.000đ',
-  },
-  {
-    name: 'XÔI XÉO',
-    subtitle: 'HÀ NỘI',
-    image: xoiXeo,
-    desc: 'Xôi xéo dẻo thơm với đậu xanh mịn béo, hành phi vàng ruộm, đặc sản sáng Hà Nội.',
-    price: '22.000đ',
-  },
-  {
-    name: 'NEM NƯỚNG',
-    subtitle: 'NHA TRANG',
-    image: nemNuong,
-    desc: 'Nem nướng Nha Trang thơm lừng, cuộn cùng rau sống tươi và nước chấm đặc trưng.',
-    price: '40.000đ',
-  },
-];
 
 export default function FeaturedMenu() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handlePrev = () => {
-    setActiveIndex((prev) => (prev === 0 ? allDishes.length - 1 : prev - 1));
+    setActiveIndex((prev) => (prev === 0 ? foodData.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setActiveIndex((prev) => (prev === allDishes.length - 1 ? 0 : prev + 1));
+    setActiveIndex((prev) => (prev === foodData.length - 1 ? 0 : prev + 1));
   };
 
-  const active = allDishes[activeIndex];
-
-  // Other dishes (not active)
-  const others = allDishes.filter((_, i) => i !== activeIndex);
+  const active = foodData[activeIndex];
+  const others = foodData.filter((_, i) => i !== activeIndex);
 
   return (
     <section className="featured-section">
-      {/* Title */}
       <div className="featured-title-wrap">
         <div className="featured-title-row">
           <span className="featured-title-line" />
@@ -77,29 +39,24 @@ export default function FeaturedMenu() {
         </div>
       </div>
 
-      {/* Big banner */}
       <div className="featured-banner-wrap">
         <div className="featured-banner">
           <div className="featured-main-card">
-            {/* Background image */}
             <img
               src={active.image}
               alt={active.name}
               className="featured-bg-img"
             />
 
-            {/* Overlays */}
             <div className="featured-overlay-lr" />
             <div className="featured-overlay-tb" />
 
-            {/* Decorative leaves */}
             <div className="featured-deco-leaf featured-deco-leaf-right">🌿</div>
             <div className="featured-deco-leaf featured-deco-leaf-left">🌱</div>
 
-            {/* Left text */}
             <div className="featured-content">
               <h3 className="featured-dish-title">
-                {active.name}
+                {active.menuName}
                 <br />
                 <span className="featured-dish-subtitle">{active.subtitle}</span>
               </h3>
@@ -110,7 +67,7 @@ export default function FeaturedMenu() {
                 <span className="featured-divider-line" />
               </div>
 
-              <p className="featured-dish-desc">{active.desc}</p>
+              <p className="featured-dish-desc">{active.description}</p>
 
               <button
                 className="featured-mobile-cta-btn"
@@ -121,7 +78,6 @@ export default function FeaturedMenu() {
                 <ArrowRight size={18} />
               </button>
 
-              {/* Feature badges */}
               <div className="featured-badges">
                 <FeatureBadge icon={<Leaf size={22} />} value="100%" label="Nguyên liệu tươi" />
                 <FeatureBadge icon={<Soup size={22} />} value="Ngon" label="Chuẩn vị" />
@@ -134,20 +90,18 @@ export default function FeaturedMenu() {
             <h3>MÓN NGON KHÁC</h3>
           </div>
 
-          {/* Food mini cards — click to switch */}
           <div className="featured-food-cards">
             {others.map((food) => (
               <FoodMiniCard
                 key={food.name}
                 food={food}
-                onClick={() => setActiveIndex(allDishes.indexOf(food))}
+                onClick={() => setActiveIndex(foodData.indexOf(food))}
               />
             ))}
           </div>
 
-          {/* Bottom dots */}
           <div className="featured-dots">
-            {allDishes.map((dish, i) => (
+            {foodData.map((dish, i) => (
               <span
                 key={dish.name}
                 className={`featured-dot ${i === activeIndex ? 'featured-dot-active' : ''}`}
@@ -156,7 +110,6 @@ export default function FeaturedMenu() {
             ))}
           </div>
 
-          {/* Bottom nav arrows */}
           <div className="featured-bottom-arrows">
             <button className="featured-nav-btn" onClick={handlePrev}>
               <ChevronLeft size={22} />
@@ -171,14 +124,14 @@ export default function FeaturedMenu() {
   );
 }
 
-function FoodMiniCard({ food, onClick }: { food: { name: string; price: string; image: string }, onClick: () => void }) {
+function FoodMiniCard({ food, onClick }: { food: typeof foodData[number], onClick: () => void }) {
   return (
     <div className="food-mini-card" onClick={onClick}>
       <div className="food-mini-card-img-wrap">
-        <img src={food.image} alt={food.name} className="food-mini-card-img" />
+        <img src={food.image} alt={food.menuName} className="food-mini-card-img" />
       </div>
       <div className="food-mini-card-body">
-        <h4 className="food-mini-card-name">{food.name}</h4>
+        <h4 className="food-mini-card-name">{food.menuName}</h4>
         <div className="food-mini-card-line" />
         <p className="food-mini-card-price">{food.price}</p>
       </div>

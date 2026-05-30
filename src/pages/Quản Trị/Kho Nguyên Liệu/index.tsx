@@ -1,4 +1,4 @@
-import {
+﻿import {
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleFilled,
@@ -30,9 +30,8 @@ import {
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Sidebar from '@/pages/Quản Trị/Sidebar';
+import { useNotif } from '@/context/NotifContext';
 import Topbar from '@/pages/Quản Trị/Topbar';
-import { formatCurrency } from '@/utils/format';
 import {
   DANH_SACH_NGUYEN_LIEU,
   TRANG_THAI_CONFIG,
@@ -43,8 +42,11 @@ import {
 } from '@/services/Quản Trị/Kho Nguyên Liệu/typing';
 import styles from './index.less';
 
-// ── Constants ─────────────────────────────────────────────────────
 const DON_VI_OPTIONS = ['kg', 'g', 'L', 'lít', 'ml', 'thùng', 'gói', 'hộp', 'chai', 'quả', 'cái'];
+
+function formatGia(gia: number): string {
+  return new Intl.NumberFormat('vi-VN').format(gia) + 'đ';
+}
 
 function tinhPhanTram(tonKho: number, mucToiThieu: number): number {
   if (mucToiThieu === 0) return 100;
@@ -60,7 +62,6 @@ function tinhTrangThai(tonKho: number, mucToiThieu: number): ETrangThaiNguyenLie
 type TrangThaiFilter = 'all' | ETrangThaiNguyenLieu;
 type NguyenLieuFormValues = Omit<INguyenLieu, 'id' | 'trangThai'>;
 
-// ── NguyenLieuForm ────────────────────────────────────────────────
 const NguyenLieuForm: React.FC<{
   open: boolean;
   initial: INguyenLieu | null;
@@ -205,7 +206,6 @@ const NguyenLieuForm: React.FC<{
   );
 };
 
-// ── NguyenLieuRestock ─────────────────────────────────────────────
 const NguyenLieuRestock: React.FC<{
   open: boolean;
   item: INguyenLieu | null;
@@ -307,7 +307,6 @@ const NguyenLieuRestock: React.FC<{
   );
 };
 
-// ── BulkRestockModal ──────────────────────────────────────────────
 const BulkRestockModal: React.FC<{
   open: boolean;
   items: INguyenLieu[];
@@ -399,7 +398,7 @@ const BulkRestockModal: React.FC<{
       render: (_, r) => {
         const qty = quantities[r.id] ?? 0;
         return qty > 0 ? (
-          <span style={{ color: '#16a34a', fontWeight: 600 }}>{formatCurrency(qty * r.giaNhap)}</span>
+          <span style={{ color: '#16a34a', fontWeight: 600 }}>{formatGia(qty * r.giaNhap)}</span>
         ) : (
           <span style={{ color: '#d1d5db' }}>—</span>
         );
@@ -419,7 +418,7 @@ const BulkRestockModal: React.FC<{
             <div style={{ fontSize: 11, color: '#9ca3af', fontWeight: 700, letterSpacing: '0.4px', marginBottom: 2 }}>
               TỔNG TIỀN
             </div>
-            <div className={styles.bulkTotalValue}>{formatCurrency(bulkTotal)}</div>
+            <div className={styles.bulkTotalValue}>{formatGia(bulkTotal)}</div>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
             <Button onClick={onCancel}>Huỷ</Button>
@@ -441,7 +440,8 @@ const BulkRestockModal: React.FC<{
         dataSource={items}
         columns={bulkColumns}
         size="small"
-        pagination={{ pageSize: 8, showSizeChanger: false, size: 'small' }}
+        pagination={false}
+        scroll={{ y: 300 }}
         className={styles.bulkTable}
         rowSelection={{
           type: 'checkbox',
@@ -453,7 +453,6 @@ const BulkRestockModal: React.FC<{
   );
 };
 
-// ── NguyenLieuDetail ──────────────────────────────────────────────
 const NguyenLieuDetail: React.FC<{
   item: INguyenLieu | null;
   onClose: () => void;
@@ -493,6 +492,7 @@ const NguyenLieuDetail: React.FC<{
     >
       {d && cfg && (
         <div className={styles.detailBody}>
+          {/* Hero */}
           <div className={styles.detailHero}>
             <div className={styles.detailHeroIconWrap}>
               <InboxOutlined />
@@ -502,12 +502,15 @@ const NguyenLieuDetail: React.FC<{
               <div className={styles.detailHeroSub}>{d.nhaCungCap}</div>
               <span
                 className={styles.detailStatusBadge}
-                style={{ color: cfg.color, background: cfg.bg }}
+                data-status={d!.trangThai}
+                style={{ color: cfg.color }}
               >
                 {cfg.label}
               </span>
             </div>
           </div>
+
+          {/* Grid: tồn kho + mức tối thiểu */}
           <div className={styles.detailGrid2}>
             <div className={styles.detailGridItem}>
               <div className={styles.detailGridLabel}>TỒN KHO</div>
@@ -524,6 +527,8 @@ const NguyenLieuDetail: React.FC<{
               </div>
             </div>
           </div>
+
+          {/* Progress */}
           <div className={styles.detailProgressWrap}>
             <div className={styles.detailProgressRow}>
               <span className={styles.detailGridLabel}>MỨC TỒN KHO</span>
@@ -536,16 +541,20 @@ const NguyenLieuDetail: React.FC<{
               />
             </div>
           </div>
+
+          {/* Grid: giá nhập + tổng giá trị */}
           <div className={styles.detailGrid2}>
             <div className={styles.detailGridItem}>
               <div className={styles.detailGridLabel}>GIÁ NHẬP</div>
-              <div className={styles.detailGridValue}>{formatCurrency(d.giaNhap)}</div>
+              <div className={styles.detailGridValue}>{formatGia(d.giaNhap)}</div>
             </div>
             <div className={styles.detailGridItem}>
               <div className={styles.detailGridLabel}>TỔNG GIÁ TRỊ</div>
-              <div className={styles.detailGridValue}>{formatCurrency(totalValue)}</div>
+              <div className={styles.detailGridValue}>{formatGia(totalValue)}</div>
             </div>
           </div>
+
+          {/* Warning box khi cần nhập thêm */}
           {canNhapBox > 0 && (
             <div className={styles.detailWarnBox}>
               ⚠ Cần nhập thêm <strong>{canNhapBox} {d.donVi}</strong> để đạt mức an toàn
@@ -557,10 +566,10 @@ const NguyenLieuDetail: React.FC<{
   );
 };
 
-// ── KhoNguyenLieu page ────────────────────────────────────────────
 const KhoNguyenLieu: React.FC = () => {
-  const [items, setItems] = useState<INguyenLieu[]>(DANH_SACH_NGUYEN_LIEU);
-  const [tuKhoa, setTuKhoa] = useState('');
+  const { addNotif } = useNotif();
+  const [items,           setItems]           = useState<INguyenLieu[]>(DANH_SACH_NGUYEN_LIEU);
+  const [tuKhoa,          setTuKhoa]          = useState('');
   const [filterTrangThai, setFilterTrangThai] = useState<TrangThaiFilter>('all');
   const [editing, setEditing] = useState<INguyenLieu | null>(null);
   const [viewing, setViewing] = useState<INguyenLieu | null>(null);
@@ -570,13 +579,12 @@ const KhoNguyenLieu: React.FC = () => {
   const [bulkRestockOpen, setBulkRestockOpen] = useState(false);
   const [bulkPreSelectIds, setBulkPreSelectIds] = useState<string[]>([]);
 
-  // ── Dynamic stats ──────────────────────────────────────────────
   const stats = useMemo(() => {
     const tongNguyenLieu = items.length;
     const sapHetHet = items.filter(
       (n) => n.trangThai === ETrangThaiNguyenLieu.SAP_HET || n.trangThai === ETrangThaiNguyenLieu.HET_HANG,
     ).length;
-    const giaTri = formatCurrency(items.reduce((s, n) => s + n.tonKho * n.giaNhap, 0));
+    const giaTri = formatGia(items.reduce((s, n) => s + n.tonKho * n.giaNhap, 0));
     const nhaCungCap = new Set(items.map((n) => n.nhaCungCap)).size;
     return { tongNguyenLieu, sapHetHet, giaTri, nhaCungCap };
   }, [items]);
@@ -591,19 +599,16 @@ const KhoNguyenLieu: React.FC = () => {
     [stats],
   );
 
-  // ── Dynamic canNhapThem ────────────────────────────────────────
   const canNhapThemItems = useMemo(
     () => items.filter((n) => n.trangThai !== ETrangThaiNguyenLieu.DU_HANG),
     [items],
   );
 
-  // ── Existing suppliers for AutoComplete ───────────────────────
   const nhaCungCapOptions = useMemo(
     () => Array.from(new Set(items.map((n) => n.nhaCungCap))),
     [items],
   );
 
-  // ── Filtered list ──────────────────────────────────────────────
   const danhSachLoc = useMemo(() => {
     let list = items;
     if (filterTrangThai !== 'all') {
@@ -618,7 +623,6 @@ const KhoNguyenLieu: React.FC = () => {
     return list;
   }, [items, tuKhoa, filterTrangThai]);
 
-  // ── Handlers ──────────────────────────────────────────────────
   const handleSubmit = (values: NguyenLieuFormValues) => {
     const trangThai = tinhTrangThai(values.tonKho, values.mucToiThieu);
     if (editing) {
@@ -648,6 +652,12 @@ const KhoNguyenLieu: React.FC = () => {
       }),
     );
     message.success(`Đã nhập ${soLuongNhap} ${donVi} ${ten}`);
+    addNotif({
+      icon: '📦',
+      title: 'Đã nhập kho',
+      desc: `${ten}: +${soLuongNhap} ${donVi}`,
+      type: 'stock_refilled',
+    });
     setRestockOpen(false);
     setRestocking(null);
   };
@@ -665,7 +675,13 @@ const KhoNguyenLieu: React.FC = () => {
         return { ...n, tonKho: tonKhoMoi, trangThai: tinhTrangThai(tonKhoMoi, n.mucToiThieu) };
       }),
     );
-    message.success(`Đã nhập kho ${updates.length} mặt hàng, tổng ${formatCurrency(totalAmount)}`);
+    message.success(`Đã nhập kho ${updates.length} mặt hàng, tổng ${formatGia(totalAmount)}`);
+    addNotif({
+      icon: '📦',
+      title: 'Nhập kho hàng loạt',
+      desc: `${updates.length} mặt hàng đã được nhập kho · Tổng ${formatGia(totalAmount)}`,
+      type: 'stock_refilled',
+    });
     setBulkRestockOpen(false);
   };
 
@@ -684,7 +700,6 @@ const KhoNguyenLieu: React.FC = () => {
     });
   };
 
-  // ── Filter dropdown ────────────────────────────────────────────
   const filterMenu = (
     <Menu
       selectedKeys={[filterTrangThai]}
@@ -697,7 +712,6 @@ const KhoNguyenLieu: React.FC = () => {
     </Menu>
   );
 
-  // ── Table columns ──────────────────────────────────────────────
   const columns: ColumnsType<INguyenLieu> = [
     {
       title: 'NGUYÊN LIỆU',
@@ -755,7 +769,7 @@ const KhoNguyenLieu: React.FC = () => {
       dataIndex: 'giaNhap',
       key: 'giaNhap',
       width: 120,
-      render: (val) => <span className={styles.giaNhap}>{formatCurrency(val)}</span>,
+      render: (val) => <span className={styles.giaNhap}>{formatGia(val)}</span>,
     },
     {
       title: 'TRẠNG THÁI',
@@ -765,7 +779,7 @@ const KhoNguyenLieu: React.FC = () => {
       render: (val) => {
         const cfg = TRANG_THAI_CONFIG[val];
         return (
-          <span className={styles.trangThaiBadge} style={{ color: cfg.color, background: cfg.bg }}>
+          <span className={styles.trangThaiBadge} data-status={val} style={{ color: cfg.color }}>
             {cfg.label}
           </span>
         );
@@ -807,12 +821,10 @@ const KhoNguyenLieu: React.FC = () => {
   ];
 
   return (
-    <div className={styles.adminLayout}>
-      <Sidebar />
-      <div className={styles.mainContent}>
-        <Topbar title="Kho nguyên liệu" />
+    <>
+      <Topbar title="Kho nguyên liệu" />
 
-        <div className={styles.pageBody}>
+      <div className={styles.pageBody}>
           <div className={styles.statGrid}>
             {statCards.map((card) => (
               <div key={card.label} className={styles.statCard}>
@@ -831,6 +843,7 @@ const KhoNguyenLieu: React.FC = () => {
               </div>
             ))}
           </div>
+
           {canNhapThemItems.length > 0 && (
             <div className={styles.warnBanner}>
               <div className={styles.warnLeft}>
@@ -852,6 +865,7 @@ const KhoNguyenLieu: React.FC = () => {
               </button>
             </div>
           )}
+
           <div className={styles.tableSection}>
             <div className={styles.tableToolbar}>
               <Input
@@ -895,14 +909,15 @@ const KhoNguyenLieu: React.FC = () => {
               pagination={false}
               className={styles.table}
               rowClassName={styles.tableRow}
+              locale={{ emptyText: 'Không tìm thấy nguyên liệu nào' }}
               onRow={(record) => ({
                 onClick: () => setViewing(record),
                 style: { cursor: 'pointer' },
               })}
             />
           </div>
-        </div>
       </div>
+
       <NguyenLieuForm
         open={formOpen}
         initial={editing}
@@ -929,7 +944,7 @@ const KhoNguyenLieu: React.FC = () => {
         onEdit={() => { setEditing(viewing); setViewing(null); setFormOpen(true); }}
         onRestock={() => { setRestocking(viewing); setViewing(null); setRestockOpen(true); }}
       />
-    </div>
+    </>
   );
 };
 

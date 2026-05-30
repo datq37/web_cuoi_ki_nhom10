@@ -1,5 +1,5 @@
-import { ArrowDownOutlined, ArrowUpOutlined, RightOutlined } from '@ant-design/icons';
-import React, { useMemo } from 'react';
+﻿import { ArrowUpOutlined, RightOutlined } from '@ant-design/icons';
+import React, { useMemo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import {
   buildBarLineOptions,
@@ -11,7 +11,6 @@ import { mockData } from '@/services/Quản Trị/Tổng Quan';
 import type { HoatDongItem } from '@/services/Quản Trị/Tổng Quan/typing';
 import styles from './index.less';
 
-// ── Icon banner ─────────────────────────────────────────────
 const BannerIcon: React.FC<{ type: string }> = ({ type }) => {
   const icons: Record<string, React.ReactNode> = {
     revenue: (
@@ -44,7 +43,6 @@ const BannerIcon: React.FC<{ type: string }> = ({ type }) => {
   return <div className={styles.bannerIconWrap}>{icons[type]}</div>;
 };
 
-// ── Icon hoạt động ──────────────────────────────────────────
 const HoatDongIcon: React.FC<{ item: HoatDongItem }> = ({ item }) => {
   const icons: Record<string, React.ReactNode> = {
     order: (
@@ -81,21 +79,118 @@ const HoatDongIcon: React.FC<{ item: HoatDongItem }> = ({ item }) => {
   );
 };
 
-// ── PhanTichView ────────────────────────────────────────────
+type Range = 'week' | 'month' | 'quarter';
+
+const RANGE_DATA: Record<Range, { labels: string[]; tuanNay: number[]; trungBinh: number[] }> = {
+  week: {
+    labels:    ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+    tuanNay:   [1800000, 2200000, 1950000, 2800000, 3200000, 2600000, 1400000],
+    trungBinh: [2000000, 2100000, 2000000, 2100000, 2000000, 2100000, 1600000],
+  },
+  month: {
+    labels:    ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'],
+    tuanNay:   [14500000, 16800000, 13200000, 17400000],
+    trungBinh: [15000000, 15000000, 15000000, 15000000],
+  },
+  quarter: {
+    labels:    ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'],
+    tuanNay:   [42000000,38000000,55000000,61000000,49000000,52000000,68000000,71000000,58000000,63000000,74000000,82000000],
+    trungBinh: [50000000,50000000,55000000,55000000,55000000,55000000,60000000,60000000,60000000,65000000,65000000,70000000],
+  },
+};
+
+const RANGE_CFG: Record<Range, { label: string; title: string }> = {
+  week:    { label: '1 tuần',  title: 'Doanh thu 7 ngày gần nhất' },
+  month:   { label: '1 tháng', title: 'Doanh thu 4 tuần gần nhất' },
+  quarter: { label: '1 quý',   title: 'Doanh thu 12 tháng gần nhất' },
+};
+
+const HEAT_HOURS = ['7h','8h','9h','10h','11h','12h','13h','14h','15h','16h','17h','18h'];
+const HEAT_DAYS  = ['T2','T3','T4','T5','T6','T7','CN'];
+const HEAT_VALS  = [
+  [12, 28, 45, 62, 78, 85, 72, 38, 25, 18, 10,  5],
+  [10, 25, 42, 58, 75, 82, 68, 35, 22, 15,  8,  3],
+  [15, 30, 48, 65, 80, 85, 74, 40, 28, 20, 12,  6],
+  [ 8, 22, 40, 55, 72, 78, 65, 32, 20, 14,  7,  2],
+  [18, 35, 52, 70, 82, 85, 76, 45, 32, 24, 15,  8],
+  [25, 45, 60, 70, 72, 68, 55, 42, 35, 28, 20, 12],
+  [ 5, 12, 20, 28, 35, 40, 38, 25, 15,  8,  4,  2],
+];
+const HEAT_MAX = 85;
+
+const CssHeatmap: React.FC = () => {
+  const wrapRef = React.useRef<HTMLDivElement>(null);
+  const [tooltip, setTooltip] = React.useState<{
+    day: string; hour: string; val: number; top: number; left: number;
+  } | null>(null);
+
+  const handleEnter = (
+    e: React.MouseEvent<HTMLDivElement>,
+    day: string,
+    hour: string,
+    val: number,
+  ) => {
+    const wrap = wrapRef.current?.getBoundingClientRect();
+    const cell = e.currentTarget.getBoundingClientRect();
+    if (!wrap) return;
+    setTooltip({
+      day, hour, val,
+      top:  cell.top  - wrap.top  - 52,
+      left: cell.left - wrap.left + cell.width / 2,
+    });
+  };
+
+  return (
+    <div ref={wrapRef} style={{ position: 'relative' }}>
+      {tooltip && (
+        <div className={styles.heatTooltip} style={{ top: tooltip.top, left: tooltip.left }}>
+          <div className={styles.heatTooltipHead}>{tooltip.day} · {tooltip.hour}</div>
+          <div className={styles.heatTooltipVal}>{tooltip.val} đơn</div>
+        </div>
+      )}
+      <div className={styles.heatGrid}>
+        <div className={styles.heatEmpty} />
+        {HEAT_HOURS.map((h) => (
+          <div key={h} className={styles.heatHourLabel}>{h}</div>
+        ))}
+        {HEAT_DAYS.map((day, di) => (
+          <React.Fragment key={day}>
+            <div className={styles.heatDayLabel}>{day}</div>
+            {HEAT_VALS[di].map((val, hi) => {
+              const pct = Math.round((val / HEAT_MAX) * 100);
+              return (
+                <div
+                  key={hi}
+                  className={styles.heatCell}
+                  style={{ background: `color-mix(in oklab, var(--accent-primary, #16a34a) ${pct}%, var(--surface-sunken, #f3f4f6))` } as React.CSSProperties}
+                  onMouseEnter={(e) => handleEnter(e, day, HEAT_HOURS[hi], val)}
+                  onMouseLeave={() => setTooltip(null)}
+                />
+              );
+            })}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const PhanTichView: React.FC = () => {
-  const { banners, doanhThuTuan, danhMuc, tongDanhMuc, topMon, donTheoTrangThai, hieuSuat, hoatDong } =
+  const [range, setRange] = useState<Range>('week');
+  const { banners, doanhThuTuan, danhMuc, tongDanhMuc, topMon, donTheoTrangThai, hoatDong } =
     mockData.phanTich;
 
+  const rd = RANGE_DATA[range];
   const barOptions = useMemo(
-    () => buildBarLineOptions(doanhThuTuan.map((d) => d.tuan)),
-    [doanhThuTuan],
+    () => buildBarLineOptions(rd.labels),
+    [rd],
   );
   const barSeries = useMemo(
     () => [
-      { name: 'Tuần này', type: 'bar',  data: doanhThuTuan.map((d) => d.tuanNay) },
-      { name: 'Trung bình', type: 'line', data: doanhThuTuan.map((d) => d.trungBinh) },
+      { name: 'Doanh thu', type: 'bar',  data: rd.tuanNay },
+      { name: 'Trung bình', type: 'line', data: rd.trungBinh },
     ],
-    [doanhThuTuan],
+    [rd],
   );
   const donutOptions = useMemo(
     () => buildDonutOptions(danhMuc.map((d) => d.ten), danhMuc.map((d) => d.mau), tongDanhMuc),
@@ -105,6 +200,7 @@ const PhanTichView: React.FC = () => {
 
   return (
     <div className={styles.phanTichWrap}>
+      {/* ── Banner thống kê ── */}
       <div className={styles.statBanner}>
         {banners.map((b, i) => (
           <React.Fragment key={b.id}>
@@ -125,18 +221,31 @@ const PhanTichView: React.FC = () => {
           </React.Fragment>
         ))}
       </div>
+
+      {/* ── Biểu đồ ── */}
       <div className={styles.chartRow2}>
         <div className={styles.barChartCard}>
           <div className={styles.chartHeader2}>
-            <span className={styles.chartTitle2}>Doanh thu 12 tuần</span>
-            <div className={styles.chartLegend}>
-              <span className={styles.legendBox} style={{ background: '#16a34a' }} />
-              <span>Tuần này</span>
-              <span className={styles.legendDash} />
-              <span>Trung bình</span>
+            <span className={styles.chartTitle2}>{RANGE_CFG[range].title}</span>
+            <div className={styles.rangeToggle}>
+              {(['week', 'month', 'quarter'] as Range[]).map((r) => (
+                <button
+                  key={r}
+                  className={`${styles.rangeBtn} ${range === r ? styles.rangeBtnActive : ''}`}
+                  onClick={() => setRange(r)}
+                >
+                  {RANGE_CFG[r].label}
+                </button>
+              ))}
             </div>
           </div>
-          <ReactApexChart options={barOptions} series={barSeries} type="bar" height={240} />
+          <div className={styles.chartLegend} style={{ marginBottom: 4 }}>
+            <span className={styles.legendBox} style={{ background: '#16a34a' }} />
+            <span>Doanh thu</span>
+            <span className={styles.legendDash} />
+            <span>Trung bình</span>
+          </div>
+          <ReactApexChart options={barOptions} series={barSeries} type="bar" height={220} />
         </div>
         <div className={styles.donutCard}>
           <div className={styles.chartTitle2}>Theo danh mục</div>
@@ -155,7 +264,10 @@ const PhanTichView: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* ── Bottom 3 cột ── */}
       <div className={styles.bottomRow}>
+        {/* Top món */}
         <div className={styles.bottomCard}>
           <div className={styles.cardHead}>
             <span className={styles.cardTitle}>Top món bán chạy</span>
@@ -190,6 +302,8 @@ const PhanTichView: React.FC = () => {
             </tbody>
           </table>
         </div>
+
+        {/* Đơn theo trạng thái */}
         <div className={styles.bottomCard}>
           <div className={styles.cardHead}>
             <span className={styles.cardTitle}>Đơn hàng theo trạng thái</span>
@@ -211,31 +325,30 @@ const PhanTichView: React.FC = () => {
             ))}
           </div>
         </div>
+
+        {/* Heatmap giờ cao điểm */}
         <div className={styles.bottomCard}>
           <div className={styles.cardHead}>
-            <span className={styles.cardTitle}>Hiệu suất phục vụ</span>
-            <button className={styles.periodSelect}>Hôm nay ▾</button>
+            <span className={styles.cardTitle}>Giờ cao điểm trong tuần</span>
           </div>
-          <div className={styles.hieuSuatList}>
-            {hieuSuat.map((h, i) => (
-              <div key={i} className={styles.hieuSuatItem}>
-                <div className={styles.hieuSuatLabel}>{h.label}</div>
-                <div className={styles.hieuSuatRow}>
-                  <span className={styles.hieuSuatValue}>
-                    {h.value}<span className={styles.hieuSuatUnit}>{h.unit}</span>
-                  </span>
-                  <div className={`${styles.hieuSuatChange} ${h.trend === 'up' ? styles.up : styles.down2}`}>
-                    {h.trend === 'up'
-                      ? <ArrowUpOutlined style={{ fontSize: 10 }} />
-                      : <ArrowDownOutlined style={{ fontSize: 10 }} />}
-                    {h.change} <span className={styles.changeDetail}>{h.changeDetail}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className={styles.heatLegend}>
+            <span className={styles.heatLegendLabel}>Ít đơn</span>
+            <div className={styles.heatLegendBar}>
+              {[10, 30, 50, 70, 90].map((p) => (
+                <div
+                  key={p}
+                  className={styles.heatLegendCell}
+                  style={{ background: `color-mix(in oklab, var(--accent-primary, #16a34a) ${p}%, var(--surface-sunken, #f3f4f6))` } as React.CSSProperties}
+                />
+              ))}
+            </div>
+            <span className={styles.heatLegendLabel}>Nhiều đơn</span>
           </div>
+          <CssHeatmap />
         </div>
       </div>
+
+      {/* ── Hoạt động gần đây ── */}
       <div className={styles.hoatDongCard}>
         <div className={styles.cardHead}>
           <span className={styles.cardTitle}>Hoạt động gần đây</span>

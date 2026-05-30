@@ -1,10 +1,7 @@
-@bg: #f8fafc;
-@sidebar-w: 260px;
-@primary: #16a34a;
+﻿@import '~@/styles/admin-tokens.less';
+
 @radius: 12px;
 
-.adminLayout { display: flex; min-height: 100vh; background: @bg; }
-.mainContent { margin-left: @sidebar-w; flex: 1; display: flex; flex-direction: column; min-height: 100vh; min-width: 0; }
 .pageBody { padding: 16px 20px 24px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
 
 .statGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; @media (max-width: 1100px) { grid-template-columns: repeat(2, 1fr); } }
@@ -22,7 +19,7 @@
 .searchIcon { color: #9ca3af; }
 .toolbarRight { display: flex; align-items: center; gap: 8px; }
 .btnFilter { border-radius: 8px !important; color: #374151 !important; border-color: #d1d5db !important; font-weight: 500; }
-.btnAdd { background: @primary !important; border-color: @primary !important; border-radius: 8px !important; font-weight: 600; &:hover { background: #15803d !important; border-color: #15803d !important; } }
+.btnAdd { background: @primary !important; border-color: @primary !important; border-radius: 8px !important; font-weight: 600; &:hover { background: @primary-hover !important; border-color: @primary-hover !important; } }
 
 .table {
   :global(.ant-table-thead > tr > th) { background: #f8fafc; font-size: 11px; font-weight: 700; color: #9ca3af; letter-spacing: 0.4px; border-bottom: 1px solid #f1f5f9 !important; padding: 10px 16px; }
@@ -36,17 +33,91 @@
 .khachTen { font-size: 13.5px; font-weight: 600; color: #111827; }
 .khachEmail { font-size: 12px; color: #9ca3af; margin-top: 2px; }
 .phongBan { font-size: 13.5px; color: #374151; }
-.vaiTroBadge { display: inline-block; font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+.vaiTroBadge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+
+  &[data-vaitro="nhan_vien"]    { background: #f3f4f6; }
+  &[data-vaitro="truong_phong"] { background: @primary-100; }
+  &[data-vaitro="giam_doc"]     { background: #dbeafe; }
+}
 .soDon { font-size: 13.5px; font-weight: 700; color: #111827; }
 .chiTieu { font-size: 13.5px; font-weight: 500; color: #374151; }
 .thamGia { font-size: 13px; color: #9ca3af; }
-.trangThaiBadge { display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 600; padding: 4px 12px; border-radius: 20px; }
+.trangThaiBadge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+
+  &[data-trangthai="hoat_dong"] { background: @primary-100; }
+  &[data-trangthai="tam_khoa"]  { background: #f3f4f6; }
+}
 .moreBtn { width: 30px; height: 30px; border: 1px solid #e5e7eb; border-radius: 7px; background: #fff; color: #6b7280; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; transition: all 0.15s; &:hover { background: #f3f4f6; color: #111827; } }
 
-// ── Dark mode overrides ─────────────────────────────────────────
-:global([data-theme="dark"]) {
-  .adminLayout { background: #0f172a; }
+.adminModal {
+  :global(.ant-modal-content) {
+    border-radius: 16px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.14);
+    overflow: hidden;
+  }
+  :global(.ant-modal-header) {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  :global(.ant-modal-title) {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+  }
+  :global(.ant-modal-body) {
+    padding: 20px 24px;
+    max-height: 72vh;
+    overflow-y: auto;
+    &::-webkit-scrollbar { width: 4px; }
+    &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+  }
+  :global(.ant-modal-footer) {
+    padding: 12px 24px 16px;
+    border-top: 1px solid #f1f5f9;
+  }
+  :global(.ant-modal-footer .ant-btn) {
+    border-radius: 8px;
+    height: 36px;
+    font-weight: 500;
+    font-size: 13.5px;
+  }
+  :global(.ant-modal-footer .ant-btn-primary) {
+    background: @primary;
+    border-color: @primary;
+    &:hover { background: @primary-hover; border-color: @primary-hover; }
+  }
+  :global(.ant-modal-close) {
+    top: 14px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
 
+.btnApply {
+  background: @primary !important;
+  border-color: @primary !important;
+  border-radius: 8px !important;
+  font-weight: 500;
+  &:hover { background: @primary-hover !important; border-color: @primary-hover !important; }
+}
+
+:global([data-theme="dark"]) {
   .statCard { background: #1e293b; border-color: #334155; }
   .statValue { color: #f1f5f9; }
   .statLabel { color: #64748b; }
@@ -82,5 +153,51 @@
     border-color: #334155;
     color: #94a3b8;
     &:hover { background: #334155; color: #f1f5f9; }
+  }
+
+  .btnFilter {
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+    background: #1e293b !important;
+    &:hover { color: #f1f5f9 !important; border-color: #475569 !important; background: #0f172a !important; }
+  }
+
+  .searchInput {
+    :global(.ant-input-affix-wrapper) { background: #1e293b !important; border-color: #334155 !important; }
+    :global(.ant-input) { background: #1e293b !important; color: #e2e8f0 !important; }
+    :global(.ant-input-prefix) { color: #475569; }
+  }
+
+  .tableRow { &:global(.ant-table-row:hover) > td { background: #0f172a !important; } }
+
+  .vaiTroBadge {
+    &[data-vaitro="nhan_vien"]    { background: rgba(55,65,81,0.15); }
+    &[data-vaitro="truong_phong"] { background: rgba(22,163,74,0.15); }
+    &[data-vaitro="giam_doc"]     { background: rgba(30,64,175,0.15); }
+  }
+  .trangThaiBadge {
+    &[data-trangthai="hoat_dong"] { background: rgba(22,163,74,0.15); }
+    &[data-trangthai="tam_khoa"]  { background: rgba(107,114,128,0.15); }
+  }
+
+  .adminModal {
+    :global(.ant-modal-content) { background: #1e293b; }
+    :global(.ant-modal-header)  { background: #1e293b; border-bottom-color: #334155; }
+    :global(.ant-modal-title)   { color: #f1f5f9; }
+    :global(.ant-modal-footer)  { border-top-color: #334155; }
+    :global(.ant-modal-footer .ant-btn:not(.ant-btn-primary)) {
+      background: #0f172a;
+      border-color: #334155;
+      color: #94a3b8;
+      &:hover { background: #1e293b; color: #f1f5f9; border-color: #475569; }
+    }
+    :global(.ant-modal-close)   { color: #64748b; &:hover { background: #0f172a; } }
+    :global(.ant-form-item-label > label) { color: #94a3b8; }
+    :global(.ant-input)         { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+    :global(.ant-input-affix-wrapper) { background: #0f172a; border-color: #334155; }
+    :global(.ant-select-selector) { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+    :global(.ant-select-selection-item) { color: #f1f5f9; }
+    :global(.ant-form-item-explain-error) { color: #f87171; }
+    :global(.ant-modal-body)::-webkit-scrollbar-thumb { background: #334155; }
   }
 }

@@ -13,27 +13,25 @@ import { Avatar, Badge, Button, Dropdown, Popover } from 'antd';
 import moment from 'moment';
 import 'moment/locale/vi';
 import React, { useState } from 'react';
+import { history } from 'umi';
+import { INotif, NotifType, timeAgo, useNotif } from '@/context/NotifContext';
 import { useTheme } from '@/hooks/useTheme';
 import styles from './index.less';
 
-moment.locale('vi');
-
-interface INotif {
-  id: string;
-  icon: string;
-  title: string;
-  desc: string;
-  time: string;
-  read: boolean;
+function getNotifRoute(type: NotifType): string {
+  if (type.startsWith('order_')) return '/quan-tri/don-hang';
+  if (type.startsWith('stock_')) return '/quan-tri/kho-nguyen-lieu';
+  return '/quan-tri/tong-quan';
 }
 
-const NOTIF_LIST: INotif[] = [
-  { id: '1', icon: '🛒', title: 'Đơn hàng mới #DH042', desc: 'Nguyễn Văn Hùng đặt 3 món · Bún đậu, trà đào cam sả', time: '2 phút trước', read: false },
-  { id: '2', icon: '⚠️', title: 'Kho sắp hết — Thịt bò', desc: 'Còn lại 1.2kg, dưới mức tối thiểu cần thiết', time: '15 phút trước', read: false },
-  { id: '3', icon: '✅', title: 'Đơn #DH038 đã hoàn thành', desc: 'Lê Thị Hà đã nhận · Cơm gà xôi mỡ, nước ép', time: '1 giờ trước', read: true },
-];
+moment.locale('vi');
 
-const NotifPopup: React.FC<{ onMarkAll: () => void; list: INotif[] }> = ({ onMarkAll, list }) => {
+const NotifPopup: React.FC<{
+  onMarkAll: () => void;
+  onMarkRead: (id: string) => void;
+  onNavigate: (type: NotifType) => void;
+  list: INotif[];
+}> = ({ onMarkAll, onMarkRead, onNavigate, list }) => {
   const unread = list.filter((n) => !n.read).length;
   return (
     <div className={styles.notifPopup}>
@@ -48,20 +46,26 @@ const NotifPopup: React.FC<{ onMarkAll: () => void; list: INotif[] }> = ({ onMar
       </div>
 
       <div className={styles.notifList}>
-        {list.map((n) => (
-          <div key={n.id} className={`${styles.notifItem} ${!n.read ? styles.notifUnread : ''}`}>
-            <div className={styles.notifIconBox}>{n.icon}</div>
-            <div className={styles.notifBody}>
-              <div className={styles.notifItemTitle}>{n.title}</div>
-              <div className={styles.notifDesc}>{n.desc}</div>
-              <div className={styles.notifTime}>{n.time}</div>
+        {list.length === 0 ? (
+          <div className={styles.notifEmpty}>Không có thông báo nào</div>
+        ) : (
+          list.map((n) => (
+            <div
+              key={n.id}
+              className={`${styles.notifItem} ${!n.read ? styles.notifUnread : ''}`}
+              onClick={() => { onMarkRead(n.id); onNavigate(n.type); }}
+            >
+              <div className={styles.notifIconBox}>{n.icon}</div>
+              <div className={styles.notifBody}>
+                <div className={styles.notifItemTitle}>{n.title}</div>
+                <div className={styles.notifDesc}>{n.desc}</div>
+                <div className={styles.notifTime}>{timeAgo(n.createdAt)}</div>
+              </div>
+              {!n.read && <span className={styles.notifDot} />}
             </div>
-            {!n.read && <span className={styles.notifDot} />}
-          </div>
-        ))}
+          ))
+        )}
       </div>
-
-      <div className={styles.notifFooter}>Xem tất cả thông báo →</div>
     </div>
   );
 };
@@ -74,12 +78,11 @@ interface TopbarProps {
 const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
   const dateStr = moment().format('D [tháng] M, YYYY');
   const { isDark, toggleDark } = useTheme();
-  const [notifOpen, setNotifOpen]   = useState(false);
-  const [notifList, setNotifList]   = useState<INotif[]>(NOTIF_LIST);
-  const [userOpen,  setUserOpen]    = useState(false);
+  const { notifs, markRead, markAll } = useNotif();
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [userOpen,  setUserOpen]  = useState(false);
 
-  const unreadCount = notifList.filter((n) => !n.read).length;
-  const handleMarkAll = () => setNotifList((prev) => prev.map((n) => ({ ...n, read: true })));
+  const unreadCount = notifs.filter((n) => !n.read).length;
 
   const userMenuOverlay = (
     <div className={styles.userDropdown}>
@@ -145,7 +148,14 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
           placement="bottomRight"
           arrow={false}
           overlayInnerStyle={{ padding: 0, borderRadius: 12, overflow: 'hidden' }}
-          content={<NotifPopup onMarkAll={handleMarkAll} list={notifList} />}
+          content={
+            <NotifPopup
+              onMarkAll={markAll}
+              onMarkRead={markRead}
+              onNavigate={(type) => { history.push(getNotifRoute(type)); setNotifOpen(false); }}
+              list={notifs}
+            />
+          }
         >
           <Badge count={unreadCount} offset={[-2, 2]}>
             <Button className={styles.iconBtn} icon={<BellOutlined />} />

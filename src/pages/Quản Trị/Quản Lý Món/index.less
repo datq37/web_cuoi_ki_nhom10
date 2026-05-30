@@ -1,32 +1,9 @@
-@bg:            #f8fafc;
-@sidebar-w:     260px;
-@primary:       #16a34a;
-@primary-hover: #15803d;
-@primary-soft:  #dcfce7;
-@radius:        12px;
-@modal-radius:  16px;
-@divider:       #f1f5f9;
-@text-dark:     #111827;
-@text-muted:    #6b7280;
-@danger:        #ef4444;
-@ease:          cubic-bezier(0.22, 0.61, 0.36, 1);
-@shadow-modal:  0 24px 64px rgba(0, 0, 0, 0.14);
+﻿@import '~@/styles/admin-tokens.less';
 
-// ── Layout ──────────────────────────────────────────────────────
-.adminLayout {
-  display: flex;
-  min-height: 100vh;
-  background: @bg;
-}
-
-.mainContent {
-  margin-left: @sidebar-w;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  min-width: 0;
-}
+@radius:       12px;
+@modal-radius: 16px;
+@ease:         cubic-bezier(0.22, 0.61, 0.36, 1);
+@shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.14);
 
 .pageBody {
   padding: 16px 20px 24px;
@@ -36,7 +13,6 @@
   gap: 16px;
 }
 
-// ── Toolbar ─────────────────────────────────────────────────────
 .toolbar {
   display: flex;
   align-items: center;
@@ -93,7 +69,6 @@
   }
 }
 
-// ── Toolbar right ────────────────────────────────────────────────
 .toolbarRight {
   display: flex;
   align-items: center;
@@ -152,12 +127,11 @@
   height: 36px;
 
   &:hover {
-    background: #15803d !important;
-    border-color: #15803d !important;
+    background: @primary-hover !important;
+    border-color: @primary-hover !important;
   }
 }
 
-// ── Grid / List ──────────────────────────────────────────────────
 .gridView {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -201,7 +175,6 @@
   font-size: 14px;
 }
 
-// ── Card ─────────────────────────────────────────────────────────
 .monCard {
   background: #fff;
   border-radius: @radius;
@@ -247,7 +220,6 @@
   letter-spacing: 0.3px;
 }
 
-// ── Card Body ─────────────────────────────────────────────────────
 .cardBody {
   padding: 14px;
   display: flex;
@@ -301,7 +273,6 @@
   font-size: 11px;
 }
 
-// ── Card Footer ───────────────────────────────────────────────────
 .cardFooter {
   display: flex;
   align-items: center;
@@ -337,7 +308,7 @@
   transition: all 0.15s;
 
   &:hover {
-    background: #f0fdf4;
+    background: @primary-50;
     border-color: @primary;
     color: @primary;
   }
@@ -351,14 +322,12 @@
   }
 }
 
-// ── Card image (khi có ảnh thật) ─────────────────────────────────
 .cardImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-// ── Image upload area ─────────────────────────────────────────────
 .imgUploadArea {
   position: relative;
   width: 100%;
@@ -376,7 +345,7 @@
 
   &:hover {
     border-color: @primary;
-    background: #f0fdf4;
+    background: @primary-50;
   }
 }
 
@@ -448,7 +417,6 @@
   &:hover { color: #ef4444; }
 }
 
-// ── Form modal ───────────────────────────────────────────────────
 .formModal {
   :global(.ant-modal-content) {
     border-radius: @modal-radius;
@@ -508,7 +476,6 @@
   }
 }
 
-// ── Detail modal ─────────────────────────────────────────────────
 .detailModal {
   :global(.ant-modal-content) {
     border-radius: @modal-radius;
@@ -556,7 +523,6 @@
   }
 }
 
-// ── Confirm modal (global) ───────────────────────────────────────
 :global(.ant-modal-confirm .ant-modal-content) {
   border-radius: @modal-radius;
   box-shadow: @shadow-modal;
@@ -586,12 +552,11 @@
   &:hover { background: #dc2626 !important; border-color: #dc2626 !important; }
 }
 
-// ── Dark mode overrides ─────────────────────────────────────────
 :global([data-theme="dark"]) {
-  .adminLayout { background: #0f172a; }
-
   .tabsRow { background: #1e293b; border-color: #334155; }
   .tabBtn { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
+  .tabCount { background: rgba(255,255,255,0.08); color: #94a3b8; }
+  .searchIcon { color: #475569; }
 
   .viewToggle { border-color: #334155; }
   .toggleBtn { background: #1e293b; color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
@@ -626,7 +591,6 @@
   .imgEmptyHint { color: #475569; }
   .imgRemoveBtn { color: #475569; &:hover { color: #f87171; } }
 
-  // Modals in dark mode
   .formModal {
     :global(.ant-modal-content) { background: #1e293b; }
     :global(.ant-modal-header) { background: #1e293b; border-bottom-color: #334155; }

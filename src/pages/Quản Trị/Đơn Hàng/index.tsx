@@ -1,4 +1,4 @@
-import {
+﻿import {
   AppstoreOutlined,
   CloseOutlined,
   SearchOutlined,
@@ -6,7 +6,7 @@ import {
 } from '@ant-design/icons';
 import { Button, Input, Modal, message } from 'antd';
 import React, { useMemo, useState, useEffect } from 'react';
-import Sidebar from '@/pages/Quản Trị/Sidebar';
+import { useNotif } from '@/context/NotifContext';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import { fmt } from '@/models/Quản Trị/Tổng Quan';
 import { mockData } from '@/services/Quản Trị/Tổng Quan';
@@ -17,10 +17,8 @@ import OrderKanban from './components/OrderKanban';
 import OrderTable from './components/OrderTable';
 import styles from './index.less';
 
-// ── Types ─────────────────────────────────────────────────────────
 type TabKey = 'tat_ca' | ETrangThaiTrucTiep | 'da_huy';
 
-// ── Constants ─────────────────────────────────────────────────────
 const TABS: { key: TabKey; label: string }[] = [
   { key: 'tat_ca',                          label: 'Tất cả'         },
   { key: ETrangThaiTrucTiep.CHO_XAC_NHAN,  label: 'Chờ xác nhận'  },
@@ -30,8 +28,8 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: 'da_huy',                           label: 'Đã huỷ'        },
 ];
 
-// ── Component ─────────────────────────────────────────────────────
 const DonHang: React.FC = () => {
+  const { addNotif } = useNotif();
   const [orders, setOrders] = useState<DonTrucTiep[]>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('admin_orders');
@@ -41,7 +39,6 @@ const DonHang: React.FC = () => {
           if (Array.isArray(list) && list.length > 0) return list;
         } catch { /* ignore */ }
       } else {
-        // Init if empty
         localStorage.setItem('admin_orders', JSON.stringify(mockData.trucTiep.donHang));
       }
     }
@@ -57,14 +54,13 @@ const DonHang: React.FC = () => {
 
   useEffect(() => {
     const handleStorage = (e?: Event) => {
-      // Dùng storage event để đồng bộ giữa các tab.
       const saved = localStorage.getItem('admin_orders');
       if (saved) {
         try {
           const list = JSON.parse(saved);
           if (Array.isArray(list)) {
             setOrders((prev) => {
-              if (JSON.stringify(prev) === saved) return prev; // Avoid infinite loop!
+              if (JSON.stringify(prev) === saved) return prev;
               return list;
             });
             setCancelledIds((prevIds) => {
@@ -79,10 +75,10 @@ const DonHang: React.FC = () => {
         } catch { /* ignore */ }
       }
     };
-    
+
     window.addEventListener('storage', handleStorage);
     window.addEventListener('focus', handleStorage);
-    
+
     return () => {
       window.removeEventListener('storage', handleStorage);
       window.removeEventListener('focus', handleStorage);
@@ -102,7 +98,6 @@ const DonHang: React.FC = () => {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<DonTrucTiep | null>(null);
 
-  // ── Tab counts ──────────────────────────────────────────────────
   const tabCounts = useMemo<Record<string, number>>(() => {
     const active = orders.filter((o) => !cancelledIds.has(o.maDon));
     return {
@@ -115,7 +110,6 @@ const DonHang: React.FC = () => {
     };
   }, [orders, cancelledIds]);
 
-  // ── Filtered list ───────────────────────────────────────────────
   const filteredOrders = useMemo(() => {
     let list =
       activeTab === 'da_huy'
@@ -137,7 +131,6 @@ const DonHang: React.FC = () => {
     return list;
   }, [orders, activeTab, searchKw, cancelledIds]);
 
-  // ── Handlers ────────────────────────────────────────────────────
   const handleMoveStatus = (
     maDon: string,
     newStatus: ETrangThaiTrucTiep | 'da_huy',
@@ -149,7 +142,10 @@ const DonHang: React.FC = () => {
         prev.map((o) => (o.maDon === maDon ? { ...o, trangThai: newStatus as any } : o)),
       );
       setSelectedOrder((prev) => (prev?.maDon === maDon ? null : prev));
-      if (!silent) message.success(`Đã huỷ đơn ${maDon}`);
+      if (!silent) {
+        message.success(`Đã huỷ đơn ${maDon}`);
+        addNotif({ icon: '❌', title: `Đơn ${maDon} đã bị huỷ`, desc: 'Đơn hàng đã được huỷ bởi quản trị viên', type: 'order_cancelled' });
+      }
     } else {
       setOrders((prev) =>
         prev.map((o) => (o.maDon === maDon ? { ...o, trangThai: newStatus as any } : o)),
@@ -157,7 +153,16 @@ const DonHang: React.FC = () => {
       setSelectedOrder((prev) =>
         prev?.maDon === maDon ? { ...prev, trangThai: newStatus as any } : prev,
       );
-      if (!silent) message.success(`Đã cập nhật đơn ${maDon}`);
+      if (!silent) {
+        message.success(`Đã cập nhật đơn ${maDon}`);
+        const notifMap: Record<ETrangThaiTrucTiep, { icon: string; title: string; desc: string; type: any }> = {
+          [ETrangThaiTrucTiep.DANG_CHE_BIEN]: { icon: '🍳', title: `Đơn ${maDon} đang chế biến`, desc: 'Bếp đã nhận và bắt đầu chuẩn bị', type: 'order_cooking' },
+          [ETrangThaiTrucTiep.SAN_SANG]:      { icon: '📦', title: `Đơn ${maDon} sẵn sàng giao`, desc: 'Món ăn đã sẵn sàng, chờ giao cho khách', type: 'order_ready' },
+          [ETrangThaiTrucTiep.HOAN_THANH]:    { icon: '✅', title: `Đơn ${maDon} hoàn thành`, desc: 'Khách hàng đã nhận được đơn', type: 'order_done' },
+          [ETrangThaiTrucTiep.CHO_XAC_NHAN]: { icon: '🛒', title: `Đơn ${maDon} chờ xác nhận`, desc: 'Đơn hàng đang chờ xác nhận', type: 'order_pending' },
+        };
+        if (notifMap[newStatus]) addNotif(notifMap[newStatus]);
+      }
     }
   };
 
@@ -241,14 +246,12 @@ const DonHang: React.FC = () => {
     setTimeout(() => { w.print(); w.close(); }, 300);
   };
 
-  // ── Render ──────────────────────────────────────────────────────
   return (
-    <div className={styles.adminLayout}>
-      <Sidebar />
-      <div className={styles.mainContent}>
-        <Topbar title="Quản lý đơn hàng" />
+    <>
+      <Topbar title="Quản lý đơn hàng" />
 
-        <div className={styles.pageBody}>
+      <div className={styles.pageBody}>
+
           <div className={styles.tabsRow}>
             {TABS.map((tab) => (
               <button
@@ -263,6 +266,7 @@ const DonHang: React.FC = () => {
               </button>
             ))}
           </div>
+
           <div className={styles.toolbar}>
             <Input
               prefix={<SearchOutlined style={{ color: '#9ca3af' }} />}
@@ -292,6 +296,7 @@ const DonHang: React.FC = () => {
               </div>
             </div>
           </div>
+
           {selectedRows.length > 0 && (
             <div className={styles.bulkBar}>
               <span className={styles.bulkCount}>
@@ -321,6 +326,7 @@ const DonHang: React.FC = () => {
               </div>
             </div>
           )}
+
           {view === 'table' ? (
             <OrderTable
               orders={filteredOrders}
@@ -338,8 +344,8 @@ const DonHang: React.FC = () => {
             />
           )}
 
-        </div>
       </div>
+
       <OrderDrawer
         order={selectedOrder}
         cancelledIds={cancelledIds}
@@ -348,7 +354,7 @@ const DonHang: React.FC = () => {
         onCancel={handleCancelOrder}
         onPrint={handlePrint}
       />
-    </div>
+    </>
   );
 };
 

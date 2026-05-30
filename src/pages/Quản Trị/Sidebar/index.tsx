@@ -1,5 +1,6 @@
 import {
   DashboardOutlined,
+  HomeOutlined,
   InboxOutlined,
   LeftOutlined,
   RightOutlined,
@@ -10,8 +11,9 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { Badge } from 'antd';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { history, useLocation } from 'umi';
+import { useNotif } from '@/context/NotifContext';
 import styles from './index.less';
 
 const ForkKnifeIcon = () => (
@@ -22,12 +24,13 @@ const ForkKnifeIcon = () => (
 
 const MENU_QUAN_LY = [
   { key: '/quan-tri/tong-quan',      icon: <DashboardOutlined />,    label: 'Tổng quan' },
-  { key: '/quan-tri/don-hang',       icon: <ShoppingCartOutlined />, label: 'Đơn hàng', badge: 5 },
+  { key: '/quan-tri/don-hang',       icon: <ShoppingCartOutlined />, label: 'Đơn hàng' },
   { key: '/quan-tri/quan-ly-mon',    icon: <ForkKnifeIcon />,        label: 'Quản lý món' },
   { key: '/quan-tri/kho-nguyen-lieu',icon: <InboxOutlined />,        label: 'Kho nguyên liệu' },
   { key: '/quan-tri/khuyen-mai',     icon: <TagOutlined />,          label: 'Khuyến mãi' },
   { key: '/quan-tri/khach-hang',     icon: <UserOutlined />,         label: 'Khách hàng' },
   { key: '/quan-tri/nhan-vien',      icon: <TeamOutlined />,         label: 'Nhân viên căng tin' },
+  { key: '/quan-tri/co-so-vat-chat', icon: <HomeOutlined />,          label: 'Cơ sở vật chất' },
 ];
 
 const MENU_KHAC = [
@@ -40,6 +43,11 @@ const EXPANDED_W  = '260px';
 const Sidebar: React.FC = () => {
   const location    = useLocation();
   const currentPath = location.pathname;
+  const { notifs }  = useNotif();
+
+  const badgeMap = useMemo<Record<string, number>>(() => ({
+    '/quan-tri/don-hang': notifs.filter((n) => n.type === 'order_pending' && !n.read).length,
+  }), [notifs]);
 
   const [collapsed, setCollapsed] = useState<boolean>(() => {
     try { return localStorage.getItem('sidebar-collapsed') === 'true'; } catch { return false; }
@@ -58,6 +66,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}>
+
       <div className={styles.logoSection}>
         <div className={styles.logoWrapper}>
           <div className={styles.logoIcon}>
@@ -73,6 +82,7 @@ const Sidebar: React.FC = () => {
           )}
         </div>
       </div>
+
       <nav className={styles.menuSection}>
         {!collapsed && <span className={styles.groupLabel}>QUẢN LÝ</span>}
         <ul className={styles.menuList}>
@@ -85,8 +95,12 @@ const Sidebar: React.FC = () => {
             >
               <span className={styles.menuIcon}>{item.icon}</span>
               {!collapsed && <span className={styles.menuLabel}>{item.label}</span>}
-              {item.badge && !collapsed && <Badge count={item.badge} className={styles.badge} />}
-              {item.badge && collapsed && <span className={styles.badgeDot} />}
+              {(badgeMap[item.key] ?? 0) > 0 && !collapsed && (
+                <Badge count={badgeMap[item.key]} className={styles.badge} />
+              )}
+              {(badgeMap[item.key] ?? 0) > 0 && collapsed && (
+                <span className={styles.badgeDot} />
+              )}
             </li>
           ))}
         </ul>
@@ -106,6 +120,7 @@ const Sidebar: React.FC = () => {
           ))}
         </ul>
       </nav>
+
       <div className={styles.collapseSection}>
         <button className={styles.collapseBtn} onClick={handleCollapse}>
           {collapsed ? <RightOutlined /> : <LeftOutlined />}

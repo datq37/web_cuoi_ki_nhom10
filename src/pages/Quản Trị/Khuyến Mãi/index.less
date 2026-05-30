@@ -1,19 +1,6 @@
-@bg: #f8fafc;
-@sidebar-w: 260px;
-@primary: #16a34a;
+﻿@import '~@/styles/admin-tokens.less';
+
 @radius: 12px;
-
-// ── Layout ──────────────────────────────────────────────────────
-.adminLayout { display: flex; min-height: 100vh; background: @bg; }
-
-.mainContent {
-  margin-left: @sidebar-w;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  min-width: 0;
-}
 
 .pageBody {
   padding: 16px 20px 24px;
@@ -23,7 +10,6 @@
   gap: 16px;
 }
 
-// ── Stat cards ───────────────────────────────────────────────────
 .statGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -83,7 +69,6 @@
   flex-shrink: 0;
 }
 
-// ── Toolbar ──────────────────────────────────────────────────────
 .toolbar {
   display: flex;
   align-items: center;
@@ -115,12 +100,11 @@
   padding: 0 20px !important;
 
   &:hover {
-    background: #15803d !important;
-    border-color: #15803d !important;
+    background: @primary-hover !important;
+    border-color: @primary-hover !important;
   }
 }
 
-// ── Promo list ────────────────────────────────────────────────────
 .promoList {
   background: #fff;
   border-radius: @radius;
@@ -141,7 +125,6 @@
   font-size: 14px;
 }
 
-// ── Promo row ─────────────────────────────────────────────────────
 .promoRow {
   display: flex;
   align-items: center;
@@ -153,7 +136,6 @@
   &:hover { background: #fafafa; }
 }
 
-// Left
 .promoLeft {
   flex: 1;
   min-width: 0;
@@ -186,6 +168,11 @@
   font-weight: 600;
   border-radius: 20px;
   padding: 2px 10px;
+
+  &[data-status="dang_chay"] { background: @primary-100; }
+  &[data-status="sap_het"]   { background: #fef3c7; }
+  &[data-status="tam_dung"]  { background: #f3f4f6; }
+  &[data-status="het_han"]   { background: #fee2e2; }
 }
 
 .promoName {
@@ -202,7 +189,6 @@
   color: #9ca3af;
 }
 
-// Center: usage
 .promoUsage {
   width: 200px;
   flex-shrink: 0;
@@ -241,7 +227,6 @@
   transition: width 0.3s;
 }
 
-// Right
 .promoRight {
   display: flex;
   align-items: center;
@@ -295,14 +280,12 @@
   }
 }
 
-// ── Primary button helper ────────────────────────────────────────
 .btnPrimary {
   background: @primary !important;
   border-color: @primary !important;
-  &:hover { background: #15803d !important; border-color: #15803d !important; }
+  &:hover { background: @primary-hover !important; border-color: @primary-hover !important; }
 }
 
-// ── Form modal ───────────────────────────────────────────────────
 .formModal {
   :global(.ant-modal-content) {
     border-radius: 16px;
@@ -326,11 +309,10 @@
   :global(.ant-btn-primary) {
     background: @primary;
     border-color: @primary;
-    &:hover { background: #15803d; border-color: #15803d; }
+    &:hover { background: @primary-hover; border-color: @primary-hover; }
   }
 }
 
-// ── Detail modal ─────────────────────────────────────────────────
 .detailModal {
   :global(.ant-modal-content) {
     border-radius: 16px;
@@ -346,11 +328,10 @@
   :global(.ant-btn-primary) {
     background: @primary;
     border-color: @primary;
-    &:hover { background: #15803d; border-color: #15803d; }
+    &:hover { background: @primary-hover; border-color: @primary-hover; }
   }
 }
 
-// ── Detail body ───────────────────────────────────────────────────
 .detailBody { padding: 0; }
 
 .detailHeader {
@@ -376,6 +357,11 @@
   font-weight: 600;
   border-radius: 20px;
   padding: 3px 10px;
+
+  &[data-status="dang_chay"] { background: @primary-100; }
+  &[data-status="sap_het"]   { background: #fef3c7; }
+  &[data-status="tam_dung"]  { background: #f3f4f6; }
+  &[data-status="het_han"]   { background: #fee2e2; }
 }
 
 .detailTitle {
@@ -448,7 +434,6 @@
   transition: width 0.3s;
 }
 
-// ── Tabs ─────────────────────────────────────────────────────────
 .mainTabs {
   :global(.ant-tabs-nav) {
     margin-bottom: 0;
@@ -478,7 +463,6 @@
   }
 }
 
-// ── Combo toolbar ────────────────────────────────────────────────
 .comboToolbar {
   display: flex;
   align-items: center;
@@ -495,18 +479,16 @@
   padding: 0 20px !important;
 
   &:hover {
-    background: #15803d !important;
-    border-color: #15803d !important;
+    background: @primary-hover !important;
+    border-color: @primary-hover !important;
   }
 }
 
-// ── Combo list ───────────────────────────────────────────────────
 .comboList {
   display: flex;
   flex-direction: column;
 }
 
-// ── Combo card ───────────────────────────────────────────────────
 .comboCard {
   padding: 18px 20px;
   border-top: 1px solid #f8fafc;
@@ -555,7 +537,6 @@
   flex-shrink: 0;
 }
 
-// ── Dish chips ───────────────────────────────────────────────────
 .comboDishChips {
   display: flex;
   flex-wrap: wrap;
@@ -574,7 +555,6 @@
   white-space: nowrap;
 }
 
-// ── Price row ────────────────────────────────────────────────────
 .comboPriceRow {
   display: flex;
   align-items: center;
@@ -624,7 +604,6 @@
   color: #374151;
 }
 
-// ── Combo form preview ───────────────────────────────────────────
 .comboFormPreview {
   background: #f8fafc;
   border: 1px solid #e5e7eb;
@@ -676,7 +655,6 @@
   margin-top: 4px;
 }
 
-// ── Dish picker ──────────────────────────────────────────────────
 .dishPicker {
   border: 1px solid #e5e7eb;
   border-radius: 10px;
@@ -705,7 +683,7 @@
   font-size: 11.5px;
   font-weight: 600;
   color: @primary;
-  background: #dcfce7;
+  background: @primary-100;
   border-radius: 20px;
   padding: 1px 8px;
 }
@@ -752,9 +730,9 @@
 }
 
 .dishAvailableRowAdded {
-  background: #f0fdf4;
+  background: @primary-50;
 
-  &:hover { background: #dcfce7; }
+  &:hover { background: @primary-100; }
 }
 
 .dishDot {
@@ -809,8 +787,8 @@
   color: #fff;
 
   &:hover {
-    border-color: #15803d;
-    background: #15803d;
+    border-color: @primary-hover;
+    background: @primary-hover;
     color: #fff;
   }
 }
@@ -913,10 +891,7 @@
   strong { color: @primary; font-variant-numeric: tabular-nums; }
 }
 
-// ── Dark mode overrides ─────────────────────────────────────────
 :global([data-theme="dark"]) {
-  .adminLayout { background: #0f172a; }
-
   .statCard { background: #1e293b; border-color: #334155; }
   .statValue { color: #f1f5f9; }
   .statLabel { color: #64748b; }
@@ -980,7 +955,7 @@
     border-bottom-color: #334155;
   }
   .dishPickerHeadLabel { color: #64748b; }
-  .dishPickerHeadCount { background: #14532d; color: #4ade80; }
+  .dishPickerHeadCount { background: @primary-darkest; color: #4ade80; }
 
   .dishPickerSearch {
     border-bottom-color: #334155;
@@ -1002,7 +977,7 @@
 
   .dishAvailableRowAdded {
     background: #052e16;
-    &:hover { background: #14532d; }
+    &:hover { background: @primary-darkest; }
   }
 
   .dishRowName { color: #cbd5e1; }
@@ -1019,7 +994,7 @@
     border-color: #16a34a;
     background: #16a34a;
     color: #fff;
-    &:hover { border-color: #15803d; background: #15803d; }
+    &:hover { border-color: @primary-hover; background: @primary-hover; }
   }
 
   .dishSelected {
@@ -1050,5 +1025,81 @@
     border-top-color: #334155;
     span { color: #64748b; }
     strong { color: #4ade80; }
+  }
+
+  .mainTabs {
+    :global(.ant-tabs-nav) {
+      background: #1e293b !important;
+      border-color: #334155 !important;
+    }
+    :global(.ant-tabs-tab) { color: #64748b !important; }
+    :global(.ant-tabs-tab-active .ant-tabs-tab-btn) { color: #4ade80 !important; }
+    :global(.ant-tabs-ink-bar) { background: #4ade80 !important; }
+    :global(.ant-tabs-content-holder) {
+      background: #1e293b !important;
+      border-color: #334155 !important;
+    }
+    :global(.ant-tabs-nav::before) { border-bottom-color: #334155 !important; }
+  }
+
+  .searchInput {
+    :global(.ant-input-affix-wrapper) {
+      background: #1e293b !important;
+      border-color: #334155 !important;
+    }
+    :global(.ant-input) { background: #1e293b !important; color: #e2e8f0 !important; }
+    :global(.ant-input-prefix) { color: #475569; }
+  }
+
+  .btnFilter {
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+    background: #1e293b !important;
+    &:hover { color: #f1f5f9 !important; border-color: #475569 !important; background: #0f172a !important; }
+  }
+
+  .statSubComplex { color: #94a3b8; }
+  .statSubSuffix  { color: #64748b; }
+
+  .empty { color: #475569; }
+
+  .comboCard {
+    border-top-color: #334155;
+    &:hover { background: #0f172a; }
+  }
+
+  .comboCardName    { color: #f1f5f9; }
+  .comboCardMoTa    { color: #64748b; }
+
+  .comboOriginalPrice { color: #475569; }
+  .comboArrow         { color: #334155; }
+  .comboFinalPrice    { color: #4ade80; }
+  .comboSaving        { background: #16a34a; }
+  .comboExpiryLabel   { color: #64748b; }
+  .comboExpiryDate    { color: #cbd5e1; }
+
+  .comboFormPreview {
+    background: #0f172a;
+    border-color: #334155;
+  }
+  .previewRow         { color: #cbd5e1; }
+  .previewRowLabel    { color: #64748b; }
+  .previewDivider     { background: #334155; }
+  .previewFinalRow    {}
+  .previewFinalLabel  { color: #f1f5f9; }
+  .previewFinalValue  { color: #4ade80; }
+  .previewSavingRow   { color: #4ade80; }
+
+  .detailStatusTag {
+    &[data-status="dang_chay"] { background: rgba(22,163,74,0.15); }
+    &[data-status="sap_het"]   { background: rgba(217,119,6,0.15); }
+    &[data-status="tam_dung"]  { background: rgba(107,114,128,0.15); }
+    &[data-status="het_han"]   { background: rgba(220,38,38,0.15); }
+  }
+  .promoStatus {
+    &[data-status="dang_chay"] { background: rgba(22,163,74,0.15); }
+    &[data-status="sap_het"]   { background: rgba(217,119,6,0.15); }
+    &[data-status="tam_dung"]  { background: rgba(107,114,128,0.15); }
+    &[data-status="het_han"]   { background: rgba(220,38,38,0.15); }
   }
 }

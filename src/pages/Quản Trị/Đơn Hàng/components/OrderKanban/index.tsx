@@ -46,7 +46,8 @@ const OrderKanban: React.FC<OrderKanbanProps> = ({
               <span className={styles.colTitle}>{cfg.tieuDe}</span>
               <span
                 className={styles.colBadge}
-                style={{ color: cfg.mau, background: cfg.bgLight }}
+                data-col={col}
+                style={{ color: cfg.mau }}
               >
                 {colOrders.length}
               </span>
@@ -98,7 +99,8 @@ const OrderKanban: React.FC<OrderKanbanProps> = ({
                       return (
                         <div
                           className={styles.ghiChuTag}
-                          style={{ color: gc.mau, background: gc.bg }}
+                          data-ghichu={don.loaiGhiChu!}
+                          style={{ color: gc.mau }}
                         >
                           {gc.label}
                         </div>

@@ -1,22 +1,9 @@
-@primary:       #16a34a;
-@primary-hover: #15803d;
-@primary-soft:  #dcfce7;
-@border:        #f0f0f0;
-@divider:       #f3f4f6;
-@text-dark:     #111827;
-@text-mid:      #374151;
-@text-muted:    #6b7280;
-@text-light:    #9ca3af;
-@bg:            #f8fafc;
-@surface:       #ffffff;
-@surface-hover: #f9fafb;
-@danger:        #ef4444;
-@danger-soft:   #fee2e2;
+﻿@import '~@/styles/admin-tokens.less';
+
 @sidebar-w:     260px;
 @sidebar-w-col: 64px;
 @ease:          cubic-bezier(0.22, 0.61, 0.36, 1);
 
-// ── Sidebar shell ────────────────────────────────────────────────
 .sidebar {
   width: @sidebar-w;
   height: 100vh;
@@ -36,7 +23,6 @@
   width: @sidebar-w-col;
 }
 
-// ── Logo ─────────────────────────────────────────────────────────
 .logoSection {
   padding: 16px 12px 14px;
   flex-shrink: 0;
@@ -52,7 +38,7 @@
 .logoIcon {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #22c55e, #15803d);
+  background: @gradient-primary;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -86,7 +72,6 @@
   white-space: nowrap;
 }
 
-// ── Menu ─────────────────────────────────────────────────────────
 .menuSection {
   flex: 1;
   overflow-y: auto;
@@ -163,7 +148,7 @@
 
 .menuLabel {
   flex: 1;
-  line-height: 1;
+  line-height: 1.4;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -193,7 +178,6 @@
   border: 1.5px solid @surface;
 }
 
-// ── Collapse section ─────────────────────────────────────────────
 .collapseSection {
   border-top: 1px solid @border;
   padding: 10px;
@@ -228,11 +212,12 @@
   }
 }
 
-// ── Dark mode ────────────────────────────────────────────────────
 :global([data-theme="dark"]) {
   .sidebar {
     background: #1e293b;
     border-right-color: #334155;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   .brandName { color: #f1f5f9; }

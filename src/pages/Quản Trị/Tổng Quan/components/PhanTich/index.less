@@ -1,17 +1,12 @@
-@primary: #16a34a;
-@border: #f0f0f0;
-@text-dark: #111827;
-@text-mid: #374151;
-@text-muted: #6b7280;
-@text-light: #9ca3af;
+﻿@import '~@/styles/admin-tokens.less';
+
 @radius: 12px;
 @shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
 
 .phanTichWrap { display: flex; flex-direction: column; gap: 14px; }
 
-// ── Banner thống kê ─────────────────────────────────────────
 .statBanner {
-  background: linear-gradient(135deg, #14532d 0%, #166534 60%, #15803d 100%);
+  background: linear-gradient(135deg, @primary-darkest 0%, @primary-dark 60%, @primary-hover 100%);
   border-radius: @radius;
   padding: 20px 28px;
   display: flex; align-items: stretch;
@@ -33,7 +28,6 @@
   flex-shrink: 0;
 }
 
-// ── Biểu đồ ────────────────────────────────────────────────
 .chartRow2 {
   display: grid;
   grid-template-columns: 1.65fr 1fr;
@@ -70,10 +64,130 @@
 .donutLegLabel { flex: 1; font-size: 13px; color: @text-mid; }
 .donutLegPct   { font-size: 13px; font-weight: 600; color: @text-dark; }
 
-// ── Bottom 3 cột ────────────────────────────────────────────
+.rangeToggle {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.rangeBtn {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+
+  &:hover { color: #374151; }
+}
+
+.rangeBtnActive {
+  background: #fff;
+  color: #111827;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.heatLegend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.heatLegendLabel {
+  font-size: 10px;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.heatLegendBar {
+  display: flex;
+  gap: 3px;
+}
+
+.heatLegendCell {
+  width: 16px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.heatGrid {
+  display: grid;
+  grid-template-columns: 24px repeat(12, minmax(0, 1fr));
+  gap: 3px;
+}
+
+.heatEmpty {}
+
+.heatHourLabel {
+  font-size: 9px;
+  color: #9ca3af;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.heatDayLabel {
+  font-size: 10px;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+}
+
+.heatCell {
+  height: 18px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: opacity 0.12s;
+
+  &:hover { opacity: 0.75; }
+}
+
+.heatTooltip {
+  position: absolute;
+  background: #1e293b;
+  border-radius: 7px;
+  padding: 6px 10px;
+  pointer-events: none;
+  z-index: 20;
+  transform: translateX(-50%);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  white-space: nowrap;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #1e293b;
+  }
+}
+
+.heatTooltipHead {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 2px;
+}
+
+.heatTooltipVal {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
 .bottomRow {
   display: grid;
-  grid-template-columns: 2fr 1.6fr 1.2fr;
+  grid-template-columns: 1.6fr 1.2fr 1.6fr;
   gap: 14px;
 }
 
@@ -91,7 +205,7 @@
 }
 
 .cardTitle { font-size: 14px; font-weight: 700; color: @text-dark; }
-.viewAll   { font-size: 12.5px; color: @primary; font-weight: 500; &:hover { color: #15803d; } }
+.viewAll   { font-size: 12.5px; color: @primary; font-weight: 500; &:hover { color: @primary-hover; } }
 
 // Top món table
 .topMonTable {
@@ -162,7 +276,6 @@
   &:hover { background: #f3f4f6; }
 }
 
-// ── Hoạt động ───────────────────────────────────────────────
 .hoatDongCard {
   background: #fff;
   border-radius: @radius;
@@ -204,8 +317,63 @@
 .hdTime  { font-size: 11px; color: @text-light; }
 .hdArrow { font-size: 11px; color: @text-light; margin-top: 3px; flex-shrink: 0; }
 
-// ── Responsive ──────────────────────────────────────────────
 @media (max-width: 1200px) {
   .chartRow2 { grid-template-columns: 1fr; }
   .bottomRow { grid-template-columns: 1fr; }
+}
+
+:global([data-theme="dark"]) {
+  .barChartCard, .donutCard, .bottomCard, .hoatDongCard {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .chartTitle2   { color: #f1f5f9; }
+  .chartLegend   { color: #94a3b8; }
+  .donutSubtitle { color: #94a3b8; }
+  .donutLegLabel { color: #cbd5e1; }
+  .donutLegPct   { color: #f1f5f9; }
+
+  .cardTitle { color: #f1f5f9; }
+
+  .topMonTable {
+    th { color: #64748b; border-bottom-color: #334155; }
+    td { color: #94a3b8; border-bottom-color: #334155; }
+    tr:last-child td { border-bottom: none; }
+  }
+  .tdRight { color: #f1f5f9; }
+
+  .trangThaiTen { color: #94a3b8; }
+  .trangThaiSo  { color: #64748b; }
+  .progressWrap2 { background: #334155; }
+  .trangThaiPct  { color: #f1f5f9; }
+
+  .hieuSuatItem  { border-bottom-color: #334155; }
+  .hieuSuatLabel { color: #94a3b8; }
+  .hieuSuatValue { color: #f1f5f9; }
+  .hieuSuatUnit  { color: #94a3b8; }
+  .changeDetail  { color: #64748b; }
+  .periodSelect  { background: #0f172a; border-color: #334155; color: #94a3b8; }
+
+  .hoatDongItem {
+    background: #0f172a;
+    border-color: #334155;
+    &:hover { background: #1e293b; border-color: #475569; }
+  }
+  .hdTitle { color: #f1f5f9; }
+  .hdMota  { color: #94a3b8; }
+  .hdTime  { color: #64748b; }
+  .hdArrow { color: #64748b; }
+
+  .hoatDongScroll {
+    &::-webkit-scrollbar-thumb { background: #334155; }
+  }
+
+  .rangeToggle { background: #0f172a; }
+  .rangeBtn { color: #64748b; &:hover { color: #94a3b8; } }
+  .rangeBtnActive { background: #1e293b; color: #f1f5f9; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+
+  .heatLegendLabel { color: #64748b; }
+  .heatHourLabel   { color: #64748b; }
+  .heatDayLabel    { color: #64748b; }
 }

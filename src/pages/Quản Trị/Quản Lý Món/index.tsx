@@ -1,4 +1,4 @@
-import {
+﻿import {
   AppstoreOutlined,
   ClockCircleOutlined,
   CloseOutlined,
@@ -25,18 +25,19 @@ import {
   message,
 } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Sidebar from '@/pages/Quản Trị/Sidebar';
 import Topbar from '@/pages/Quản Trị/Topbar';
-import { formatCurrency } from '@/utils/format';
 import { DANH_SACH_NGUYEN_LIEU } from '@/services/Quản Trị/Kho Nguyên Liệu';
 import { DANH_SACH_MON } from '@/services/Quản Trị/Quản Lý Món';
 import { EDanhMuc, IMonAn } from '@/services/Quản Trị/Quản Lý Món/typing';
 import styles from './index.less';
 
-// ── Local extension — không sửa typing.ts ────────────────────────
 interface IMonAnLocal extends IMonAn {
   hinhAnh?: string;
   nguyenLieu?: string[];
+}
+
+function formatGia(gia: number): string {
+  return new Intl.NumberFormat('vi-VN').format(gia) + 'đ';
 }
 
 const PRESET_GRADIENTS = [
@@ -63,7 +64,6 @@ interface TabDanhMuc {
   soLuong: number;
 }
 
-// ── MonCard ───────────────────────────────────────────────────────
 interface MonCardProps {
   mon: IMonAnLocal;
   onClick: () => void;
@@ -103,7 +103,7 @@ const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete }) => 
       </div>
 
       <div className={styles.cardFooter}>
-        <span className={styles.cardGia}>{formatCurrency(mon.giaBan)}</span>
+        <span className={styles.cardGia}>{formatGia(mon.giaBan)}</span>
         <div className={styles.cardActions}>
           <button
             className={styles.actionBtn}
@@ -125,7 +125,6 @@ const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete }) => 
   </div>
 );
 
-// ── MonForm ───────────────────────────────────────────────────────
 interface MonFormProps {
   open: boolean;
   initial: IMonAnLocal | null;
@@ -191,6 +190,7 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
     >
       <Form form={form} layout="vertical" preserve={false} style={{ marginTop: 8 }}>
         <Form.Item name="id" hidden><Input /></Form.Item>
+
         <Form.Item label="Hình ảnh món ăn">
           <input
             ref={fileInputRef}
@@ -228,6 +228,7 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
             </button>
           )}
         </Form.Item>
+
         <Form.Item
           name="ten"
           label="Tên món"
@@ -294,6 +295,7 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
             </Form.Item>
           </Col>
         </Row>
+
         <Form.Item
           name="moTa"
           label="Mô tả"
@@ -301,6 +303,7 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
         >
           <Input.TextArea rows={3} maxLength={200} showCount placeholder="Mô tả ngắn về món ăn..." />
         </Form.Item>
+
         <Form.Item name="nguyenLieu" label="Nguyên liệu sử dụng">
           <Select
             mode="multiple"
@@ -319,6 +322,8 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
             ))}
           </Select>
         </Form.Item>
+
+        {/* hidden — giữ giá trị khi edit, dùng default khi tạo mới */}
         <Form.Item name="mauNen" hidden><Input /></Form.Item>
         <Form.Item name="isHot"  hidden valuePropName="checked"><Switch /></Form.Item>
 
@@ -330,7 +335,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
   );
 };
 
-// ── MonDetail ─────────────────────────────────────────────────────
 interface MonDetailProps {
   mon: IMonAnLocal | null;
   onClose: () => void;
@@ -358,6 +362,7 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
       className={styles.detailModal}
       transitionName="ant-move-up"
     >
+      {/* Hero */}
       <div style={{
         height: 180,
         background: mon.hinhAnh ? undefined : mon.mauNen,
@@ -389,6 +394,8 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
           </span>
         )}
       </div>
+
+      {/* Content */}
       <div style={{ padding: '20px 24px 8px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
@@ -396,9 +403,11 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
             <div style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>{mon.moTa}</div>
           </div>
           <div style={{ fontSize: 26, fontWeight: 700, color: '#16a34a', flexShrink: 0, marginLeft: 16 }}>
-            {formatCurrency(mon.giaBan)}
+            {formatGia(mon.giaBan)}
           </div>
         </div>
+
+        {/* Stats */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginTop: 18 }}>
           {[
             { value: mon.thoiGian, unit: 'phút',  label: 'Thời gian', color: '#111827' },
@@ -420,6 +429,8 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
             </div>
           ))}
         </div>
+
+        {/* Nguyên liệu */}
         {ingredientList.length > 0 && (
           <div style={{ marginTop: 18, paddingBottom: 8 }}>
             <div style={{
@@ -445,7 +456,6 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
   );
 };
 
-// ── QuanLyMon (main page) ─────────────────────────────────────────
 const QuanLyMon: React.FC = () => {
   const [items, setItems] = useState<IMonAnLocal[]>(() => {
     if (typeof window !== 'undefined') {
@@ -493,7 +503,6 @@ const QuanLyMon: React.FC = () => {
     return ds;
   }, [activeTab, tuKhoa, items]);
 
-  // ── Handlers ──────────────────────────────────────────────────
   const handleDelete = (mon: IMonAnLocal) => {
     Modal.confirm({
       title: 'Xác nhận xoá món?',
@@ -521,14 +530,11 @@ const QuanLyMon: React.FC = () => {
     setEditing(null);
   };
 
-  // ── Render ────────────────────────────────────────────────────
   return (
-    <div className={styles.adminLayout}>
-      <Sidebar />
-      <div className={styles.mainContent}>
-        <Topbar title="Quản lý món ăn" />
+    <>
+      <Topbar title="Quản lý món ăn" />
 
-        <div className={styles.pageBody}>
+      <div className={styles.pageBody}>
           <div className={styles.toolbar}>
             <div className={styles.tabsRow}>
               {tabs.map((t) => (
@@ -577,6 +583,7 @@ const QuanLyMon: React.FC = () => {
               </Button>
             </div>
           </div>
+
           <div className={isGrid ? styles.gridView : styles.listView}>
             {danhSachLoc.map((mon) => (
               <MonCard
@@ -591,8 +598,8 @@ const QuanLyMon: React.FC = () => {
               <div className={styles.empty}>Không tìm thấy món ăn phù hợp</div>
             )}
           </div>
-        </div>
       </div>
+
       <MonForm
         open={formOpen}
         initial={editing}
@@ -604,7 +611,7 @@ const QuanLyMon: React.FC = () => {
         onClose={() => setViewing(null)}
         onEdit={() => { setEditing(viewing); setViewing(null); setFormOpen(true); }}
       />
-    </div>
+    </>
   );
 };
 

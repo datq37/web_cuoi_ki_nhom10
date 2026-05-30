@@ -78,7 +78,7 @@ const Topbar: React.FC = () => {
     const avatarText = user.avatar && user.avatar.length <= 2 ? user.avatar : 'U';
 
     return (
-        <header className="topbar" style={{ position: 'relative' }}>
+        <header className="topbar">
             <button
                 className="mobile-menu-toggle"
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}

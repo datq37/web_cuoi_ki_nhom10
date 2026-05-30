@@ -1,5 +1,6 @@
-﻿@primary: #16a34a;
-@ease:    cubic-bezier(0.22, 0.61, 0.36, 1);
+﻿@import '~@/styles/admin-tokens.less';
+
+@ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
 .kanbanWrap {
   display: grid;
@@ -49,7 +50,7 @@
   &[data-col="cho_xac_nhan"]  { background: #fff7ed; }
   &[data-col="dang_che_bien"] { background: #eff6ff; }
   &[data-col="san_sang"]      { background: #f5f3ff; }
-  &[data-col="hoan_thanh"]    { background: #f0fdf4; }
+  &[data-col="hoan_thanh"]    { background: @primary-50; }
 }
 
 .colBody {

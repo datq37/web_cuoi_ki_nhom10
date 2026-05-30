@@ -1,7 +1,6 @@
-﻿@bg: #f8fafc;
-@primary: #16a34a;
+﻿@import '~@/styles/admin-tokens.less';
+
 @radius: 14px;
-@border: #f1f5f9;
 
 .pageBody {
   padding: 20px 24px 32px;
@@ -49,7 +48,7 @@
 }
 
 .navActive {
-  background: #f0fdf4 !important;
+  background: @primary-50 !important;
   color: @primary !important;
   font-weight: 600;
 
@@ -189,8 +188,8 @@
   height: 40px !important;
 
   &:hover {
-    background: #15803d !important;
-    border-color: #15803d !important;
+    background: @primary-hover !important;
+    border-color: @primary-hover !important;
   }
 }
 

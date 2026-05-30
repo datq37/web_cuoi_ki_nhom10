@@ -1,5 +1,5 @@
-﻿@bg: #f8fafc;
-@primary: #16a34a;
+﻿@import '~@/styles/admin-tokens.less';
+
 @radius: 12px;
 
 .pageBody { padding: 16px 20px 24px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
@@ -19,7 +19,7 @@
 .searchIcon { color: #9ca3af; }
 .toolbarRight { display: flex; align-items: center; gap: 8px; }
 .btnFilter { border-radius: 8px !important; color: #374151 !important; border-color: #d1d5db !important; font-weight: 500; }
-.btnAdd { background: @primary !important; border-color: @primary !important; border-radius: 8px !important; font-weight: 600; &:hover { background: #15803d !important; border-color: #15803d !important; } }
+.btnAdd { background: @primary !important; border-color: @primary !important; border-radius: 8px !important; font-weight: 600; &:hover { background: @primary-hover !important; border-color: @primary-hover !important; } }
 
 .table {
   :global(.ant-table-thead > tr > th) { background: #f8fafc; font-size: 11px; font-weight: 700; color: #9ca3af; letter-spacing: 0.4px; border-bottom: 1px solid #f1f5f9 !important; padding: 10px 16px; }
@@ -41,7 +41,7 @@
   border-radius: 20px;
 
   &[data-vaitro="nhan_vien"]    { background: #f3f4f6; }
-  &[data-vaitro="truong_phong"] { background: #dcfce7; }
+  &[data-vaitro="truong_phong"] { background: @primary-100; }
   &[data-vaitro="giam_doc"]     { background: #dbeafe; }
 }
 .soDon { font-size: 13.5px; font-weight: 700; color: #111827; }
@@ -55,7 +55,7 @@
   padding: 4px 12px;
   border-radius: 20px;
 
-  &[data-trangthai="hoat_dong"] { background: #dcfce7; }
+  &[data-trangthai="hoat_dong"] { background: @primary-100; }
   &[data-trangthai="tam_khoa"]  { background: #f3f4f6; }
 }
 .moreBtn { width: 30px; height: 30px; border: 1px solid #e5e7eb; border-radius: 7px; background: #fff; color: #6b7280; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; transition: all 0.15s; &:hover { background: #f3f4f6; color: #111827; } }
@@ -95,7 +95,7 @@
   :global(.ant-modal-footer .ant-btn-primary) {
     background: @primary;
     border-color: @primary;
-    &:hover { background: #15803d; border-color: #15803d; }
+    &:hover { background: @primary-hover; border-color: @primary-hover; }
   }
   :global(.ant-modal-close) {
     top: 14px;
@@ -114,7 +114,7 @@
   border-color: @primary !important;
   border-radius: 8px !important;
   font-weight: 500;
-  &:hover { background: #15803d !important; border-color: #15803d !important; }
+  &:hover { background: @primary-hover !important; border-color: @primary-hover !important; }
 }
 
 :global([data-theme="dark"]) {

@@ -1,11 +1,6 @@
-﻿@primary:       #16a34a;
-@primary-hover: #15803d;
-@border:        #f0f0f0;
-@divider:       #f3f4f6;
-@text-dark:     #111827;
-@text-mid:      #374151;
-@text-muted:    #6b7280;
-@ease:          cubic-bezier(0.22, 0.61, 0.36, 1);
+﻿@import '~@/styles/admin-tokens.less';
+
+@ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
 .orderDrawer {
   :global(.ant-drawer-content) {
@@ -142,7 +137,7 @@
   &[data-status="cho_xac_nhan"]  { background: #fff7ed; }
   &[data-status="dang_che_bien"] { background: #eff6ff; }
   &[data-status="san_sang"]      { background: #f5f3ff; }
-  &[data-status="hoan_thanh"]    { background: #f0fdf4; }
+  &[data-status="hoan_thanh"]    { background: @primary-50; }
   &[data-status="huy"]           { background: #f3f4f6; }
 }
 

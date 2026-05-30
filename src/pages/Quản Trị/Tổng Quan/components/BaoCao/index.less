@@ -1,3 +1,5 @@
+@import '~@/styles/admin-tokens.less';
+
 .baoCaoModal {
   :global(.ant-modal-content) {
     padding: 0;
@@ -60,14 +62,14 @@
   font-size: 13px;
   font-weight: 600;
   border-radius: 8px;
-  background: #16a34a !important;
-  border-color: #16a34a !important;
+  background: @primary !important;
+  border-color: @primary !important;
   display: flex;
   align-items: center;
   gap: 6px;
   &:hover {
-    background: #15803d !important;
-    border-color: #15803d !important;
+    background: @primary-hover !important;
+    border-color: @primary-hover !important;
   }
 }
 
@@ -133,7 +135,7 @@
 :global(.rpt-logo) {
   width: 42px;
   height: 42px;
-  background: #16a34a;
+  background: @primary;
   border-radius: 8px;
   color: #fff;
   font-size: 14px;
@@ -208,7 +210,7 @@
 
 :global(.rpt-stat-change) {
   font-size: 10px;
-  color: #16a34a;
+  color: @primary;
   margin-top: 3px;
   font-weight: 500;
 }
@@ -234,7 +236,7 @@
     display: inline-block;
     width: 3px;
     height: 14px;
-    background: #16a34a;
+    background: @primary;
     border-radius: 2px;
     flex-shrink: 0;
   }
@@ -271,7 +273,7 @@
 }
 
 :global(table.rpt-table tbody tr:hover td) {
-  background: #f0fdf4;
+  background: @primary-50;
 }
 
 :global(.td-c) { text-align: center; }
@@ -281,7 +283,7 @@
 :global(.td-rank) {
   text-align: center;
   font-weight: 700;
-  color: #16a34a;
+  color: @primary;
 }
 
 /* ── Footer ──────────────────────────────────────────────────── */

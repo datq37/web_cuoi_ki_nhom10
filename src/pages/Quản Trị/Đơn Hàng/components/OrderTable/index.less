@@ -1,5 +1,6 @@
-﻿@primary:  #16a34a;
-@ease:     cubic-bezier(0.22, 0.61, 0.36, 1);
+﻿@import '~@/styles/admin-tokens.less';
+
+@ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
 .orderTable {
   :global(.ant-table) {
@@ -24,10 +25,10 @@
     transition: background 120ms @ease;
   }
   :global(.ant-table-tbody > tr:hover > td) {
-    background: #f0fdf4 !important;
+    background: @primary-50 !important;
   }
   :global(.ant-table-row-selected > td) {
-    background: #dcfce7 !important;
+    background: @primary-100 !important;
   }
   :global(.ant-table-placeholder > td) {
     border-bottom: none;
@@ -96,7 +97,7 @@
   &[data-status="cho_xac_nhan"]  { background: #fff7ed; }
   &[data-status="dang_che_bien"] { background: #eff6ff; }
   &[data-status="san_sang"]      { background: #f5f3ff; }
-  &[data-status="hoan_thanh"]    { background: #f0fdf4; }
+  &[data-status="hoan_thanh"]    { background: @primary-50; }
   &[data-status="huy"]           { background: #f3f4f6; }
 }
 

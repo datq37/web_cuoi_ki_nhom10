@@ -1,7 +1,6 @@
-﻿@bg: #f8fafc;
-@primary: #16a34a;
+﻿@import '~@/styles/admin-tokens.less';
+
 @radius: 12px;
-@border: #f1f5f9;
 
 .pageBody {
   padding: 16px 20px 32px;
@@ -52,7 +51,7 @@
   font-weight: 600;
   padding: 0 20px !important;
 
-  &:hover { background: #15803d !important; border-color: #15803d !important; }
+  &:hover { background: @primary-hover !important; border-color: @primary-hover !important; }
 }
 
 .areaGrid {
@@ -179,7 +178,7 @@
 
   &:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
 
-  &[data-status="san_sang"]  { background: #f0fdf4; border-color: #bbf7d0; }
+  &[data-status="san_sang"]  { background: @primary-50; border-color: @primary-200; }
   &[data-status="dang_dung"] { background: #fff7ed; border-color: #fed7aa; }
   &[data-status="bao_tri"]   { background: #fef2f2; border-color: #fecaca; }
 }
@@ -211,7 +210,7 @@
   cursor: pointer;
   transition: all 0.15s;
 
-  &:hover { border-color: @primary; color: @primary; background: #f0fdf4; }
+  &:hover { border-color: @primary; color: @primary; background: @primary-50; }
 }
 
 .addAreaCard {
@@ -230,7 +229,7 @@
 
   &:hover {
     border-color: @primary;
-    background: #f0fdf4;
+    background: @primary-50;
 
     .addAreaIcon { color: #fff; background: @primary; }
     .addAreaTitle { color: @primary; }
@@ -241,7 +240,7 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #dcfce7;
+  background: @primary-100;
   color: @primary;
   display: flex;
   align-items: center;
@@ -298,7 +297,7 @@
   :global(.ant-modal-footer .ant-btn-primary) {
     background: @primary;
     border-color: @primary;
-    &:hover { background: #15803d; border-color: #15803d; }
+    &:hover { background: @primary-hover; border-color: @primary-hover; }
   }
   :global(.ant-modal-close) {
     top: 14px;

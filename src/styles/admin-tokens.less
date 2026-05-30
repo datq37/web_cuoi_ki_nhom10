@@ -1,0 +1,55 @@
+// ─────────────────────────────────────────────────────────────────
+// Admin Design Tokens — nguồn sự thật duy nhất cho màu admin
+// Đồng bộ với trang Khách Hàng (Sidebar.less, topbar.less, v.v.)
+// ─────────────────────────────────────────────────────────────────
+
+// ── Primary green palette ────────────────────────────────────────
+@primary:          #16a34a;
+@primary-light:    #22c55e;   // nhấn sáng, gradient
+@primary-hover:    #15803d;   // hover, nút đậm
+@primary-dark:     #166534;   // text đậm trên nền sáng
+@primary-darkest:  #14532d;   // heading xanh đậm nhất
+
+// Soft backgrounds (green-50 / 100 / 200)
+@primary-50:       #f0fdf4;
+@primary-100:      #dcfce7;
+@primary-200:      #bbf7d0;
+
+// Compatibility aliases used by existing files
+@primary-soft:     @primary-100;  // = #dcfce7
+
+// ── Accent / Warning ─────────────────────────────────────────────
+@accent:           #f97316;
+@accent-hover:     #ea580c;
+@warning:          #d97706;
+
+// ── Text scale ───────────────────────────────────────────────────
+@text-ink:         #111827;
+@text-dark:        @text-ink;    // compatibility alias
+@text-mid:         #374151;
+@text-secondary:   #4b5563;
+@text-muted:       #6b7280;
+@text-light:       #9ca3af;
+
+// ── Surfaces ─────────────────────────────────────────────────────
+@surface:          #ffffff;
+@surface-hover:    #f9fafb;
+@bg-soft:          #f8faf8;   // nền phụ (hơi xanh nhạt — dùng user page)
+@bg-page:          #f5f8f3;   // page background (ấm xanh nhẹ)
+@bg:               #f8fafc;   // compatibility alias (dùng rộng trong admin)
+
+// ── Borders / Lines ──────────────────────────────────────────────
+@line:             #eef2ef;   // per spec
+@border:           #f0f0f0;   // compatibility alias (dùng rộng trong admin)
+@divider:          #f3f4f6;   // dùng trong DonHang, OrderDrawer
+
+// ── Semantic ─────────────────────────────────────────────────────
+@success:          #16a34a;
+@success-soft:     #dcfce7;
+@danger:           #dc2626;
+@danger-soft:      #fff2f0;
+@info:             #2563eb;
+@info-soft:        #dbeafe;
+
+// ── Gradient ─────────────────────────────────────────────────────
+@gradient-primary: linear-gradient(135deg, @primary-hover, @primary-light);

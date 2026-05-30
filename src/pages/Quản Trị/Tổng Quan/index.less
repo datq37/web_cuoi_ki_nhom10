@@ -1,11 +1,5 @@
-﻿@primary: #16a34a;
-@primary-light: #f0fdf4;
-@border: #f0f0f0;
-@text-dark: #111827;
-@text-mid: #374151;
-@text-muted: #6b7280;
-@text-light: #9ca3af;
-@bg: #f8fafc;
+﻿@import '~@/styles/admin-tokens.less';
+
 @radius: 12px;
 @shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
 
@@ -43,7 +37,7 @@
 .tabActive {
   background: @primary !important;
   color: white !important;
-  &:hover { background: #15803d !important; }
+  &:hover { background: @primary-hover !important; }
 }
 
 .headerRight { display: flex; align-items: center; gap: 10px; }
@@ -65,7 +59,7 @@
   border-radius: 9px !important;
   font-weight: 500 !important;
   height: 36px !important;
-  &:hover { background: #15803d !important; border-color: #15803d !important; }
+  &:hover { background: @primary-hover !important; border-color: @primary-hover !important; }
 }
 
 .trucTiepWrap { display: flex; flex-direction: column; gap: 12px; flex: 1; }
@@ -136,7 +130,7 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
-  &:hover { background: #15803d; }
+  &:hover { background: @primary-hover; }
 }
 
 .kanbanBoard {
@@ -261,8 +255,8 @@
 .emptyText { font-size: 12px; color: @text-light; text-align: center; }
 
 .trophyCard {
-  background: @primary-light;
-  border: 1px solid #bbf7d0;
+  background: @primary-50;
+  border: 1px solid @primary-200;
   border-radius: 10px;
   padding: 16px;
   display: flex;
@@ -304,13 +298,13 @@
   font-size: 13px;
   font-weight: 500;
   color: @primary;
-  &:hover { color: #15803d; }
+  &:hover { color: @primary-hover; }
 }
 
 .phanTichWrap { display: flex; flex-direction: column; gap: 14px; }
 
 .statBanner {
-  background: linear-gradient(135deg, #14532d 0%, #166534 60%, #15803d 100%);
+  background: linear-gradient(135deg, @primary-darkest 0%, @primary-dark 60%, @primary-hover 100%);
   border-radius: @radius;
   padding: 20px 28px;
   display: flex;
@@ -408,7 +402,7 @@
 .cardTitle { font-size: 14px; font-weight: 700; color: @text-dark; }
 
 .viewAll { font-size: 12.5px; color: @primary; font-weight: 500;
-  &:hover { color: #15803d; }
+  &:hover { color: @primary-hover; }
 }
 
 .topMonTable {
@@ -633,7 +627,7 @@
 .tnPromoIcon {
   width: 42px; height: 42px;
   border-radius: 10px;
-  background: @primary-light;
+  background: @primary-50;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
@@ -642,7 +636,7 @@
 
 .tnPromoLeft { font-size: 12px; color: @text-muted; margin-bottom: 4px; }
 
-.tnPromoLink { font-size: 12px; color: @primary; font-weight: 500; &:hover { color: #15803d; } }
+.tnPromoLink { font-size: 12px; color: @primary; font-weight: 500; &:hover { color: @primary-hover; } }
 
 .tnSatisfy { display: flex; align-items: flex-start; gap: 10px; }
 
@@ -696,7 +690,7 @@
   font-size: 12.5px;
   color: @primary;
   font-weight: 500;
-  &:hover { color: #15803d; }
+  &:hover { color: @primary-hover; }
 }
 
 .tnDataRow {

@@ -1,5 +1,5 @@
-﻿@bg: #f8fafc;
-@primary: #16a34a;
+﻿@import '~@/styles/admin-tokens.less';
+
 @radius: 12px;
 
 .pageBody {
@@ -100,8 +100,8 @@
   padding: 0 20px !important;
 
   &:hover {
-    background: #15803d !important;
-    border-color: #15803d !important;
+    background: @primary-hover !important;
+    border-color: @primary-hover !important;
   }
 }
 
@@ -169,7 +169,7 @@
   border-radius: 20px;
   padding: 2px 10px;
 
-  &[data-status="dang_chay"] { background: #dcfce7; }
+  &[data-status="dang_chay"] { background: @primary-100; }
   &[data-status="sap_het"]   { background: #fef3c7; }
   &[data-status="tam_dung"]  { background: #f3f4f6; }
   &[data-status="het_han"]   { background: #fee2e2; }
@@ -283,7 +283,7 @@
 .btnPrimary {
   background: @primary !important;
   border-color: @primary !important;
-  &:hover { background: #15803d !important; border-color: #15803d !important; }
+  &:hover { background: @primary-hover !important; border-color: @primary-hover !important; }
 }
 
 .formModal {
@@ -309,7 +309,7 @@
   :global(.ant-btn-primary) {
     background: @primary;
     border-color: @primary;
-    &:hover { background: #15803d; border-color: #15803d; }
+    &:hover { background: @primary-hover; border-color: @primary-hover; }
   }
 }
 
@@ -328,7 +328,7 @@
   :global(.ant-btn-primary) {
     background: @primary;
     border-color: @primary;
-    &:hover { background: #15803d; border-color: #15803d; }
+    &:hover { background: @primary-hover; border-color: @primary-hover; }
   }
 }
 
@@ -358,7 +358,7 @@
   border-radius: 20px;
   padding: 3px 10px;
 
-  &[data-status="dang_chay"] { background: #dcfce7; }
+  &[data-status="dang_chay"] { background: @primary-100; }
   &[data-status="sap_het"]   { background: #fef3c7; }
   &[data-status="tam_dung"]  { background: #f3f4f6; }
   &[data-status="het_han"]   { background: #fee2e2; }
@@ -479,8 +479,8 @@
   padding: 0 20px !important;
 
   &:hover {
-    background: #15803d !important;
-    border-color: #15803d !important;
+    background: @primary-hover !important;
+    border-color: @primary-hover !important;
   }
 }
 
@@ -683,7 +683,7 @@
   font-size: 11.5px;
   font-weight: 600;
   color: @primary;
-  background: #dcfce7;
+  background: @primary-100;
   border-radius: 20px;
   padding: 1px 8px;
 }
@@ -730,9 +730,9 @@
 }
 
 .dishAvailableRowAdded {
-  background: #f0fdf4;
+  background: @primary-50;
 
-  &:hover { background: #dcfce7; }
+  &:hover { background: @primary-100; }
 }
 
 .dishDot {
@@ -787,8 +787,8 @@
   color: #fff;
 
   &:hover {
-    border-color: #15803d;
-    background: #15803d;
+    border-color: @primary-hover;
+    background: @primary-hover;
     color: #fff;
   }
 }
@@ -955,7 +955,7 @@
     border-bottom-color: #334155;
   }
   .dishPickerHeadLabel { color: #64748b; }
-  .dishPickerHeadCount { background: #14532d; color: #4ade80; }
+  .dishPickerHeadCount { background: @primary-darkest; color: #4ade80; }
 
   .dishPickerSearch {
     border-bottom-color: #334155;
@@ -977,7 +977,7 @@
 
   .dishAvailableRowAdded {
     background: #052e16;
-    &:hover { background: #14532d; }
+    &:hover { background: @primary-darkest; }
   }
 
   .dishRowName { color: #cbd5e1; }
@@ -994,7 +994,7 @@
     border-color: #16a34a;
     background: #16a34a;
     color: #fff;
-    &:hover { border-color: #15803d; background: #15803d; }
+    &:hover { border-color: @primary-hover; background: @primary-hover; }
   }
 
   .dishSelected {

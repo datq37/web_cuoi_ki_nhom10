@@ -1,18 +1,6 @@
-﻿@primary:       #16a34a;
-@primary-hover: #15803d;
-@primary-soft:  #dcfce7;
-@border:        #f0f0f0;
-@divider:       #f3f4f6;
-@text-dark:     #111827;
-@text-mid:      #374151;
-@text-muted:    #6b7280;
-@text-light:    #9ca3af;
-@bg:            #f8fafc;
-@surface:       #ffffff;
-@surface-hover: #f9fafb;
-@danger:        #ef4444;
-@danger-soft:   #fee2e2;
-@ease:          cubic-bezier(0.22, 0.61, 0.36, 1);
+﻿@import '~@/styles/admin-tokens.less';
+
+@ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
 .topbar {
   height: 64px;
@@ -169,7 +157,7 @@
 }
 
 .notifUnread {
-  background: #f0fdf4;
+  background: @primary-50;
   &:hover { background: @primary-soft; }
 }
 

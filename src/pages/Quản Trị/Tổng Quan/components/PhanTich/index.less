@@ -1,16 +1,12 @@
-﻿@primary: #16a34a;
-@border: #f0f0f0;
-@text-dark: #111827;
-@text-mid: #374151;
-@text-muted: #6b7280;
-@text-light: #9ca3af;
+﻿@import '~@/styles/admin-tokens.less';
+
 @radius: 12px;
 @shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
 
 .phanTichWrap { display: flex; flex-direction: column; gap: 14px; }
 
 .statBanner {
-  background: linear-gradient(135deg, #14532d 0%, #166534 60%, #15803d 100%);
+  background: linear-gradient(135deg, @primary-darkest 0%, @primary-dark 60%, @primary-hover 100%);
   border-radius: @radius;
   padding: 20px 28px;
   display: flex; align-items: stretch;
@@ -209,7 +205,7 @@
 }
 
 .cardTitle { font-size: 14px; font-weight: 700; color: @text-dark; }
-.viewAll   { font-size: 12.5px; color: @primary; font-weight: 500; &:hover { color: #15803d; } }
+.viewAll   { font-size: 12.5px; color: @primary; font-weight: 500; &:hover { color: @primary-hover; } }
 
 // Top món table
 .topMonTable {

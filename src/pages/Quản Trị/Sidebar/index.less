@@ -1,17 +1,5 @@
-﻿@primary:       #16a34a;
-@primary-hover: #15803d;
-@primary-soft:  #dcfce7;
-@border:        #f0f0f0;
-@divider:       #f3f4f6;
-@text-dark:     #111827;
-@text-mid:      #374151;
-@text-muted:    #6b7280;
-@text-light:    #9ca3af;
-@bg:            #f8fafc;
-@surface:       #ffffff;
-@surface-hover: #f9fafb;
-@danger:        #ef4444;
-@danger-soft:   #fee2e2;
+﻿@import '~@/styles/admin-tokens.less';
+
 @sidebar-w:     260px;
 @sidebar-w-col: 64px;
 @ease:          cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -50,7 +38,7 @@
 .logoIcon {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #22c55e, #15803d);
+  background: @gradient-primary;
   border-radius: 10px;
   display: flex;
   align-items: center;

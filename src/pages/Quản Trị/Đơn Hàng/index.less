@@ -1,13 +1,6 @@
-﻿@bg:            #f8fafc;
-@primary:       #16a34a;
-@primary-hover: #15803d;
-@primary-soft:  #dcfce7;
-@border:        #f0f0f0;
-@divider:       #f3f4f6;
-@text-dark:     #111827;
-@text-muted:    #6b7280;
-@danger:        #ef4444;
-@ease:          cubic-bezier(0.22, 0.61, 0.36, 1);
+﻿@import '~@/styles/admin-tokens.less';
+
+@ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
 .pageBody {
   padding: 16px 20px 24px;
@@ -119,8 +112,8 @@
   align-items: center;
   gap: 12px;
   padding: 10px 16px;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
+  background: @primary-50;
+  border: 1px solid @primary-200;
   border-radius: 10px;
   animation: slideDown 200ms @ease;
 }
@@ -156,7 +149,7 @@
   cursor: pointer;
   font-size: 12px;
   transition: all 150ms @ease;
-  &:hover { background: #bbf7d0; color: @text-dark; }
+  &:hover { background: @primary-200; color: @text-dark; }
 }
 
 :global([data-theme="dark"]) {

@@ -1,7 +1,6 @@
-﻿@bg: #f8fafc;
-@primary: #16a34a;
+﻿@import '~@/styles/admin-tokens.less';
+
 @radius: 16px;
-@border: #f1f5f9;
 
 .pageBody {
   padding: 20px 24px 32px;
@@ -84,7 +83,7 @@
 
   &[data-vaitro="quan_tri_vien"],
   &[data-vaitro="bep_truong"],
-  &[data-vaitro="thu_ngan"]        { background: #dcfce7; }
+  &[data-vaitro="thu_ngan"]        { background: @primary-100; }
   &[data-vaitro="nhan_vien_bep"]   { background: #dbeafe; }
   &[data-vaitro="nhan_vien_phuc_vu"] { background: #fef3c7; }
 }
@@ -117,7 +116,7 @@
   transition: all 0.15s;
 
   &:hover {
-    background: #f0fdf4;
+    background: @primary-50;
     border-color: @primary;
     color: @primary;
   }
@@ -143,7 +142,7 @@
 
   &:hover {
     border-color: @primary;
-    background: #f0fdf4;
+    background: @primary-50;
 
     .addIconWrap {
       background: @primary;
@@ -159,7 +158,7 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #dcfce7;
+  background: @primary-100;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -211,7 +210,7 @@
   :global(.ant-modal-footer .ant-btn-primary) {
     background: @primary;
     border-color: @primary;
-    &:hover { background: #15803d; border-color: #15803d; }
+    &:hover { background: @primary-hover; border-color: @primary-hover; }
   }
   :global(.ant-modal-close) {
     top: 12px;
@@ -230,7 +229,7 @@
   flex-direction: column;
   align-items: center;
   padding: 28px 24px 20px;
-  background: linear-gradient(160deg, #f0fdf4 0%, #f8fafc 100%);
+  background: linear-gradient(160deg, @primary-50 0%, @bg 100%);
   gap: 10px;
 }
 
@@ -291,7 +290,7 @@
   :global(.ant-modal-footer .ant-btn-primary) {
     background: @primary;
     border-color: @primary;
-    &:hover { background: #15803d; border-color: #15803d; }
+    &:hover { background: @primary-hover; border-color: @primary-hover; }
   }
   :global(.ant-modal-close) {
     top: 14px;

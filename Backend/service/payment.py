@@ -1,3 +1,4 @@
+from model.enums import PaymentStatus, PaymentMethod
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
@@ -19,9 +20,9 @@ def create_payment_service(db: Session, order_id: str, method: str, user_makh: s
     # Kiểm tra xem đơn hàng đã có thanh toán nào hoàn tất chưa
     # Hoặc đã có thanh toán đang pending chưa
     for p in order.payments:
-        if p.status == "PAID":
+        if p.status == PaymentStatus.PAID:
             raise HTTPException(status_code=400, detail="Đơn hàng này đã được thanh toán")
-        if p.status == "PENDING":
+        if p.status == PaymentStatus.PENDING:
             raise HTTPException(status_code=400, detail="Đơn hàng đang có một thanh toán chờ xử lý")
 
     # Tạo thanh toán
@@ -43,19 +44,19 @@ def get_payment_service(db: Session, payment_id: str) -> Payment:
 
 def confirm_payment_service(db: Session, payment_id: str) -> Payment:
     payment = get_payment_service(db, payment_id)
-    if payment.status == "CANCELLED":
+    if payment.status == PaymentStatus.CANCELLED:
         raise HTTPException(status_code=400, detail="Không thể xác nhận giao dịch đã bị huỷ")
-    if payment.status == "PAID":
+    if payment.status == PaymentStatus.PAID:
         raise HTTPException(status_code=400, detail="Giao dịch này đã được xác nhận từ trước")
     
-    return payment_crud.update_payment_status(db, payment, "PAID")
+    return payment_crud.update_payment_status(db, payment, PaymentStatus.PAID)
 
 
 def cancel_payment_service(db: Session, payment_id: str) -> Payment:
     payment = get_payment_service(db, payment_id)
-    if payment.status == "PAID":
+    if payment.status == PaymentStatus.PAID:
         raise HTTPException(status_code=400, detail="Không thể huỷ giao dịch đã hoàn tất")
-    if payment.status == "CANCELLED":
+    if payment.status == PaymentStatus.CANCELLED:
         raise HTTPException(status_code=400, detail="Giao dịch này đã bị huỷ từ trước")
     
-    return payment_crud.update_payment_status(db, payment, "CANCELLED")
+    return payment_crud.update_payment_status(db, payment, PaymentStatus.CANCELLED)

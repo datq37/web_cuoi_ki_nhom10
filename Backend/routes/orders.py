@@ -1,3 +1,4 @@
+from model.enums import OrderStatus, PaymentMethod
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, status

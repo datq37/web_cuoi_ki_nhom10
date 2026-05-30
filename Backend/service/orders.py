@@ -1,3 +1,4 @@
+from model.enums import OrderStatus, PaymentMethod
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -26,17 +27,17 @@ def verify_order_ownership(order: Order, makh: str) -> None:
 
 def create_user_order(db: Session, makh: str, data: OrderCreate) -> Order:
     """Tạo đơn hàng mới (Giỏ hàng) hoặc bổ sung món vào Giỏ hàng hiện tại."""
-    # Tìm xem khách hàng này đã có đơn hàng nào ở trạng thái "Giỏ hàng" chưa
+    # Tìm xem khách hàng này đã có đơn hàng nào ở trạng thái OrderStatus.CART chưa
     all_orders = orders_crud.get_orders_by_makh(db, makh)
     cart = None
     for o in all_orders:
-        if o.trangthai == "Giỏ hàng":
+        if o.trangthai == OrderStatus.CART:
             cart = o
             break
 
     # Nếu chưa có giỏ hàng, khởi tạo mới
     if not cart:
-        cart = orders_crud.create_order(db, makh, data.hinhthucthanhtoan or "Tiền mặt")
+        cart = orders_crud.create_order(db, makh, data.hinhthucthanhtoan or PaymentMethod.CASH)
 
     # Thêm các món ăn vào giỏ hàng
     for item in data.chitiet:
@@ -65,7 +66,7 @@ def update_user_order_item(db: Session, order_id: str, makh: str, data: OrderUpd
     order = get_order_or_404(db, order_id)
     verify_order_ownership(order, makh)
 
-    if order.trangthai not in ["Giỏ hàng", "Chờ xác nhận"]:
+    if order.trangthai not in [OrderStatus.CART, OrderStatus.PENDING_CONFIRMATION]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Chỉ có thể sửa đơn hàng ở trạng thái Giỏ hàng hoặc Chờ xác nhận"
@@ -90,7 +91,7 @@ def confirm_user_order(db: Session, order_id: str, makh: str) -> Order:
     order = get_order_or_404(db, order_id)
     verify_order_ownership(order, makh)
 
-    if order.trangthai != "Giỏ hàng":
+    if order.trangthai != OrderStatus.CART:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Chỉ có thể chốt đơn hàng từ Giỏ hàng"
@@ -102,7 +103,7 @@ def confirm_user_order(db: Session, order_id: str, makh: str) -> Order:
         )
 
     # Chuyển sang trạng thái chờ admin xác nhận để nấu
-    return orders_crud.update_order_status(db, order, "Chờ xác nhận")
+    return orders_crud.update_order_status(db, order, OrderStatus.PENDING_CONFIRMATION)
 
 
 def cancel_user_order(db: Session, order_id: str, makh: str) -> Order:
@@ -110,13 +111,13 @@ def cancel_user_order(db: Session, order_id: str, makh: str) -> Order:
     order = get_order_or_404(db, order_id)
     verify_order_ownership(order, makh)
 
-    if order.trangthai not in ["Giỏ hàng", "Chờ xác nhận"]:
+    if order.trangthai not in [OrderStatus.CART, OrderStatus.PENDING_CONFIRMATION]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Không thể hủy đơn khi đã được xác nhận nấu hoặc đã hoàn thành"
         )
 
-    return orders_crud.update_order_status(db, order, "Đã hủy")
+    return orders_crud.update_order_status(db, order, OrderStatus.CANCELLED)
 
 
 def get_user_order_detail(db: Session, order_id: str, makh: str) -> Order:
@@ -129,3 +130,33 @@ def get_user_order_detail(db: Session, order_id: str, makh: str) -> Order:
 def get_user_orders_history(db: Session, makh: str) -> list[Order]:
     """Lấy danh sách tất cả các đơn hàng đã đặt của khách hàng."""
     return orders_crud.get_orders_by_makh(db, makh)
+
+
+# --- ADMIN SERVICES ---
+
+def get_all_orders_admin(db: Session) -> list[Order]:
+    """Lấy danh sách toàn bộ đơn hàng cho Admin."""
+    return orders_crud.get_all_orders(db)
+
+
+def get_order_detail_admin(db: Session, order_id: str) -> Order:
+    """Lấy chi tiết đơn hàng cho Admin."""
+    order = orders_crud.get_order_by_id(db, order_id)
+    if not order:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Đơn hàng không tồn tại")
+    return order
+
+
+def update_order_status_admin(db: Session, order_id: str, new_status: str) -> Order:
+    """Cập nhật trạng thái đơn hàng (Admin)."""
+    order = orders_crud.get_order_by_id(db, order_id)
+    if not order:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Đơn hàng không tồn tại")
+    
+    # Không tạo trạng thái lạ, đã được validate ở mức Schema Enum
+    return orders_crud.update_order_status(db, order, new_status)
+
+
+def get_orders_by_date_admin(db: Session, date_str: str) -> list[Order]:
+    """Lọc đơn hàng theo ngày cho Admin (format: YYYY-MM-DD)."""
+    return orders_crud.get_orders_by_date(db, date_str)

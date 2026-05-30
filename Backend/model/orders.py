@@ -1,3 +1,4 @@
+from model.enums import OrderStatus, PaymentMethod
 from sqlalchemy import Float, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -12,8 +13,8 @@ class Order(Base):
     id: Mapped[str] = mapped_column(String, primary_key=True, nullable=False)
     makh: Mapped[str | None] = mapped_column(ForeignKey("khachhang.makh"), nullable=True)
     tongtien: Mapped[float | None] = mapped_column(Float, nullable=True, default=0.0)
-    # Các trạng thái: "Giỏ hàng", "Chờ xác nhận", "Đã xác nhận", "Đang xử lý", "Đã giao", "Đã hủy"
-    trangthai: Mapped[str | None] = mapped_column(String, nullable=True, default="Giỏ hàng")
+    # Các trạng thái: OrderStatus.CART, OrderStatus.PENDING_CONFIRMATION, OrderStatus.CONFIRMED, OrderStatus.PROCESSING, OrderStatus.DELIVERED, OrderStatus.CANCELLED
+    trangthai: Mapped[str | None] = mapped_column(String, nullable=True, default="cart")
     thoigiandat: Mapped[str | None] = mapped_column(String, nullable=True)
     hinhthucthanhtoan: Mapped[str | None] = mapped_column(String, nullable=True)
 

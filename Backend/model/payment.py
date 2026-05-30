@@ -1,3 +1,4 @@
+from model.enums import PaymentStatus, PaymentMethod
 from datetime import datetime
 from sqlalchemy import DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -13,7 +14,7 @@ class Payment(Base):
     id: Mapped[str] = mapped_column(String, primary_key=True, nullable=False)
     order_id: Mapped[str | None] = mapped_column(ForeignKey("orders.id", ondelete="CASCADE"), nullable=True)
     method: Mapped[str | None] = mapped_column(String, nullable=True) # CASH, BANKING
-    status: Mapped[str | None] = mapped_column(String, nullable=True, default="PENDING") # PENDING, PAID, CANCELLED
+    status: Mapped[str | None] = mapped_column(String, nullable=True, default="pending") # PENDING, PAID, CANCELLED
     created_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True, default=datetime.now)
 
     # Thiết lập quan hệ với bảng orders

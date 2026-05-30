@@ -1,8 +1,11 @@
+from pydantic.alias_generators import to_camel
 from pydantic import BaseModel, ConfigDict, Field
 
 
 class KhachHangBase(BaseModel):
     """Schema cơ sở của Khách hàng."""
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
     ten: str | None = None
     tuoi: int | None = None
     taikhoan: str | None = None
@@ -12,6 +15,8 @@ class KhachHangBase(BaseModel):
 
 class KhachHangCreate(BaseModel):
     """Schema tạo tài khoản khách hàng (Admin)."""
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
     taikhoan: str = Field(..., min_length=3, max_length=100)
     matkhau: str = Field(..., min_length=6, max_length=128)
     ten: str | None = Field(default=None, min_length=1, max_length=255)
@@ -21,6 +26,8 @@ class KhachHangCreate(BaseModel):
 
 class KhachHangRegister(BaseModel):
     """Schema đăng ký tài khoản mới của khách hàng."""
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
     taikhoan: str = Field(..., min_length=3, max_length=100)
     matkhau: str = Field(..., min_length=6, max_length=128)
     ten: str | None = Field(default=None, min_length=1, max_length=255)
@@ -29,6 +36,8 @@ class KhachHangRegister(BaseModel):
 
 class KhachHangUpdate(BaseModel):
     """Schema cập nhật thông tin khách hàng."""
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
     ten: str | None = Field(default=None, min_length=1, max_length=255)
     tuoi: int | None = None
     taikhoan: str | None = None
@@ -39,6 +48,8 @@ class KhachHangUpdate(BaseModel):
 
 class ProfileUpdate(BaseModel):
     """Schema cập nhật hồ sơ cá nhân của khách hàng."""
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
     ten: str | None = Field(default=None, min_length=1, max_length=255)
     current_password: str | None = Field(default=None, min_length=1)
     new_password: str | None = Field(default=None, min_length=6, max_length=128)
@@ -46,13 +57,16 @@ class ProfileUpdate(BaseModel):
 
 class KhachHangResponse(KhachHangBase):
     """Schema phản hồi thông tin khách hàng."""
-    model_config = ConfigDict(from_attributes=True)
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
 
     makh: str
 
 
 class KhachHangListResponse(BaseModel):
     """Schema danh sách khách hàng phân trang."""
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
     items: list[KhachHangResponse]
     total: int
     page: int

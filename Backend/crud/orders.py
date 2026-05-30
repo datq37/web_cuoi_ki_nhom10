@@ -1,3 +1,4 @@
+from model.enums import OrderStatus, PaymentMethod
 import uuid
 from datetime import datetime
 from sqlalchemy import select
@@ -28,7 +29,7 @@ def get_orders_by_makh(db: Session, makh: str) -> list[Order]:
     return list(db.execute(stmt).unique().scalars().all())
 
 
-def create_order(db: Session, makh: str, hinhthucthanhtoan: str = "Tiền mặt") -> Order:
+def create_order(db: Session, makh: str, hinhthucthanhtoan: str = PaymentMethod.CASH) -> Order:
     """Khởi tạo một đơn hàng mới (ở trạng thái Giỏ hàng)."""
     order_id = f"OD-{uuid.uuid4().hex[:8].upper()}"
     thoigian = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -37,7 +38,7 @@ def create_order(db: Session, makh: str, hinhthucthanhtoan: str = "Tiền mặt"
         id=order_id,
         makh=makh,
         tongtien=0.0,
-        trangthai="Giỏ hàng",
+        trangthai=OrderStatus.CART,
         thoigiandat=thoigian,
         hinhthucthanhtoan=hinhthucthanhtoan,
     )
@@ -106,7 +107,7 @@ def recalculate_order_total(db: Session, order: Order) -> float:
 def update_order_status(db: Session, order: Order, trangthai: str) -> Order:
     """Cập nhật trạng thái của đơn hàng."""
     order.trangthai = trangthai
-    if trangthai != "Giỏ hàng":
+    if trangthai != OrderStatus.CART:
         # Cập nhật lại thời gian chốt đặt hàng thực tế
         order.thoigiandat = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     db.add(order)
@@ -119,3 +120,31 @@ def delete_order(db: Session, order: Order) -> None:
     """Xóa đơn hàng và chi tiết đơn hàng (CASCADE tự động do quan hệ)."""
     db.delete(order)
     db.commit()
+
+def get_all_orders(db: Session) -> list[Order]:
+    """Lấy toàn bộ đơn hàng của tất cả khách hàng (cho Admin)."""
+    stmt = (
+        select(Order)
+        .options(
+            joinedload(Order.khachhang),
+            joinedload(Order.chitiet).joinedload(OrderDetail.thucdon),
+            joinedload(Order.payments)
+        )
+        .order_by(Order.thoigiandat.desc() if Order.thoigiandat is not None else Order.id.desc())
+    )
+    return list(db.execute(stmt).unique().scalars().all())
+
+
+def get_orders_by_date(db: Session, date_str: str) -> list[Order]:
+    """Lọc đơn hàng theo ngày (cho Admin), format: YYYY-MM-DD."""
+    stmt = (
+        select(Order)
+        .options(
+            joinedload(Order.khachhang),
+            joinedload(Order.chitiet).joinedload(OrderDetail.thucdon),
+            joinedload(Order.payments)
+        )
+        .where(Order.thoigiandat.startswith(date_str))
+        .order_by(Order.thoigiandat.desc() if Order.thoigiandat is not None else Order.id.desc())
+    )
+    return list(db.execute(stmt).unique().scalars().all())

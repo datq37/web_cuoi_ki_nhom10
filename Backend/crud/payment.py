@@ -1,3 +1,4 @@
+from model.enums import PaymentStatus, PaymentMethod
 import uuid
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
@@ -47,7 +48,7 @@ def create_payment(db: Session, order_id: str, method: str) -> Payment:
         id=payment_id,
         order_id=order_id,
         method=method,
-        status="PENDING"
+        status=PaymentStatus.PENDING
     )
     db.add(payment)
     db.commit()

@@ -63,7 +63,6 @@ export default function TermsPage() {
 
   return (
     <div className={`privacy-page-wrapper theme-${theme}`}>
-      {/* Header */}
       <header className="pp-header">
         <button className="pp-back-btn" onClick={() => history.push('/')}>
           <ArrowLeft size={18} />
@@ -85,7 +84,6 @@ export default function TermsPage() {
       </header>
 
       <main className="pp-main">
-        {/* Sidebar */}
         <aside className="pp-sidebar">
           <div 
             className="pp-sidebar-header"
@@ -146,8 +144,6 @@ export default function TermsPage() {
             </div>
           </div>
         </aside>
-
-        {/* Content */}
         <section className="pp-content-area">
           <div className="pp-content-header">
             <h1 className="pp-main-title">
@@ -159,8 +155,6 @@ export default function TermsPage() {
               <span>Cập nhật lần cuối: Ngày 18 tháng 05 năm 2026</span>
             </div>
           </div>
-
-          {/* Intro box */}
           <div className="pp-intro-box">
             <div className="pp-intro-icon-wrapper">
               <div className="pp-intro-icon-bg" />

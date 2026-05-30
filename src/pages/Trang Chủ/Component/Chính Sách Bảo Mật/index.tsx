@@ -59,7 +59,6 @@ export default function PrivacyPage() {
 
   return (
     <div className={`privacy-page-wrapper theme-${theme}`}>
-      {/* Header */}
       <header className="pp-header">
         <button className="pp-back-btn" onClick={() => history.push('/')}>
           <ArrowLeft size={18} />
@@ -79,10 +78,7 @@ export default function PrivacyPage() {
           </div>
         </div>
       </header>
-
-      {/* Main */}
       <main className="pp-main">
-        {/* Sidebar */}
         <aside className="pp-sidebar">
           <div 
             className="pp-sidebar-header"
@@ -138,10 +134,7 @@ export default function PrivacyPage() {
             </div>
           </div>
         </aside>
-
-        {/* Content */}
         <section className="pp-content-area">
-          {/* Title */}
           <div className="pp-content-header">
             <h1 className="pp-main-title">Chính Sách Bảo Mật</h1>
             <div className="pp-last-updated">
@@ -149,8 +142,6 @@ export default function PrivacyPage() {
               <span>Cập nhật lần cuối: Ngày 18 tháng 05 năm 2026</span>
             </div>
           </div>
-
-          {/* Intro box */}
           <div className="pp-intro-box">
             <div className="pp-intro-icon-wrapper">
               <div className="pp-intro-icon-bg" />
@@ -167,8 +158,6 @@ export default function PrivacyPage() {
           </div>
 
           <Divider />
-
-          {/* Section 1 */}
           <PolicySection id="section-1" number="1" title="Thu Thập Thông Tin Cá Nhân">
             <p>
               Hệ thống Căng tin Doanh nghiệp của chúng tôi tiến hành thu thập
@@ -196,8 +185,6 @@ export default function PrivacyPage() {
           </PolicySection>
 
           <Divider />
-
-          {/* Section 2 */}
           <PolicySection id="section-2" number="2" title="Mục Đích Sử Dụng Thông Tin">
             <p>
               Chúng tôi cam kết sử dụng thông tin cá nhân của bạn vào các mục
@@ -211,8 +198,6 @@ export default function PrivacyPage() {
           </PolicySection>
 
           <Divider />
-
-          {/* Section 3 */}
           <PolicySection id="section-3" number="3" title="Cam Kết Bảo Mật Thông Tin">
             <p>
               Thông tin của bạn được lưu trữ và bảo vệ bằng các biện pháp kỹ

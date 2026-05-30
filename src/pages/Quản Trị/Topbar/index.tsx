@@ -83,7 +83,6 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
 
   const userMenuOverlay = (
     <div className={styles.userDropdown}>
-      {/* Header */}
       <div className={styles.dropdownHeader}>
         <Avatar className={styles.dropdownAvatar} size={36}>MT</Avatar>
         <div className={styles.dropdownInfo}>
@@ -93,8 +92,6 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
       </div>
 
       <div className={styles.dropdownDivider} />
-
-      {/* Items */}
       <div className={styles.dropdownItems}>
         <button className={styles.dropdownItem}>
           <UserOutlined className={styles.dropdownItemIcon} />
@@ -123,7 +120,6 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
 
   return (
     <header className={styles.topbar}>
-      {/* ── Title ───────────────────────────────────────── */}
       <div className={styles.left}>
         <h1 className={styles.pageTitle}>{title}</h1>
         {subtitle ? (
@@ -135,19 +131,13 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
           </div>
         )}
       </div>
-
-      {/* ── Actions ─────────────────────────────────────── */}
       <div className={styles.right}>
-
-        {/* Dark mode toggle */}
         <Button
           className={styles.iconBtn}
           icon={isDark ? <BulbOutlined /> : <BulbFilled />}
           onClick={toggleDark}
           title={isDark ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối'}
         />
-
-        {/* Notification bell */}
         <Popover
           open={notifOpen}
           onOpenChange={setNotifOpen}
@@ -161,8 +151,6 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
             <Button className={styles.iconBtn} icon={<BellOutlined />} />
           </Badge>
         </Popover>
-
-        {/* User pill */}
         <Dropdown
           overlay={userMenuOverlay}
           trigger={['click']}

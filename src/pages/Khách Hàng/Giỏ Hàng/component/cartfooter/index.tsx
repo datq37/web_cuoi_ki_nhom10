@@ -27,21 +27,15 @@ const CartFooter: React.FC<CartFooterProps> = ({
 
     return (
         <div className="chanGioHang">
-            {/* ── Bảng chi tiết giá ─────────────────────────────────────── */}
             <div className="chiTietGia">
-                {/* Tạm tính */}
                 <div className="hangGia">
                     <span className="nhanGia">Tạm tính</span>
                     <span className="giaTriGia">{fmtVND(subtotal)}</span>
                 </div>
-
-                {/* Phụ phí phục vụ */}
                 <div className="hangGia">
                     <span className="nhanGia">{SERVICE_FEE_LABEL}</span>
                     <span className="giaTriGia phi">+{fmtVND(serviceFee)}</span>
                 </div>
-
-                {/* Giảm giá Combo */}
                 {comboDiscount > 0 && (
                     <div className="hangGia hangPhieuGiamGia">
                         <span className="nhanGia">
@@ -50,8 +44,6 @@ const CartFooter: React.FC<CartFooterProps> = ({
                         <span className="giaTriGia giamGia">-{fmtVND(comboDiscount)}</span>
                     </div>
                 )}
-
-                {/* Khuyến mãi / Voucher */}
                 {selectedVoucher && (
                     <div className={`hangGia hangPhieuGiamGia ${voucherNotMet ? 'voHieuHoa' : ''}`}>
                         <span className="nhanGia">
@@ -68,18 +60,12 @@ const CartFooter: React.FC<CartFooterProps> = ({
                         )}
                     </div>
                 )}
-
-                {/* Đường kẻ phân cách */}
                 <div className="duongChiaGia" />
-
-                {/* Tổng thanh toán */}
                 <div className="hangGia hangTongCong">
                     <span className="nhanTongCong">Tổng thanh toán</span>
                     <span className="giaTriTongCong">{fmtVND(total)}</span>
                 </div>
             </div>
-
-            {/* ── Nút xác nhận ──────────────────────────────────────────── */}
             <button
                 id="btn-confirm-order"
                 className={`nutXacNhan ${isEmpty ? 'voHieuHoa' : ''}`}

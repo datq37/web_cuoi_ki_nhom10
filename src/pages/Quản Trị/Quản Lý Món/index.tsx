@@ -195,8 +195,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
     >
       <Form form={form} layout="vertical" preserve={false} style={{ marginTop: 8 }}>
         <Form.Item name="id" hidden><Input /></Form.Item>
-
-        {/* ── Hình ảnh ── */}
         <Form.Item label="Hình ảnh món ăn">
           <input
             ref={fileInputRef}
@@ -234,8 +232,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
             </button>
           )}
         </Form.Item>
-
-        {/* ── Tên ── */}
         <Form.Item
           name="ten"
           label="Tên món"
@@ -284,7 +280,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
         </Row>
 
         <Row gutter={16}>
-          {/* ── Thời gian chuẩn bị ── */}
           <Col span={12}>
             <Form.Item
               name="thoiGian"
@@ -303,8 +298,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
             </Form.Item>
           </Col>
         </Row>
-
-        {/* ── Mô tả ── */}
         <Form.Item
           name="moTa"
           label="Mô tả"
@@ -312,8 +305,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
         >
           <Input.TextArea rows={3} maxLength={200} showCount placeholder="Mô tả ngắn về món ăn..." />
         </Form.Item>
-
-        {/* ── Nguyên liệu từ kho ── */}
         <Form.Item name="nguyenLieu" label="Nguyên liệu sử dụng">
           <Select
             mode="multiple"
@@ -332,8 +323,6 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
             ))}
           </Select>
         </Form.Item>
-
-        {/* hidden — giữ giá trị khi edit, dùng default khi tạo mới */}
         <Form.Item name="mauNen" hidden><Input /></Form.Item>
         <Form.Item name="isHot"  hidden valuePropName="checked"><Switch /></Form.Item>
 
@@ -373,7 +362,6 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
       className={styles.detailModal}
       transitionName="ant-move-up"
     >
-      {/* Hero */}
       <div style={{
         height: 180,
         background: mon.hinhAnh ? undefined : mon.mauNen,
@@ -405,8 +393,6 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
           </span>
         )}
       </div>
-
-      {/* Content */}
       <div style={{ padding: '20px 24px 8px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
@@ -417,8 +403,6 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
             {formatGia(mon.giaBan)}
           </div>
         </div>
-
-        {/* Stats */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginTop: 18 }}>
           {[
             { value: mon.thoiGian, unit: 'phút',  label: 'Thời gian', color: '#111827' },
@@ -440,8 +424,6 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
             </div>
           ))}
         </div>
-
-        {/* Nguyên liệu */}
         {ingredientList.length > 0 && (
           <div style={{ marginTop: 18, paddingBottom: 8 }}>
             <div style={{
@@ -551,7 +533,6 @@ const QuanLyMon: React.FC = () => {
         <Topbar title="Quản lý món ăn" />
 
         <div className={styles.pageBody}>
-          {/* ── Toolbar ── */}
           <div className={styles.toolbar}>
             <div className={styles.tabsRow}>
               {tabs.map((t) => (
@@ -600,8 +581,6 @@ const QuanLyMon: React.FC = () => {
               </Button>
             </div>
           </div>
-
-          {/* ── Grid / List ── */}
           <div className={isGrid ? styles.gridView : styles.listView}>
             {danhSachLoc.map((mon) => (
               <MonCard
@@ -618,8 +597,6 @@ const QuanLyMon: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* ── Modals ── */}
       <MonForm
         open={formOpen}
         initial={editing}

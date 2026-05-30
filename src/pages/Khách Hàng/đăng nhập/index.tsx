@@ -58,7 +58,6 @@ export default function LoginPage() {
   return (
     <div className={`trangDangNhapMoi ${isSignUp ? 'laDangKy' : ''} ${darkMode ? 'giaoDienToi' : ''}`}>
       <div className="theDangNhap">
-        {/* Bên trái*/}
 
         <div className="bangTrai">
 
@@ -177,8 +176,6 @@ export default function LoginPage() {
             </p>
           </div>
         </div>
-
-        {/* bên phải */}
         <div className="bangPhai">
           <img src={bgImage} alt="Ảnh căn tin" className="anhNen" />
 

@@ -19,7 +19,6 @@ const NhanVienCard: React.FC<{ nv: INhanVien }> = ({ nv }) => {
 
   return (
     <div className={styles.card}>
-      {/* Header: avatar + tên + email */}
       <div className={styles.cardHeader}>
         <Avatar
           size={52}
@@ -36,8 +35,6 @@ const NhanVienCard: React.FC<{ nv: INhanVien }> = ({ nv }) => {
           <div className={styles.cardEmail}>{nv.email}</div>
         </div>
       </div>
-
-      {/* Role + last active */}
       <div className={styles.cardMeta}>
         <span
           className={styles.roleBadge}
@@ -49,8 +46,6 @@ const NhanVienCard: React.FC<{ nv: INhanVien }> = ({ nv }) => {
           Hoạt động: {nv.hoatDongGanNhat}
         </span>
       </div>
-
-      {/* Actions */}
       <div className={styles.cardActions}>
         <button className={styles.actionBtn}>
           <KeyOutlined className={styles.actionIcon} />

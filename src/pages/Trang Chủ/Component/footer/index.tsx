@@ -80,8 +80,6 @@ export default function HomeFooter() {
                 onClick={() => history.push('/lien-he')}
               />
             </FooterColumn>
-
-            {/* Contact */}
             <FooterColumn title="LIÊN HỆ">
               <InfoItem
                 icon={<Building2 size={22} />}

@@ -186,7 +186,6 @@ const KhachHang: React.FC = () => {
         />
 
         <div className={styles.pageBody}>
-          {/* ── Stat cards ── */}
           <div className={styles.statGrid}>
             {STAT_CARDS.map((card) => (
               <div key={card.label} className={styles.statCard}>
@@ -212,8 +211,6 @@ const KhachHang: React.FC = () => {
               </div>
             ))}
           </div>
-
-          {/* ── Table section ── */}
           <div className={styles.tableSection}>
             <div className={styles.tableToolbar}>
               <Input

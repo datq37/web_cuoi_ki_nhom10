@@ -26,16 +26,12 @@ const GioHang: React.FC = () => {
 
     return (
         <>
-            {/* ── Overlay backdrop ─────────────────────────────────────────── */}
             <div
                 className={`lopPhuGioHang ${cartOpen ? 'hienThi' : ''}`}
                 onClick={() => setCartOpen(false)}
                 aria-hidden="true"
             />
-
-            {/* ── Drawer giỏ hàng ──────────────────────────────────────────── */}
             <aside className={`nganKeoGioHang ${cartOpen ? 'mo' : ''}`} aria-label="Giỏ hàng">
-                {/* Header */}
                 <div className="phanDauNganKeoGioHang">
                     <button
                         className="nutQuayLaiGioHang"
@@ -64,15 +60,10 @@ const GioHang: React.FC = () => {
                         <X size={30} />
                     </button>
                 </div>
-
-                {/* Nội dung cuộn được */}
                 <div className="phanThanNganKeoGioHang">
-                    {/* 1. Danh sách món */}
                     <section className="phanGioHang">
                         <DanhSachMon />
                     </section>
-
-                    {/* 2. Tuỳ chọn (giờ nhận, voucher, ghi chú) */}
                     <section className="phanGioHang">
                         <CartOption
                             note={note}
@@ -82,14 +73,10 @@ const GioHang: React.FC = () => {
                             subtotal={subtotal}
                         />
                     </section>
-
-                    {/* 3. Phương thức thanh toán */}
                     <section className="phanGioHang">
                         <ThanhToan payment={payment} onSelect={setPayment} />
                     </section>
                 </div>
-
-                {/* Footer cố định: giá + nút xác nhận */}
                 <div className="phanChanNganKeoGioHang">
                     <CartFooter
                         selectedVoucher={selectedVoucher}

@@ -78,7 +78,6 @@ export default function WhyChooseUs() {
 
   return (
     <section className="why-section">
-      {/* Background decorations */}
       <div className="why-dots why-dots-left">
         {decorationDots.map((dot) => (
           <span key={`left-${dot}`} className="why-dot" />
@@ -89,7 +88,6 @@ export default function WhyChooseUs() {
       <div className="why-blob why-blob-right" />
 
       <div className="why-inner">
-        {/* Title */}
         <div className="why-header">
           <h2 className="why-title">
             VÌ SAO CHỌN{' '}
@@ -100,8 +98,6 @@ export default function WhyChooseUs() {
             Mang đến trải nghiệm đặt món hiện đại, tiện lợi và an toàn cho doanh nghiệp
           </p>
         </div>
-
-        {/* Tabs */}
         <div className="why-tabs">
           {whyData.map((item, index) => (
             <button
@@ -114,18 +110,13 @@ export default function WhyChooseUs() {
             </button>
           ))}
         </div>
-
-        {/* Dots decoration right */}
         <div className="why-dots why-dots-right">
           {decorationDots.map((dot) => (
             <span key={`right-${dot}`} className="why-dot" />
           ))}
         </div>
-
-        {/* Main card */}
         <div className="why-card">
           <div className="why-card-grid">
-            {/* Image side */}
             <div className="why-image-side">
               <div className="why-image-bg-blob" />
               <div className="why-image-wrap">
@@ -146,8 +137,6 @@ export default function WhyChooseUs() {
                 </div>
               </div>
             </div>
-
-            {/* Text side */}
             <div className="why-text-side">
               <div className="why-divider-line" />
               <div className="why-icon-wrap">

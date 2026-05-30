@@ -249,8 +249,6 @@ const DonHang: React.FC = () => {
         <Topbar title="Quản lý đơn hàng" />
 
         <div className={styles.pageBody}>
-
-          {/* ── Tabs ── */}
           <div className={styles.tabsRow}>
             {TABS.map((tab) => (
               <button
@@ -265,8 +263,6 @@ const DonHang: React.FC = () => {
               </button>
             ))}
           </div>
-
-          {/* ── Toolbar ── */}
           <div className={styles.toolbar}>
             <Input
               prefix={<SearchOutlined style={{ color: '#9ca3af' }} />}
@@ -296,8 +292,6 @@ const DonHang: React.FC = () => {
               </div>
             </div>
           </div>
-
-          {/* ── Bulk action bar ── */}
           {selectedRows.length > 0 && (
             <div className={styles.bulkBar}>
               <span className={styles.bulkCount}>
@@ -327,8 +321,6 @@ const DonHang: React.FC = () => {
               </div>
             </div>
           )}
-
-          {/* ── Content ── */}
           {view === 'table' ? (
             <OrderTable
               orders={filteredOrders}
@@ -348,8 +340,6 @@ const DonHang: React.FC = () => {
 
         </div>
       </div>
-
-      {/* ── Drawer ── */}
       <OrderDrawer
         order={selectedOrder}
         cancelledIds={cancelledIds}

@@ -56,7 +56,6 @@ const CartOption: React.FC<CartOptionProps> = ({
 
     return (
         <div className="thungChuaTuyChonGioHang">
-            {/* 1. Giờ nhận món — chỉ đọc, do hệ thống tính */}
             <div className="phanTuyChon">
                 <div className="tieuDePhan">
                     <Clock3 size={25} />
@@ -77,8 +76,6 @@ const CartOption: React.FC<CartOptionProps> = ({
                     <div className="laLay" aria-hidden="true">❧</div>
                 </div>
             </div>
-
-            {/* 2. Voucher */}
             <div className="phanTuyChon">
                 <div className="tieuDePhan">
                     <Tag size={25} />
@@ -116,8 +113,6 @@ const CartOption: React.FC<CartOptionProps> = ({
                     <ChevronRight size={28} className="muiTen" />
                 </div>
             </div>
-
-            {/* 3. Ghi chú */}
             <div className="phanTuyChon">
                 <div className="tieuDePhan">
                     <PencilLine size={25} />
@@ -134,8 +129,6 @@ const CartOption: React.FC<CartOptionProps> = ({
                     <div className="laGhiChu" aria-hidden="true">❧</div>
                 </div>
             </div>
-
-            {/* Modal danh sách Voucher */}
             <Modal
                 title={false}
                 visible={isVoucherModalOpen}

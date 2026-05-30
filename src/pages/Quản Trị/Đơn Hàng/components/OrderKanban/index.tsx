@@ -41,7 +41,6 @@ const OrderKanban: React.FC<OrderKanbanProps> = ({
 
         return (
           <div key={col} className={styles.kanbanCol}>
-            {/* Header */}
             <div className={styles.colHeader}>
               <span className={styles.colDot} style={{ background: cfg.mau }} />
               <span className={styles.colTitle}>{cfg.tieuDe}</span>
@@ -52,8 +51,6 @@ const OrderKanban: React.FC<OrderKanbanProps> = ({
                 {colOrders.length}
               </span>
             </div>
-
-            {/* Cards */}
             <div className={styles.colBody}>
               {colOrders.map((don) => {
                 const nextStatus = NEXT_STATUS[don.trangThai];

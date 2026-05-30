@@ -491,18 +491,13 @@ const ComboForm: React.FC<{
         >
           <Input.TextArea rows={2} showCount maxLength={120} placeholder="Mô tả ngắn..." />
         </Form.Item>
-
-        {/* ── Dish picker ── */}
         <div className={styles.dishPicker}>
-          {/* Header */}
           <div className={styles.dishPickerHead}>
             <span className={styles.dishPickerHeadLabel}>MÓN TRONG COMBO</span>
             {selectedIds.length > 0 && (
               <span className={styles.dishPickerHeadCount}>{selectedIds.length} đã chọn</span>
             )}
           </div>
-
-          {/* Search */}
           <div className={styles.dishPickerSearch}>
             <Input
               prefix={<SearchOutlined style={{ color: '#9ca3af', fontSize: 13 }} />}
@@ -513,8 +508,6 @@ const ComboForm: React.FC<{
               bordered={false}
             />
           </div>
-
-          {/* Available dishes */}
           <div className={styles.dishAvailableList}>
             {filteredDishes.length === 0 && (
               <div className={styles.dishListEmpty}>Không tìm thấy món</div>
@@ -540,8 +533,6 @@ const ComboForm: React.FC<{
               );
             })}
           </div>
-
-          {/* Selected dishes */}
           <div className={styles.dishSelected}>
             <div className={styles.dishSelectedHead}>
               <span className={styles.dishSelectedLabel}>ĐÃ CHỌN</span>
@@ -578,8 +569,6 @@ const ComboForm: React.FC<{
             )}
           </div>
         </div>
-
-        {/* ── Cấu hình giá ── */}
         <Form.Item label="Loại giá combo" name="loaiGia" rules={[{ required: true }]}>
           <Radio.Group>
             <Radio value={ELoaiGiaCombo.PHAN_TRAM}>Giảm %</Radio>
@@ -614,8 +603,6 @@ const ComboForm: React.FC<{
             }
           />
         </Form.Item>
-
-        {/* Preview tính giá */}
         {selectedIds.length >= 2 && tongLe > 0 && giaComboPreview !== null && (
           <div className={styles.comboFormPreview}>
             <div className={styles.previewRow}>
@@ -1036,7 +1023,6 @@ const KhuyenMai: React.FC = () => {
         <Topbar title="Khuyến mãi" />
 
         <div className={styles.pageBody}>
-          {/* ── Stat cards ── */}
           <div className={styles.statGrid}>
             {statCards.map((card) => (
               <div key={card.label} className={styles.statCard}>
@@ -1063,8 +1049,6 @@ const KhuyenMai: React.FC = () => {
               </div>
             ))}
           </div>
-
-          {/* ── Tabs ── */}
           <Tabs
             activeKey={activeTab}
             onChange={(key) => setActiveTab(key as 'ma-giam-gia' | 'combo')}
@@ -1155,8 +1139,6 @@ const KhuyenMai: React.FC = () => {
           </Tabs>
         </div>
       </div>
-
-      {/* ── Modals ── */}
       <KhuyenMaiForm
         open={formOpen}
         initial={editing}

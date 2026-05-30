@@ -105,7 +105,6 @@ const PhanTichView: React.FC = () => {
 
   return (
     <div className={styles.phanTichWrap}>
-      {/* ── Banner thống kê ── */}
       <div className={styles.statBanner}>
         {banners.map((b, i) => (
           <React.Fragment key={b.id}>
@@ -126,8 +125,6 @@ const PhanTichView: React.FC = () => {
           </React.Fragment>
         ))}
       </div>
-
-      {/* ── Biểu đồ ── */}
       <div className={styles.chartRow2}>
         <div className={styles.barChartCard}>
           <div className={styles.chartHeader2}>
@@ -158,10 +155,7 @@ const PhanTichView: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* ── Bottom 3 cột ── */}
       <div className={styles.bottomRow}>
-        {/* Top món */}
         <div className={styles.bottomCard}>
           <div className={styles.cardHead}>
             <span className={styles.cardTitle}>Top món bán chạy</span>
@@ -196,8 +190,6 @@ const PhanTichView: React.FC = () => {
             </tbody>
           </table>
         </div>
-
-        {/* Đơn theo trạng thái */}
         <div className={styles.bottomCard}>
           <div className={styles.cardHead}>
             <span className={styles.cardTitle}>Đơn hàng theo trạng thái</span>
@@ -219,8 +211,6 @@ const PhanTichView: React.FC = () => {
             ))}
           </div>
         </div>
-
-        {/* Hiệu suất */}
         <div className={styles.bottomCard}>
           <div className={styles.cardHead}>
             <span className={styles.cardTitle}>Hiệu suất phục vụ</span>
@@ -246,8 +236,6 @@ const PhanTichView: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* ── Hoạt động gần đây ── */}
       <div className={styles.hoatDongCard}>
         <div className={styles.cardHead}>
           <span className={styles.cardTitle}>Hoạt động gần đây</span>

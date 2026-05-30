@@ -30,7 +30,6 @@ const TongQuan: React.FC = () => {
         <Topbar title="Tổng quan" />
 
         <div className={styles.pageBody}>
-          {/* ── Header: tabs + date + export ── */}
           <div className={styles.pageHeader}>
             <div className={styles.tabsRow}>
               {tabs.map((t) => (
@@ -58,8 +57,6 @@ const TongQuan: React.FC = () => {
               </Button>
             </div>
           </div>
-
-          {/* ── Content ── */}
           {activeTab === ETabKey.PHAN_TICH  && <PhanTichView />}
           {activeTab === ETabKey.TAC_NGHIEP && <TacNghiepView />}
         </div>

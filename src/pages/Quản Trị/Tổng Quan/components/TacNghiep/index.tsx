@@ -86,7 +86,6 @@ const TacNghiepView: React.FC = () => {
 
   return (
     <div className={styles.tnWrap}>
-      {/* ── Stat cards ── */}
       <div className={styles.tnStatGrid}>
         {statCards.map((c: StatCard) => (
           <div key={c.id} className={styles.tnStatCard}>
@@ -102,10 +101,7 @@ const TacNghiepView: React.FC = () => {
           </div>
         ))}
       </div>
-
-      {/* ── Info cards ── */}
       <div className={styles.tnInfoGrid}>
-        {/* Tỉ lệ hoàn thành */}
         <div className={styles.tnInfoCard}>
           <div className={styles.tnInfoTitle}>Tỉ lệ hoàn thành đơn</div>
           <div className={styles.tnCompletion}>
@@ -126,8 +122,6 @@ const TacNghiepView: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Món bán chạy */}
         <div className={styles.tnInfoCard}>
           <div className={styles.tnInfoTitle}>Món bán chạy nhất</div>
           <div className={styles.tnBestDish}>
@@ -146,8 +140,6 @@ const TacNghiepView: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Khuyến mãi */}
         <div className={styles.tnInfoCard}>
           <div className={styles.tnInfoTitle}>Khuyến mãi đang chạy</div>
           <div className={styles.tnPromo}>
@@ -161,8 +153,6 @@ const TacNghiepView: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Hài lòng */}
         <div className={styles.tnInfoCard}>
           <div className={styles.tnInfoTitle}>Mức hài lòng khách hàng</div>
           <div className={styles.tnSatisfy}>
@@ -177,8 +167,6 @@ const TacNghiepView: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* ── Biểu đồ ── */}
       <div className={styles.tnChartRow}>
         <div className={styles.tnChartCard}>
           <div className={styles.tnChartHead}>
@@ -210,8 +198,6 @@ const TacNghiepView: React.FC = () => {
           </a>
         </div>
       </div>
-
-      {/* ── Bảng đơn + Top món ── */}
       <div className={styles.tnDataRow}>
         <div className={styles.tnTableCard}>
           <div className={styles.tnTableHead}>

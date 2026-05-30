@@ -143,7 +143,6 @@ const TrucTiepView: React.FC = () => {
 
   return (
     <div className={styles.trucTiepWrap}>
-      {/* Status bar trên */}
       <div className={styles.liveBar}>
         <div className={styles.liveLeft}>
           <span className={styles.liveDot} />
@@ -200,15 +199,11 @@ const TrucTiepView: React.FC = () => {
           Tự động (10s)
         </button>
       </div>
-
-      {/* Kanban board */}
       <div className={styles.kanbanBoard}>
         {cols.map((col) => (
           <KanbanCot key={col} trangThai={col} dons={filterDon(donHang, col)} />
         ))}
       </div>
-
-      {/* Summary bar dưới */}
       <div className={styles.summaryBar}>
         <div className={styles.summaryLeft}>
           <svg width="22" height="22" fill="none" viewBox="0 0 24 24" style={{ color: '#16a34a' }}>

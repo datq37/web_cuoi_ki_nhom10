@@ -28,7 +28,6 @@ const RatingForm: React.FC<RatingFormProps> = ({
 
     return (
         <div className="noiDungDanhGia">
-            {/* món */}
             <div className="thongTinCuaHang">
                 <div className="anhDaiDienMon" style={{ fontSize: 60, marginBottom: 12 }}>
                     {dishDetails?.emoji || '🍽️'}
@@ -37,8 +36,6 @@ const RatingForm: React.FC<RatingFormProps> = ({
                     {dishNames || 'Đơn hàng không tên'}
                 </div>
             </div>
-
-            {/* sao đánh giá */}
             <div className="khungSao">
                 {[1, 2, 3, 4, 5].map((star) => (
                     <StarFilled
@@ -48,8 +45,6 @@ const RatingForm: React.FC<RatingFormProps> = ({
                     />
                 ))}
             </div>
-
-            {/*from đnahs giá */}
             <div className="phanBinhLuan">
                 <textarea
                     placeholder="Món ăn có ngon không? Bạn hãy chia sẻ cảm nhận nhé..."

@@ -71,7 +71,6 @@ const BaoCaoModal: React.FC<Props> = ({ open, onClose }) => {
       closable={false}
       title={null}
     >
-      {/* Action bar — tự quản lý nút đóng, không dùng closeIcon của antd */}
       <div className={styles.actionBar}>
         <div className={styles.barLeft}>
           <span className={styles.modalTitle}>Xem trước báo cáo</span>
@@ -91,12 +90,9 @@ const BaoCaoModal: React.FC<Props> = ({ open, onClose }) => {
           </button>
         </div>
       </div>
-
-      {/* Paper viewport */}
       <div className={styles.paperViewport}>
         <div className={styles.paper}>
           <div ref={printRef}>
-            {/* Header */}
             <div className="rpt-header">
               <div className="rpt-header-left">
                 <div className="rpt-logo">CT</div>
@@ -111,8 +107,6 @@ const BaoCaoModal: React.FC<Props> = ({ open, onClose }) => {
                 <div className="rpt-sub">Giờ tạo: {moment().format('HH:mm')}</div>
               </div>
             </div>
-
-            {/* Stat cards */}
             <div className="rpt-stat-row">
               {banners.map((b) => (
                 <div key={b.id} className="rpt-stat-card">
@@ -122,8 +116,6 @@ const BaoCaoModal: React.FC<Props> = ({ open, onClose }) => {
                 </div>
               ))}
             </div>
-
-            {/* I. Top món */}
             <div className="rpt-section">
               <div className="rpt-section-title">I. Top món bán chạy</div>
               <table className="rpt-table">
@@ -147,8 +139,6 @@ const BaoCaoModal: React.FC<Props> = ({ open, onClose }) => {
                 </tbody>
               </table>
             </div>
-
-            {/* II. Đơn hàng */}
             <div className="rpt-section">
               <div className="rpt-section-title">II. Đơn hàng theo trạng thái</div>
               <table className="rpt-table">
@@ -170,8 +160,6 @@ const BaoCaoModal: React.FC<Props> = ({ open, onClose }) => {
                 </tbody>
               </table>
             </div>
-
-            {/* III. Hiệu suất */}
             <div className="rpt-section">
               <div className="rpt-section-title">III. Hiệu suất phục vụ</div>
               <table className="rpt-table">
@@ -193,8 +181,6 @@ const BaoCaoModal: React.FC<Props> = ({ open, onClose }) => {
                 </tbody>
               </table>
             </div>
-
-            {/* Footer */}
             <div className="rpt-footer">
               <div className="rpt-footer-note">
                 Tạo tự động lúc {moment().format('HH:mm DD/MM/YYYY')}

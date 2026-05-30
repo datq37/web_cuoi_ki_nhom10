@@ -72,8 +72,6 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
                     />
                 ))}
             </div>
-
-            {/* Modal chi tiết món ăn */}
             {selectedDish && (
                 <DishDetailModal
                     dish={selectedDish}

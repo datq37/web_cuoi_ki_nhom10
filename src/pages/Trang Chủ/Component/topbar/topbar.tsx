@@ -35,10 +35,8 @@ const Topbar: React.FC = () => {
 
   return (
     <div className={`landing-page ${darkMode ? 'dark' : 'light'}`}>
-      {/* Navbar */}
       <header className={`landing-topbar ${darkMode ? 'dark' : ''}`}>
         <div className="lt-inner">
-          {/* Logo */}
           <div className="lt-logo" onClick={() => history.push('/')} style={{ cursor: 'pointer' }}>
             <img src="/logo.webp" alt="Căng tin doanh nghiệp" className="lt-logo-img" />
             <div className="lt-brand-text">
@@ -46,10 +44,7 @@ const Topbar: React.FC = () => {
               <span className="lt-brand-slogan">DOANH NGHIỆP</span>
             </div>
           </div>
-
-          {/* Right nav */}
           <div className="lt-nav-right">
-            {/* Theme toggle */}
             <button
               className={`lt-theme-toggle ${darkMode ? 'dark' : ''}`}
               onClick={toggleTheme}
@@ -117,18 +112,14 @@ const Topbar: React.FC = () => {
           )}
         </div>
       </header>
-
-      {/* Hero Section */}
       <main
         className={`landing-hero ${darkMode ? 'dark' : ''}`}
         style={{ '--hero-mobile-image': `url(${bannerImage})` } as React.CSSProperties}
       >
-        {/* Background blobs */}
         <div className="hero-blob hero-blob-left" />
         <div className="hero-blob hero-blob-center" />
 
         <div className="hero-grid">
-          {/* Left content */}
           <div className="hero-left">
             <div className={`hero-tag ${darkMode ? 'dark' : ''}`}>
               <Leaf size={18} />
@@ -144,15 +135,11 @@ const Topbar: React.FC = () => {
               Trải nghiệm ẩm thực tinh tế, kết hợp hoàn hảo giữa hương vị
               truyền thống và phong cách hiện đại trong không gian sang trọng.
             </p>
-
-            {/* Mini features */}
             <div className="hero-features">
               <MiniFeature darkMode={darkMode} icon={<Leaf size={22} />} title="Nguyên liệu" desc="tươi ngon" />
               <MiniFeature darkMode={darkMode} icon={<ShieldCheck size={22} />} title="An toàn" desc="vệ sinh" />
               <MiniFeature darkMode={darkMode} icon={<Clock3 size={22} />} title="Phục vụ" desc="nhanh chóng" />
             </div>
-
-            {/* CTA */}
             <div className="hero-cta">
               <button
                 className="hero-cta-btn"
@@ -163,8 +150,6 @@ const Topbar: React.FC = () => {
                 <ArrowRight size={20} />
               </button>
             </div>
-
-            {/* Trust */}
             <div className="hero-trust">
               <div className="hero-avatars">
                 <span className="hero-avatar" style={{ background: '#fed7aa' }} />
@@ -178,8 +163,6 @@ const Topbar: React.FC = () => {
               </div>
             </div>
           </div>
-
-          {/* Right image */}
           <div className="hero-right">
             <div className="hero-img-wrap">
               <img

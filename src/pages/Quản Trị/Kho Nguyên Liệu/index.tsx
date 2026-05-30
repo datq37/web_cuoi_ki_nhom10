@@ -497,7 +497,6 @@ const NguyenLieuDetail: React.FC<{
     >
       {d && cfg && (
         <div className={styles.detailBody}>
-          {/* Hero */}
           <div className={styles.detailHero}>
             <div className={styles.detailHeroIconWrap}>
               <InboxOutlined />
@@ -513,8 +512,6 @@ const NguyenLieuDetail: React.FC<{
               </span>
             </div>
           </div>
-
-          {/* Grid: tồn kho + mức tối thiểu */}
           <div className={styles.detailGrid2}>
             <div className={styles.detailGridItem}>
               <div className={styles.detailGridLabel}>TỒN KHO</div>
@@ -531,8 +528,6 @@ const NguyenLieuDetail: React.FC<{
               </div>
             </div>
           </div>
-
-          {/* Progress */}
           <div className={styles.detailProgressWrap}>
             <div className={styles.detailProgressRow}>
               <span className={styles.detailGridLabel}>MỨC TỒN KHO</span>
@@ -545,8 +540,6 @@ const NguyenLieuDetail: React.FC<{
               />
             </div>
           </div>
-
-          {/* Grid: giá nhập + tổng giá trị */}
           <div className={styles.detailGrid2}>
             <div className={styles.detailGridItem}>
               <div className={styles.detailGridLabel}>GIÁ NHẬP</div>
@@ -557,8 +550,6 @@ const NguyenLieuDetail: React.FC<{
               <div className={styles.detailGridValue}>{formatGia(totalValue)}</div>
             </div>
           </div>
-
-          {/* Warning box khi cần nhập thêm */}
           {canNhapBox > 0 && (
             <div className={styles.detailWarnBox}>
               ⚠ Cần nhập thêm <strong>{canNhapBox} {d.donVi}</strong> để đạt mức an toàn
@@ -826,7 +817,6 @@ const KhoNguyenLieu: React.FC = () => {
         <Topbar title="Kho nguyên liệu" />
 
         <div className={styles.pageBody}>
-          {/* ── Stat cards ── */}
           <div className={styles.statGrid}>
             {statCards.map((card) => (
               <div key={card.label} className={styles.statCard}>
@@ -845,8 +835,6 @@ const KhoNguyenLieu: React.FC = () => {
               </div>
             ))}
           </div>
-
-          {/* ── Warning banner (chỉ hiện khi có mặt hàng cần nhập) ── */}
           {canNhapThemItems.length > 0 && (
             <div className={styles.warnBanner}>
               <div className={styles.warnLeft}>
@@ -868,8 +856,6 @@ const KhoNguyenLieu: React.FC = () => {
               </button>
             </div>
           )}
-
-          {/* ── Table section ── */}
           <div className={styles.tableSection}>
             <div className={styles.tableToolbar}>
               <Input
@@ -921,8 +907,6 @@ const KhoNguyenLieu: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* ── Modals ── */}
       <NguyenLieuForm
         open={formOpen}
         initial={editing}

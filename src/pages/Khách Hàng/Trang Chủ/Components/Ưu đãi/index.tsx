@@ -263,7 +263,6 @@ const OffersAndCombos: React.FC<OffersAndCombosProps> = ({ setPage }) => {
   return (
     <aside className="home-main-right">
       <div className="daily-offer-card">
-        {/* Hình ảnh món ăn liên quan đến ưu đãi tốt nhất */}
         <img
           src={best?.foodImg || comPhan}
           alt={best?.ten || 'Ưu đãi hôm nay'}

@@ -77,7 +77,6 @@ const DrawerContent: React.FC<ContentProps> = ({
 
   return (
     <>
-      {/* ── Status + time ── */}
       <div className={styles.statusRow}>
         <span
           className={styles.statusBadge}
@@ -91,8 +90,6 @@ const DrawerContent: React.FC<ContentProps> = ({
           {order.thoiGian || 'Vừa xong'}
         </span>
       </div>
-
-      {/* ── Progress steps ── */}
       {!isCancelled && (
         <div className={styles.stepsWrap}>
           {STEPS.map((label, idx) => (
@@ -140,8 +137,6 @@ const DrawerContent: React.FC<ContentProps> = ({
       )}
 
       <div className={styles.divider} />
-
-      {/* ── Customer ── */}
       <div className={styles.section}>
         <div className={styles.sectionTitle}>Khách hàng</div>
         <div className={styles.customerCard}>
@@ -173,8 +168,6 @@ const DrawerContent: React.FC<ContentProps> = ({
       </div>
 
       <div className={styles.divider} />
-
-      {/* ── Items ── */}
       <div className={styles.section}>
         <div className={styles.sectionTitle}>
           Món ăn
@@ -195,8 +188,6 @@ const DrawerContent: React.FC<ContentProps> = ({
           ))}
         </div>
       </div>
-
-      {/* ── Note ── */}
       {order.ghiChu && (
         <>
           <div className={styles.divider} />
@@ -219,8 +210,6 @@ const DrawerContent: React.FC<ContentProps> = ({
       )}
 
       <div className={styles.divider} />
-
-      {/* ── Pricing ── */}
       <div className={styles.section}>
         <div className={styles.sectionTitle}>Chi tiết thanh toán</div>
         <div className={styles.priceList}>

@@ -38,8 +38,6 @@ const ThongTinChung: React.FC = () => (
   <div className={styles.tabContent}>
     <div className={styles.contentTitle}>Thông tin chung</div>
     <div className={styles.contentSub}>Thông tin căng tin sẽ hiển thị cho người dùng</div>
-
-    {/* Logo */}
     <div className={styles.logoSection}>
       <div className={styles.logoIcon}>
         <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
@@ -54,8 +52,6 @@ const ThongTinChung: React.FC = () => (
         Đổi logo
       </Button>
     </div>
-
-    {/* Fields */}
     <div className={styles.fieldGroup}>
       <div className={styles.fieldFull}>
         <label className={styles.fieldLabel}>
@@ -281,7 +277,6 @@ const CaiDat: React.FC = () => {
 
         <div className={styles.pageBody}>
           <div className={styles.settingsWrap}>
-            {/* Left nav */}
             <div className={styles.leftNav}>
               {TABS.map((tab) => (
                 <button
@@ -294,8 +289,6 @@ const CaiDat: React.FC = () => {
                 </button>
               ))}
             </div>
-
-            {/* Right content */}
             <div className={styles.rightContent}>
               <ContentComponent />
             </div>

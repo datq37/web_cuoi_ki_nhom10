@@ -4,6 +4,7 @@
   CloseOutlined,
   DeleteOutlined,
   EditOutlined,
+  FilterOutlined,
   FireOutlined,
   PictureOutlined,
   PlusOutlined,
@@ -14,18 +15,22 @@
 import {
   Button,
   Col,
+  Dropdown,
   Form,
   Input,
   InputNumber,
+  Menu,
   Modal,
   Row,
   Select,
   Switch,
   Tag,
   message,
+  notification,
 } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Topbar from '@/pages/Quản Trị/Topbar';
+import PageToolbar from '@/pages/Quản Trị/components/PageToolbar';
 import { DANH_SACH_NGUYEN_LIEU } from '@/services/Quản Trị/Kho Nguyên Liệu';
 import { DANH_SACH_MON } from '@/services/Quản Trị/Quản Lý Món';
 import { EDanhMuc, IMonAn } from '@/services/Quản Trị/Quản Lý Món/typing';
@@ -34,6 +39,7 @@ import styles from './index.less';
 interface IMonAnLocal extends IMonAn {
   hinhAnh?: string;
   nguyenLieu?: string[];
+  coSan?: boolean;  // true = đang bán, false = tạm hết (default true)
 }
 
 function formatGia(gia: number): string {
@@ -69,61 +75,81 @@ interface MonCardProps {
   onClick: () => void;
   onEdit: () => void;
   onDelete: () => void;
+  onToggleCoSan: (id: string, coSan: boolean) => void;
 }
 
-const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete }) => (
-  <div className={styles.monCard} onClick={onClick} style={{ cursor: 'pointer' }}>
-    <div className={styles.cardImage} style={mon.hinhAnh ? {} : { background: mon.mauNen }}>
-      {mon.hinhAnh ? (
-        <img src={mon.hinhAnh} alt={mon.ten} className={styles.cardImg} />
-      ) : (
-        <PictureOutlined className={styles.cardNoImg} />
-      )}
-      {mon.isHot && (
-        <span className={styles.hotBadge}>
-          <FireOutlined style={{ marginRight: 3 }} />HOT
-        </span>
-      )}
-    </div>
-
-    <div className={styles.cardBody}>
-      <div className={styles.cardName}>{mon.ten}</div>
-      <div className={styles.cardMoTa}>{mon.moTa}</div>
-
-      <div className={styles.cardStats}>
-        <span className={styles.statItem}>
-          <ClockCircleOutlined className={styles.statIcon} />
-          {mon.thoiGian} phút
-        </span>
-        <span className={styles.statItem}><FireOutlined className={styles.statIcon} /> {mon.calo} kcal</span>
-        <span className={styles.statItem}>
-          <StarFilled className={styles.starIcon} />
-          {mon.danhGia}
-        </span>
+const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete, onToggleCoSan }) => {
+  const dangBan = mon.coSan !== false;
+  return (
+    <div
+      className={`${styles.monCard} ${!dangBan ? styles.monCardOff : ''}`}
+      onClick={onClick}
+      style={{ cursor: 'pointer' }}
+    >
+      <div className={styles.cardImage} style={mon.hinhAnh ? {} : { background: mon.mauNen }}>
+        {mon.hinhAnh ? (
+          <img src={mon.hinhAnh} alt={mon.ten} className={styles.cardImg} />
+        ) : (
+          <PictureOutlined className={styles.cardNoImg} />
+        )}
+        {mon.isHot && dangBan && (
+          <span className={styles.hotBadge}>
+            <FireOutlined style={{ marginRight: 3 }} />HOT
+          </span>
+        )}
+        {!dangBan && (
+          <span className={styles.tamHetBadge}>Tạm hết</span>
+        )}
       </div>
 
-      <div className={styles.cardFooter}>
-        <span className={styles.cardGia}>{formatGia(mon.giaBan)}</span>
-        <div className={styles.cardActions}>
-          <button
-            className={styles.actionBtn}
-            title="Chỉnh sửa"
-            onClick={(e) => { e.stopPropagation(); onEdit(); }}
-          >
-            <EditOutlined />
-          </button>
-          <button
-            className={`${styles.actionBtn} ${styles.actionDelete}`}
-            title="Xóa"
-            onClick={(e) => { e.stopPropagation(); onDelete(); }}
-          >
-            <DeleteOutlined />
-          </button>
+      <div className={styles.cardBody}>
+        <div className={styles.cardName}>{mon.ten}</div>
+        <div className={styles.cardMoTa}>{mon.moTa}</div>
+
+        <div className={styles.cardStats}>
+          <span className={styles.statItem}>
+            <ClockCircleOutlined className={styles.statIcon} />
+            {mon.thoiGian} phút
+          </span>
+          <span className={styles.statItem}><FireOutlined className={styles.statIcon} /> {mon.calo} kcal</span>
+          <span className={styles.statItem}>
+            <StarFilled className={styles.starIcon} />
+            {mon.danhGia}
+          </span>
+        </div>
+
+        <div className={styles.cardFooter}>
+          <span className={styles.cardGia}>{formatGia(mon.giaBan)}</span>
+          <div className={styles.cardActions}>
+            <Switch
+              size="small"
+              checked={dangBan}
+              onClick={(checked, e) => {
+                e.stopPropagation();
+                onToggleCoSan(mon.id, checked);
+              }}
+              title={dangBan ? 'Đang bán — click để tắt' : 'Tạm hết — click để bật'}
+            />
+            <button
+              className={styles.actionBtn}
+              title="Chỉnh sửa"
+              onClick={(e) => { e.stopPropagation(); onEdit(); }}
+            >
+              <EditOutlined />
+            </button>
+            <button
+              className={`${styles.actionBtn} ${styles.actionDelete}`}
+              title="Xóa"
+              onClick={(e) => { e.stopPropagation(); onDelete(); }}
+            >
+              <DeleteOutlined />
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 interface MonFormProps {
   open: boolean;
@@ -477,12 +503,13 @@ const QuanLyMon: React.FC = () => {
     }
   }, [items]);
 
-  const [activeTab, setActiveTab] = useState<EDanhMuc | 'tat_ca'>('tat_ca');
-  const [tuKhoa,   setTuKhoa]   = useState('');
-  const [isGrid,   setIsGrid]   = useState(true);
-  const [formOpen, setFormOpen] = useState(false);
-  const [editing,  setEditing]  = useState<IMonAnLocal | null>(null);
-  const [viewing,  setViewing]  = useState<IMonAnLocal | null>(null);
+  const [activeTab,    setActiveTab]    = useState<EDanhMuc | 'tat_ca'>('tat_ca');
+  const [tuKhoa,       setTuKhoa]       = useState('');
+  const [isGrid,       setIsGrid]       = useState(true);
+  const [formOpen,     setFormOpen]     = useState(false);
+  const [editing,      setEditing]      = useState<IMonAnLocal | null>(null);
+  const [viewing,      setViewing]      = useState<IMonAnLocal | null>(null);
+  const [filterCoSan,  setFilterCoSan]  = useState<'all' | 'dang_ban' | 'tam_het'>('all');
 
   // Dynamic tab counts
   const tabs = useMemo<TabDanhMuc[]>(() => [
@@ -496,20 +523,47 @@ const QuanLyMon: React.FC = () => {
   const danhSachLoc = useMemo(() => {
     let ds = items;
     if (activeTab !== 'tat_ca') ds = ds.filter((m) => m.danhMuc === activeTab);
+    if (filterCoSan === 'dang_ban') ds = ds.filter((m) => m.coSan !== false);
+    if (filterCoSan === 'tam_het')  ds = ds.filter((m) => m.coSan === false);
     if (tuKhoa.trim()) {
       const kw = tuKhoa.toLowerCase();
       ds = ds.filter((m) => m.ten.toLowerCase().includes(kw) || m.moTa.toLowerCase().includes(kw));
     }
     return ds;
-  }, [activeTab, tuKhoa, items]);
+  }, [activeTab, tuKhoa, filterCoSan, items]);
+
+  const handleToggleCoSan = (id: string, coSan: boolean) => {
+    const mon = items.find((m) => m.id === id);
+    if (!mon) return;
+    setItems((prev) => prev.map((m) => m.id === id ? { ...m, coSan } : m));
+    const key = `notif_${id}`;
+    notification.open({
+      key,
+      message: coSan ? `Đã bật "${mon.ten}"` : `Đã tắt "${mon.ten}"`,
+      description: coSan ? 'Món đang được bán.' : 'Món tạm thời ẩn khỏi thực đơn.',
+      duration: 4,
+      btn: (
+        <Button
+          size="small"
+          onClick={() => {
+            setItems((prev) => prev.map((m) => m.id === id ? { ...m, coSan: !coSan } : m));
+            notification.close(key);
+            message.info('Đã hoàn tác');
+          }}
+        >
+          Hoàn tác
+        </Button>
+      ),
+    });
+  };
 
   const handleDelete = (mon: IMonAnLocal) => {
     Modal.confirm({
       title: 'Xác nhận xoá món?',
       content: `Xoá "${mon.ten}" khỏi thực đơn? Hành động không thể hoàn tác.`,
-      okType: 'danger',
-      okText: 'Xoá',
-      cancelText: 'Huỷ',
+      okType: 'danger', okText: 'Xoá', cancelText: 'Huỷ', centered: true,
+      okButtonProps: { style: { borderRadius: 8 } },
+      cancelButtonProps: { style: { borderRadius: 8 } },
       onOk: () => {
         setItems((prev) => prev.filter((i) => i.id !== mon.id));
         message.success(`Đã xoá "${mon.ten}"`);
@@ -535,54 +589,61 @@ const QuanLyMon: React.FC = () => {
       <Topbar title="Quản lý món ăn" />
 
       <div className={styles.pageBody}>
-          <div className={styles.toolbar}>
-            <div className={styles.tabsRow}>
-              {tabs.map((t) => (
-                <button
-                  key={t.key}
-                  className={`${styles.tabBtn} ${activeTab === t.key ? styles.tabActive : ''}`}
-                  onClick={() => setActiveTab(t.key)}
-                >
-                  {t.label}
-                  <span className={styles.tabCount}>{t.soLuong}</span>
-                </button>
-              ))}
-            </div>
-
-            <div className={styles.toolbarRight}>
-              <Input
-                prefix={<SearchOutlined className={styles.searchIcon} />}
-                placeholder="Tìm kiếm món ăn..."
-                className={styles.searchInput}
-                value={tuKhoa}
-                onChange={(e) => setTuKhoa(e.target.value)}
-              />
-              <div className={styles.viewToggle}>
-                <button
-                  className={`${styles.toggleBtn} ${isGrid ? styles.toggleActive : ''}`}
-                  onClick={() => setIsGrid(true)}
-                  title="Dạng lưới"
-                >
-                  <AppstoreOutlined />
-                </button>
-                <button
-                  className={`${styles.toggleBtn} ${!isGrid ? styles.toggleActive : ''}`}
-                  onClick={() => setIsGrid(false)}
-                  title="Dạng danh sách"
-                >
-                  <UnorderedListOutlined />
-                </button>
-              </div>
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                className={styles.addBtn}
-                onClick={() => { setEditing(null); setFormOpen(true); }}
+          {/* Tab danh mục — hàng riêng */}
+          <div className={styles.tabsRow}>
+            {tabs.map((t) => (
+              <button
+                key={t.key}
+                className={`${styles.tabBtn} ${activeTab === t.key ? styles.tabActive : ''}`}
+                onClick={() => setActiveTab(t.key)}
               >
-                Thêm món mới
-              </Button>
-            </div>
+                {t.label}
+                <span className={styles.tabCount}>{t.soLuong}</span>
+              </button>
+            ))}
           </div>
+
+          {/* Toolbar */}
+          <PageToolbar
+            searchPlaceholder="Tìm kiếm món ăn..."
+            searchValue={tuKhoa}
+            onSearch={setTuKhoa}
+            filters={
+              <Dropdown
+                trigger={['click']}
+                overlay={
+                  <Menu
+                    selectedKeys={[filterCoSan]}
+                    onClick={({ key }) => setFilterCoSan(key as typeof filterCoSan)}
+                  >
+                    <Menu.Item key="all">Tất cả</Menu.Item>
+                    <Menu.Item key="dang_ban">🟢 Đang bán</Menu.Item>
+                    <Menu.Item key="tam_het">🔴 Tạm hết</Menu.Item>
+                  </Menu>
+                }
+              >
+                <Button icon={<FilterOutlined />} className={styles.btnFilter}>
+                  {filterCoSan === 'all' ? 'Bộ lọc' : filterCoSan === 'dang_ban' ? 'Đang bán' : 'Tạm hết'}
+                </Button>
+              </Dropdown>
+            }
+            actions={
+              <>
+                <div className={styles.viewToggle}>
+                  <button className={`${styles.toggleBtn} ${isGrid ? styles.toggleActive : ''}`} onClick={() => setIsGrid(true)} title="Dạng lưới"><AppstoreOutlined /></button>
+                  <button className={`${styles.toggleBtn} ${!isGrid ? styles.toggleActive : ''}`} onClick={() => setIsGrid(false)} title="Dạng danh sách"><UnorderedListOutlined /></button>
+                </div>
+                <Button
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  className={styles.addBtn}
+                  onClick={() => { setEditing(null); setFormOpen(true); }}
+                >
+                  Thêm món mới
+                </Button>
+              </>
+            }
+          />
 
           <div className={isGrid ? styles.gridView : styles.listView}>
             {danhSachLoc.map((mon) => (
@@ -592,6 +653,7 @@ const QuanLyMon: React.FC = () => {
                 onClick={() => setViewing(mon)}
                 onEdit={() => { setEditing(mon); setFormOpen(true); }}
                 onDelete={() => handleDelete(mon)}
+                onToggleCoSan={handleToggleCoSan}
               />
             ))}
             {danhSachLoc.length === 0 && (

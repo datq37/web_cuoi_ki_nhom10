@@ -13,21 +13,21 @@
   gap: 16px;
 }
 
-.toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
 .tabsRow {
   display: flex;
   gap: 4px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  background: @surface;
+  border: 1px solid @border;
   border-radius: 10px;
   padding: 4px;
+  align-self: flex-start;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .tabBtn {
@@ -73,6 +73,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-left: auto;
 }
 
 .searchInput {
@@ -203,6 +204,60 @@
 .cardNoImg {
   font-size: 40px;
   color: rgba(255, 255, 255, 0.5);
+}
+
+// Tạm hết badge
+.tamHetBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(220, 38, 38, 0.88);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+}
+
+// Card tắt — mờ nhạt
+.monCardOff {
+  opacity: 0.55;
+  filter: grayscale(0.4);
+
+  &:hover {
+    opacity: 0.75;
+    filter: grayscale(0.2);
+  }
+}
+
+// Filter bán / tắt
+.coSanFilter {
+  display: flex;
+  gap: 3px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.coSanBtn {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: @text-muted;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  padding: 5px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  &:hover { color: @text-dark; }
+}
+
+.coSanBtnActive {
+  background: #fff;
+  color: @text-dark;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .hotBadge {
@@ -553,6 +608,10 @@
 }
 
 :global([data-theme="dark"]) {
+  .coSanFilter { background: #0f172a; }
+  .coSanBtn { color: #64748b; &:hover { color: #f1f5f9; } }
+  .coSanBtnActive { background: #1e293b; color: #f1f5f9; }
+
   .tabsRow { background: #1e293b; border-color: #334155; }
   .tabBtn { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
   .tabCount { background: rgba(255,255,255,0.08); color: #94a3b8; }

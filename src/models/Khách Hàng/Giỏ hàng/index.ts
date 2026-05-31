@@ -57,6 +57,12 @@ export function useGioHangModel() {
 
     // Xác nhận đặt 
     const handleConfirm = () => {
+        const today = new Date();
+        if (today.getDay() === 0) {
+            showCustomerNotification('Căng tin nghỉ Chủ Nhật', 'Rất xin lỗi, căng tin không hoạt động vào ngày Chủ Nhật. Vui lòng đặt hàng vào các ngày trong tuần!', 'error');
+            return;
+        }
+
         if (selectedVoucher) {
             const claimed = claimVoucher(selectedVoucher.id);
             if (!claimed) {

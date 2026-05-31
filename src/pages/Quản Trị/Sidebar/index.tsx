@@ -99,7 +99,9 @@ const Sidebar: React.FC = () => {
                 <Badge count={badgeMap[item.key]} className={styles.badge} />
               )}
               {(badgeMap[item.key] ?? 0) > 0 && collapsed && (
-                <span className={styles.badgeDot} />
+                <span className={styles.badgeCollapsed}>
+                  {badgeMap[item.key] > 9 ? '9+' : badgeMap[item.key]}
+                </span>
               )}
             </li>
           ))}

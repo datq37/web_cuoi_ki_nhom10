@@ -178,6 +178,25 @@
   border: 1.5px solid @surface;
 }
 
+.badgeCollapsed {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 17px;
+  height: 17px;
+  background: @danger;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 99px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border: 1.5px solid @surface;
+  line-height: 1;
+}
+
 .collapseSection {
   border-top: 1px solid @border;
   padding: 10px;
@@ -232,7 +251,8 @@
   }
   .menuIcon { color: #64748b; }
 
-  .badgeDot { border-color: #1e293b; }
+  .badgeDot        { border-color: #1e293b; }
+  .badgeCollapsed  { border-color: #1e293b; }
 
   .collapseSection { border-top-color: #334155; }
   .collapseBtn { color: #64748b; &:hover { background: #0f172a; color: #94a3b8; } }

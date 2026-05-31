@@ -1,7 +1,10 @@
-﻿@import '~@/styles/admin-tokens.less';
+@import '~@/styles/admin-tokens.less';
 
 @ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+@popup-shadow: 0 12px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+@popup-radius: 14px;
 
+// ── Topbar ───────────────────────────────────────────────────────
 .topbar {
   height: 64px;
   background: @surface;
@@ -49,6 +52,7 @@
   gap: 10px;
 }
 
+// ── Icon buttons ─────────────────────────────────────────────────
 .iconBtn {
   width: 38px !important;
   height: 38px !important;
@@ -84,16 +88,74 @@
   border-radius: 8px;
 }
 
+// ── User pill ────────────────────────────────────────────────────
+.userPill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 4px;
+  border: 1px solid @border;
+  border-radius: 999px;
+  background: @surface;
+  cursor: pointer;
+  transition: all 180ms @ease;
+
+  &:hover {
+    border-color: #d1d5db;
+    background: @surface-hover;
+  }
+}
+
+.userAvatar {
+  background: @primary !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  flex-shrink: 0;
+}
+
+.pillArrow {
+  font-size: 10px;
+  color: @text-light;
+  transition: transform 200ms @ease;
+}
+
+.pillArrowUp {
+  transform: rotate(180deg);
+}
+
+// ── Notification popup overlay ───────────────────────────────────
+.notifOverlay {
+  :global(.ant-popover-content) {
+    border-radius: @popup-radius;
+    box-shadow: @popup-shadow;
+    overflow: hidden;
+    border: 1px solid @border;
+  }
+  :global(.ant-popover-inner) {
+    border-radius: @popup-radius;
+    padding: 0;
+    box-shadow: none;
+    overflow: hidden;
+  }
+  :global(.ant-popover-inner-content) {
+    padding: 0;
+  }
+}
+
 .notifPopup {
   width: 380px;
+  background: @surface;
+  border-radius: @popup-radius;
+  overflow: hidden;
 }
 
 .notifHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 16px;
-  border-bottom: 1px solid @divider;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid @border;
+  background: @surface;
 }
 
 .notifHeaderLeft {
@@ -110,9 +172,10 @@
 
 .notifUnreadBadge {
   font-size: 11px;
-  color: @text-muted;
-  background: @divider;
-  padding: 2px 7px;
+  font-weight: 600;
+  color: @primary;
+  background: @primary-100;
+  padding: 2px 8px;
   border-radius: 99px;
 }
 
@@ -131,14 +194,14 @@
 
 .notifList {
   padding: 0;
-  max-height: 440px;
+  max-height: 400px;
   overflow-y: auto;
   &::-webkit-scrollbar { width: 3px; }
   &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
 }
 
 .notifEmpty {
-  padding: 32px 16px;
+  padding: 36px 16px;
   text-align: center;
   font-size: 13px;
   color: @text-light;
@@ -149,7 +212,7 @@
   align-items: flex-start;
   gap: 10px;
   padding: 12px 16px;
-  border-bottom: 1px solid @divider;
+  border-bottom: 1px solid @border;
   cursor: pointer;
   transition: background 120ms @ease;
   &:last-child { border-bottom: none; }
@@ -158,14 +221,14 @@
 
 .notifUnread {
   background: @primary-50;
-  &:hover { background: @primary-soft; }
+  &:hover { background: @primary-100; }
 }
 
 .notifIconBox {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: @divider;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: #f3f4f6;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -196,7 +259,7 @@
 }
 
 .notifTime {
-  font-size: 10px;
+  font-size: 10.5px;
   color: @text-light;
   margin-top: 4px;
 }
@@ -207,59 +270,35 @@
   background: @primary;
   border-radius: 50%;
   flex-shrink: 0;
-  margin-top: 6px;
+  margin-top: 5px;
 }
 
-
-.userPill {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 8px 4px 4px;
-  border: 1px solid @border;
-  border-radius: 999px;
-  background: @surface;
-  cursor: pointer;
-  transition: all 180ms @ease;
-
-  &:hover {
-    border-color: #d1d5db;
-    background: @surface-hover;
+// ── User dropdown overlay ────────────────────────────────────────
+.userOverlay {
+  :global(.ant-dropdown) {
+    border-radius: @popup-radius;
   }
-}
-
-.userAvatar {
-  background: @primary !important;
-  font-weight: 700 !important;
-  font-size: 12px !important;
-  flex-shrink: 0;
-}
-
-.pillArrow {
-  font-size: 11px;
-  color: @text-muted;
-  transition: transform 200ms @ease;
-}
-
-.pillArrowUp {
-  transform: rotate(180deg);
+  // antd Dropdown renders the overlay directly, no inner wrapper needed
+  // just need to remove default padding/shadow that antd may add
+  padding-top: 6px !important;
 }
 
 .userDropdown {
-  width: 240px;
+  width: 248px;
   background: @surface;
-  border-radius: 12px;
+  border-radius: @popup-radius;
   border: 1px solid @border;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  box-shadow: @popup-shadow;
   overflow: hidden;
-  padding: 4px 0;
 }
 
 .dropdownHeader {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 16px 12px;
+  gap: 12px;
+  padding: 16px 16px 14px;
+  background: linear-gradient(135deg, @primary-50 0%, @surface 100%);
+  border-bottom: 1px solid @border;
 }
 
 .dropdownAvatar {
@@ -267,15 +306,17 @@
   font-weight: 700 !important;
   font-size: 13px !important;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25);
 }
 
 .dropdownInfo {
   min-width: 0;
+  flex: 1;
 }
 
 .dropdownName {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 13.5px;
+  font-weight: 700;
   color: @text-dark;
   white-space: nowrap;
   overflow: hidden;
@@ -283,7 +324,7 @@
 }
 
 .dropdownEmail {
-  font-size: 11px;
+  font-size: 11.5px;
   color: @text-muted;
   margin-top: 2px;
   white-space: nowrap;
@@ -293,8 +334,8 @@
 
 .dropdownDivider {
   height: 1px;
-  background: @divider;
-  margin: 4px 0;
+  background: @border;
+  margin: 2px 0;
 }
 
 .dropdownItems {
@@ -306,7 +347,7 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  padding: 8px 10px;
+  padding: 9px 10px;
   border: none;
   background: transparent;
   color: @text-mid;
@@ -326,6 +367,8 @@
   font-size: 15px;
   color: @text-muted;
   flex-shrink: 0;
+  width: 16px;
+  text-align: center;
 }
 
 .dropdownLogout {
@@ -334,6 +377,7 @@
   &:hover { background: @danger-soft; color: @danger; }
 }
 
+// ── Dark mode ────────────────────────────────────────────────────
 :global([data-theme="dark"]) {
   .topbar {
     background: #1e293b;
@@ -341,7 +385,7 @@
   }
 
   .pageTitle { color: #f1f5f9; }
-  .pageDate { color: #94a3b8; }
+  .pageDate  { color: #94a3b8; }
 
   .iconBtn {
     background: #0f172a !important;
@@ -354,22 +398,7 @@
     }
   }
 
-  :global(.ant-badge .ant-badge-count) {
-    box-shadow: 0 0 0 2px #1e293b;
-  }
-
-  .notifPopup { background: #1e293b; }
-  .notifHeader { border-bottom-color: #334155; }
-  .notifTitle { color: #f1f5f9; }
-  .notifUnreadBadge { background: #334155; color: #94a3b8; }
-  .notifList { &::-webkit-scrollbar-thumb { background: #334155; } }
-  .notifItem { border-bottom-color: #334155; &:hover { background: #0f172a; } }
-  .notifUnread { background: rgba(22,163,74,.1); &:hover { background: rgba(22,163,74,.18); } }
-  .notifIconBox { background: #334155; }
-  .notifItemTitle { color: #f1f5f9; }
-  .notifDesc { color: #94a3b8; }
-  .notifTime { color: #64748b; }
-  .notifEmpty { color: #64748b; }
+  :global(.ant-badge .ant-badge-count) { box-shadow: 0 0 0 2px #1e293b; }
 
   .userPill {
     border-color: #334155;
@@ -378,15 +407,32 @@
   }
   .pillArrow { color: #64748b; }
 
-  .userDropdown {
-    background: #1e293b;
-    border-color: #334155;
-    box-shadow: 0 8px 24px rgba(0,0,0,.3);
+  // Notification popup dark
+  .notifOverlay {
+    :global(.ant-popover-content) { border-color: #334155; background: #1e293b; }
+    :global(.ant-popover-inner)   { background: #1e293b; }
   }
-  .dropdownName { color: #f1f5f9; }
-  .dropdownEmail { color: #64748b; }
-  .dropdownDivider { background: #334155; }
-  .dropdownItem { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
+  .notifPopup     { background: #1e293b; }
+  .notifHeader    { background: #1e293b; border-bottom-color: #334155; }
+  .notifTitle     { color: #f1f5f9; }
+  .notifUnreadBadge { background: rgba(22,163,74,.2); color: #4ade80; }
+  .notifList      { &::-webkit-scrollbar-thumb { background: #334155; } }
+  .notifItem      { border-bottom-color: #334155; &:hover { background: #0f172a; } }
+  .notifUnread    { background: rgba(22,163,74,.08); &:hover { background: rgba(22,163,74,.15); } }
+  .notifIconBox   { background: #334155; }
+  .notifItemTitle { color: #f1f5f9; }
+  .notifDesc      { color: #94a3b8; }
+  .notifTime      { color: #64748b; }
+  .notifEmpty     { color: #64748b; }
+  .notifDot       { background: #4ade80; }
+
+  // User dropdown dark
+  .userDropdown     { background: #1e293b; border-color: #334155; box-shadow: 0 12px 40px rgba(0,0,0,.4); }
+  .dropdownHeader   { background: linear-gradient(135deg, rgba(22,163,74,.1) 0%, #1e293b 100%); border-bottom-color: #334155; }
+  .dropdownName     { color: #f1f5f9; }
+  .dropdownEmail    { color: #64748b; }
+  .dropdownDivider  { background: #334155; }
+  .dropdownItem     { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
   .dropdownItemIcon { color: #64748b; }
-  .dropdownLogout { color: @danger; .dropdownItemIcon { color: @danger; } &:hover { background: rgba(239,68,68,.12); } }
+  .dropdownLogout   { color: #f87171; .dropdownItemIcon { color: #f87171; } &:hover { background: rgba(239,68,68,.12); } }
 }

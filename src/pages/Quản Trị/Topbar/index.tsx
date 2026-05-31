@@ -7,15 +7,15 @@ import {
   LogoutOutlined,
   QuestionCircleOutlined,
   SettingOutlined,
-  UserOutlined,
 } from '@ant-design/icons';
-import { Avatar, Badge, Button, Dropdown, Popover } from 'antd';
+import { Avatar, Badge, Button, Dropdown, Modal, Popover } from 'antd';
 import moment from 'moment';
 import 'moment/locale/vi';
 import React, { useState } from 'react';
 import { history } from 'umi';
 import { INotif, NotifType, timeAgo, useNotif } from '@/context/NotifContext';
 import { useTheme } from '@/hooks/useTheme';
+import { KEYS, clearAdminSession, store } from '@/utils/storage';
 import styles from './index.less';
 
 function getNotifRoute(type: NotifType): string {
@@ -75,6 +75,12 @@ interface TopbarProps {
   subtitle?: string;
 }
 
+interface AdminUser {
+  ten: string;
+  email: string;
+  avatar?: string;
+}
+
 const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
   const dateStr = moment().format('D [tháng] M, YYYY');
   const { isDark, toggleDark } = useTheme();
@@ -84,27 +90,80 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
 
   const unreadCount = notifs.filter((n) => !n.read).length;
 
+  const user = store.get<AdminUser>(KEYS.user, { ten: 'Quản trị viên', email: 'admin@canteen.vn' });
+  const vietTat = user.ten
+    .trim()
+    .split(/\s+/)
+    .slice(-2)
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase() || 'AD';
+
+  const handleLogout = () => {
+    setUserOpen(false);
+    Modal.confirm({
+      title: 'Xác nhận đăng xuất',
+      content: 'Bạn có chắc muốn đăng xuất khỏi trang quản trị?',
+      okText: 'Đăng xuất',
+      cancelText: 'Huỷ',
+      okType: 'danger',
+      centered: true,
+      icon: <LogoutOutlined style={{ color: '#dc2626' }} />,
+      okButtonProps: { style: { background: '#dc2626', borderColor: '#dc2626', borderRadius: 8 } },
+      cancelButtonProps: { style: { borderRadius: 8 } },
+      onOk: () => {
+        clearAdminSession();
+        history.push('/dang-nhap');
+      },
+    });
+  };
+
+  const handleHoTro = () => {
+    setUserOpen(false);
+    Modal.info({
+      title: 'Liên hệ hỗ trợ',
+      centered: true,
+      icon: <QuestionCircleOutlined style={{ color: '#16a34a' }} />,
+      content: (
+        <div style={{ paddingTop: 8, lineHeight: 1.8, color: '#374151' }}>
+          <div>📧 <a href="mailto:it@canteen.vn" style={{ color: '#16a34a' }}>it@canteen.vn</a></div>
+          <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 6 }}>
+            Thời gian hỗ trợ: 7:00 – 18:00, thứ Hai đến thứ Sáu
+          </div>
+        </div>
+      ),
+      okText: 'Đóng',
+      okButtonProps: { style: { background: '#16a34a', borderColor: '#16a34a', borderRadius: 8 } },
+    });
+  };
+
   const userMenuOverlay = (
     <div className={styles.userDropdown}>
       <div className={styles.dropdownHeader}>
-        <Avatar className={styles.dropdownAvatar} size={36}>MT</Avatar>
+        {user.avatar ? (
+          <Avatar src={user.avatar} className={styles.dropdownAvatar} size={38} />
+        ) : (
+          <Avatar className={styles.dropdownAvatar} size={38}>{vietTat}</Avatar>
+        )}
         <div className={styles.dropdownInfo}>
-          <div className={styles.dropdownName}>Nguyễn Minh Tâm</div>
-          <div className={styles.dropdownEmail}>tam.nm@canteen.vn</div>
+          <div className={styles.dropdownName}>{user.ten}</div>
+          <div className={styles.dropdownEmail}>{user.email}</div>
         </div>
       </div>
 
       <div className={styles.dropdownDivider} />
       <div className={styles.dropdownItems}>
-        <button className={styles.dropdownItem}>
-          <UserOutlined className={styles.dropdownItemIcon} />
-          Hồ sơ cá nhân
-        </button>
-        <button className={styles.dropdownItem}>
+        <button
+          className={styles.dropdownItem}
+          onClick={() => { setUserOpen(false); history.push('/quan-tri/cai-dat'); }}
+        >
           <SettingOutlined className={styles.dropdownItemIcon} />
-          Cài đặt
+          Cài đặt & hồ sơ
         </button>
-        <button className={styles.dropdownItem}>
+        <button
+          className={styles.dropdownItem}
+          onClick={handleHoTro}
+        >
           <QuestionCircleOutlined className={styles.dropdownItemIcon} />
           Trợ giúp
         </button>
@@ -113,7 +172,10 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
       <div className={styles.dropdownDivider} />
 
       <div className={styles.dropdownItems}>
-        <button className={`${styles.dropdownItem} ${styles.dropdownLogout}`}>
+        <button
+          className={`${styles.dropdownItem} ${styles.dropdownLogout}`}
+          onClick={handleLogout}
+        >
           <LogoutOutlined className={styles.dropdownItemIcon} />
           Đăng xuất
         </button>
@@ -147,7 +209,8 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
           trigger="click"
           placement="bottomRight"
           arrow={false}
-          overlayInnerStyle={{ padding: 0, borderRadius: 12, overflow: 'hidden' }}
+          overlayClassName={styles.notifOverlay}
+          overlayInnerStyle={{ padding: 0, borderRadius: 12, overflow: 'hidden', border: 'none', boxShadow: 'none' }}
           content={
             <NotifPopup
               onMarkAll={markAll}
@@ -161,19 +224,24 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
             <Button className={styles.iconBtn} icon={<BellOutlined />} />
           </Badge>
         </Popover>
+
         <Dropdown
           overlay={userMenuOverlay}
           trigger={['click']}
           visible={userOpen}
           onVisibleChange={setUserOpen}
           placement="bottomRight"
+          overlayClassName={styles.userOverlay}
         >
           <button className={styles.userPill}>
-            <Avatar className={styles.userAvatar} size={30}>MT</Avatar>
+            {user.avatar ? (
+              <Avatar src={user.avatar} className={styles.userAvatar} size={30} />
+            ) : (
+              <Avatar className={styles.userAvatar} size={30}>{vietTat}</Avatar>
+            )}
             <DownOutlined className={`${styles.pillArrow} ${userOpen ? styles.pillArrowUp : ''}`} />
           </button>
         </Dropdown>
-
       </div>
     </header>
   );

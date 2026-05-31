@@ -10,7 +10,7 @@ import {
 import type { TongQuanData } from './typing';
 
 export const mockData: TongQuanData = {
-  // ── Tab Tác nghiệp ─────────────────────────────────────────
+  // tab tác nghiệp
   tacNghiep: {
     statCards: [
       { id: 'doanh-thu', label: 'DOANH THU HÔM NAY', value: 641000, valueDisplay: '641.000đ', changeText: '12.4% so với tuần trước', trend: ETrend.UP,   iconBg: '#dcfce7', iconColor: '#16a34a', icon: EStatIcon.REVENUE },
@@ -55,7 +55,7 @@ export const mockData: TongQuanData = {
     ],
   },
 
-  // ── Tab Trực tiếp ──────────────────────────────────────────
+  // tab trực tiếp
   trucTiep: {
     thongKe: { donCho: 1, dangCheBien: 2, sanSangGiao: 2, thoiGianTB: 6.4 },
     tomTat: { tongDon: 10, khachHang: 47, doanhThu: 641000, thoiGianTB: 6.4 },
@@ -105,7 +105,7 @@ export const mockData: TongQuanData = {
     ],
   },
 
-  // ── Tab Phân tích ──────────────────────────────────────────
+  // tab phân tích
   phanTich: {
     banners: [
       { id: 'revenue', label: 'DOANH THU HÔM NAY', value: '641.000đ', change: '+12.4% so với hôm qua', trend: ETrend.UP, icon: EBannerIcon.REVENUE },

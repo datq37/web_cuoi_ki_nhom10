@@ -47,7 +47,7 @@ export default function useCustomerChatBoxModel() {
           addToCart(dish, response.action!.qty);
         }
       }
-      // hiện thi câu trả lời của au
+      // hiện thi câu trả lời c
       const responseMessage = createMessage(EChatRole.BOT, response.reply);
       setMessages(prev => [...prev, responseMessage]);
     } catch (error) {

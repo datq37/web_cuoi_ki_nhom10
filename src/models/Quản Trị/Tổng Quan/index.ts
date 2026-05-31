@@ -3,7 +3,7 @@ import { ELoaiGhiChu, ETrangThaiDon, ETrangThaiTrucTiep } from '@/services/Quả
 import type { DonTrucTiep } from '@/services/Quản Trị/Tổng Quan/typing';
 import { formatCurrency } from '@/utils/format';
 
-// ─── Formatter ─────────────────────────────────────────────
+// formatter
 export const fmt = formatCurrency;
 export const fmtShort = (v: number) => {
   if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}tr`;
@@ -11,7 +11,7 @@ export const fmtShort = (v: number) => {
   return `${v}`;
 };
 
-// ─── Lọc đơn theo trạng thái ───────────────────────────────
+// lọc đơn
 export const filterDon = (
   list: DonTrucTiep[],
   trangThai: ETrangThaiTrucTiep,
@@ -20,7 +20,7 @@ export const filterDon = (
 export const tongTienCot = (list: DonTrucTiep[]) =>
   list.reduce((s, d) => s + d.tongTien, 0);
 
-// ─── Config cột Kanban ─────────────────────────────────────
+// config kanban
 export const COT_CONFIG: Record<
   ETrangThaiTrucTiep,
   { tieuDe: string; mau: string; bgLight: string; actionLabel: string; actionColor: string }
@@ -61,7 +61,7 @@ export const GHI_CHU_CONFIG: Record<ELoaiGhiChu, { label: string; mau: string; b
   [ELoaiGhiChu.MANG_DI]:    { label: 'Mang đi',    mau: '#8b5cf6', bg: '#f5f3ff' },
 };
 
-// ─── ApexCharts – Bar + Line (Phân tích) ───────────────────
+// biểu đồ phân tích
 export const buildBarLineOptions = (categories: string[]) => ({
   chart: { type: 'bar' as const, toolbar: { show: false }, fontFamily: 'inherit' },
   colors: ['#16a34a', '#d1d5db'],
@@ -95,7 +95,7 @@ export const buildBarLineOptions = (categories: string[]) => ({
   fill: { opacity: [1, 0.6] },
 });
 
-// ─── Config trạng thái đơn (Tác nghiệp) ───────────────────
+// config trạng thái đơn
 export const TRANG_THAI_DON_CONFIG: Record<
   ETrangThaiDon,
   { label: string; color: string; bg: string }
@@ -110,7 +110,7 @@ export const TRANG_THAI_DON_CONFIG: Record<
 export const getTrangThaiDon = (key: ETrangThaiDon) =>
   TRANG_THAI_DON_CONFIG[key] ?? TRANG_THAI_DON_CONFIG[ETrangThaiDon.CHO_XAC_NHAN];
 
-// ─── ApexCharts – Area line (Tác nghiệp) ──────────────────
+// biểu đồ tác nghiệp
 export const buildAreaOptions = (categories: string[]) => ({
   chart: { type: 'area' as const, toolbar: { show: false }, fontFamily: 'inherit' },
   colors: ['#16a34a'],

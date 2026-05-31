@@ -100,8 +100,8 @@ export function useGioHangModel() {
         };
 
         addOrder(newOrder);
-        // Lưu ý: daDung đã được tăng đồng bộ ở claimVoucher() ở trên rồi,
-        // KHÔNG cần tăng lại ở đây nữa.
+        // lưu ý tăng đồng bộ
+        // không tăng lại
 
         const isQRPayment = payment === PaymentMethod.QR;
 
@@ -109,7 +109,7 @@ export function useGioHangModel() {
             setPendingOrder(newOrder);
         }
 
-        // Thêm thông báo
+        // thêm thông báo
         addNotification({
             id: `n-${Date.now()}`,
             title: isQRPayment ? 'Đơn hàng đang chờ thanh toán QR' : 'Đơn hàng đã được đặt thành công',

@@ -1,4 +1,4 @@
-// ─── Enums ──────────────────────────────────────────────────
+// enum
 export enum ETabKey {
   TAC_NGHIEP = 'tac_nghiep',
   PHAN_TICH  = 'phan_tich',
@@ -52,7 +52,7 @@ export enum EHoatDongType {
   PROMO     = 'promo',
 }
 
-// ─── Trực tiếp (Live Kanban) ─────────────────────────────────
+// live kanban
 export interface KhachHangTT {
   ten: string;
   vietTat: string;
@@ -90,7 +90,7 @@ export interface TomTatHomNay {
   thoiGianTB: number;
 }
 
-// ─── Phân tích (Analytics) ───────────────────────────────────
+// phân tích
 export interface StatBanner {
   id: string;
   label: string;
@@ -148,7 +148,7 @@ export interface HoatDongItem {
   type: EHoatDongType;
 }
 
-// ─── Tác nghiệp (Operations) ────────────────────────────────
+// tác nghiệp
 export interface StatCard {
   id: string;
   label: string;
@@ -190,7 +190,7 @@ export interface TrangThaiDonStat {
   color: string;
 }
 
-// ─── Root data shape ─────────────────────────────────────────
+// root data shape
 export interface TongQuanData {
   tacNghiep: {
     statCards: StatCard[];

@@ -303,7 +303,7 @@ const KhuVucModal: React.FC<KhuVucModalProps> = ({ open, initial, onCancel, onSu
 const CoSoVatChat: React.FC = () => {
   const [khuVucs, setKhuVucs] = useState<IKhuVuc[]>(DANH_SACH_KHU_VUC);
 
-  // Modal state
+  // trạng thái modal
   const [khuModal,  setKhuModal]  = useState(false);
   const [editingKhu, setEditingKhu] = useState<IKhuVuc | null>(null);
 

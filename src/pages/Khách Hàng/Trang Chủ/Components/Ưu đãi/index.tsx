@@ -33,7 +33,7 @@ interface BestCombo {
   dishIds: string[];
 }
 
-// Chọn ảnh món ăn ngẫu nhiên thay đổi theo mã voucher
+// chọn ảnh ngẫu nhiên
 const FOOD_IMGS = [comPhan, bunPho, doUong, anNhe, chayImg];
 function getFoodImgForVoucher(id: string): string {
   let hash = 0;
@@ -66,7 +66,7 @@ function getBestVoucher(): BestVoucher | null {
 
     if (active.length === 0) return null;
 
-    // Tính giá trị thực: phan_tram dùng % (1 = 1%), so_tien dùng VND
+    // tính giá trị thực
     const scored = active.map((k: any) => ({
       ...k,
       score: k.loai === 'phan_tram' ? k.giaTriGiam * 1000 : k.giaTriGiam,
@@ -129,7 +129,7 @@ function getBestCombo(): BestCombo | null {
 
     if (activeCombos.length === 0) return null;
 
-    // Lấy combo đầu tiên
+    // lấy combo đầu
     const best = activeCombos[0];
     
     let originalPrice = 0;
@@ -166,7 +166,7 @@ function getBestCombo(): BestCombo | null {
   }
 }
 
-// Countdown đến cuối ngày hôm nay
+// đếm ngược hết ngày
 function useCountdown() {
   const getSecsLeft = () => {
     const now = new Date();
@@ -223,7 +223,7 @@ const OffersAndCombos: React.FC<OffersAndCombosProps> = ({ setPage }) => {
       bestCombo.dishIds.forEach(id => {
         const dishData = dishList.find((d: any) => d.id === id);
         if (dishData) {
-          // Convert admin dish to customer Dish format
+          // format món ăn
           let cat = 'main';
           if (dishData.danhMuc === 'do_uong') cat = 'drink';
           else if (dishData.danhMuc === 'an_vat') cat = 'snack';

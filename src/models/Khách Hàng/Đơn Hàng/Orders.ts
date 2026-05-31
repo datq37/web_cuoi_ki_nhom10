@@ -8,7 +8,7 @@ export default function useOrderModel() {
         if (typeof window !== 'undefined') {
             const saved = localStorage.getItem('customer_orders');
             if (saved) {
-                try { return JSON.parse(saved); } catch {}
+                try { return JSON.parse(saved); } catch { }
             }
         }
         return SEED_ORDERS;
@@ -20,7 +20,7 @@ export default function useOrderModel() {
         }
     }, [orders]);
 
-    // Lắng nghe thay đổi từ admin_orders để đồng bộ trạng thái về phía khách hàng
+    // đồng bộ trạng thái
     useEffect(() => {
         const handleAdminSync = () => {
             const adminSaved = localStorage.getItem('admin_orders');
@@ -28,7 +28,7 @@ export default function useOrderModel() {
             try {
                 const adminOrders = JSON.parse(adminSaved);
                 if (!Array.isArray(adminOrders)) return;
-                
+
                 const STATUS_MAP: Record<string, OrderStatus> = {
                     'cho_xac_nhan': OrderStatus.Pending,
                     'dang_che_bien': OrderStatus.Preparing,
@@ -56,8 +56,8 @@ export default function useOrderModel() {
                         setTimeout(() => {
                             changedOrders.forEach(co => {
                                 message.info(`Đơn hàng ${co.id} của bạn đã được cập nhật thành: ${co.status}`);
-                                
-                                // Gửi thông báo cho khách hàng
+
+                                // gửi thông báo
                                 window.dispatchEvent(new CustomEvent('new_notification', {
                                     detail: {
                                         id: `notif_${Date.now()}_${co.id}`,
@@ -79,7 +79,7 @@ export default function useOrderModel() {
                     return prev;
                 });
             } catch (e) {
-                // ignore
+                // bỏ qua
             }
         };
 
@@ -87,7 +87,7 @@ export default function useOrderModel() {
         window.addEventListener('admin_orders_updated', handleAdminSync);
         window.addEventListener('focus', handleAdminSync);
 
-        // Initial sync on mount
+        // đồng bộ ban đầu
         handleAdminSync();
 
         return () => {
@@ -100,7 +100,7 @@ export default function useOrderModel() {
     const addOrder = useCallback((newOrder: Order) => {
         setOrders(prev => [newOrder, ...prev]);
 
-        // -- Sync to admin --
+        // đồng bộ admin
         if (typeof window !== 'undefined') {
             try {
                 const adminSaved = localStorage.getItem('admin_orders');
@@ -109,7 +109,7 @@ export default function useOrderModel() {
                     adminOrders = JSON.parse(adminSaved);
                 }
 
-                // Map Customer Order -> Admin DonTrucTiep
+                // map đơn hàng
                 const donTrucTiep = {
                     maDon: newOrder.id,
                     thoiGian: newOrder.created,
@@ -128,8 +128,8 @@ export default function useOrderModel() {
                 adminOrders = [donTrucTiep, ...adminOrders];
                 localStorage.setItem('admin_orders', JSON.stringify(adminOrders));
                 window.dispatchEvent(new Event('admin_orders_updated'));
-                
-                // Gửi thông báo cho khách hàng
+
+                // gửi thông báo
                 window.dispatchEvent(new CustomEvent('new_notification', {
                     detail: {
                         id: `notif_${Date.now()}`,
@@ -159,13 +159,13 @@ export default function useOrderModel() {
                     [OrderStatus.Ready]: OrderStatus.Done,
                     [OrderStatus.Done]: OrderStatus.Done
                 };
-                
+
                 const finalStatus = nextStatus[o.status] || o.status;
                 if (finalStatus === OrderStatus.Done && o.status !== OrderStatus.Done) {
                     nextStatusToAdmin = 'hoan_thanh';
                     setTimeout(() => {
                         window.dispatchEvent(new CustomEvent('order_completed', { detail: { amount: o.total } }));
-                        
+
                         window.dispatchEvent(new CustomEvent('new_notification', {
                             detail: {
                                 id: `notif_received_${Date.now()}`,

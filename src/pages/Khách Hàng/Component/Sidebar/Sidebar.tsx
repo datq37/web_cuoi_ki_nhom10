@@ -26,9 +26,9 @@ const Sidebar: React.FC = () => {
 
   const closeSidebar = () => setIsSidebarOpen(false);
 
-  // --- Tính toán điểm và hạng tiếp theo ---
-  // Import động nếu chưa import, tuy nhiên ta có thể dùng require hoặc tính thẳng ở đây để gọn.
-  // Ta có RANKS: Đồng (0), Bạc (1M), Vàng (3M), Kim Cương (10M)
+  // tính điểm và hạng
+  // import động
+  // các mức rank
   const RANKS = [
     { name: 'Đồng', min: 0, mult: 1, color: '#cd7f32' },
     { name: 'Bạc', min: 1000000, mult: 1.2, color: '#c0c0c0' },
@@ -51,9 +51,9 @@ const Sidebar: React.FC = () => {
     }
   }
 
-  // Progress tính theo số tiền (chi tiêu) vì hạng dựa vào tiền
-  // Tuy nhiên, UI có thể hiển thị "cần chi tiêu thêm X VNĐ" thay vì "điểm" để lên hạng.
-  // Hoặc ta có thể quy đổi ngược ra điểm tương đối.
+  // tính progress
+  // hiển thị điểm lên hạng
+  // quy đổi điểm
   const spentNeeded = nextRank.min - currentSpent;
   const progressPercent = isMaxRank ? 100 : ((currentSpent - currentRank.min) / (nextRank.min - currentRank.min)) * 100;
   const orderItems = [

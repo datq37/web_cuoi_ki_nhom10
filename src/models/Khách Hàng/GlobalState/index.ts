@@ -45,7 +45,7 @@ export default function useGlobalModel() {
   });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Lưu theme vào localStorage mỗi khi có thay đổi
+  // lưu theme
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem(CUSTOMER_THEME_KEY, theme);
@@ -70,7 +70,7 @@ export default function useGlobalModel() {
     return () => window.removeEventListener('canteen-theme-change', handleThemeChange);
   }, []);
 
-  // Lưu page vào sessionStorage mỗi khi có thay đổi
+  // lưu page
   useEffect(() => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('current_page', page);

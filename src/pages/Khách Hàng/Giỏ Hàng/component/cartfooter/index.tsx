@@ -6,7 +6,6 @@ import { useCartFooterModel } from '@/models/Khách Hàng/Giỏ hàng/cartfooter
 import { formatCurrency } from '@/utils/format';
 import './index.less';
 
-// ─── Component ────────────────────────────────────────────────────────────────
 const CartFooter: React.FC<CartFooterProps> = ({
     selectedVoucher,
     onConfirm,

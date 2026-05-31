@@ -1,4 +1,4 @@
-import { AppModules, EModuleKey } from '@/services/base/constant';
+import { AppModules } from '@/services/base/constant';
 
 const ipRoot = APP_CONFIG_IP_ROOT; // ip dev
 
@@ -9,11 +9,11 @@ const ip3 = ipRoot + 'slink'; // ip dev
 const ipNotif = ipRoot + 'notification'; // ip dev
 const ipSlink = ipRoot + 'slink'; // ip dev
 
-const currentRole = EModuleKey.CONNECT;
-const oneSignalRole = EModuleKey.CONNECT;
+const currentRole: keyof typeof AppModules = 'admin';
+const oneSignalRole: keyof typeof AppModules = currentRole;
 
 // DO NOT TOUCH
-const keycloakClientID = AppModules[currentRole].clientId;
+const keycloakClientID = `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}${currentRole}`;
 const keycloakAuthority = APP_CONFIG_KEYCLOAK_AUTHORITY;
 const resourceServerClientId = `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}auth`;
 const keycloakAuthEndpoint = APP_CONFIG_KEYCLOAK_AUTHORITY + '/protocol/openid-connect/auth';

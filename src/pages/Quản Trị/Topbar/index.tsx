@@ -142,11 +142,10 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
           title={isDark ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối'}
         />
         <Popover
-          open={notifOpen}
-          onOpenChange={setNotifOpen}
+          visible={notifOpen}
+          onVisibleChange={setNotifOpen}
           trigger="click"
           placement="bottomRight"
-          arrow={false}
           overlayInnerStyle={{ padding: 0, borderRadius: 12, overflow: 'hidden' }}
           content={
             <NotifPopup

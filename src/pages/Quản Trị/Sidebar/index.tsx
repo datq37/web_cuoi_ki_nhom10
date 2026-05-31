@@ -38,7 +38,7 @@ const MENU_KHAC = [
 ];
 
 const COLLAPSED_W = '64px';
-const EXPANDED_W  = '260px';
+const EXPANDED_W  = '248px';
 
 const Sidebar: React.FC = () => {
   const location    = useLocation();

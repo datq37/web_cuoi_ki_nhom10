@@ -1,55 +1,40 @@
-// ─────────────────────────────────────────────────────────────────
-// Admin Design Tokens — nguồn sự thật duy nhất cho màu admin
-// Đồng bộ với trang Khách Hàng (Sidebar.less, topbar.less, v.v.)
-// ─────────────────────────────────────────────────────────────────
+@primary: var(--accent);
+@primary-light: #35a852;
+@primary-hover: var(--accent-strong);
+@primary-dark: var(--accent-strong);
+@primary-darkest: #14532d;
 
-// ── Primary green palette ────────────────────────────────────────
-@primary:          #16a34a;
-@primary-light:    #22c55e;   // nhấn sáng, gradient
-@primary-hover:    #15803d;   // hover, nút đậm
-@primary-dark:     #166534;   // text đậm trên nền sáng
-@primary-darkest:  #14532d;   // heading xanh đậm nhất
+@primary-50: var(--accent-soft);
+@primary-100: var(--accent-soft);
+@primary-200: rgba(45, 106, 79, 0.26);
+@primary-soft: var(--accent-soft);
 
-// Soft backgrounds (green-50 / 100 / 200)
-@primary-50:       #f0fdf4;
-@primary-100:      #dcfce7;
-@primary-200:      #bbf7d0;
+@accent: #f97316;
+@accent-hover: #ea580c;
+@warning: #d97706;
 
-// Compatibility aliases used by existing files
-@primary-soft:     @primary-100;  // = #dcfce7
+@text-ink: var(--ink);
+@text-dark: var(--ink);
+@text-mid: var(--ink-2);
+@text-secondary: var(--ink-2);
+@text-muted: var(--ink-3);
+@text-light: var(--ink-4);
 
-// ── Accent / Warning ─────────────────────────────────────────────
-@accent:           #f97316;
-@accent-hover:     #ea580c;
-@warning:          #d97706;
+@surface: var(--bg-elev);
+@surface-hover: var(--bg-soft);
+@bg-soft: var(--bg-soft);
+@bg-page: var(--bg-main);
+@bg: var(--bg-main);
 
-// ── Text scale ───────────────────────────────────────────────────
-@text-ink:         #111827;
-@text-dark:        @text-ink;    // compatibility alias
-@text-mid:         #374151;
-@text-secondary:   #4b5563;
-@text-muted:       #6b7280;
-@text-light:       #9ca3af;
+@line: var(--line);
+@border: var(--line);
+@divider: var(--line);
 
-// ── Surfaces ─────────────────────────────────────────────────────
-@surface:          #ffffff;
-@surface-hover:    #f9fafb;
-@bg-soft:          #f8faf8;   // nền phụ (hơi xanh nhạt — dùng user page)
-@bg-page:          #f5f8f3;   // page background (ấm xanh nhẹ)
-@bg:               #f8fafc;   // compatibility alias (dùng rộng trong admin)
+@success: var(--accent);
+@success-soft: var(--accent-soft);
+@danger: var(--danger);
+@danger-soft: rgba(239, 68, 68, 0.1);
+@info: #2563eb;
+@info-soft: #dbeafe;
 
-// ── Borders / Lines ──────────────────────────────────────────────
-@line:             #eef2ef;   // per spec
-@border:           #f0f0f0;   // compatibility alias (dùng rộng trong admin)
-@divider:          #f3f4f6;   // dùng trong DonHang, OrderDrawer
-
-// ── Semantic ─────────────────────────────────────────────────────
-@success:          #16a34a;
-@success-soft:     #dcfce7;
-@danger:           #dc2626;
-@danger-soft:      #fff2f0;
-@info:             #2563eb;
-@info-soft:        #dbeafe;
-
-// ── Gradient ─────────────────────────────────────────────────────
-@gradient-primary: linear-gradient(135deg, @primary-hover, @primary-light);
+@gradient-primary: linear-gradient(145deg, #c5f38f 0%, #35a852 100%);

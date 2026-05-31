@@ -10,6 +10,77 @@
   gap: 12px;
 }
 
+// ── Stat cards (4 cột — đồng nhất với Khách Hàng, Kho) ──────────
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  @media (max-width: 1100px) { grid-template-columns: repeat(2, 1fr); }
+}
+
+.statCard {
+  background: @surface;
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border: 1px solid @border;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  gap: 12px;
+  transition: box-shadow 0.15s;
+  &:hover { box-shadow: 0 4px 12px rgba(0,0,0,.08); }
+}
+
+.statCardAlert {
+  border-color: #fed7aa !important;
+  background: #fff7ed !important;
+}
+
+.statLeft { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+
+.statLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: @text-light;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.statValue {
+  font-size: 26px;
+  font-weight: 800;
+  color: @text-dark;
+  line-height: 1;
+}
+
+.statSub { font-size: 12px; color: @text-muted; }
+
+.statIconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+// ── DatePicker + reset ───────────────────────────────────────────
+.datePicker {
+  width: 150px;
+  border-radius: 8px !important;
+  :global(.ant-picker-input > input) { font-size: 13px; }
+}
+
+.btnResetDate {
+  border-radius: 8px !important;
+  font-size: 12.5px;
+  color: @primary !important;
+  border-color: @primary !important;
+  &:hover { background: @primary-50 !important; }
+}
+
 .tabsRow {
   display: flex;
   gap: 2px;
@@ -153,6 +224,15 @@
 }
 
 :global([data-theme="dark"]) {
+  .statCard    { background: #1e293b; border-color: #334155; }
+  .statCardAlert { background: rgba(234,88,12,.1) !important; border-color: rgba(234,88,12,.3) !important; }
+  .statValue   { color: #f1f5f9; }
+  .statLabel   { color: #64748b; }
+  .datePicker {
+    :global(.ant-picker) { background: #1e293b; border-color: #334155; }
+    :global(.ant-picker-input > input) { color: #e2e8f0; }
+  }
+
   .tabsRow { background: #1e293b; border-color: #334155; }
   .tabBtn { color: #64748b; &:hover { background: #0f172a; color: #cbd5e1; } }
   .tabCount { background: rgba(255,255,255,0.08); color: #94a3b8; }

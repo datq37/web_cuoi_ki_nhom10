@@ -7,5 +7,5 @@ export interface IInitialState {
   permissionLoading?: boolean;
   currentUser?: any;
   settings?: any;
-  authorizedPermissions?: { rsname: string }[];
+  authorizedPermissions?: { rsname?: string; scopes?: string[] }[];
 }

@@ -14,7 +14,7 @@ import styles from './index.less';
 moment.locale('vi');
 
 const TongQuan: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<ETabKey>(ETabKey.PHAN_TICH);
+  const [activeTab, setActiveTab] = useState<ETabKey>(ETabKey.TAC_NGHIEP);
   const [reportOpen, setReportOpen] = useState(false);
 
   const tabs: { key: ETabKey; label: string }[] = [
@@ -27,32 +27,33 @@ const TongQuan: React.FC = () => {
       <Topbar title="Tổng quan" />
 
       <div className={styles.pageBody}>
-          <div className={styles.pageHeader}>
-            <div className={styles.tabsRow}>
-              {tabs.map((t) => (
-                <button
-                  key={t.key}
-                  className={`${styles.tabBtn} ${activeTab === t.key ? styles.tabActive : ''}`}
-                  onClick={() => setActiveTab(t.key)}
-                >
-                  {t.label}
-                </button>
-              ))}
-            </div>
-            <div className={styles.headerRight}>
-              <span className={styles.dateChip}>
-                <CalendarOutlined style={{ marginRight: 5, color: '#9ca3af' }} />
-                Hôm nay · {moment().format('D/M/YYYY')}
-              </span>
-              <Button
-                type="primary"
-                icon={<DownloadOutlined />}
-                className={styles.exportBtn}
-                onClick={() => setReportOpen(true)}
+          {/* Hàng 1: Tabs */}
+          <div className={styles.tabsRow}>
+            {tabs.map((t) => (
+              <button
+                key={t.key}
+                className={`${styles.tabBtn} ${activeTab === t.key ? styles.tabActive : ''}`}
+                onClick={() => setActiveTab(t.key)}
               >
-                Xuất báo cáo
-              </Button>
-            </div>
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Hàng 2: Date + Export */}
+          <div className={styles.pageHeader}>
+            <span className={styles.dateChip}>
+              <CalendarOutlined style={{ marginRight: 5, color: '#9ca3af' }} />
+              Hôm nay · {moment().format('D/M/YYYY')}
+            </span>
+            <Button
+              type="primary"
+              icon={<DownloadOutlined />}
+              className={styles.exportBtn}
+              onClick={() => setReportOpen(true)}
+            >
+              Xuất báo cáo
+            </Button>
           </div>
 
           {activeTab === ETabKey.PHAN_TICH  && <PhanTichView />}

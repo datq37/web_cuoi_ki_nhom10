@@ -1,290 +1,275 @@
-﻿@import '~@/styles/admin-tokens.less';
+@import '~@/styles/admin-tokens.less';
 
 @radius: 12px;
-@shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+@shadow: 0 1px 4px rgba(0,0,0,.05);
 
-.tnWrap { display: flex; flex-direction: column; gap: 14px; }
-
-.tnStatGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-}
-
-.tnStatCard {
-  background: #fff;
-  border: 1px solid @border;
-  border-radius: @radius;
-  padding: 16px 18px;
-  box-shadow: @shadow;
+.tnWrap {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 16px;
 }
 
-.tnStatTop { display: flex; align-items: center; justify-content: space-between; }
-.tnStatLabel { font-size: 12.5px; color: @text-muted; font-weight: 500; }
-
-.tnStatIcon {
-  width: 38px; height: 38px;
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-
-.tnStatValue { font-size: 24px; font-weight: 800; color: @text-dark; line-height: 1.1; }
-
-.tnStatChange {
-  display: flex; align-items: center; gap: 4px;
-  font-size: 12px; font-weight: 500;
-  span { font-size: 12px; }
-}
-
-.tnUp   { color: @primary; }
-.tnDown { color: #ef4444; }
-
-.tnInfoGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-}
-
-.tnInfoCard {
-  background: #fff;
-  border: 1px solid @border;
-  border-radius: @radius;
-  padding: 14px 16px;
-  box-shadow: @shadow;
+// ── Welcome card ──────────────────────────────────────────────────
+.welcomeCard {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.tnInfoTitle { font-size: 12.5px; font-weight: 600; color: @text-muted; }
-.tnCompletion { display: flex; align-items: center; gap: 12px; }
-.tnBestDish   { display: flex; align-items: center; gap: 10px; }
-
-.tnDishImg {
-  width: 52px; height: 52px;
-  border-radius: 10px;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-.tnDishName {
-  font-size: 13px; font-weight: 600; color: @text-dark;
-  margin-bottom: 2px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-
-.tnDishSold { font-size: 12px; color: @text-muted; }
-
-.tnTopBadge {
-  display: flex; align-items: center;
-  font-size: 11px; font-weight: 700;
-  color: #ef4444;
-  background: #fef2f2;
-  border-radius: 20px;
-  padding: 3px 8px;
-  white-space: nowrap;
-}
-
-.tnPromo { display: flex; align-items: flex-start; gap: 10px; }
-
-.tnPromoIcon {
-  width: 42px; height: 42px;
-  border-radius: 10px;
-  background: @primary-50;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-
-.tnPromoName  { font-size: 13px; font-weight: 600; color: @text-dark; margin-bottom: 2px; }
-.tnPromoLeft  { font-size: 12px; color: @text-muted; margin-bottom: 4px; }
-.tnPromoLink  { font-size: 12px; color: @primary; font-weight: 500; &:hover { color: @primary-hover; } }
-
-.tnSatisfy { display: flex; align-items: flex-start; gap: 10px; }
-
-.tnSatisfyIcon {
-  width: 42px; height: 42px;
-  border-radius: 10px;
-  background: #fefce8;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-
-.tnSatisfyScore { font-size: 20px; font-weight: 800; color: @text-dark; line-height: 1.1; }
-.tnSatisfyDesc  { font-size: 11px; color: @text-muted; margin-bottom: 4px; }
-
-.tnChartRow {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 14px;
-}
-
-.tnChartCard {
-  background: #fff;
-  border: 1px solid @border;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, @primary-darkest 0%, @primary-dark 60%, @primary-hover 100%);
   border-radius: @radius;
-  padding: 16px 18px;
+  padding: 20px 28px;
+  box-shadow: 0 4px 16px rgba(22,101,52,0.25);
+  gap: 16px;
+}
+
+.welcomeLeft { flex: 1; min-width: 0; }
+
+.welcomeGreet {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.welcomeDate {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+}
+
+.welcomeRevenue {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.welcomeRevenueLabel {
+  font-size: 11px;
+  color: rgba(255,255,255,0.65);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.welcomeRevenueValue {
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.1;
+}
+
+// ── Section card ─────────────────────────────────────────────────
+.sectionCard {
+  background: @surface;
+  border-radius: @radius;
+  border: 1px solid @border;
+  padding: 18px 20px;
   box-shadow: @shadow;
 }
 
-.tnChartHead { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 4px; }
-.tnChartTitle { font-size: 14px; font-weight: 700; color: @text-dark; }
-.tnChartSub { font-size: 12px; color: @text-muted; margin-top: 2px; strong { color: @primary; } }
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
 
-.tnDonutWrap { display: flex; align-items: center; gap: 10px; }
-.tnDonutLeg  { display: flex; flex-direction: column; gap: 7px; flex: 1; }
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: @text-dark;
+  display: flex;
+  align-items: center;
+}
 
-.tnLegRow    { display: flex; align-items: center; gap: 7px; }
-.tnLegDot    { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-.tnLegLabel  { flex: 1; font-size: 12.5px; color: @text-mid; }
-.tnLegVal    { font-size: 13px; font-weight: 700; color: @text-dark; }
-
-.tnViewAll {
-  display: inline-block;
-  margin-top: 10px;
+.sectionLink {
   font-size: 12.5px;
-  color: @primary;
-  font-weight: 500;
-  &:hover { color: @primary-hover; }
+  color: @primary !important;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  &:hover { color: @primary-hover !important; }
 }
 
-.tnDataRow {
+// ── Order stat grid ───────────────────────────────────────────────
+.orderStatGrid {
   display: grid;
-  grid-template-columns: 1.7fr 1fr;
-  gap: 14px;
-}
-
-.tnTableCard, .tnTopCard {
-  background: #fff;
-  border: 1px solid @border;
-  border-radius: @radius;
-  padding: 16px 18px;
-  box-shadow: @shadow;
-}
-
-.tnTableHead {
-  display: flex; align-items: center; justify-content: space-between;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
   margin-bottom: 12px;
 }
 
-.tnTableTitle { font-size: 14px; font-weight: 700; color: @text-dark; }
-
-.tnTable {
-  width: 100%;
-  border-collapse: collapse;
-  th {
-    font-size: 10.5px; font-weight: 600; color: @text-light;
-    letter-spacing: 0.04em;
-    padding: 4px 8px 8px;
-    border-bottom: 1px solid @border;
-    text-align: left;
-    white-space: nowrap;
-  }
-  td {
-    padding: 9px 8px;
-    font-size: 13px;
-    color: @text-mid;
-    border-bottom: 1px solid #f9fafb;
-    vertical-align: middle;
-  }
-  tr:last-child td { border-bottom: none; }
+.orderStatItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 8px;
+  background: #f9fafb;
+  border-radius: 10px;
+  border: 1px solid @border;
+  text-align: center;
+  transition: all 0.15s;
 }
 
-.tnMaDon { font-size: 12px; font-weight: 700; color: @text-dark; font-family: monospace; }
-.tnKH    { font-size: 13px; font-weight: 500; color: @text-dark; }
-.tnPhong { font-size: 11.5px; color: @text-muted; }
-.tnMon   { font-size: 12.5px; color: @text-mid; }
-.tnTien  { font-size: 13px; font-weight: 700; color: @text-dark; white-space: nowrap; }
-.tnGio   { font-size: 12px; color: @text-muted; }
+.orderStatAlert {
+  background: #fff7ed !important;
+  border-color: #fed7aa !important;
+  .orderStatNum { color: #ea580c !important; }
+}
 
-.tnStatusBadge {
-  display: inline-block;
-  border: none;
-  border-radius: 20px;
+.orderStatIcon {
+  font-size: 18px;
+  color: @text-muted;
+  margin-bottom: 2px;
+}
+
+.orderStatNum {
+  font-size: 28px;
+  font-weight: 800;
+  color: @text-dark;
+  line-height: 1;
+}
+
+.orderStatLabel {
+  font-size: 11.5px;
+  color: @text-muted;
   font-weight: 500;
-  font-size: 12px;
-  padding: 3px 10px;
-
-  &[data-status="cho_xac_nhan"]  { background: #fff7ed; }
-  &[data-status="dang_chuan_bi"] { background: #eff6ff; }
-  &[data-status="dang_giao"]     { background: #ecfeff; }
-  &[data-status="hoan_thanh"]    { background: @primary-50; }
-  &[data-status="da_huy"]        { background: #f9fafb; }
 }
 
-.tnTopList { display: flex; flex-direction: column; gap: 10px; }
+// ── Urgent banner ─────────────────────────────────────────────────
+.urgentBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #92400e;
+  flex-wrap: wrap;
 
-.tnTopRow {
-  display: flex; align-items: center; gap: 10px;
+  strong { color: #c2410c; }
+}
+
+.urgentBtn {
+  margin-left: auto;
+  background: #ea580c !important;
+  border-color: #ea580c !important;
+  border-radius: 7px !important;
+  font-size: 12px !important;
+  &:hover { background: #c2410c !important; border-color: #c2410c !important; }
+}
+
+// ── Kho warnings ─────────────────────────────────────────────────
+.khoOk {
+  display: flex;
+  align-items: center;
+  font-size: 13.5px;
+  color: @text-muted;
   padding: 8px 0;
-  border-bottom: 1px solid #f9fafb;
-  &:last-child { border-bottom: none; }
 }
 
-.tnTopRank { font-size: 18px; font-weight: 800; min-width: 24px; text-align: center; }
-.tnTopImg  { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
-.tnTopName {
-  flex: 1; font-size: 13.5px; font-weight: 500; color: @text-dark;
-  min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.tnTopSuat { font-size: 12.5px; font-weight: 700; white-space: nowrap; }
-
-@media (max-width: 1200px) {
-  .tnStatGrid  { grid-template-columns: repeat(2, 1fr); }
-  .tnInfoGrid  { grid-template-columns: repeat(2, 1fr); }
-  .tnChartRow  { grid-template-columns: 1fr; }
-  .tnDataRow   { grid-template-columns: 1fr; }
+.khoWarnList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
+.khoWarnItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13.5px;
+}
+
+.khoWarnDanger {
+  background: #fff2f0;
+  border: 1px solid #fca5a5;
+}
+
+.khoWarnWarning {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+}
+
+.khoWarnTen {
+  flex: 1;
+  font-weight: 500;
+  color: @text-dark;
+}
+
+.khoWarnTag {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 20px;
+  background: #fff2f0;
+  color: #dc2626;
+  white-space: nowrap;
+}
+
+// ── Shortcut grid ─────────────────────────────────────────────────
+.shortcutGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.shortcutBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 10px;
+  border: 1.5px solid @border;
+  border-radius: 10px;
+  background: @surface;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 13px;
+  font-weight: 500;
+  color: @text-mid;
+
+  &:hover {
+    border-color: @primary;
+    background: @primary-50;
+    color: @primary;
+
+    .shortcutIcon { color: @primary; }
+  }
+}
+
+.shortcutIcon {
+  font-size: 22px;
+  color: @text-muted;
+  transition: color 0.15s;
+}
+
+// ── Dark mode ─────────────────────────────────────────────────────
 :global([data-theme="dark"]) {
-  .tnStatCard, .tnInfoCard, .tnChartCard, .tnTableCard, .tnTopCard {
-    background: #1e293b;
+  .sectionCard { background: #1e293b; border-color: #334155; }
+  .sectionTitle { color: #f1f5f9; }
+
+  .orderStatItem { background: #0f172a; border-color: #334155; }
+  .orderStatNum  { color: #f1f5f9; }
+  .orderStatLabel { color: #64748b; }
+  .orderStatAlert { background: rgba(234,88,12,.12) !important; border-color: rgba(234,88,12,.4) !important; }
+
+  .urgentBanner { background: rgba(234,88,12,.1); border-color: rgba(234,88,12,.3); color: #fcd34d; }
+
+  .khoOk { color: #64748b; }
+  .khoWarnDanger  { background: rgba(220,38,38,.1); border-color: rgba(220,38,38,.3); }
+  .khoWarnWarning { background: rgba(217,119,6,.1); border-color: rgba(217,119,6,.3); }
+  .khoWarnTen { color: #f1f5f9; }
+
+  .shortcutBtn {
+    background: #0f172a;
     border-color: #334155;
+    color: #94a3b8;
+    &:hover { background: rgba(22,163,74,.1); border-color: @primary; color: #4ade80; .shortcutIcon { color: #4ade80; } }
   }
-
-  .tnStatLabel  { color: #94a3b8; }
-  .tnStatValue  { color: #f1f5f9; }
-
-  .tnInfoTitle  { color: #94a3b8; }
-  .tnDishName   { color: #f1f5f9; }
-  .tnDishSold   { color: #94a3b8; }
-  .tnTopBadge   { background: rgba(239,68,68,.15); color: #f87171; }
-  .tnPromoIcon  { background: rgba(22,163,74,.15); }
-  .tnPromoName  { color: #f1f5f9; }
-  .tnPromoLeft  { color: #94a3b8; }
-  .tnSatisfyIcon  { background: rgba(234,179,8,.12); }
-  .tnSatisfyScore { color: #f1f5f9; }
-  .tnSatisfyDesc  { color: #94a3b8; }
-
-  .tnChartTitle { color: #f1f5f9; }
-  .tnChartSub   { color: #94a3b8; }
-  .tnLegLabel   { color: #cbd5e1; }
-  .tnLegVal     { color: #f1f5f9; }
-
-  .tnTableTitle { color: #f1f5f9; }
-  .tnTable {
-    th { color: #64748b; border-bottom-color: #334155; }
-    td { color: #94a3b8; border-bottom-color: #334155; }
-    tr:last-child td { border-bottom: none; }
-  }
-  .tnMaDon { color: #f1f5f9; }
-  .tnKH    { color: #f1f5f9; }
-  .tnPhong { color: #64748b; }
-  .tnMon   { color: #94a3b8; }
-  .tnTien  { color: #f1f5f9; }
-  .tnGio   { color: #64748b; }
-
-  .tnTopRow  { border-bottom-color: #334155; }
-  .tnTopName { color: #f1f5f9; }
-
-  .tnStatusBadge {
-    &[data-status="cho_xac_nhan"]  { background: rgba(234,88,12,0.15); }
-    &[data-status="dang_chuan_bi"] { background: rgba(37,99,235,0.15); }
-    &[data-status="dang_giao"]     { background: rgba(8,145,178,0.15); }
-    &[data-status="hoan_thanh"]    { background: rgba(22,163,74,0.15); }
-    &[data-status="da_huy"]        { background: rgba(107,114,128,0.15); }
-  }
+  .shortcutIcon { color: #64748b; }
 }

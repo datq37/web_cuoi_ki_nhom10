@@ -37,7 +37,7 @@ const Sidebar: React.FC = () => {
   ];
 
   const currentSpent = user.totalSpent || 0;
-  const currentPoints = user.points || 0;
+  const currentPoints = Math.floor(Number(user.points) || 0);
   let nextRank = RANKS[RANKS.length - 1]; // Giả định là max rank
   let currentRank = RANKS[0];
   let isMaxRank = true;
@@ -164,7 +164,7 @@ const Sidebar: React.FC = () => {
         </div>
 
         <div className="sidebar-bottom">
-          <div className="reward-card" style={{ cursor: 'pointer' }} onClick={() => setPage('settings')}>
+          <div className="reward-card">
             <div className="reward-icon" style={{ background: currentRank.color, color: '#fff' }}>
               <Award size={28} />
             </div>

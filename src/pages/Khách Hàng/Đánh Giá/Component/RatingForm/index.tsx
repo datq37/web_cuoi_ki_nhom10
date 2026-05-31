@@ -2,18 +2,7 @@ import React from 'react';
 import { CameraFilled, CloseOutlined } from '@ant-design/icons';
 import { Button, Input, Rate, Upload } from 'antd';
 import type { RcFile } from 'antd/lib/upload';
-
-interface RatingFormProps {
-    dishDetails: any;
-    dishNames: string;
-    rating: number;
-    setRating: (rating: number) => void;
-    comment: string;
-    setComment: (comment: string) => void;
-    images: string[];
-    handleImageFiles: (files: File[]) => void;
-    handleRemoveImage: (idx: number) => void;
-}
+import { RatingFormProps } from '@/services/Khách hàng/Đánh giá/typing';
 
 const RatingForm: React.FC<RatingFormProps> = ({
     dishDetails,

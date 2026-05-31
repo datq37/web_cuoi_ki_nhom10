@@ -1,0 +1,34 @@
+@import '~@/styles/admin-tokens.less';
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.search {
+  width: 320px;
+  border-radius: 8px !important;
+
+  :global(.ant-input-prefix) { margin-right: 6px; }
+}
+
+.searchIcon { color: @text-light; }
+
+.right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+// ── Dark mode ─────────────────────────────────────────────────────
+:global([data-theme="dark"]) {
+  .search {
+    :global(.ant-input-affix-wrapper) { background: #1e293b; border-color: #334155; }
+    :global(.ant-input)               { background: #1e293b; color: #e2e8f0; }
+    :global(.ant-input-prefix)        { color: #475569; }
+  }
+  .searchIcon { color: #475569; }
+}

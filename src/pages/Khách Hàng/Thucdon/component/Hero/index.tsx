@@ -1,9 +1,10 @@
 import React from 'react';
 import { useModel } from 'umi';
-import { CalendarDays, Clock3 } from 'lucide-react';
+import { CalendarDays, Clock3, Flame } from 'lucide-react';
 import type { MenuHeroProps } from '@/services/Khách hàng/Thực đơn/Hero/typing';
 import menuBanner from '@/assets/Khách Hàng/Thực đơn/thucdon.png';
-const MenuHero: React.FC<MenuHeroProps> = ({ orders, totalDishes }) => {
+
+const MenuHero: React.FC<MenuHeroProps> = ({ orders, totalDishes, bestSeller }) => {
     const { greeting, timeStr, dateStr } = useModel('Khách Hàng.Thực đơn.index');
 
     return (
@@ -29,6 +30,15 @@ const MenuHero: React.FC<MenuHeroProps> = ({ orders, totalDishes }) => {
                             <span>{dateStr}</span>
                         </div>
                     </div>
+                    {bestSeller && (
+                        <div className="hero-stat hero-stat-best">
+                            <Flame size={28} />
+                            <div>
+                                <strong>{bestSeller.name}</strong>
+                                <span>{bestSeller.sold} đã bán</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

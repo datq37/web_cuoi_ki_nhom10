@@ -493,39 +493,69 @@
   }
 }
 
-.main-page-container.theme-dark {
-  .qr-payment-page {
-    --qr-ink: #f3f7f4;
-    --qr-muted: #aeb8b0;
-    --qr-line: rgba(76, 175, 80, 0.2);
-    --qr-card: rgba(30, 34, 31, 0.94);
+.main-page-container.theme-dark .qr-payment-page,
+[data-theme='dark'] .qr-payment-page {
+  --qr-green: var(--accent);
+  --qr-green-dark: var(--accent);
+  --qr-ink: var(--ink);
+  --qr-muted: var(--ink-3);
+  --qr-line: var(--line);
+  --qr-card: rgba(21, 26, 23, 0.96);
 
+  background:
+    radial-gradient(circle at 18% 12%, rgba(50, 168, 82, 0.16), transparent 30%),
+    linear-gradient(135deg, var(--bg-main) 0%, var(--bg-soft) 58%, var(--bg-main) 100%);
+
+  .qr-card,
+  .qr-support-bar,
+  .qr-empty-state {
+    border-color: var(--line);
+    box-shadow: none;
+  }
+
+  .qr-guide-card {
     background:
-      radial-gradient(circle at 18% 12%, rgba(49, 153, 80, 0.16), transparent 30%),
-      linear-gradient(135deg, #131713 0%, #181f19 58%, #101510 100%);
+      radial-gradient(circle at 92% 6%, rgba(50, 168, 82, 0.12), transparent 34%),
+      linear-gradient(135deg, var(--bg-elev), var(--bg-soft));
+  }
 
-    .qr-back-button,
-    .qr-empty-state button,
-    .support-actions button {
-      box-shadow: none;
+  .qr-back-button,
+  .qr-empty-state button,
+  .support-actions button {
+    box-shadow: none;
+  }
+
+  .qr-back-button,
+  .qr-payment-step .step-icon,
+  .support-actions button {
+    color: var(--qr-ink);
+    background: var(--bg-soft);
+    border-color: var(--line);
+  }
+
+  .qr-payment-step {
+    .step-line {
+      border-left-color: var(--line);
     }
+  }
 
-    .qr-back-button,
-    .qr-payment-step .step-icon,
-    .support-actions button {
-      background: #232923;
-      color: var(--qr-ink);
-    }
+  .qr-bank-section {
+    border-top-color: var(--line);
+  }
 
-    .qr-code-frame,
-    .qr-logo-mark,
-    .qr-bank-logo {
-      background: #fff;
-    }
+  .qr-code-frame,
+  .qr-logo-mark,
+  .qr-bank-logo {
+    background: #fff;
+  }
 
-    .qr-alert {
-      background: rgba(82, 56, 14, 0.34);
-      color: #ffd591;
+  .qr-alert {
+    color: #ffd591;
+    background: rgba(82, 56, 14, 0.34);
+
+    &.expired {
+      color: #ff9c8a;
+      background: rgba(87, 31, 22, 0.42);
     }
   }
 }

@@ -22,6 +22,7 @@ import {
 } from './DishCard';
 import type { CartItem } from './DishCard';
 import { createReview } from './DishDetailModal';
+import { showCustomerNotification } from '@/utils/notification';
 
 const mapAdminToCustomerDishes = (adminList: any[]): Dish[] => {
   return adminList.map((item: any) => {
@@ -123,6 +124,11 @@ export default function useCartModel() {
   }, []);
 
   const addToCart = useCallback((dish: Dish, qty?: number) => {
+    const today = new Date();
+    if (today.getDay() === 0) {
+      showCustomerNotification('Căng tin nghỉ Chủ Nhật', 'Rất xin lỗi, căng tin không hoạt động vào ngày Chủ Nhật. Vui lòng đặt hàng vào các ngày trong tuần!', 'error');
+      return;
+    }
     setCart(prev => addDishToCart(prev, dish, qty));
   }, []);
 
@@ -142,6 +148,13 @@ export default function useCartModel() {
     () => filterMenuByCategoryAndSearch(dishes, activeCategory, searchQuery),
     [dishes, activeCategory, searchQuery]
   );
+
+  const bestSeller = useMemo(() => {
+    return dishes.reduce<Dish | undefined>((topDish, dish) => {
+      if (!topDish || dish.sold > topDish.sold) return dish;
+      return topDish;
+    }, undefined);
+  }, [dishes]);
 
   const categoryCounts = useMemo(
     () => buildCategoryCounts(dishes, MENU_CATEGORIES),
@@ -168,6 +181,7 @@ export default function useCartModel() {
     activeCategory,
     setActiveCategory,
     filteredMenu,
+    bestSeller,
     categoryCounts,
     searchQuery,
     setSearchQuery,

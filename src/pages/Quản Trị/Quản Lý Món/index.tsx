@@ -196,7 +196,7 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
       const values = await form.validateFields();
       onSubmit({ ...values, hinhAnh: imgPreview || undefined });
     } catch {
-      // antd hiển thị lỗi tự động
+      // hiển thị lỗi tự động
     }
   };
 
@@ -511,7 +511,7 @@ const QuanLyMon: React.FC = () => {
   const [viewing,      setViewing]      = useState<IMonAnLocal | null>(null);
   const [filterCoSan,  setFilterCoSan]  = useState<'all' | 'dang_ban' | 'tam_het'>('all');
 
-  // Dynamic tab counts
+  // đếm tab động
   const tabs = useMemo<TabDanhMuc[]>(() => [
     { key: 'tat_ca',           label: 'Tất cả',    soLuong: items.length },
     { key: EDanhMuc.MON_CHINH, label: 'Món chính', soLuong: items.filter((m) => m.danhMuc === EDanhMuc.MON_CHINH).length },

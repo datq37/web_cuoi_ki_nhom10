@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 
 import { getRankBySpent } from '@/services/Khách hàng/Tài khoản/Thanghang';
 
+const lamTronDiemThuong = (points: number) => Math.floor(Number(points) || 0);
+
 export default function useUserModel() {
   const [role, setRole] = useState<'employee'>('employee');
   const [currentUser, setCurrentUser] = useState(() => {
@@ -36,11 +38,11 @@ export default function useUserModel() {
     setCurrentUser((prev: any) => {
       const newTotal = (prev.totalSpent || 0) + amount;
       const rank = getRankBySpent(newTotal);
-      const earnedPoints = Math.floor(amount / 10000) * rank.mult;
+      const earnedPoints = lamTronDiemThuong(Math.floor(amount / 10000) * rank.mult);
       return {
         ...prev,
         totalSpent: newTotal,
-        points: (prev.points || 0) + earnedPoints
+        points: lamTronDiemThuong(prev.points) + earnedPoints
       };
     });
   };
@@ -65,11 +67,15 @@ export default function useUserModel() {
   };
 
   const rankInfo = getRankBySpent(currentUser.totalSpent || 0);
+  const normalizedUser = {
+    ...currentUser,
+    points: lamTronDiemThuong(currentUser.points)
+  };
 
   return {
     role,
     setRole,
-    currentUser,
+    currentUser: normalizedUser,
     updateProfile,
     addPurchase,
     rankInfo

@@ -381,7 +381,7 @@ const ComboForm: React.FC<{
   const loaiGiaWatch = Form.useWatch('loaiGia',    form) as ELoaiGiaCombo | undefined;
   const giaTriWatch  = Form.useWatch('giaTriGiam', form) as number        | undefined;
 
-  // Tổng giá lẻ tính từ các món đã chọn
+  // tổng giá lẻ
   const tongLe = selectedIds.reduce((sum, id) => {
     const mon = DANH_SACH_MON.find((m) => m.id === id);
     return sum + (mon?.giaBan ?? 0);
@@ -400,14 +400,14 @@ const ComboForm: React.FC<{
       ? 'Giá combo phải nhỏ hơn tổng giá lẻ'
       : null;
 
-  // Danh sách món hiển thị trong picker (có filter)
+  // danh sách món picker
   const filteredDishes = useMemo(() => {
     if (!dishSearch.trim()) return DANH_SACH_MON;
     const kw = dishSearch.toLowerCase();
     return DANH_SACH_MON.filter((m) => m.ten.toLowerCase().includes(kw));
   }, [dishSearch]);
 
-  // Các đối tượng mon đã được chọn (theo đúng thứ tự chọn)
+  // món đã chọn
   const selectedDishes = selectedIds
     .map((id) => DANH_SACH_MON.find((m) => m.id === id))
     .filter(Boolean) as (typeof DANH_SACH_MON[number])[];
@@ -929,7 +929,7 @@ const KhuyenMai: React.FC = () => {
       setItems((prev) => [newItem, ...prev]);
       message.success(`Đã tạo khuyến mãi ${data.ma}`);
       
-      // Dispatch notification
+      // gửi thông báo
       window.dispatchEvent(new CustomEvent('new_notification', {
         detail: {
             id: `notif_voucher_${Date.now()}`,
@@ -976,7 +976,7 @@ const KhuyenMai: React.FC = () => {
       setComboItems((prev) => [newCombo, ...prev]);
       message.success(`Đã tạo combo "${data.ten}"`);
       
-      // Dispatch notification
+      // gửi thông báo
       window.dispatchEvent(new CustomEvent('new_notification', {
         detail: {
             id: `notif_combo_${Date.now()}`,

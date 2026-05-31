@@ -5,6 +5,8 @@ import type { ThanhBenProps } from '@/services/Khách hàng/Tài khoản/typing'
 import { formatNumberViVN } from '@/utils/format';
 
 const ThanhBen: React.FC<ThanhBenProps> = ({ nguoiDungHienTai, duongDanAnhDaiDien, laAnhDaiDien, truocKhiTaiLen, thongTinHang }) => {
+    const diemThuong = Math.floor(Number(nguoiDungHienTai.points) || 0);
+
     const renderAvatar = () => {
         if (laAnhDaiDien()) {
             return <Avatar size={128} src={duongDanAnhDaiDien} className="anh-dai-dien-tai-khoan" />;
@@ -38,7 +40,7 @@ const ThanhBen: React.FC<ThanhBenProps> = ({ nguoiDungHienTai, duongDanAnhDaiDie
                     <CrownFilled /> Hạng {thongTinHang?.name || 'Đồng'}
                 </div>
                 <div className="diem-hang">
-                    Điểm thưởng: <strong>{formatNumberViVN(nguoiDungHienTai.points || 0)}</strong>
+                    Điểm thưởng: <strong>{formatNumberViVN(diemThuong)}</strong>
                 </div>
                 <div className="chi-tieu-hang">
                     Đã chi tiêu: {formatNumberViVN(nguoiDungHienTai.totalSpent || 0)}đ

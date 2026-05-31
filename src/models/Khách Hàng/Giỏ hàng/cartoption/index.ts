@@ -5,7 +5,7 @@ import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/cartoption/typ
 import { VoucherLoai, VoucherTheme } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
 import { formatCurrency, formatTimeHHMM } from '@/utils/format';
 
-//  Chuyển đổi IKhuyenMai (Admin) → Voucher (Customer)
+// chuyển đổi voucher
 function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -14,9 +14,9 @@ function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
         .filter((k: any) => {
             if (!k.hoatDong) return false;
             if (k.trangThai === 'het_han' || k.trangThai === 'tam_dung') return false;
-            // Lọc hết lượt dùng
+            // lọc hết lượt
             if (k.gioiHan && (k.daDung || 0) >= k.gioiHan) return false;
-            // Lọc hết hạn theo ngày thực tế (format D/M/YYYY)
+            // lọc hết hạn
             if (k.hetHan) {
                 const parts = k.hetHan.split('/');
                 if (parts.length === 3) {
@@ -33,7 +33,7 @@ function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
             let theme: VoucherTheme = VoucherTheme.Green;
 
             if (k.loai === VoucherLoai.PhanTram) {
-                // Sẽ tính theo % đơn hàng; lưu giá trị % vào discount tạm
+                // tính phần trăm
                 discount = k.giaTriGiam;
                 valueLabel = `${k.giaTriGiam}%`;
                 typeLabel = 'GIẢM %';
@@ -79,7 +79,7 @@ function loadVouchersFromStorage(): Voucher[] {
     return SEED_VOUCHERS;
 }
 
-//  Tính giờ nhận tự động
+// tính giờ nhận tự động
 export function calcPickupTime(cart: any[]): { timeStr: string; prepMin: number } {
     if (cart.length === 0) return { timeStr: '--:--', prepMin: 0 };
 
@@ -96,7 +96,7 @@ export function calcPickupTime(cart: any[]): { timeStr: string; prepMin: number 
     return { timeStr, prepMin: totalMin };
 }
 
-// Custom Hook quản lý State của CartOption 
+// hook quản lý cart option
 export function useCartOptionModel(
     cart: any[],
     subtotal: number,

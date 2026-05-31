@@ -9,6 +9,7 @@ import GioHang from '../Giỏ Hàng';
 import TaiKhoan from '../Tài khoản';
 import QRPaymentPage from '../Thanh Toán QR';
 import CustomerChatBox from '../ChatBox';
+import GlobalNotificationModal from '../Component/GlobalNotificationModal';
 import './index.less';
 
 const MainPage: React.FC = () => {
@@ -45,8 +46,8 @@ const MainPage: React.FC = () => {
         </section>
       </main>
       <GioHang />
-
       <CustomerChatBox />
+      <GlobalNotificationModal />
     </div>
   );
 };

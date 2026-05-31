@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { message } from 'antd';
 import { useModel } from 'umi';
 import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
+import { showCustomerNotification } from '@/utils/notification';
 
 export default function useDanhGiaModel(order: any, onClose: () => void) {
     const { currentUser } = useModel('Khách Hàng.Tài Khoản.thanghang');
@@ -12,8 +13,7 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
     const [comment, setComment] = useState('');
     const [images, setImages] = useState<string[]>([]);
     // tải ảnh đánh giá
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(e.target.files || []);
+    const handleImageFiles = (files: File[]) => {
         files.forEach((file) => {
             const reader = new FileReader();
             reader.onload = (ev) => {
@@ -23,7 +23,6 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
             };
             reader.readAsDataURL(file);
         });
-        e.target.value = '';
     };
 
     const handleRemoveImage = (idx: number) => {
@@ -50,7 +49,7 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
         if (order?.id) {
             markAsReviewed(order.id);
         }
-        message.success("Cảm ơn bạn đã gửi đánh giá món ăn!");
+        showCustomerNotification('Cảm ơn bạn đã gửi đánh giá món ăn!', 'Phản hồi của bạn đã được ghi nhận và sẽ giúp chúng tôi cải thiện chất lượng phục vụ.', 'success');
         onClose();
     };
     // đóng from khi click ngoài 
@@ -64,7 +63,7 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
         rating, setRating,
         comment, setComment,
         images,
-        handleImageChange,
+        handleImageFiles,
         handleRemoveImage,
         handleSubmit,
         handleBackdropClick,

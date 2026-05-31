@@ -29,7 +29,7 @@ function getActiveCombos() {
     }
 }
 
-// ─── Custom Hook quản lý logic tính toán giá cho CartFooter ───────────────────
+// hook tính giá
 export function useCartFooterModel(selectedVoucher: Voucher | undefined) {
     const { cart } = useModel('Khách Hàng.Thực đơn.index');
 
@@ -38,11 +38,11 @@ export function useCartFooterModel(selectedVoucher: Voucher | undefined) {
         0,
     );
 
-    // Tính toán combo tự động
+    // tính combo
     const combos = getActiveCombos();
     let comboDiscount = 0;
     
-    // Tạo map số lượng món trong giỏ
+    // map số lượng món
     const cartQtyMap: Record<string, number> = {};
     cart.forEach((it: any) => {
         cartQtyMap[it.id] = it.qty;
@@ -51,7 +51,7 @@ export function useCartFooterModel(selectedVoucher: Voucher | undefined) {
     combos.forEach((c: any) => {
         if (!c.monAnIds || c.monAnIds.length === 0) return;
         
-        // Xem giỏ hàng thoả mãn bao nhiêu set combo này
+        // kiểm tra số combo
         const requiredQtyMap: Record<string, number> = {};
         c.monAnIds.forEach((id: string) => {
             requiredQtyMap[id] = (requiredQtyMap[id] || 0) + 1;
@@ -67,7 +67,7 @@ export function useCartFooterModel(selectedVoucher: Voucher | undefined) {
         }
 
         if (maxComboCount > 0) {
-            // Tính giá gốc của 1 bộ combo
+            // tính giá combo
             let originalComboPrice = 0;
             c.monAnIds.forEach((id: string) => {
                 const itemInCart = cart.find((it: any) => it.id === id);
@@ -76,7 +76,7 @@ export function useCartFooterModel(selectedVoucher: Voucher | undefined) {
                 }
             });
 
-            // Tính tiền giảm cho 1 bộ
+            // tính tiền giảm
             let discountPerSet = 0;
             if (c.loaiGia === 'phan_tram') {
                 discountPerSet = originalComboPrice * c.giaTriGiam / 100;
@@ -86,8 +86,8 @@ export function useCartFooterModel(selectedVoucher: Voucher | undefined) {
 
             comboDiscount += (discountPerSet * maxComboCount);
             
-            // Giảm số lượng trong map để không áp dụng trùng combo khác (nếu cần thiết)
-            // Tạm thời cho phép áp dụng đồng thời nếu đủ số lượng
+            // giảm map số lượng
+            // cho phép áp dụng đồng thời
         }
     });
 
@@ -98,11 +98,11 @@ export function useCartFooterModel(selectedVoucher: Voucher | undefined) {
     const voucherDiscount = (() => {
         if (!selectedVoucher) return 0;
         if (selectedVoucher.minOrder && subtotal < selectedVoucher.minOrder) return 0;
-        // Nếu loại giảm là phần trăm, tính theo % của subtotal
+        // tính giảm phần trăm
         if (selectedVoucher.loai === VoucherLoai.PhanTram) {
             return Math.round(subtotal * selectedVoucher.discount / 100);
         }
-        // Ngược lại dùng số tiền cố định
+        // giảm tiền cố định
         return selectedVoucher.discount;
     })();
 
@@ -112,7 +112,7 @@ export function useCartFooterModel(selectedVoucher: Voucher | undefined) {
 
     const isEmpty = cart.length === 0;
 
-    // Kiểm tra voucher không đủ điều kiện
+    // kiểm tra voucher
     const voucherNotMet =
         !!selectedVoucher &&
         !!selectedVoucher.minOrder &&

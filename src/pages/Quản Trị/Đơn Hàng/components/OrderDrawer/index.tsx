@@ -249,7 +249,7 @@ const OrderDrawer: React.FC<OrderDrawerProps> = ({
   onCancel,
   onPrint,
 }) => {
-  // Keep last order to render during close animation
+  // giữ đơn hàng khi đóng
   const lastOrderRef = useRef<DonTrucTiep | null>(null);
   if (order) lastOrderRef.current = order;
   const displayOrder = lastOrderRef.current;

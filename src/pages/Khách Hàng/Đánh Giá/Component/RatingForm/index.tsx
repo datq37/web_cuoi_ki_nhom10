@@ -1,17 +1,8 @@
-import React, { useRef } from 'react';
-import { StarFilled, CameraFilled } from '@ant-design/icons';
-
-interface RatingFormProps {
-    dishDetails: any;
-    dishNames: string;
-    rating: number;
-    setRating: (rating: number) => void;
-    comment: string;
-    setComment: (comment: string) => void;
-    images: string[];
-    handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    handleRemoveImage: (idx: number) => void;
-}
+import React from 'react';
+import { CameraFilled, CloseOutlined } from '@ant-design/icons';
+import { Button, Input, Rate, Upload } from 'antd';
+import type { RcFile } from 'antd/lib/upload';
+import { RatingFormProps } from '@/services/Khách hàng/Đánh giá/typing';
 
 const RatingForm: React.FC<RatingFormProps> = ({
     dishDetails,
@@ -21,10 +12,13 @@ const RatingForm: React.FC<RatingFormProps> = ({
     comment,
     setComment,
     images,
-    handleImageChange,
+    handleImageFiles,
     handleRemoveImage,
 }) => {
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const beforeUpload = (file: RcFile) => {
+        handleImageFiles([file]);
+        return false;
+    };
 
     return (
         <div className="noiDungDanhGia">
@@ -37,46 +31,38 @@ const RatingForm: React.FC<RatingFormProps> = ({
                 </div>
             </div>
             <div className="khungSao">
-                {[1, 2, 3, 4, 5].map((star) => (
-                    <StarFilled
-                        key={star}
-                        className={`sao ${star <= rating ? 'hoatDong' : ''}`}
-                        onClick={() => setRating(star)}
-                    />
-                ))}
+                <Rate value={rating} onChange={setRating} className="saoAnt" />
             </div>
             <div className="phanBinhLuan">
-                <textarea
+                <Input.TextArea
                     placeholder="Món ăn có ngon không? Bạn hãy chia sẻ cảm nhận nhé..."
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
-                />
-
-                <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    style={{ display: 'none' }}
-                    onChange={handleImageChange}
+                    autoSize={{ minRows: 4, maxRows: 6 }}
                 />
 
                 <div className="khuVucTaiAnh">
-                    <div
-                        className="hopTaiAnh"
-                        onClick={() => fileInputRef.current?.click()}
+                    <Upload
+                        accept="image/*"
+                        multiple
+                        showUploadList={false}
+                        beforeUpload={beforeUpload}
                     >
-                        <CameraFilled className="bieuTuongTaiAnh" />
-                        <span>Thêm ảnh</span>
-                    </div>
+                        <Button className="hopTaiAnh" icon={<CameraFilled className="bieuTuongTaiAnh" />}>
+                            Thêm ảnh
+                        </Button>
+                    </Upload>
 
                     {images.map((src, idx) => (
                         <div key={idx} className="anhXemTruoc">
                             <img src={src} alt={`preview-${idx}`} />
-                            <span
+                            <Button
+                                type="text"
+                                shape="circle"
                                 className="nutXoaAnh"
+                                icon={<CloseOutlined />}
                                 onClick={() => handleRemoveImage(idx)}
-                            >×</span>
+                            />
                         </div>
                     ))}
                 </div>

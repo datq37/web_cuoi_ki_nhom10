@@ -156,29 +156,66 @@
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  min-width: 150px;
+  width: 180px;
+  overflow: hidden;
   padding: 8px;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--bg-elev);
   box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14);
   z-index: 30;
+}
 
-  button {
-    width: 100%;
-    height: 38px;
-    padding: 0 12px;
-    border: 0;
-    border-radius: 9px;
-    background: transparent;
+.topbar .topbar-user-menu-list {
+  padding: 0;
+}
+
+.topbar .topbar-user-menu-item {
+  width: 100%;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: left;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  svg {
+    flex-shrink: 0;
+    color: var(--ink-3);
+    font-size: 16px;
+  }
+
+  &:hover {
+    background: var(--bg-soft);
+    color: var(--ink);
+
+    svg {
+      color: var(--ink);
+    }
+  }
+}
+
+.topbar .topbar-user-menu-logout {
+  color: #ef4444;
+
+  svg {
     color: #ef4444;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 800;
-    text-align: left;
+  }
 
-    &:hover {
-      background: rgba(239, 68, 68, 0.1);
+  &:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+
+    svg {
+      color: #ef4444;
     }
   }
 }
@@ -405,26 +442,122 @@
     height: 100%;
   }
 
-  .plate { fill: #edf8e8; }
-  .spark-green { fill: #2f8f4e; }
-  .spark-yellow { fill: #f4c84f; }
-  .spark-orange { fill: #ef9d2f; }
-  .bun-top, .bun-bottom { fill: #f4bb61; stroke: #152235; stroke-width: 3; stroke-linejoin: round; }
-  .burger-line { fill: none; stroke: #152235; stroke-width: 3; stroke-linecap: round; }
-  .cheese { fill: #f6d34b; stroke: #152235; stroke-width: 2.5; stroke-linejoin: round; }
-  .patty { fill: #8a5132; stroke: #152235; stroke-width: 2.5; stroke-linejoin: round; }
-  .lettuce { fill: #55b657; stroke: #152235; stroke-width: 2.5; stroke-linejoin: round; }
-  .sesame { fill: #152235; }
+  .plate {
+    fill: #edf8e8;
+  }
+
+  .spark-green {
+    fill: #2f8f4e;
+  }
+
+  .spark-yellow {
+    fill: #f4c84f;
+  }
+
+  .spark-orange {
+    fill: #ef9d2f;
+  }
+
+  .bun-top,
+  .bun-bottom {
+    fill: #f4bb61;
+    stroke: #152235;
+    stroke-width: 3;
+    stroke-linejoin: round;
+  }
+
+  .burger-line {
+    fill: none;
+    stroke: #152235;
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+
+  .cheese {
+    fill: #f6d34b;
+    stroke: #152235;
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+
+  .patty {
+    fill: #8a5132;
+    stroke: #152235;
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+
+  .lettuce {
+    fill: #55b657;
+    stroke: #152235;
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+
+  .sesame {
+    fill: #152235;
+  }
   
-  .speed-line, .bike-base, .bike-seat, .bike-handle, .arm, .leg, .ground { fill: none; stroke: #20313f; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
-  .speed-line { stroke: #93a391; stroke-width: 3; }
-  .wheel { fill: #1f7a3a; stroke: #20313f; stroke-width: 4; }
-  .bike-base { stroke: #2f8f4e; }
-  .rider-face { fill: #f2b16d; stroke: #20313f; stroke-width: 3; }
-  .helmet, .rider-body { fill: #2f8f4e; stroke: #20313f; stroke-width: 3; stroke-linejoin: round; }
-  .delivery-box { fill: #f4c84f; stroke: #20313f; stroke-width: 3; }
-  .box-label { fill: none; stroke: #2f8f4e; stroke-width: 3; stroke-linecap: round; }
-  .ground { stroke: #93a391; stroke-width: 3; }
+  .speed-line,
+  .bike-base,
+  .bike-seat,
+  .bike-handle,
+  .arm,
+  .leg,
+  .ground {
+    fill: none;
+    stroke: #20313f;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .speed-line {
+    stroke: #93a391;
+    stroke-width: 3;
+  }
+
+  .wheel {
+    fill: #1f7a3a;
+    stroke: #20313f;
+    stroke-width: 4;
+  }
+
+  .bike-base {
+    stroke: #2f8f4e;
+  }
+
+  .rider-face {
+    fill: #f2b16d;
+    stroke: #20313f;
+    stroke-width: 3;
+  }
+
+  .helmet,
+  .rider-body {
+    fill: #2f8f4e;
+    stroke: #20313f;
+    stroke-width: 3;
+    stroke-linejoin: round;
+  }
+
+  .delivery-box {
+    fill: #f4c84f;
+    stroke: #20313f;
+    stroke-width: 3;
+  }
+
+  .box-label {
+    fill: none;
+    stroke: #2f8f4e;
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+
+  .ground {
+    stroke: #93a391;
+    stroke-width: 3;
+  }
 }
 
 .notifBody {
@@ -485,9 +618,7 @@
   .ant-badge-count {
     box-shadow: 0 0 0 2px var(--bg-elev) !important;
   }
-}
 
-[data-theme='dark'] {
   .notifPopup {
     background: var(--bg-elev);
   }

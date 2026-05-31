@@ -349,7 +349,7 @@ const CoSoVatChat: React.FC = () => {
     return () => clearInterval(intervalRef.current);
   }, [syncTrangThaiBan]);
 
-  // Modal state
+  // trạng thái modal
   const [khuModal,  setKhuModal]  = useState(false);
   const [editingKhu, setEditingKhu] = useState<IKhuVuc | null>(null);
 

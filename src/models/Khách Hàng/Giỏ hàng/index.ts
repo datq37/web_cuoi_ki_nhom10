@@ -5,6 +5,7 @@ import type { Voucher } from '@/services/Khách hàng/Giỏ hàng/cartoption/typ
 import { VoucherLoai } from '@/services/Khách hàng/Giỏ hàng/cartoption/typing';
 import { Order, OrderStatus, PaymentMethod } from '@/services/Khách hàng/Đơn Hàng';
 import { formatDateTimeViVN, formatTimeHHMM } from '@/utils/format';
+import { showCustomerNotification } from '@/utils/notification';
 export function useGioHangModel() {
     const { cart, cartOpen, setCartOpen, clearCart } = useModel('Khách Hàng.Thực đơn.index');
     const { addOrder } = useModel('Khách Hàng.Đơn Hàng.Orders');
@@ -56,11 +57,17 @@ export function useGioHangModel() {
 
     // Xác nhận đặt 
     const handleConfirm = () => {
+        const today = new Date();
+        if (today.getDay() === 0) {
+            showCustomerNotification('Căng tin nghỉ Chủ Nhật', 'Rất xin lỗi, căng tin không hoạt động vào ngày Chủ Nhật. Vui lòng đặt hàng vào các ngày trong tuần!', 'error');
+            return;
+        }
+
         if (selectedVoucher) {
             const claimed = claimVoucher(selectedVoucher.id);
             if (!claimed) {
                 setSelectedVoucher(undefined);
-                message.error('Voucher này vừa hết lượt sử dụng! Vui lòng chọn voucher khác.');
+                showCustomerNotification('Voucher này vừa hết lượt sử dụng! Vui lòng chọn voucher khác.', undefined, 'error');
                 return;
             }
         }
@@ -100,8 +107,8 @@ export function useGioHangModel() {
         };
 
         addOrder(newOrder);
-        // Lưu ý: daDung đã được tăng đồng bộ ở claimVoucher() ở trên rồi,
-        // KHÔNG cần tăng lại ở đây nữa.
+        // lưu ý tăng đồng bộ
+        // không tăng lại
 
         const isQRPayment = payment === PaymentMethod.QR;
 
@@ -109,7 +116,7 @@ export function useGioHangModel() {
             setPendingOrder(newOrder);
         }
 
-        // Thêm thông báo
+        // thêm thông báo
         addNotification({
             id: `n-${Date.now()}`,
             title: isQRPayment ? 'Đơn hàng đang chờ thanh toán QR' : 'Đơn hàng đã được đặt thành công',
@@ -127,6 +134,15 @@ export function useGioHangModel() {
 
         setIsLoading(false);
         setCartOpen(false);
+        
+        showCustomerNotification(
+            isQRPayment ? 'Vui lòng thanh toán' : 'Đặt đơn thành công!',
+            isQRPayment
+                ? `Đơn hàng ${newOrder.id} đang chờ thanh toán qua mã QR.`
+                : `Đơn hàng ${newOrder.id} của bạn đã được xác nhận.`,
+            isQRPayment ? 'info' : 'success'
+        );
+
         setPage(isQRPayment ? 'qr-payment' : 'history');
     }, 1000);
 };

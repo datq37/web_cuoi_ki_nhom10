@@ -335,7 +335,7 @@
   padding: 10px 0;
 }
 
-.thanhTheoDoi-step {
+.buocTheoDoi {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -504,7 +504,7 @@
     padding: 6px 0;
   }
   
-  .thanhTheoDoi-step {
+  .buocTheoDoi {
     .cham {
       width: 22px;
       height: 22px;
@@ -519,6 +519,208 @@
     .nhan {
       font-size: 9px;
       letter-spacing: -0.3px;
+    }
+  }
+}
+
+.main-page-container.theme-dark,
+[data-theme='dark'] {
+  .khungTrangLichSu {
+    background-color: var(--bg-main);
+
+    .phanDauTrang {
+      .tieuDeTrang {
+        color: var(--ink);
+      }
+
+      .tieuDePhuTrang {
+        color: var(--ink-3);
+      }
+    }
+
+    .boLocPhanDoan {
+      background: var(--bg-soft);
+
+      button {
+        color: var(--ink-3);
+
+        &:hover {
+          color: var(--ink);
+        }
+
+        &.dangChon {
+          background: var(--bg-elev);
+          color: var(--accent);
+          box-shadow: none;
+        }
+      }
+    }
+
+    .theDonHang {
+      background: var(--bg-elev);
+      border-color: var(--line);
+
+      &:hover {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      }
+
+      .phanChinhThe {
+        border-bottom-color: var(--line);
+      }
+
+      .thongTinDon {
+        .maDon {
+          background: var(--bg-soft);
+          color: var(--ink-3);
+        }
+
+        .thoiGianNhan {
+          color: var(--ink-3);
+
+          strong {
+            color: var(--ink);
+          }
+        }
+      }
+
+      .danhSachMonAn {
+        .monAnThuGon {
+          background: var(--bg-soft);
+          border-color: var(--line);
+          color: var(--ink-2);
+
+          .soLuong {
+            color: var(--ink-4);
+          }
+        }
+      }
+
+      .phanBenThe {
+        .nhanTongTien,
+        .donVi {
+          color: var(--ink-4);
+        }
+
+        .giaTriTongTien {
+          color: var(--ink);
+        }
+
+        .phuongThucThanhToan {
+          background: var(--bg-soft);
+          color: var(--ink-2);
+        }
+      }
+
+      .ghiChuDon {
+        background: rgba(245, 159, 0, 0.12);
+        border-top-color: rgba(245, 159, 0, 0.35);
+        color: #f6c15b;
+      }
+
+      .hanhDongThe {
+        background: var(--bg-soft);
+        border-top-color: var(--line);
+
+        .ant-btn-text {
+          color: var(--ink-2);
+
+          &:hover {
+            background: var(--bg-mute);
+            color: var(--ink);
+          }
+        }
+
+        .nutDanhGiaDon {
+          background: transparent;
+          border-color: var(--accent);
+          color: var(--accent);
+
+          &:hover {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+            color: var(--accent);
+          }
+        }
+      }
+    }
+
+    .nhanTrangThai {
+      background: var(--bg-soft);
+      color: var(--ink-2);
+
+      &.green {
+        background: rgba(50, 168, 82, 0.16);
+        color: #55d474;
+      }
+
+      &.warn {
+        background: rgba(245, 159, 0, 0.16);
+        color: #f6c15b;
+      }
+
+      &.err {
+        background: rgba(250, 82, 82, 0.16);
+        color: #ff8585;
+      }
+
+      &.info {
+        background: rgba(34, 139, 230, 0.16);
+        color: #74c0fc;
+      }
+    }
+
+    .trangThaiTrong {
+      color: var(--ink-4);
+
+      .khungBieuTuong {
+        color: var(--ink-4);
+      }
+
+      h4 {
+        color: var(--ink-2);
+      }
+
+      span {
+        color: var(--ink-4);
+      }
+    }
+  }
+
+  .buocTheoDoi {
+    &::before {
+      background: var(--line);
+    }
+
+    &.hoanThanh::before {
+      background: var(--accent);
+    }
+
+    .cham {
+      background: var(--bg-elev);
+      border-color: var(--line);
+      color: var(--ink-4);
+    }
+
+    &.hoanThanh .cham {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-ink);
+    }
+
+    &.dangChon .cham {
+      background: var(--bg-elev);
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    .nhan {
+      color: var(--ink-4);
+    }
+
+    &.hoanThanh .nhan,
+    &.dangChon .nhan {
+      color: var(--ink);
     }
   }
 }

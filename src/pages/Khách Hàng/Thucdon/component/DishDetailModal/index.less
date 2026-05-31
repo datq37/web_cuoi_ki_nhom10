@@ -1,4 +1,4 @@
-// DishDetailModal/index.less — Modal chi tiết món ăn
+// modal chi tiết món
 
 .nenMo {
     position: fixed;
@@ -30,12 +30,19 @@
     box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.18);
 
     @keyframes ddm-slide-up {
-        from { transform: translateY(100%); opacity: 0; }
-        to   { transform: translateY(0);    opacity: 1; }
+        from {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 }
 
-// ── Hero Section ──────────────────────────────────────────────
+// ảnh món
 .phanAnhBia {
     position: relative;
     height: 220px;
@@ -61,12 +68,19 @@
 .bieuTuongAnhBia {
     font-size: 110px;
     line-height: 1;
-    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.15));
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.15));
     animation: ddm-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
 
     @keyframes ddm-pop {
-        from { transform: scale(0.6); opacity: 0; }
-        to   { transform: scale(1);   opacity: 1; }
+        from {
+            opacity: 0;
+            transform: scale(0.6);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
 }
 
@@ -96,7 +110,7 @@
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.85);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(6px);
     border: none;
     display: grid;
@@ -105,18 +119,28 @@
     color: #333;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-    &:hover { background: #fff; transform: scale(1.1); }
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+
+    &:hover {
+        background: #fff;
+        transform: scale(1.1);
+    }
 }
 
-// ── Scrollable Body ───────────────────────────────────────────
+// nội dung cuộn
 .phanThanChiTiet {
     flex: 1;
     overflow-y: auto;
     padding: 20px 20px 8px;
 
-    &::-webkit-scrollbar { width: 5px; }
-    &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #e5e7eb;
+        border-radius: 10px;
+    }
 }
 
 .hangTieuDe {
@@ -215,7 +239,7 @@
     margin: 4px 0 18px;
 }
 
-// ── Reviews ───────────────────────────────────────────────────
+// đánh giá
 .phanDanhGia {
     padding-bottom: 8px;
 }
@@ -286,7 +310,7 @@
     border-left: 3px solid #2f8f4e;
 }
 
-// ── Sticky Footer ─────────────────────────────────────────────
+// chân modal
 .phanChanChiTiet {
     padding: 16px 20px;
     background: #fff;
@@ -340,6 +364,24 @@
     &:active {
         transform: translateY(0);
     }
+
+    &.disabled,
+    &:disabled {
+        color: #999;
+        background: #f5f5f5;
+        border: 1px solid #e9ecef;
+        box-shadow: none;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    &.disabled:hover,
+    &:disabled:hover {
+        color: #999;
+        background: #f5f5f5;
+        box-shadow: none;
+        transform: none;
+    }
 }
 
 .dieuKhienSoLuong {
@@ -368,7 +410,7 @@
         display: grid;
         place-items: center;
         cursor: pointer;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
         transition: all 0.15s;
         font-size: 13px;
 
@@ -379,10 +421,10 @@
     }
 }
 
-/* DARK MODE OVERRIDES */
+// chế độ tối
 [data-theme='dark'] {
     .khungChiTiet {
-        background: var(--bg-main, #141414);
+        background: var(--bg-elev);
         box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.6);
     }
 
@@ -397,27 +439,53 @@
     }
 
     .tenMonChiTiet { color: var(--ink); }
-    
-    .ddm-meta span {
-        background: var(--bg-elev);
+
+    .phanThanChiTiet {
+        &::-webkit-scrollbar-thumb {
+            background: var(--line);
+        }
+    }
+
+    .nhanDanhGia {
+        color: #f6c15b;
+        background: rgba(245, 158, 11, 0.16);
+    }
+
+    .thongTinChiTiet {
         color: var(--ink-3);
+
+        span {
+            background: var(--bg-soft);
+        }
     }
 
     .moTaChiTiet { color: var(--ink-2); }
 
     .nhanPhanChiTiet { color: var(--ink); }
 
+    .soLuongDanhGia,
+    .khongCoDanhGia,
+    .ngayDanhGia,
+    .donViChiTiet {
+        color: var(--ink-4);
+    }
+
+    .nhanThanhPhan {
+        color: var(--accent);
+        background: var(--accent-soft);
+    }
+
     .duongChiaChiTiet { background: var(--line); }
 
     .anhDaiDienDanhGia {
-        background: var(--bg-elev);
+        background: var(--bg-soft);
         border-color: var(--line);
     }
 
     .tacGiaDanhGia { color: var(--ink); }
 
     .binhLuanDanhGia {
-        background: var(--bg-elev);
+        background: var(--bg-soft);
         color: var(--ink-2);
         border-left-color: var(--accent);
     }
@@ -429,15 +497,32 @@
     }
 
     .giaChiTiet { color: var(--ink); }
-    
+
+    .nutThemChiTiet.disabled,
+    .nutThemChiTiet:disabled {
+        color: var(--ink-4);
+        background: var(--bg-soft);
+        border-color: var(--line);
+    }
+
+    .nutThemChiTiet.disabled:hover,
+    .nutThemChiTiet:disabled:hover {
+        color: var(--ink-4);
+        background: var(--bg-soft);
+    }
+
     .dieuKhienSoLuong {
         background: var(--bg-soft);
         color: var(--accent);
-        
+
         button {
             background: var(--bg-elev);
             color: var(--ink);
-            &:hover { background: var(--accent); color: #fff; }
+
+            &:hover {
+                color: #fff;
+                background: var(--accent);
+            }
         }
     }
 }

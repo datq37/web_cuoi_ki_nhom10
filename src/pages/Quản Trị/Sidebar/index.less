@@ -1,14 +1,15 @@
 ﻿@import '~@/styles/admin-tokens.less';
 
-@sidebar-w:     260px;
+@sidebar-w:     248px;
 @sidebar-w-col: 64px;
-@ease:          cubic-bezier(0.22, 0.61, 0.36, 1);
+@ease:          cubic-bezier(0.4, 0, 0.2, 1);
 
 .sidebar {
   width: @sidebar-w;
   height: 100vh;
   background: @surface;
   border-right: 1px solid @border;
+  color: @text-dark;
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -16,7 +17,7 @@
   top: 0;
   z-index: 100;
   overflow: hidden;
-  transition: width 200ms @ease;
+  transition: width 220ms @ease, background 220ms @ease, border-color 220ms @ease;
 }
 
 .collapsed {
@@ -24,7 +25,7 @@
 }
 
 .logoSection {
-  padding: 16px 12px 14px;
+  padding: 14px 12px 18px;
   flex-shrink: 0;
 }
 
@@ -36,14 +37,15 @@
 }
 
 .logoIcon {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   background: @gradient-primary;
-  border-radius: 10px;
+  border-radius: 13px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 8px 22px rgba(26, 111, 47, 0.14);
 
   .collapsed & {
     margin: 0 auto;
@@ -58,27 +60,33 @@
 }
 
 .brandName {
-  font-size: 15px;
-  font-weight: 700;
-  color: @text-dark;
-  line-height: 1.3;
+  font-size: 19px;
+  font-weight: 850;
+  color: @primary-hover;
+  line-height: 1;
   white-space: nowrap;
 }
 
 .brandSub {
   font-size: 11px;
   color: @text-muted;
-  line-height: 1.3;
+  line-height: 1.15;
   white-space: nowrap;
 }
 
 .menuSection {
   flex: 1;
   overflow-y: auto;
-  padding: 4px 10px;
+  padding: 4px 12px;
 
-  &::-webkit-scrollbar { width: 3px; }
-  &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: @line;
+    border-radius: 3px;
+  }
 
   .collapsed & {
     padding: 4px 8px;
@@ -87,11 +95,11 @@
 
 .groupLabel {
   display: block;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 800;
   color: @text-light;
-  letter-spacing: 0.1em;
-  padding: 12px 8px 5px;
+  letter-spacing: 0.08em;
+  padding: 12px 12px 7px;
   text-transform: uppercase;
 }
 
@@ -102,30 +110,53 @@
 }
 
 .menuItem {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 10px;
-  border-radius: 8px;
+  gap: 11px;
+  min-height: 42px;
+  padding: 0 10px 0 13px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 12px;
   cursor: pointer;
   color: @text-mid;
   font-size: 13.5px;
-  transition: all 120ms @ease;
-  margin-bottom: 1px;
+  transition: transform 220ms @ease, color 220ms @ease, background 220ms @ease, border-color 220ms @ease, box-shadow 220ms @ease;
+  margin-bottom: 5px;
   user-select: none;
-  position: relative;
+
+  &::before {
+    position: absolute;
+    inset: 8px auto 8px 0;
+    width: 4px;
+    border-radius: 0 999px 999px 0;
+    background: @primary-hover;
+    opacity: 0;
+    transform: scaleY(0.35);
+    transition: opacity 220ms @ease, transform 220ms @ease;
+    content: '';
+  }
 
   &:hover {
-    background: @surface-hover;
-    color: @text-dark;
-    .menuIcon { color: @text-mid; }
+    background: rgba(45, 106, 79, 0.05);
+    color: @primary-hover;
+    transform: translateX(3px);
+    .menuIcon { color: currentColor; }
   }
 
   &.active {
-    background: @primary-soft;
-    color: @primary;
-    font-weight: 600;
-    .menuIcon { color: @primary; }
+    background: linear-gradient(90deg, rgba(116, 185, 77, 0.16), rgba(255, 255, 255, 0.88));
+    border-color: rgba(45, 106, 79, 0.55);
+    box-shadow: 0 12px 26px rgba(45, 106, 79, 0.1);
+    color: @primary-hover;
+    font-weight: 700;
+    .menuIcon { color: currentColor; }
+
+    &::before {
+      opacity: 1;
+      transform: scaleY(1);
+    }
   }
 
   .collapsed & {
@@ -178,28 +209,9 @@
   border: 1.5px solid @surface;
 }
 
-.badgeCollapsed {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  min-width: 17px;
-  height: 17px;
-  background: @danger;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 700;
-  border-radius: 99px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 4px;
-  border: 1.5px solid @surface;
-  line-height: 1;
-}
-
 .collapseSection {
   border-top: 1px solid @border;
-  padding: 10px;
+  padding: 10px 12px;
   flex-shrink: 0;
 }
 
@@ -209,13 +221,14 @@
   justify-content: center;
   gap: 6px;
   width: 100%;
-  padding: 8px 10px;
+  min-height: 38px;
+  padding: 0 10px;
   border: none;
   background: transparent;
-  color: @text-light;
+  color: @text-muted;
   font-size: 12.5px;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 12px;
   transition: all 180ms @ease;
 
   span { letter-spacing: 0.01em; }
@@ -223,7 +236,7 @@
 
   &:hover {
     background: @surface-hover;
-    color: @text-muted;
+    color: @text-dark;
   }
 
   .collapsed & {
@@ -233,27 +246,53 @@
 
 :global([data-theme="dark"]) {
   .sidebar {
-    background: #1e293b;
-    border-right-color: #334155;
+    background: @surface;
+    border-right-color: @border;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  .brandName { color: #f1f5f9; }
-  .brandSub  { color: #64748b; }
+  .brandName { color: @primary; }
+  .brandSub  { color: @text-muted; }
 
-  .groupLabel { color: #64748b; }
+  .groupLabel { color: @text-light; }
 
   .menuItem {
-    color: #94a3b8;
-    &:hover { background: #0f172a; color: #cbd5e1; .menuIcon { color: #94a3b8; } }
-    &.active { background: rgba(22,163,74,.15); color: #4ade80; .menuIcon { color: #4ade80; } }
+    color: @text-mid;
+
+    &:hover {
+      background: @surface-hover;
+      color: @primary;
+
+      .menuIcon {
+        color: currentColor;
+      }
+    }
+
+    &.active {
+      background: @primary-soft;
+      border-color: rgba(50, 168, 82, 0.42);
+      box-shadow: none;
+      color: @primary;
+
+      .menuIcon {
+        color: currentColor;
+      }
+    }
   }
-  .menuIcon { color: #64748b; }
 
-  .badgeDot        { border-color: #1e293b; }
-  .badgeCollapsed  { border-color: #1e293b; }
+  .menuIcon { color: @text-muted; }
 
-  .collapseSection { border-top-color: #334155; }
-  .collapseBtn { color: #64748b; &:hover { background: #0f172a; color: #94a3b8; } }
+  .badgeDot { border-color: @surface; }
+
+  .collapseSection { border-top-color: @border; }
+
+  .collapseBtn {
+    color: @text-muted;
+
+    &:hover {
+      background: @surface-hover;
+      color: @text-dark;
+    }
+  }
 }

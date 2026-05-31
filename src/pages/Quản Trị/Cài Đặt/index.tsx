@@ -1,7 +1,6 @@
 import {
   AppstoreOutlined,
   BellOutlined,
-  CheckCircleFilled,
   ClockCircleOutlined,
   CreditCardOutlined,
   SafetyOutlined,
@@ -11,6 +10,7 @@ import { Button, Input, Switch, message } from 'antd';
 import dayjs from 'dayjs';
 import React, { useRef, useState } from 'react';
 import Topbar from '@/pages/Quản Trị/Topbar';
+import useLocalStorage from '@/hooks/useLocalStorage';
 import { KEYS, store } from '@/utils/storage';
 import styles from './index.less';
 
@@ -98,16 +98,16 @@ function savedMsg() {
 const ThongTinChung: React.FC = () => {
   const init = loadSettings().thongTin;
   const [form, setForm] = useState(init);
-  const [avatar, setAvatar] = useState<string>(
-    store.get<{ avatar?: string }>(KEYS.user, {}).avatar ?? '',
-  );
+  // Dùng useLocalStorage hook để đọc/ghi avatar trực tiếp
+  const [savedUser, setSavedUser] = useLocalStorage<{ ten?: string; email?: string; avatar?: string }>(KEYS.user, {});
+  const [avatar, setAvatar] = useState<string>(savedUser.avatar ?? '');
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleSave = () => {
     const s = loadSettings();
     store.set(KEYS.settings, { ...s, thongTin: form });
-    // Cập nhật Topbar
-    store.set(KEYS.user, { ten: form.tenHienThi || form.ten, email: form.email, avatar });
+    // Dùng useLocalStorage setter để cập nhật Topbar
+    setSavedUser({ ten: form.tenHienThi || form.ten, email: form.email, avatar });
     savedMsg();
   };
 
@@ -118,8 +118,7 @@ const ThongTinChung: React.FC = () => {
     reader.onload = (ev) => {
       const b64 = ev.target?.result as string;
       setAvatar(b64);
-      const user = store.get<any>(KEYS.user, {});
-      store.set(KEYS.user, { ...user, avatar: b64 });
+      setSavedUser((prev) => ({ ...prev, avatar: b64 }));
     };
     reader.readAsDataURL(file);
   };

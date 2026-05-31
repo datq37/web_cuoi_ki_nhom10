@@ -15,7 +15,7 @@ import React, { useState } from 'react';
 import { history } from 'umi';
 import { INotif, NotifType, timeAgo, useNotif } from '@/context/NotifContext';
 import { useTheme } from '@/hooks/useTheme';
-import { KEYS, clearAdminSession, store } from '@/utils/storage';
+import useAdminAuth from '@/hooks/useAdminAuth';
 import styles from './index.less';
 
 function getNotifRoute(type: NotifType): string {
@@ -75,11 +75,7 @@ interface TopbarProps {
   subtitle?: string;
 }
 
-interface AdminUser {
-  ten: string;
-  email: string;
-  avatar?: string;
-}
+
 
 const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
   const dateStr = moment().format('D [tháng] M, YYYY');
@@ -90,7 +86,8 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
 
   const unreadCount = notifs.filter((n) => !n.read).length;
 
-  const user = store.get<AdminUser>(KEYS.user, { ten: 'Quản trị viên', email: 'admin@canteen.vn' });
+  // Dùng custom hook useAdminAuth thay vì store.get trực tiếp
+  const { user, logout: authLogout } = useAdminAuth();
   const vietTat = user.ten
     .trim()
     .split(/\s+/)
@@ -111,10 +108,7 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
       icon: <LogoutOutlined style={{ color: '#dc2626' }} />,
       okButtonProps: { style: { background: '#dc2626', borderColor: '#dc2626', borderRadius: 8 } },
       cancelButtonProps: { style: { borderRadius: 8 } },
-      onOk: () => {
-        clearAdminSession();
-        history.push('/dang-nhap');
-      },
+      onOk: () => { authLogout(); },
     });
   };
 

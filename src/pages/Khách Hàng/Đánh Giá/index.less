@@ -332,3 +332,116 @@
         }
     }
 }
+
+[data-theme='dark'] {
+    .baoBocDanhGia {
+        background: rgba(0, 0, 0, 0.68);
+
+        .khungDanhGia {
+            color: var(--ink);
+            background: var(--bg-elev);
+            box-shadow: 0 12px 44px rgba(0, 0, 0, 0.52);
+        }
+
+        .tieuDeDanhGia {
+            border-bottom-color: var(--line);
+
+            .chuTieuDe {
+                color: var(--ink);
+            }
+
+            .nutDong {
+                color: var(--ink-3);
+
+                &:hover {
+                    color: var(--ink);
+                    background: var(--bg-soft);
+                }
+            }
+
+            .nutHoTro {
+                color: var(--ink-3);
+            }
+        }
+
+        .noiDungDanhGia {
+            &::-webkit-scrollbar-thumb {
+                background: var(--line);
+            }
+
+            .bangDanhGia {
+                color: #f6c15b;
+                background: rgba(245, 158, 11, 0.14);
+            }
+
+            .thongTinCuaHang {
+                .tenCuaHang {
+                    color: var(--ink-2) !important;
+                }
+            }
+
+            .khungSao {
+                .saoAnt {
+                    .ant-rate-star-zero {
+                        color: var(--ink-4);
+                    }
+                }
+            }
+
+            .phanBinhLuan {
+                border-top-color: var(--line);
+
+                textarea,
+                .ant-input {
+                    color: var(--ink);
+                    background: var(--bg-soft);
+                    border-color: var(--line);
+
+                    &:focus,
+                    &:hover {
+                        border-color: var(--accent);
+                    }
+
+                    &::placeholder {
+                        color: var(--ink-4);
+                    }
+                }
+
+                .goiYPhanThuong {
+                    color: var(--ink-4);
+                }
+
+                .hopTaiAnh {
+                    color: var(--accent);
+                    background: var(--bg-soft);
+                    border-color: var(--line);
+
+                    &:hover {
+                        color: var(--accent);
+                        background: var(--accent-soft);
+                        border-color: var(--accent);
+                    }
+                }
+
+                .anhXemTruoc {
+                    border-color: var(--line);
+                }
+            }
+        }
+
+        .chanDanhGia {
+            background: var(--bg-elev);
+            border-top-color: var(--line);
+
+            .nutGui {
+                color: var(--ink-4);
+                background: var(--bg-soft);
+
+                &:not(:disabled) {
+                    color: var(--accent-ink);
+                    background: var(--accent);
+                }
+            }
+        }
+    }
+}

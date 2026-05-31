@@ -24,13 +24,13 @@ import {
   Radio,
   Select,
   Switch,
-  Tabs,
   message,
 } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import React, { useEffect, useMemo, useState } from 'react';
 import Topbar from '@/pages/Quản Trị/Topbar';
+import PageToolbar from '@/pages/Quản Trị/components/PageToolbar';
 import {
   DANH_SACH_KHUYEN_MAI,
   DANH_SACH_COMBO,
@@ -910,9 +910,9 @@ const KhuyenMai: React.FC = () => {
       title: 'Xác nhận xoá?',
       icon: <ExclamationCircleOutlined />,
       content: `Xoá khuyến mãi "${item.ten}"? Hành động không thể hoàn tác.`,
-      okText: 'Xoá',
-      okType: 'danger',
-      cancelText: 'Huỷ',
+      okText: 'Xoá', okType: 'danger', cancelText: 'Huỷ', centered: true,
+      okButtonProps: { style: { borderRadius: 8 } },
+      cancelButtonProps: { style: { borderRadius: 8 } },
       onOk: () => {
         setItems((prev) => prev.filter((k) => k.id !== item.id));
         message.success(`Đã xoá khuyến mãi ${item.ma}`);
@@ -1045,21 +1045,29 @@ const KhuyenMai: React.FC = () => {
             ))}
           </div>
 
-          <Tabs
-            activeKey={activeTab}
-            onChange={(key) => setActiveTab(key as 'ma-giam-gia' | 'combo')}
-            className={styles.mainTabs}
-          >
-            <Tabs.TabPane key="ma-giam-gia" tab="Mã Giảm Giá">
-              <div className={styles.toolbar} style={{ padding: '0 20px 16px' }}>
-                <Input
-                  prefix={<SearchOutlined className={styles.searchIcon} />}
-                  placeholder="Tìm mã, tên chương trình..."
-                  className={styles.searchInput}
-                  value={tuKhoa}
-                  onChange={(e) => setTuKhoa(e.target.value)}
-                  allowClear
-                />
+          {/* Tab row — pill buttons đồng bộ với các trang khác */}
+          <div className={styles.kmTabsRow}>
+            <button
+              className={`${styles.kmTabBtn} ${activeTab === 'ma-giam-gia' ? styles.kmTabActive : ''}`}
+              onClick={() => setActiveTab('ma-giam-gia')}
+            >
+              Mã Giảm Giá
+            </button>
+            <button
+              className={`${styles.kmTabBtn} ${activeTab === 'combo' ? styles.kmTabActive : ''}`}
+              onClick={() => setActiveTab('combo')}
+            >
+              Combo
+            </button>
+          </div>
+
+          {/* Toolbar */}
+          {activeTab === 'ma-giam-gia' ? (
+            <PageToolbar
+              searchPlaceholder="Tìm mã, tên chương trình..."
+              searchValue={tuKhoa}
+              onSearch={setTuKhoa}
+              filters={
                 <Badge count={filterTrangThai ? 1 : 0} size="small" offset={[-4, 4]}>
                   <Dropdown overlay={filterMenu} trigger={['click']}>
                     <Button icon={<FilterOutlined />} className={styles.btnFilter}>
@@ -1067,72 +1075,64 @@ const KhuyenMai: React.FC = () => {
                     </Button>
                   </Dropdown>
                 </Badge>
-                <Button
-                  type="primary"
-                  icon={<PlusOutlined />}
-                  className={styles.btnCreate}
-                  onClick={() => { setEditing(null); setFormOpen(true); }}
-                >
+              }
+              actions={
+                <Button type="primary" icon={<PlusOutlined />} className={styles.btnCreate} onClick={() => { setEditing(null); setFormOpen(true); }}>
                   Tạo khuyến mãi
                 </Button>
-              </div>
-
-              <div className={styles.promoList} style={{ border: 'none', borderRadius: 0 }}>
-                {danhSachLoc.map((item, idx) => (
-                  <React.Fragment key={item.id}>
-                    <KhuyenMaiRow
-                      item={item}
-                      onClick={() => setViewing(item)}
-                      onEdit={() => { setEditing(item); setFormOpen(true); }}
-                      onDelete={() => handleDelete(item)}
-                      onToggle={(v) => handleToggleHoatDong(item.id, v)}
-                    />
-                    {idx < danhSachLoc.length - 1 && <div className={styles.divider} />}
-                  </React.Fragment>
-                ))}
-                {danhSachLoc.length === 0 && (
-                  <div className={styles.empty}>Không tìm thấy khuyến mãi phù hợp</div>
-                )}
-              </div>
-            </Tabs.TabPane>
-
-            <Tabs.TabPane key="combo" tab="Combo">
-              <div className={styles.comboToolbar}>
-                <Input
-                  prefix={<SearchOutlined className={styles.searchIcon} />}
-                  placeholder="Tìm tên combo..."
-                  className={styles.searchInput}
-                  value={comboTuKhoa}
-                  onChange={(e) => setComboTuKhoa(e.target.value)}
-                  allowClear
-                />
-                <Button
-                  type="primary"
-                  icon={<PlusOutlined />}
-                  className={styles.btnComboCreate}
-                  onClick={() => { setEditingCombo(null); setComboFormOpen(true); }}
-                >
+              }
+            />
+          ) : (
+            <PageToolbar
+              searchPlaceholder="Tìm tên combo..."
+              searchValue={comboTuKhoa}
+              onSearch={setComboTuKhoa}
+              actions={
+                <Button type="primary" icon={<PlusOutlined />} className={styles.btnComboCreate} onClick={() => { setEditingCombo(null); setComboFormOpen(true); }}>
                   Tạo combo
                 </Button>
-              </div>
+              }
+            />
+          )}
 
-              <div className={styles.comboList}>
-                {danhSachComboLoc.map((item) => (
-                  <ComboRow
-                    key={item.id}
+          {/* Nội dung tab */}
+          {activeTab === 'ma-giam-gia' && (
+            <div className={styles.promoList}>
+              {danhSachLoc.map((item, idx) => (
+                <React.Fragment key={item.id}>
+                  <KhuyenMaiRow
                     item={item}
-                    onClick={() => {}}
-                    onEdit={() => { setEditingCombo(item); setComboFormOpen(true); }}
-                    onDelete={() => handleComboDelete(item)}
-                    onToggle={(v) => handleComboToggle(item.id, v)}
+                    onClick={() => setViewing(item)}
+                    onEdit={() => { setEditing(item); setFormOpen(true); }}
+                    onDelete={() => handleDelete(item)}
+                    onToggle={(v) => handleToggleHoatDong(item.id, v)}
                   />
-                ))}
-                {danhSachComboLoc.length === 0 && (
-                  <div className={styles.empty}>Không tìm thấy combo phù hợp</div>
-                )}
-              </div>
-            </Tabs.TabPane>
-          </Tabs>
+                  {idx < danhSachLoc.length - 1 && <div className={styles.divider} />}
+                </React.Fragment>
+              ))}
+              {danhSachLoc.length === 0 && (
+                <div className={styles.empty}>Không tìm thấy khuyến mãi phù hợp</div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'combo' && (
+            <div className={styles.comboList}>
+              {danhSachComboLoc.map((item) => (
+                <ComboRow
+                  key={item.id}
+                  item={item}
+                  onClick={() => {}}
+                  onEdit={() => { setEditingCombo(item); setComboFormOpen(true); }}
+                  onDelete={() => handleComboDelete(item)}
+                  onToggle={(v) => handleComboToggle(item.id, v)}
+                />
+              ))}
+              {danhSachComboLoc.length === 0 && (
+                <div className={styles.empty}>Không tìm thấy combo phù hợp</div>
+              )}
+            </div>
+          )}
       </div>
 
       <KhuyenMaiForm

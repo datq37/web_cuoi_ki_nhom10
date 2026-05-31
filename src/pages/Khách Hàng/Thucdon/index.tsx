@@ -19,6 +19,7 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
         incCart,
         decCart,
         filteredMenu,
+        bestSeller,
         todayTabIndex,
     } = useModel('Khách Hàng.Thực đơn.index');
     const { theme } = useModel('Khách Hàng.GlobalState.index');
@@ -53,7 +54,7 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
                     </div>
                 </div>
             </div>
-            <MenuHero orders={ordersToday} totalDishes={filteredMenu.length} />
+            <MenuHero orders={ordersToday} totalDishes={filteredMenu.length} bestSeller={bestSeller} />
             <div className="hangLichTrinh">
                 <DayTabs selected={day} onSelect={setDay} />
             </div>

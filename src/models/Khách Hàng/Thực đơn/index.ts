@@ -143,6 +143,13 @@ export default function useCartModel() {
     [dishes, activeCategory, searchQuery]
   );
 
+  const bestSeller = useMemo(() => {
+    return dishes.reduce<Dish | undefined>((topDish, dish) => {
+      if (!topDish || dish.sold > topDish.sold) return dish;
+      return topDish;
+    }, undefined);
+  }, [dishes]);
+
   const categoryCounts = useMemo(
     () => buildCategoryCounts(dishes, MENU_CATEGORIES),
     [dishes]
@@ -168,6 +175,7 @@ export default function useCartModel() {
     activeCategory,
     setActiveCategory,
     filteredMenu,
+    bestSeller,
     categoryCounts,
     searchQuery,
     setSearchQuery,

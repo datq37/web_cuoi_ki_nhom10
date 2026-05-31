@@ -183,6 +183,17 @@
     }
   }
 
+  .hero-stat-best {
+    min-width: 180px;
+
+    strong {
+      max-width: 170px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
   .hangLichTrinh {
     display: flex;
     align-items: center;
@@ -709,10 +720,10 @@
 
     .hero-stats {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
       width: 100%;
-      max-width: 320px;
+      max-width: 520px;
       padding: 10px;
     }
 
@@ -726,6 +737,12 @@
 
       span {
         font-size: 9px;
+      }
+    }
+
+    .hero-stat-best {
+      strong {
+        max-width: 120px;
       }
     }
 
@@ -803,7 +820,8 @@
     }
 
     .hero-stats {
-      max-width: 270px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      max-width: 310px;
       margin-top: 10px;
       padding: 9px;
     }

@@ -10,6 +10,51 @@
   gap: 16px;
 }
 
+// ── Tabs ─────────────────────────────────────────────────────────
+// Tab style đồng bộ với chuẩn toàn trang
+.khoTabs {
+  display: flex;
+  gap: 2px;
+  background: @surface;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 4px;
+  align-self: flex-start;
+}
+
+.khoTabBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: @text-muted;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  &:hover { background: @divider; color: @text-dark; }
+}
+
+.khoTabActive {
+  background: @primary !important;
+  color: #fff !important;
+  &:hover { background: @primary-hover !important; }
+}
+
+.khoTabCount {
+  background: rgba(255,255,255,0.25);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 1px 7px;
+  line-height: 1.6;
+}
+
 .statGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -541,6 +586,9 @@
 }
 
 :global([data-theme="dark"]) {
+  .khoTabs   { background: #1e293b; border-color: #334155; }
+  .khoTabBtn { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
+
   .statCard { background: #1e293b; border-color: #334155; }
   .statValue { color: #f1f5f9; }
   .statLabel { color: #64748b; }

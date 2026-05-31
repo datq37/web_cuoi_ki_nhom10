@@ -30,6 +30,9 @@ import {
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import EmptyState from '@/pages/Quản Trị/components/EmptyState';
+import PageToolbar from '@/pages/Quản Trị/components/PageToolbar';
+import { KEYS, store } from '@/utils/storage';
 import { useNotif } from '@/context/NotifContext';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import {
@@ -61,6 +64,17 @@ function tinhTrangThai(tonKho: number, mucToiThieu: number): ETrangThaiNguyenLie
 
 type TrangThaiFilter = 'all' | ETrangThaiNguyenLieu;
 type NguyenLieuFormValues = Omit<INguyenLieu, 'id' | 'trangThai'>;
+type ViewTab = 'danh_sach' | 'lich_su';
+
+interface ILichSuNhap {
+  id:       string;
+  tenNL:    string;
+  donVi:    string;
+  soLuong:  number;
+  giaNhap:  number;
+  ngay:     string;  // 'HH:mm DD/MM/YYYY'
+  ghiChu?:  string;
+}
 
 const NguyenLieuForm: React.FC<{
   open: boolean;
@@ -571,6 +585,11 @@ const KhoNguyenLieu: React.FC = () => {
   const [items,           setItems]           = useState<INguyenLieu[]>(DANH_SACH_NGUYEN_LIEU);
   const [tuKhoa,          setTuKhoa]          = useState('');
   const [filterTrangThai, setFilterTrangThai] = useState<TrangThaiFilter>('all');
+  const [filterNCC,       setFilterNCC]       = useState<string>('');
+  const [activeTab,       setActiveTab]       = useState<ViewTab>('danh_sach');
+  const [lichSuNhap,      setLichSuNhap]      = useState<ILichSuNhap[]>(() =>
+    store.get<ILichSuNhap[]>(KEYS.importHistory, []),
+  );
   const [editing, setEditing] = useState<INguyenLieu | null>(null);
   const [viewing, setViewing] = useState<INguyenLieu | null>(null);
   const [formOpen, setFormOpen] = useState(false);
@@ -611,17 +630,14 @@ const KhoNguyenLieu: React.FC = () => {
 
   const danhSachLoc = useMemo(() => {
     let list = items;
-    if (filterTrangThai !== 'all') {
-      list = list.filter((n) => n.trangThai === filterTrangThai);
-    }
+    if (filterTrangThai !== 'all') list = list.filter((n) => n.trangThai === filterTrangThai);
+    if (filterNCC) list = list.filter((n) => n.nhaCungCap === filterNCC);
     if (tuKhoa.trim()) {
       const kw = tuKhoa.toLowerCase();
-      list = list.filter(
-        (n) => n.ten.toLowerCase().includes(kw) || n.nhaCungCap.toLowerCase().includes(kw),
-      );
+      list = list.filter((n) => n.ten.toLowerCase().includes(kw) || n.nhaCungCap.toLowerCase().includes(kw));
     }
     return list;
-  }, [items, tuKhoa, filterTrangThai]);
+  }, [items, tuKhoa, filterTrangThai, filterNCC]);
 
   const handleSubmit = (values: NguyenLieuFormValues) => {
     const trangThai = tinhTrangThai(values.tonKho, values.mucToiThieu);
@@ -639,6 +655,14 @@ const KhoNguyenLieu: React.FC = () => {
     setEditing(null);
   };
 
+  const addLichSu = (entries: ILichSuNhap[]) => {
+    setLichSuNhap((prev) => {
+      const next = [...entries, ...prev];
+      store.set(KEYS.importHistory, next);
+      return next;
+    });
+  };
+
   const handleRestock = (id: string, soLuongNhap: number, newGiaNhap: number) => {
     let ten = '';
     let donVi = '';
@@ -651,13 +675,14 @@ const KhoNguyenLieu: React.FC = () => {
         return { ...n, tonKho: tonKhoMoi, giaNhap: newGiaNhap, trangThai: tinhTrangThai(tonKhoMoi, n.mucToiThieu) };
       }),
     );
+    addLichSu([{
+      id: `ls_${Date.now()}`,
+      tenNL: ten, donVi, soLuong: soLuongNhap,
+      giaNhap: newGiaNhap,
+      ngay: dayjs().format('HH:mm DD/MM/YYYY'),
+    }]);
     message.success(`Đã nhập ${soLuongNhap} ${donVi} ${ten}`);
-    addNotif({
-      icon: '📦',
-      title: 'Đã nhập kho',
-      desc: `${ten}: +${soLuongNhap} ${donVi}`,
-      type: 'stock_refilled',
-    });
+    addNotif({ icon: '📦', title: 'Đã nhập kho', desc: `${ten}: +${soLuongNhap} ${donVi}`, type: 'stock_refilled' });
     setRestockOpen(false);
     setRestocking(null);
   };
@@ -667,21 +692,20 @@ const KhoNguyenLieu: React.FC = () => {
       const it = items.find((n) => n.id === u.id);
       return sum + (it ? u.soLuongNhap * it.giaNhap : 0);
     }, 0);
+    const now = dayjs().format('HH:mm DD/MM/YYYY');
+    const entries: ILichSuNhap[] = [];
     setItems((prev) =>
       prev.map((n) => {
         const u = updates.find((x) => x.id === n.id);
         if (!u) return n;
+        entries.push({ id: `ls_${Date.now()}_${n.id}`, tenNL: n.ten, donVi: n.donVi, soLuong: u.soLuongNhap, giaNhap: n.giaNhap, ngay: now });
         const tonKhoMoi = n.tonKho + u.soLuongNhap;
         return { ...n, tonKho: tonKhoMoi, trangThai: tinhTrangThai(tonKhoMoi, n.mucToiThieu) };
       }),
     );
+    addLichSu(entries);
     message.success(`Đã nhập kho ${updates.length} mặt hàng, tổng ${formatGia(totalAmount)}`);
-    addNotif({
-      icon: '📦',
-      title: 'Nhập kho hàng loạt',
-      desc: `${updates.length} mặt hàng đã được nhập kho · Tổng ${formatGia(totalAmount)}`,
-      type: 'stock_refilled',
-    });
+    addNotif({ icon: '📦', title: 'Nhập kho hàng loạt', desc: `${updates.length} mặt hàng · Tổng ${formatGia(totalAmount)}`, type: 'stock_refilled' });
     setBulkRestockOpen(false);
   };
 
@@ -690,9 +714,9 @@ const KhoNguyenLieu: React.FC = () => {
       title: 'Xác nhận xoá nguyên liệu?',
       icon: <ExclamationCircleOutlined />,
       content: `Xoá "${item.ten}" khỏi kho? Tất cả lịch sử nhập kho cũng sẽ bị mất.`,
-      okText: 'Xoá',
-      okType: 'danger',
-      cancelText: 'Huỷ',
+      okText: 'Xoá', okType: 'danger', cancelText: 'Huỷ', centered: true,
+      okButtonProps: { style: { borderRadius: 8 } },
+      cancelButtonProps: { style: { borderRadius: 8 } },
       onOk: () => {
         setItems((prev) => prev.filter((n) => n.id !== item.id));
         message.success(`Đã xoá nguyên liệu "${item.ten}"`);
@@ -820,6 +844,23 @@ const KhoNguyenLieu: React.FC = () => {
     },
   ];
 
+  const lichSuColumns: ColumnsType<ILichSuNhap> = [
+    { title: 'NGUYÊN LIỆU', dataIndex: 'tenNL', key: 'tenNL', render: (v) => <strong>{v}</strong> },
+    {
+      title: 'SỐ LƯỢNG', dataIndex: 'soLuong', key: 'soLuong', width: 130,
+      render: (v, r) => <span style={{ color: '#16a34a', fontWeight: 600 }}>+{v} {r.donVi}</span>,
+    },
+    {
+      title: 'GIÁ NHẬP', dataIndex: 'giaNhap', key: 'giaNhap', width: 130,
+      render: (v) => formatGia(v),
+    },
+    {
+      title: 'THÀNH TIỀN', key: 'thanhTien', width: 140,
+      render: (_, r) => <span style={{ fontWeight: 600 }}>{formatGia(r.soLuong * r.giaNhap)}</span>,
+    },
+    { title: 'THỜI GIAN', dataIndex: 'ngay', key: 'ngay', width: 160, render: (v) => <span style={{ color: '#9ca3af' }}>{v}</span> },
+  ];
+
   return (
     <>
       <Topbar title="Kho nguyên liệu" />
@@ -844,7 +885,66 @@ const KhoNguyenLieu: React.FC = () => {
             ))}
           </div>
 
-          {canNhapThemItems.length > 0 && (
+          {/* Tabs — sau stat cards */}
+          <div className={styles.khoTabs}>
+            <button
+              className={`${styles.khoTabBtn} ${activeTab === 'danh_sach' ? styles.khoTabActive : ''}`}
+              onClick={() => setActiveTab('danh_sach')}
+            >
+              Danh sách nguyên liệu
+            </button>
+            <button
+              className={`${styles.khoTabBtn} ${activeTab === 'lich_su' ? styles.khoTabActive : ''}`}
+              onClick={() => setActiveTab('lich_su')}
+            >
+              Lịch sử nhập kho
+              {lichSuNhap.length > 0 && (
+                <span className={styles.khoTabCount}>{lichSuNhap.length}</span>
+              )}
+            </button>
+          </div>
+
+          {activeTab === 'lich_su' && (
+            <div className={styles.tableSection}>
+              <div className={styles.tableToolbar}>
+                <span style={{ fontSize: 13, color: '#6b7280' }}>
+                  {lichSuNhap.length} lần nhập kho
+                </span>
+                {lichSuNhap.length > 0 && (
+                  <Button
+                    danger size="small"
+                    style={{ marginLeft: 'auto', borderRadius: 7 }}
+                    onClick={() => {
+                      Modal.confirm({
+                        title: 'Xoá toàn bộ lịch sử?',
+                        okType: 'danger', okText: 'Xoá', cancelText: 'Huỷ', centered: true,
+                        onOk: () => { setLichSuNhap([]); store.set(KEYS.importHistory, []); },
+                      });
+                    }}
+                  >
+                    Xoá lịch sử
+                  </Button>
+                )}
+              </div>
+              {lichSuNhap.length === 0 ? (
+                <EmptyState
+                  kind="inventory"
+                  title="Chưa có lịch sử nhập kho"
+                  desc="Mỗi lần nhập kho sẽ được ghi lại tại đây."
+                />
+              ) : (
+                <Table<ILichSuNhap>
+                  dataSource={lichSuNhap}
+                  columns={lichSuColumns}
+                  rowKey="id"
+                  pagination={{ pageSize: 15, showTotal: (t) => `${t} bản ghi` }}
+                  className={styles.table}
+                />
+              )}
+            </div>
+          )}
+
+          {activeTab === 'danh_sach' && canNhapThemItems.length > 0 && (
             <div className={styles.warnBanner}>
               <div className={styles.warnLeft}>
                 <ExclamationCircleFilled className={styles.warnIcon} />
@@ -866,41 +966,53 @@ const KhoNguyenLieu: React.FC = () => {
             </div>
           )}
 
-          <div className={styles.tableSection}>
-            <div className={styles.tableToolbar}>
-              <Input
-                prefix={<SearchOutlined className={styles.searchIcon} />}
-                placeholder="Tìm nguyên liệu, nhà cung cấp..."
-                className={styles.searchInput}
-                value={tuKhoa}
-                onChange={(e) => setTuKhoa(e.target.value)}
-                allowClear
-              />
-              <div className={styles.tableActions}>
-                <Badge count={filterTrangThai !== 'all' ? 1 : 0} size="small" offset={[-4, 4]}>
-                  <Dropdown overlay={filterMenu} trigger={['click']}>
-                    <Button icon={<FilterOutlined />} className={styles.btnOutline}>
-                      Lọc
-                    </Button>
-                  </Dropdown>
-                </Badge>
-                <Button
-                  icon={<ImportOutlined />}
-                  className={styles.btnOutline}
-                  onClick={() => { setBulkPreSelectIds([]); setBulkRestockOpen(true); }}
-                >
-                  Nhập kho
-                </Button>
-                <Button
-                  type="primary"
-                  icon={<PlusOutlined />}
-                  className={styles.addBtn}
-                  onClick={() => { setEditing(null); setFormOpen(true); }}
-                >
-                  Thêm nguyên liệu
-                </Button>
-              </div>
-            </div>
+          {activeTab === 'danh_sach' && <div className={styles.tableSection}>
+            <PageToolbar
+              searchPlaceholder="Tìm nguyên liệu, nhà cung cấp..."
+              searchValue={tuKhoa}
+              onSearch={setTuKhoa}
+              filters={
+                <>
+                  <Select
+                    placeholder="Tất cả NCC"
+                    value={filterNCC || undefined}
+                    onChange={(v) => setFilterNCC(v ?? '')}
+                    allowClear
+                    style={{ width: 160 }}
+                  >
+                    {nhaCungCapOptions.map((ncc) => (
+                      <Select.Option key={ncc} value={ncc}>{ncc}</Select.Option>
+                    ))}
+                  </Select>
+                  <Badge count={filterTrangThai !== 'all' ? 1 : 0} size="small" offset={[-4, 4]}>
+                    <Dropdown overlay={filterMenu} trigger={['click']}>
+                      <Button icon={<FilterOutlined />} className={styles.btnOutline}>
+                        Trạng thái
+                      </Button>
+                    </Dropdown>
+                  </Badge>
+                </>
+              }
+              actions={
+                <>
+                  <Button
+                    icon={<ImportOutlined />}
+                    className={styles.btnOutline}
+                    onClick={() => { setBulkPreSelectIds([]); setBulkRestockOpen(true); }}
+                  >
+                    Nhập kho
+                  </Button>
+                  <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    className={styles.addBtn}
+                    onClick={() => { setEditing(null); setFormOpen(true); }}
+                  >
+                    Thêm nguyên liệu
+                  </Button>
+                </>
+              }
+            />
 
             <Table<INguyenLieu>
               columns={columns}
@@ -909,13 +1021,13 @@ const KhoNguyenLieu: React.FC = () => {
               pagination={false}
               className={styles.table}
               rowClassName={styles.tableRow}
-              locale={{ emptyText: 'Không tìm thấy nguyên liệu nào' }}
+              locale={{ emptyText: <EmptyState kind="search" desc="Không tìm thấy nguyên liệu nào" /> }}
               onRow={(record) => ({
                 onClick: () => setViewing(record),
                 style: { cursor: 'pointer' },
               })}
             />
-          </div>
+          </div>}
       </div>
 
       <NguyenLieuForm

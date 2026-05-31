@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { message } from 'antd';
 import { useModel } from 'umi';
 import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
+import { showCustomerNotification } from '@/utils/notification';
 
 export default function useDanhGiaModel(order: any, onClose: () => void) {
     const { currentUser } = useModel('Khách Hàng.Tài Khoản.thanghang');
@@ -48,7 +49,7 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
         if (order?.id) {
             markAsReviewed(order.id);
         }
-        message.success("Cảm ơn bạn đã gửi đánh giá món ăn!");
+        showCustomerNotification('Cảm ơn bạn đã gửi đánh giá món ăn!', 'Phản hồi của bạn đã được ghi nhận và sẽ giúp chúng tôi cải thiện chất lượng phục vụ.', 'success');
         onClose();
     };
     // đóng from khi click ngoài 

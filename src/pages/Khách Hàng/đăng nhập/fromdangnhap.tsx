@@ -3,6 +3,7 @@ import { GoogleOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 import { history } from 'umi';
 import { LoginFormProps } from '@/services/Khách hàng/Login/typing';
+import { showCustomerNotification } from '@/utils/notification';
 
 const LoginForm: React.FC<LoginFormProps> = ({ onToggle }) => {
   const [phone, setPhone] = useState('');
@@ -13,10 +14,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggle }) => {
     const DUMMY_PASSWORD = 'password123';
 
     if (phone === DUMMY_PHONE && password === DUMMY_PASSWORD) {
-      message.success('Đăng nhập thành công! Chào mừng bạn.');
+      showCustomerNotification('Đăng nhập thành công! Chào mừng bạn.', undefined, 'success');
       history.push('/trang-chinh');
     } else {
-      message.error('Số điện thoại hoặc mật khẩu không chính xác. Thử: 0987654321 / password123');
+      showCustomerNotification('Số điện thoại hoặc mật khẩu không chính xác. Thử: 0987654321 / password123', undefined, 'error');
     }
   };
 

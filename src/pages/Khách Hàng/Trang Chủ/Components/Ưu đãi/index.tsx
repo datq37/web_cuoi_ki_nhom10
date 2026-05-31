@@ -10,6 +10,7 @@ import chayImg from '@/assets/Khách Hàng/Trang chủ/chay_salad_no_text.png';
 import { OffersAndCombosProps } from '@/services/Khách hàng/Trang Chủ/typing';
 import { formatCurrency, formatNumberViVN } from '@/utils/format';
 import './index.less';
+import { showCustomerNotification } from '@/utils/notification';
 
 interface BestVoucher {
   ma: string;
@@ -253,11 +254,11 @@ const OffersAndCombos: React.FC<OffersAndCombosProps> = ({ setPage }) => {
       });
 
       if (added > 0) {
-        message.success(`Đã thêm combo ${bestCombo.ten} vào giỏ hàng!`);
+        showCustomerNotification(`Đã thêm combo ${bestCombo.ten} vào giỏ hàng!`, undefined, 'success');
       }
     } catch (e) {
       console.error(e);
-      message.error("Lỗi khi thêm combo vào giỏ hàng");
+      showCustomerNotification("Lỗi khi thêm combo vào giỏ hàng", undefined, 'error');
     }
   };
 

@@ -18,6 +18,7 @@ import { history, useModel } from "umi";
 
 import './index.less';
 import bgImage from "@/assets/dangki/dangnhap.png";
+import { showCustomerNotification } from '@/utils/notification';
 
 export default function LoginPage() {
   const isRegisterRoute = history.location.pathname === '/dang-ky';
@@ -36,7 +37,7 @@ export default function LoginPage() {
         message.warning('Vui lòng nhập đầy đủ thông tin');
         return;
       }
-      message.success('Tạo tài khoản thành công! Bạn có thể đăng nhập ngay.');
+      showCustomerNotification('Tạo tài khoản thành công! Bạn có thể đăng nhập ngay.', undefined, 'success');
       setIsSignUp(false);
       setPhone("");
       setPassword("");
@@ -44,13 +45,13 @@ export default function LoginPage() {
       const DUMMY_PHONE = '0987654321';
       const DUMMY_PASSWORD = 'password123';
       if ((phone === 'admin' || phone === '0999999999') && password === 'admin') {
-        message.success('Đăng nhập Quản trị thành công! Chào mừng Admin.');
+        showCustomerNotification('Đăng nhập Quản trị thành công! Chào mừng Admin.', undefined, 'success');
         history.push('/quan-tri/tong-quan');
       } else if (phone === DUMMY_PHONE && password === DUMMY_PASSWORD) {
-        message.success('Đăng nhập thành công! Chào mừng bạn.');
+        showCustomerNotification('Đăng nhập thành công! Chào mừng bạn.', undefined, 'success');
         history.push('/trang-chinh');
       } else {
-        message.error('Số điện thoại hoặc mật khẩu không chính xác. Thử: 0987654321 / password123 hoặc admin / admin');
+        showCustomerNotification('Số điện thoại hoặc mật khẩu không chính xác. Thử: 0987654321 / password123 hoặc admin / admin', undefined, 'error');
       }
     }
   };

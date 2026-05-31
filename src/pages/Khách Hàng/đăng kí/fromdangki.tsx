@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { GoogleOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 import { history } from 'umi';
+import { showCustomerNotification } from '@/utils/notification';
 
 interface RegisterFormProps {
     onToggle?: () => void;
@@ -16,7 +17,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onToggle }) => {
             message.warning('Vui lòng nhập đầy đủ thông tin');
             return;
         }
-        message.success('Tạo tài khoản thành công! Bạn có thể đăng nhập ngay.');
+        showCustomerNotification('Tạo tài khoản thành công! Bạn có thể đăng nhập ngay.', undefined, 'success');
         setTimeout(() => {
             window.location.reload();
         }, 1500);

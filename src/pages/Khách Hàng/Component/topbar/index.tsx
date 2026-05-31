@@ -6,7 +6,9 @@ import {
     BellOutlined,
     MenuOutlined,
     CheckCircleOutlined,
-    ClockCircleOutlined
+    ClockCircleOutlined,
+    LogoutOutlined,
+    SettingOutlined
 } from '@ant-design/icons';
 import { ChevronDown } from 'lucide-react';
 import { Popover, Badge } from 'antd';
@@ -70,7 +72,7 @@ const getNotificationIcon = (id: string) => {
 const Topbar: React.FC = () => {
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isNotifOpen, setIsNotifOpen] = useState(false);
-    const { theme, toggleTheme, breadcrumbs, isSidebarOpen, setIsSidebarOpen } = useModel('Khách Hàng.GlobalState.index');
+    const { theme, toggleTheme, breadcrumbs, isSidebarOpen, setIsSidebarOpen, setPage } = useModel('Khách Hàng.GlobalState.index');
     const { currentUser } = useModel('Khách Hàng.Tài Khoản.thanghang');
     const { notifications, unreadCount, markAsRead, markAllAsRead } = useModel('Khách Hàng.Thông Báo.index');
 
@@ -174,14 +176,29 @@ const Topbar: React.FC = () => {
 
                     {isUserMenuOpen && (
                         <div className="topbar-user-menu">
-                            <button
-                                onClick={() => {
-                                    setIsUserMenuOpen(false);
-                                    history.push('/');
-                                }}
-                            >
-                                Đăng xuất
-                            </button>
+                            <div className="topbar-user-menu-list">
+                                <button
+                                    className="topbar-user-menu-item"
+                                    onClick={() => {
+                                        setIsUserMenuOpen(false);
+                                        setPage('settings');
+                                    }}
+                                >
+                                    <SettingOutlined />
+                                    <span>Cài đặt</span>
+                                </button>
+                                <button
+                                    className="topbar-user-menu-item topbar-user-menu-logout"
+                                    onClick={() => {
+                                        setIsUserMenuOpen(false);
+                                        sessionStorage.removeItem('current_page');
+                                        history.push('/');
+                                    }}
+                                >
+                                    <LogoutOutlined />
+                                    <span>Đăng xuất</span>
+                                </button>
+                            </div>
                         </div>
                     )}
                 </div>

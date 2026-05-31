@@ -5,6 +5,70 @@
 .pageBody {
   padding: 20px 24px 32px;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// ── Stat cards ───────────────────────────────────────────────────
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  @media (max-width: 1100px) { grid-template-columns: repeat(2, 1fr); }
+}
+
+.statCard {
+  background: @surface;
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border: 1px solid @border;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  gap: 12px;
+}
+
+.statLeft { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.statLabel { font-size: 11px; font-weight: 600; color: @text-light; letter-spacing: 0.5px; text-transform: uppercase; }
+.statValue { font-size: 26px; font-weight: 800; color: @text-dark; line-height: 1; }
+.statIconWrap { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+// ── Toolbar ───────────────────────────────────────────────────────
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.searchInput {
+  width: 260px;
+  border-radius: 8px !important;
+  :global(.ant-input-prefix) { margin-right: 6px; }
+}
+
+.roleSelect {
+  :global(.ant-select-selector) { border-radius: 8px !important; }
+}
+
+.countBadge {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: @text-muted;
+  white-space: nowrap;
+  margin-left: 2px;
+}
+
+.addBtn {
+  margin-left: auto;
+  background: @primary !important;
+  border-color: @primary !important;
+  border-radius: 8px !important;
+  font-weight: 600;
+  &:hover { background: @primary-hover !important; border-color: @primary-hover !important; }
 }
 
 .grid {
@@ -61,9 +125,24 @@
   text-overflow: ellipsis;
 }
 
+.cardId {
+  font-size: 10.5px;
+  font-family: monospace;
+  color: @text-light;
+  margin-bottom: 1px;
+}
+
 .cardEmail {
   font-size: 12.5px;
   color: #9ca3af;
+}
+
+.cardPhone {
+  font-size: 12px;
+  color: @text-muted;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
 }
 
 .cardMeta {
@@ -91,6 +170,13 @@
 .lastActive {
   font-size: 12.5px;
   color: #9ca3af;
+}
+
+.cardLuong {
+  font-size: 14px;
+  font-weight: 700;
+  color: @primary;
+  padding: 4px 0 2px;
 }
 
 .cardActions {
@@ -122,8 +208,37 @@
   }
 }
 
-.actionIcon {
-  font-size: 13px;
+.actionIcon { font-size: 13px; }
+
+// 3 icon buttons nhỏ gọn
+.iconActionBtn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  color: @text-muted;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+
+  &:hover {
+    background: @primary-50;
+    border-color: @primary;
+    color: @primary;
+  }
+}
+
+.iconActionBtnDanger {
+  &:hover {
+    background: #fff1f0 !important;
+    border-color: @danger !important;
+    color: @danger !important;
+  }
 }
 
 .addCard {
@@ -305,14 +420,31 @@
 }
 
 :global([data-theme="dark"]) {
+  .statCard  { background: #1e293b; border-color: #334155; }
+  .statValue { color: #f1f5f9; }
+  .statLabel { color: #64748b; }
+
   .card {
     background: #1e293b;
     border-color: #334155;
     &:hover { box-shadow: 0 6px 20px rgba(0,0,0,.35); }
   }
-  .cardName  { color: #f1f5f9; }
-  .cardEmail { color: #64748b; }
+  .cardName   { color: #f1f5f9; }
+  .cardId     { color: #475569; }
+  .cardEmail  { color: #64748b; }
+  .cardPhone  { color: #64748b; }
+  .cardLuong  { color: #4ade80; }
+  .countBadge { color: #64748b; }
   .lastActive { color: #64748b; }
+  .iconActionBtn {
+    background: #0f172a;
+    border-color: #334155;
+    color: #64748b;
+    &:hover { background: rgba(22,163,74,.12); border-color: @primary; color: #4ade80; }
+  }
+  .iconActionBtnDanger {
+    &:hover { background: rgba(220,38,38,.12) !important; border-color: @danger !important; color: #f87171 !important; }
+  }
 
   .actionBtn {
     background: #0f172a;

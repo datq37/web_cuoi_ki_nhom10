@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useModel } from 'umi';
 import { QRCodeCanvas } from 'qrcode.react';
 import { ArrowLeft, Clock3, Headphones, ShieldCheck } from 'lucide-react';
@@ -13,6 +13,7 @@ const LOGO_SRC = '/logo.webp';
 const QRPaymentPage: React.FC = () => {
   const { setPage } = useModel('Khách Hàng.GlobalState.index');
   const { orders, cancelOrder } = useModel('Khách Hàng.Đơn Hàng.Orders');
+  const expiredOrderIdRef = useRef<string | null>(null);
   const {
     pendingOrder,
     setPendingOrder,
@@ -38,6 +39,15 @@ const QRPaymentPage: React.FC = () => {
 
   const paymentOrder = pendingOrder || fallbackOrder || null;
   const qrValue = paymentPayload || (paymentOrder ? `CANTEEN_PAYMENT_ORDER_${paymentOrder.id}_AMOUNT_${paymentOrder.total}` : '');
+
+  useEffect(() => {
+    if (!paymentOrder || !isExpired || expiredOrderIdRef.current === paymentOrder.id) return;
+
+    expiredOrderIdRef.current = paymentOrder.id;
+    cancelOrder(paymentOrder.id);
+    clearPendingOrder();
+    setPage('history');
+  }, [cancelOrder, clearPendingOrder, isExpired, paymentOrder, setPage]);
 
   const goBackToOrders = () => {
     setPage('history');

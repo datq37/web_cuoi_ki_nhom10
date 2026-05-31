@@ -30,6 +30,7 @@ import {
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import React, { useEffect, useMemo, useState } from 'react';
+import TableStaticData from '@/components/TableStaticData';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import PageToolbar from '@/pages/Quản Trị/components/PageToolbar';
 import EmptyState from '@/pages/Quản Trị/components/EmptyState';
@@ -515,11 +516,7 @@ const KhachHang: React.FC = () => {
                 Bộ lọc{soBoLoc > 0 && ` (${soBoLoc})`}
               </Button>
             }
-            actions={
-              <Button type="primary" icon={<PlusOutlined />} className={styles.btnAdd} onClick={() => setThemOpen(true)}>
-                Thêm người dùng
-              </Button>
-            }
+            actions={undefined}
           />
 
           {danhSachLoc.length === 0 ? (
@@ -528,11 +525,13 @@ const KhachHang: React.FC = () => {
               desc={tuKhoa || soBoLoc > 0 ? 'Không tìm thấy khách hàng phù hợp.' : undefined}
             />
           ) : (
-            <Table<IKhachHang>
-              columns={columns}
+            <TableStaticData<IKhachHang>
               dataSource={danhSachLoc}
+              columns={columns}
               rowKey="id"
-              pagination={false}
+              searchValue={tuKhoa}
+              searchFields={['hoTen', 'email', 'phongBan']}
+              pageSize={10}
               className={styles.table}
               rowClassName={styles.tableRow}
               onRow={(r) => ({ onClick: () => setChiTietKhach(r), style: { cursor: 'pointer' } })}

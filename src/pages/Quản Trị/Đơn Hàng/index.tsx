@@ -42,60 +42,56 @@ const DonHang: React.FC = () => {
   const { addNotif } = useNotif();
 
   const [orders, setOrders] = useState<DonTrucTiep[]>(() => {
-    if (typeof window !== 'undefined') {
+    try {
       const saved = localStorage.getItem('admin_orders');
-      if (saved) {
-        try {
-          const list = JSON.parse(saved);
-          if (Array.isArray(list) && list.length > 0) return list;
-        } catch { /* ignore */ }
-      } else {
-        localStorage.setItem('admin_orders', JSON.stringify(mockData.trucTiep.donHang));
-      }
-    }
+      if (saved) { const list = JSON.parse(saved); if (Array.isArray(list) && list.length > 0) return list; }
+      else { localStorage.setItem('admin_orders', JSON.stringify(mockData.trucTiep.donHang)); }
+    } catch { /* */ }
     return mockData.trucTiep.donHang;
   });
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('admin_orders', JSON.stringify(orders));
-      window.dispatchEvent(new Event('admin_orders_updated'));
-    }
-  }, [orders]);
+  useEffect(() => { localStorage.setItem('admin_orders', JSON.stringify(orders)); window.dispatchEvent(new Event('admin_orders_updated')); }, [orders]);
 
   useEffect(() => {
-    const handleStorage = () => {
+    const h = () => {
       const saved = localStorage.getItem('admin_orders');
       if (!saved) return;
       try {
         const list = JSON.parse(saved);
         if (!Array.isArray(list)) return;
-        setOrders((prev) => JSON.stringify(prev) === saved ? prev : list);
-        setCancelledIds(() => {
-          const s = new Set<string>();
-          list.forEach((o: DonTrucTiep) => {
-            if (o.trangThai === ('da_huy' as any)) s.add(o.maDon);
-          });
-          return s;
-        });
-      } catch { /* ignore */ }
+        setOrders((p) => JSON.stringify(p) === saved ? p : list);
+        setCancelledIds(() => { const s = new Set<string>(); list.forEach((o: DonTrucTiep) => { if ((o.trangThai as any) === 'da_huy') s.add(o.maDon); }); return s; });
+      } catch { /* */ }
     };
-    window.addEventListener('storage', handleStorage);
-    window.addEventListener('focus', handleStorage);
-    return () => {
-      window.removeEventListener('storage', handleStorage);
-      window.removeEventListener('focus', handleStorage);
-    };
+    window.addEventListener('storage', h); window.addEventListener('focus', h);
+    return () => { window.removeEventListener('storage', h); window.removeEventListener('focus', h); };
   }, []);
 
   const [cancelledIds, setCancelledIds] = useState<Set<string>>(() => {
-    const s = new Set<string>();
-    mockData.trucTiep.donHang.forEach((o) => {
-      if (o.trangThai === ('da_huy' as any)) s.add(o.maDon);
-    });
-    return s;
+    const s = new Set<string>(); mockData.trucTiep.donHang.forEach((o) => { if ((o.trangThai as any) === 'da_huy') s.add(o.maDon); }); return s;
   });
 
+  const stats = useMemo(() => {
+    const active = orders.filter((o) => !cancelledIds.has(o.maDon));
+    const choXacNhan = active.filter((o) => o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN).length;
+    const dangCheBien = active.filter((o) => o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN).length;
+    const doanhThu = active.filter((o) => o.trangThai === ETrangThaiTrucTiep.HOAN_THANH).reduce((s, o) => s + o.tongTien, 0);
+    return { tong: active.length, choXacNhan, dangCheBien, doanhThu };
+  }, [orders, cancelledIds]);
+
+  const tabCounts = useMemo<Record<string, number>>(() => {
+    const active = orders.filter((o) => !cancelledIds.has(o.maDon));
+    return {
+      tat_ca: active.length,
+      [ETrangThaiTrucTiep.CHO_XAC_NHAN]: active.filter((o) => o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN).length,
+      [ETrangThaiTrucTiep.DANG_CHE_BIEN]: active.filter((o) => o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN).length,
+      [ETrangThaiTrucTiep.SAN_SANG]: active.filter((o) => o.trangThai === ETrangThaiTrucTiep.SAN_SANG).length,
+      [ETrangThaiTrucTiep.HOAN_THANH]: active.filter((o) => o.trangThai === ETrangThaiTrucTiep.HOAN_THANH).length,
+      da_huy: cancelledIds.size,
+    };
+  }, [orders, cancelledIds]);
+
+  // ── UI state (cục bộ) ─────────────────────────────────────────────
   const [activeTab,     setActiveTab]     = useState<TabKey>('tat_ca');
   const [view,          setView]          = useState<'table' | 'kanban'>('table');
   const [searchKw,      setSearchKw]      = useState('');
@@ -105,28 +101,7 @@ const DonHang: React.FC = () => {
 
   const isToday = filterDate.format('DD/MM/YYYY') === TODAY;
 
-  // ── Stat bar — tính từ orders hôm nay (tất cả đơn active) ──────
-  const stats = useMemo(() => {
-    const active = orders.filter((o) => !cancelledIds.has(o.maDon));
-    const choXacNhan  = active.filter((o) => o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN).length;
-    const dangCheBien = active.filter((o) => o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN).length;
-    const hoanThanh   = active.filter((o) => o.trangThai === ETrangThaiTrucTiep.HOAN_THANH);
-    const doanhThu    = hoanThanh.reduce((s, o) => s + o.tongTien, 0);
-    return { tong: active.length, choXacNhan, dangCheBien, doanhThu };
-  }, [orders, cancelledIds]);
-
-  // ── Tab counts ───────────────────────────────────────────────────
-  const tabCounts = useMemo<Record<string, number>>(() => {
-    const active = orders.filter((o) => !cancelledIds.has(o.maDon));
-    return {
-      tat_ca:                              active.length,
-      [ETrangThaiTrucTiep.CHO_XAC_NHAN]:  active.filter((o) => o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN).length,
-      [ETrangThaiTrucTiep.DANG_CHE_BIEN]: active.filter((o) => o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN).length,
-      [ETrangThaiTrucTiep.SAN_SANG]:      active.filter((o) => o.trangThai === ETrangThaiTrucTiep.SAN_SANG).length,
-      [ETrangThaiTrucTiep.HOAN_THANH]:    active.filter((o) => o.trangThai === ETrangThaiTrucTiep.HOAN_THANH).length,
-      da_huy:                              cancelledIds.size,
-    };
-  }, [orders, cancelledIds]);
+  // stats và tabCounts đã lấy từ useModel phía trên
 
   // ── Filtered orders ──────────────────────────────────────────────
   const filteredOrders = useMemo(() => {
@@ -159,24 +134,18 @@ const DonHang: React.FC = () => {
     newStatus: ETrangThaiTrucTiep | 'da_huy',
     silent = false,
   ) => {
+    if (newStatus === 'da_huy') setCancelledIds((prev) => new Set([...prev, maDon]));
+    setOrders((prev) => prev.map((o) => o.maDon === maDon ? { ...o, trangThai: newStatus as any } : o));
     if (newStatus === 'da_huy') {
-      setCancelledIds((prev) => new Set([...prev, maDon]));
-      setOrders((prev) =>
-        prev.map((o) => (o.maDon === maDon ? { ...o, trangThai: newStatus as any } : o)),
-      );
-      setSelectedOrder((prev) => (prev?.maDon === maDon ? null : prev));
-      if (!silent) {
+      setSelectedOrder((prev) => prev?.maDon === maDon ? null : prev);
+    } else {
+      setSelectedOrder((prev) => prev?.maDon === maDon ? { ...prev, trangThai: newStatus as any } : prev);
+    }
+    if (!silent) {
+      if (newStatus === 'da_huy') {
         message.success(`Đã huỷ đơn ${maDon}`);
         addNotif({ icon: '❌', title: `Đơn ${maDon} đã bị huỷ`, desc: 'Huỷ bởi quản trị viên', type: 'order_cancelled' });
-      }
-    } else {
-      setOrders((prev) =>
-        prev.map((o) => (o.maDon === maDon ? { ...o, trangThai: newStatus as any } : o)),
-      );
-      setSelectedOrder((prev) =>
-        prev?.maDon === maDon ? { ...prev, trangThai: newStatus as any } : prev,
-      );
-      if (!silent) {
+      } else {
         message.success(`Đã cập nhật đơn ${maDon}`);
         const notifMap: Record<ETrangThaiTrucTiep, { icon: string; title: string; desc: string; type: any }> = {
           [ETrangThaiTrucTiep.DANG_CHE_BIEN]: { icon: '🍳', title: `Đơn ${maDon} đang chế biến`, desc: 'Bếp đã nhận đơn', type: 'order_cooking' },
@@ -184,7 +153,7 @@ const DonHang: React.FC = () => {
           [ETrangThaiTrucTiep.HOAN_THANH]:    { icon: '✅', title: `Đơn ${maDon} hoàn thành`,    desc: 'Khách đã nhận đơn', type: 'order_done' },
           [ETrangThaiTrucTiep.CHO_XAC_NHAN]: { icon: '🛒', title: `Đơn ${maDon} chờ xác nhận`, desc: 'Đang chờ', type: 'order_pending' },
         };
-        if (notifMap[newStatus]) addNotif(notifMap[newStatus]);
+        if (notifMap[newStatus as ETrangThaiTrucTiep]) addNotif(notifMap[newStatus as ETrangThaiTrucTiep]);
       }
     }
   };
@@ -193,10 +162,7 @@ const DonHang: React.FC = () => {
     Modal.confirm({
       title: 'Huỷ đơn hàng?',
       content: `Xác nhận huỷ đơn ${maDon}? Hành động không thể hoàn tác.`,
-      okType: 'danger',
-      okText: 'Huỷ đơn',
-      cancelText: 'Không',
-      centered: true,
+      okType: 'danger', okText: 'Huỷ đơn', cancelText: 'Không', centered: true,
       okButtonProps: { style: { borderRadius: 8 } },
       cancelButtonProps: { style: { borderRadius: 8 } },
       onOk: () => handleMoveStatus(maDon, 'da_huy'),
@@ -210,34 +176,14 @@ const DonHang: React.FC = () => {
       cancel:  'da_huy',
     };
     const newStatus = statusMap[action];
-
-    // Chỉ xác nhận đơn đang ở trạng thái phù hợp
     const eligibleRows = action === 'confirm'
       ? selectedRows.filter((id) => orders.find((o) => o.maDon === id)?.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN)
       : selectedRows;
-
-    if (eligibleRows.length === 0) {
-      message.warning('Không có đơn nào đủ điều kiện thực hiện.');
-      return;
-    }
-
-    if (eligibleRows.length < selectedRows.length) {
-      message.info(`Chỉ ${eligibleRows.length}/${selectedRows.length} đơn đủ điều kiện.`);
-    }
-
-    if (newStatus === 'da_huy') {
-      setCancelledIds((prev) => new Set([...prev, ...eligibleRows]));
-      setOrders((prev) =>
-        prev.map((o) => eligibleRows.includes(o.maDon) ? { ...o, trangThai: newStatus as any } : o),
-      );
-    } else {
-      setOrders((prev) =>
-        prev.map((o) => eligibleRows.includes(o.maDon) ? { ...o, trangThai: newStatus as ETrangThaiTrucTiep } : o),
-      );
-    }
-
-    const label = action === 'cancel' ? 'huỷ' : 'cập nhật';
-    message.success(`Đã ${label} ${eligibleRows.length} đơn`);
+    if (eligibleRows.length === 0) { message.warning('Không có đơn nào đủ điều kiện.'); return; }
+    if (eligibleRows.length < selectedRows.length) message.info(`Chỉ ${eligibleRows.length}/${selectedRows.length} đơn đủ điều kiện.`);
+    if (newStatus === 'da_huy') { setCancelledIds((prev) => new Set([...prev, ...eligibleRows])); }
+    setOrders((prev) => prev.map((o) => eligibleRows.includes(o.maDon) ? { ...o, trangThai: newStatus as any } : o));
+    message.success(`Đã ${action === 'cancel' ? 'huỷ' : 'cập nhật'} ${eligibleRows.length} đơn`);
     setSelectedRows([]);
   };
 

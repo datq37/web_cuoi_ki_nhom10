@@ -29,6 +29,7 @@ import {
 import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import React, { useEffect, useMemo, useState } from 'react';
+import TinyEditor from '@/components/TinyEditor';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import PageToolbar from '@/pages/Quản Trị/components/PageToolbar';
 import {
@@ -171,7 +172,7 @@ const KhuyenMaiForm: React.FC<{
           name="moTa"
           rules={[{ max: 120, message: 'Tối đa 120 ký tự' }]}
         >
-          <Input.TextArea rows={2} showCount maxLength={120} placeholder="Mô tả ngắn..." />
+          <TinyEditor placeholder="Mô tả ngắn..." minHeight={100} />
         </Form.Item>
 
         <Form.Item label="Loại giảm giá" name="loai" rules={[{ required: true }]}>
@@ -484,7 +485,7 @@ const ComboForm: React.FC<{
           name="moTa"
           rules={[{ max: 120, message: 'Tối đa 120 ký tự' }]}
         >
-          <Input.TextArea rows={2} showCount maxLength={120} placeholder="Mô tả ngắn..." />
+          <TinyEditor placeholder="Mô tả ngắn..." minHeight={100} />
         </Form.Item>
 
         <div className={styles.dishPicker}>

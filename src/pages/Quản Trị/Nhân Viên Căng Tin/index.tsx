@@ -23,6 +23,7 @@ import {
 import dayjs from 'dayjs';
 import React, { useEffect, useMemo, useState } from 'react';
 import Topbar from '@/pages/Quản Trị/Topbar';
+import ConfirmModal from '@/pages/Quản Trị/components/ConfirmModal';
 import PageToolbar from '@/pages/Quản Trị/components/PageToolbar';
 import EmptyState from '@/pages/Quản Trị/components/EmptyState';
 import {
@@ -499,15 +500,9 @@ const NhanVienCangTin: React.FC = () => {
   };
 
   const handleXoaNhanVien = (nv: INhanVienEx) => {
-    Modal.confirm({
+    ConfirmModal.delete({
       title: 'Xoá nhân viên?',
-      content: `Xoá "${nv.hoTen}" khỏi danh sách? Hành động này không thể hoàn tác.`,
-      okText: 'Xoá',
-      okType: 'danger',
-      cancelText: 'Huỷ',
-      centered: true,
-      okButtonProps: { style: { borderRadius: 8 } },
-      cancelButtonProps: { style: { borderRadius: 8 } },
+      content: `Xoá "${nv.hoTen}" khỏi danh sách?`,
       onOk: () => {
         setDanhSach((prev) => prev.filter((n) => n.id !== nv.id));
         message.success(`Đã xoá nhân viên "${nv.hoTen}"`);

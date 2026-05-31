@@ -29,7 +29,8 @@ import {
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import TableStaticData from '@/components/TableStaticData';
 import EmptyState from '@/pages/Quản Trị/components/EmptyState';
 import PageToolbar from '@/pages/Quản Trị/components/PageToolbar';
 import { KEYS, store } from '@/utils/storage';
@@ -600,9 +601,7 @@ const KhoNguyenLieu: React.FC = () => {
 
   const stats = useMemo(() => {
     const tongNguyenLieu = items.length;
-    const sapHetHet = items.filter(
-      (n) => n.trangThai === ETrangThaiNguyenLieu.SAP_HET || n.trangThai === ETrangThaiNguyenLieu.HET_HANG,
-    ).length;
+    const sapHetHet = items.filter((n) => n.trangThai === ETrangThaiNguyenLieu.SAP_HET || n.trangThai === ETrangThaiNguyenLieu.HET_HANG).length;
     const giaTri = formatGia(items.reduce((s, n) => s + n.tonKho * n.giaNhap, 0));
     const nhaCungCap = new Set(items.map((n) => n.nhaCungCap)).size;
     return { tongNguyenLieu, sapHetHet, giaTri, nhaCungCap };
@@ -611,21 +610,11 @@ const KhoNguyenLieu: React.FC = () => {
   const statCards = useMemo(
     () => [
       { label: 'TỔNG NGUYÊN LIỆU', value: String(stats.tongNguyenLieu), iconBg: '#dcfce7', iconColor: '#16a34a', Icon: InboxOutlined, sub: null },
-      { label: 'SẮP HẾT / HẾT', value: String(stats.sapHetHet), iconBg: '#ffedd5', iconColor: '#ea580c', Icon: WarningFilled, sub: '1 đã hết so với tuần trước', subTrend: 'down' as const },
+      { label: 'SẮP HẾT / HẾT', value: String(stats.sapHetHet), iconBg: '#ffedd5', iconColor: '#ea580c', Icon: WarningFilled, sub: null, subTrend: 'down' as const },
       { label: 'GIÁ TRỊ KHO', value: stats.giaTri, iconBg: '#dcfce7', iconColor: '#16a34a', Icon: ShoppingCartOutlined, sub: null },
       { label: 'NHÀ CUNG CẤP', value: String(stats.nhaCungCap), iconBg: '#dcfce7', iconColor: '#16a34a', Icon: ImportOutlined, sub: null },
     ],
     [stats],
-  );
-
-  const canNhapThemItems = useMemo(
-    () => items.filter((n) => n.trangThai !== ETrangThaiNguyenLieu.DU_HANG),
-    [items],
-  );
-
-  const nhaCungCapOptions = useMemo(
-    () => Array.from(new Set(items.map((n) => n.nhaCungCap))),
-    [items],
   );
 
   const danhSachLoc = useMemo(() => {
@@ -639,12 +628,17 @@ const KhoNguyenLieu: React.FC = () => {
     return list;
   }, [items, tuKhoa, filterTrangThai, filterNCC]);
 
+  const canNhapThemItems = useMemo(() => items.filter((n) => n.trangThai !== ETrangThaiNguyenLieu.DU_HANG), [items]);
+  const nhaCungCapOptions = useMemo(() => Array.from(new Set(items.map((n) => n.nhaCungCap))), [items]);
+
+  const addLichSu = (entries: ILichSuNhap[]) => {
+    setLichSuNhap((prev) => { const next = [...entries, ...prev]; store.set(KEYS.importHistory, next); return next; });
+  };
+
   const handleSubmit = (values: NguyenLieuFormValues) => {
     const trangThai = tinhTrangThai(values.tonKho, values.mucToiThieu);
     if (editing) {
-      setItems((prev) =>
-        prev.map((n) => (n.id === editing.id ? { ...editing, ...values, trangThai } : n)),
-      );
+      setItems((prev) => prev.map((n) => n.id === editing.id ? { ...editing, ...values, trangThai } : n));
       message.success(`Đã cập nhật "${values.ten}"`);
     } else {
       const newItem: INguyenLieu = { ...values, id: `nl_${Date.now()}`, trangThai };
@@ -655,54 +649,30 @@ const KhoNguyenLieu: React.FC = () => {
     setEditing(null);
   };
 
-  const addLichSu = (entries: ILichSuNhap[]) => {
-    setLichSuNhap((prev) => {
-      const next = [...entries, ...prev];
-      store.set(KEYS.importHistory, next);
-      return next;
-    });
-  };
-
   const handleRestock = (id: string, soLuongNhap: number, newGiaNhap: number) => {
-    let ten = '';
-    let donVi = '';
-    setItems((prev) =>
-      prev.map((n) => {
-        if (n.id !== id) return n;
-        ten = n.ten;
-        donVi = n.donVi;
-        const tonKhoMoi = n.tonKho + soLuongNhap;
-        return { ...n, tonKho: tonKhoMoi, giaNhap: newGiaNhap, trangThai: tinhTrangThai(tonKhoMoi, n.mucToiThieu) };
-      }),
-    );
-    addLichSu([{
-      id: `ls_${Date.now()}`,
-      tenNL: ten, donVi, soLuong: soLuongNhap,
-      giaNhap: newGiaNhap,
-      ngay: dayjs().format('HH:mm DD/MM/YYYY'),
-    }]);
+    let ten = '', donVi = '';
+    setItems((prev) => prev.map((n) => {
+      if (n.id !== id) return n;
+      ten = n.ten; donVi = n.donVi;
+      const tonKhoMoi = n.tonKho + soLuongNhap;
+      return { ...n, tonKho: tonKhoMoi, giaNhap: newGiaNhap, trangThai: tinhTrangThai(tonKhoMoi, n.mucToiThieu) };
+    }));
+    addLichSu([{ id: `ls_${Date.now()}`, tenNL: ten, donVi, soLuong: soLuongNhap, giaNhap: newGiaNhap, ngay: dayjs().format('HH:mm DD/MM/YYYY') }]);
     message.success(`Đã nhập ${soLuongNhap} ${donVi} ${ten}`);
     addNotif({ icon: '📦', title: 'Đã nhập kho', desc: `${ten}: +${soLuongNhap} ${donVi}`, type: 'stock_refilled' });
-    setRestockOpen(false);
-    setRestocking(null);
+    setRestockOpen(false); setRestocking(null);
   };
 
   const handleBulkRestock = (updates: { id: string; soLuongNhap: number }[]) => {
-    const totalAmount = updates.reduce((sum, u) => {
-      const it = items.find((n) => n.id === u.id);
-      return sum + (it ? u.soLuongNhap * it.giaNhap : 0);
-    }, 0);
+    const totalAmount = updates.reduce((sum, u) => { const it = items.find((n) => n.id === u.id); return sum + (it ? u.soLuongNhap * it.giaNhap : 0); }, 0);
     const now = dayjs().format('HH:mm DD/MM/YYYY');
     const entries: ILichSuNhap[] = [];
-    setItems((prev) =>
-      prev.map((n) => {
-        const u = updates.find((x) => x.id === n.id);
-        if (!u) return n;
-        entries.push({ id: `ls_${Date.now()}_${n.id}`, tenNL: n.ten, donVi: n.donVi, soLuong: u.soLuongNhap, giaNhap: n.giaNhap, ngay: now });
-        const tonKhoMoi = n.tonKho + u.soLuongNhap;
-        return { ...n, tonKho: tonKhoMoi, trangThai: tinhTrangThai(tonKhoMoi, n.mucToiThieu) };
-      }),
-    );
+    setItems((prev) => prev.map((n) => {
+      const u = updates.find((x) => x.id === n.id); if (!u) return n;
+      entries.push({ id: `ls_${Date.now()}_${n.id}`, tenNL: n.ten, donVi: n.donVi, soLuong: u.soLuongNhap, giaNhap: n.giaNhap, ngay: now });
+      const tonKhoMoi = n.tonKho + u.soLuongNhap;
+      return { ...n, tonKho: tonKhoMoi, trangThai: tinhTrangThai(tonKhoMoi, n.mucToiThieu) };
+    }));
     addLichSu(entries);
     message.success(`Đã nhập kho ${updates.length} mặt hàng, tổng ${formatGia(totalAmount)}`);
     addNotif({ icon: '📦', title: 'Nhập kho hàng loạt', desc: `${updates.length} mặt hàng · Tổng ${formatGia(totalAmount)}`, type: 'stock_refilled' });
@@ -713,14 +683,11 @@ const KhoNguyenLieu: React.FC = () => {
     Modal.confirm({
       title: 'Xác nhận xoá nguyên liệu?',
       icon: <ExclamationCircleOutlined />,
-      content: `Xoá "${item.ten}" khỏi kho? Tất cả lịch sử nhập kho cũng sẽ bị mất.`,
+      content: `Xoá "${item.ten}" khỏi kho?`,
       okText: 'Xoá', okType: 'danger', cancelText: 'Huỷ', centered: true,
       okButtonProps: { style: { borderRadius: 8 } },
       cancelButtonProps: { style: { borderRadius: 8 } },
-      onOk: () => {
-        setItems((prev) => prev.filter((n) => n.id !== item.id));
-        message.success(`Đã xoá nguyên liệu "${item.ten}"`);
-      },
+      onOk: () => { setItems((prev) => prev.filter((n) => n.id !== item.id)); message.success(`Đã xoá "${item.ten}"`); },
     });
   };
 
@@ -933,11 +900,12 @@ const KhoNguyenLieu: React.FC = () => {
                   desc="Mỗi lần nhập kho sẽ được ghi lại tại đây."
                 />
               ) : (
-                <Table<ILichSuNhap>
+                <TableStaticData<ILichSuNhap>
                   dataSource={lichSuNhap}
                   columns={lichSuColumns}
                   rowKey="id"
-                  pagination={{ pageSize: 15, showTotal: (t) => `${t} bản ghi` }}
+                  pageSize={15}
+                  showTotal
                   className={styles.table}
                 />
               )}
@@ -1014,11 +982,13 @@ const KhoNguyenLieu: React.FC = () => {
               }
             />
 
-            <Table<INguyenLieu>
-              columns={columns}
+            <TableStaticData<INguyenLieu>
               dataSource={danhSachLoc}
+              columns={columns}
               rowKey="id"
-              pagination={false}
+              searchValue={tuKhoa}
+              searchFields={['ten', 'nhaCungCap']}
+              pageSize={10}
               className={styles.table}
               rowClassName={styles.tableRow}
               locale={{ emptyText: <EmptyState kind="search" desc="Không tìm thấy nguyên liệu nào" /> }}

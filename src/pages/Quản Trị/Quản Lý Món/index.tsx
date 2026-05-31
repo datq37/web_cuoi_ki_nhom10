@@ -29,17 +29,20 @@ import {
   notification,
 } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import TinyEditor from '@/components/TinyEditor';
 import Topbar from '@/pages/Quản Trị/Topbar';
+import ConfirmModal from '@/pages/Quản Trị/components/ConfirmModal';
 import PageToolbar from '@/pages/Quản Trị/components/PageToolbar';
 import { DANH_SACH_NGUYEN_LIEU } from '@/services/Quản Trị/Kho Nguyên Liệu';
 import { DANH_SACH_MON } from '@/services/Quản Trị/Quản Lý Món';
 import { EDanhMuc, IMonAn } from '@/services/Quản Trị/Quản Lý Món/typing';
 import styles from './index.less';
 
+// IMonAnLocal — extended type, không sửa typing gốc
 interface IMonAnLocal extends IMonAn {
   hinhAnh?: string;
   nguyenLieu?: string[];
-  coSan?: boolean;  // true = đang bán, false = tạm hết (default true)
+  coSan?: boolean;
 }
 
 function formatGia(gia: number): string {
@@ -327,7 +330,7 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
           label="Mô tả"
           rules={[{ required: true, message: 'Nhập mô tả ngắn về món' }]}
         >
-          <Input.TextArea rows={3} maxLength={200} showCount placeholder="Mô tả ngắn về món ăn..." />
+          <TinyEditor placeholder="Mô tả ngắn về món ăn..." minHeight={120} />
         </Form.Item>
 
         <Form.Item name="nguyenLieu" label="Nguyên liệu sử dụng">
@@ -484,40 +487,26 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
 
 const QuanLyMon: React.FC = () => {
   const [items, setItems] = useState<IMonAnLocal[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('admin_dishes');
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    }
+    try { const s = localStorage.getItem('admin_dishes'); if (s) return JSON.parse(s); } catch { /* */ }
     return DANH_SACH_MON as IMonAnLocal[];
   });
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('admin_dishes', JSON.stringify(items));
-    }
-  }, [items]);
+  useEffect(() => { localStorage.setItem('admin_dishes', JSON.stringify(items)); }, [items]);
 
-  const [activeTab,    setActiveTab]    = useState<EDanhMuc | 'tat_ca'>('tat_ca');
-  const [tuKhoa,       setTuKhoa]       = useState('');
-  const [isGrid,       setIsGrid]       = useState(true);
-  const [formOpen,     setFormOpen]     = useState(false);
-  const [editing,      setEditing]      = useState<IMonAnLocal | null>(null);
-  const [viewing,      setViewing]      = useState<IMonAnLocal | null>(null);
-  const [filterCoSan,  setFilterCoSan]  = useState<'all' | 'dang_ban' | 'tam_het'>('all');
+  const [activeTab,   setActiveTab]   = useState<EDanhMuc | 'tat_ca'>('tat_ca');
+  const [tuKhoa,      setTuKhoa]      = useState('');
+  const [isGrid,      setIsGrid]      = useState(true);
+  const [formOpen,    setFormOpen]    = useState(false);
+  const [editing,     setEditing]     = useState<IMonAnLocal | null>(null);
+  const [viewing,     setViewing]     = useState<IMonAnLocal | null>(null);
+  const [filterCoSan, setFilterCoSan] = useState<'all' | 'dang_ban' | 'tam_het'>('all');
 
-  // đếm tab động
   const tabs = useMemo<TabDanhMuc[]>(() => [
     { key: 'tat_ca',           label: 'Tất cả',    soLuong: items.length },
     { key: EDanhMuc.MON_CHINH, label: 'Món chính', soLuong: items.filter((m) => m.danhMuc === EDanhMuc.MON_CHINH).length },
-    { key: EDanhMuc.DO_UONG,   label: 'Đồ uống',   soLuong: items.filter((m) => m.danhMuc === EDanhMuc.DO_UONG).length   },
-    { key: EDanhMuc.AN_VAT,    label: 'Ăn vặt',    soLuong: items.filter((m) => m.danhMuc === EDanhMuc.AN_VAT).length    },
-    { key: EDanhMuc.MON_CHAY,  label: 'Món chay',  soLuong: items.filter((m) => m.danhMuc === EDanhMuc.MON_CHAY).length  },
+    { key: EDanhMuc.DO_UONG,   label: 'Đồ uống',   soLuong: items.filter((m) => m.danhMuc === EDanhMuc.DO_UONG).length },
+    { key: EDanhMuc.AN_VAT,    label: 'Ăn vặt',    soLuong: items.filter((m) => m.danhMuc === EDanhMuc.AN_VAT).length },
+    { key: EDanhMuc.MON_CHAY,  label: 'Món chay',  soLuong: items.filter((m) => m.danhMuc === EDanhMuc.MON_CHAY).length },
   ], [items]);
 
   const danhSachLoc = useMemo(() => {
@@ -543,14 +532,7 @@ const QuanLyMon: React.FC = () => {
       description: coSan ? 'Món đang được bán.' : 'Món tạm thời ẩn khỏi thực đơn.',
       duration: 4,
       btn: (
-        <Button
-          size="small"
-          onClick={() => {
-            setItems((prev) => prev.map((m) => m.id === id ? { ...m, coSan: !coSan } : m));
-            notification.close(key);
-            message.info('Đã hoàn tác');
-          }}
-        >
+        <Button size="small" onClick={() => { setItems((prev) => prev.map((m) => m.id === id ? { ...m, coSan: !coSan } : m)); notification.close(key); message.info('Đã hoàn tác'); }}>
           Hoàn tác
         </Button>
       ),
@@ -558,16 +540,10 @@ const QuanLyMon: React.FC = () => {
   };
 
   const handleDelete = (mon: IMonAnLocal) => {
-    Modal.confirm({
+    ConfirmModal.delete({
       title: 'Xác nhận xoá món?',
-      content: `Xoá "${mon.ten}" khỏi thực đơn? Hành động không thể hoàn tác.`,
-      okType: 'danger', okText: 'Xoá', cancelText: 'Huỷ', centered: true,
-      okButtonProps: { style: { borderRadius: 8 } },
-      cancelButtonProps: { style: { borderRadius: 8 } },
-      onOk: () => {
-        setItems((prev) => prev.filter((i) => i.id !== mon.id));
-        message.success(`Đã xoá "${mon.ten}"`);
-      },
+      content: `Xoá "${mon.ten}" khỏi thực đơn?`,
+      onOk: () => { setItems((prev) => prev.filter((i) => i.id !== mon.id)); message.success(`Đã xoá "${mon.ten}"`); },
     });
   };
 

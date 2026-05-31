@@ -330,11 +330,54 @@
 
 .colorSwatchActive { border-color: #fff; box-shadow: 0 0 0 2px #374151; }
 
+.legendBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: @surface;
+  border: 1px solid @border;
+  border-radius: 10px;
+  padding: 10px 16px;
+}
+
 .legend {
   display: flex;
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
+}
+
+.legendHint {
+  font-size: 12px;
+  color: @text-light;
+  font-style: italic;
+}
+
+.legendActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.lastSyncText {
+  font-size: 12px;
+  color: @text-light;
+  white-space: nowrap;
+}
+
+.syncBtn {
+  border-radius: 7px !important;
+  font-size: 12.5px;
+  border-color: @border !important;
+  color: @text-mid !important;
+  &:hover {
+    border-color: @primary !important;
+    color: @primary !important;
+    background: @primary-50 !important;
+  }
 }
 
 .legendItem {
@@ -353,6 +396,11 @@
 }
 
 :global([data-theme="dark"]) {
+  .legendBar    { background: #1e293b; border-color: #334155; }
+  .legendHint   { color: #475569; }
+  .lastSyncText { color: #475569; }
+  .syncBtn { border-color: #334155 !important; color: #94a3b8 !important; background: #0f172a !important; &:hover { border-color: @primary !important; color: #4ade80 !important; background: rgba(22,163,74,.1) !important; } }
+
   .statCard  { background: #1e293b; border-color: #334155; }
   .statValue { color: #f1f5f9; }
   .statLabel { color: #64748b; }

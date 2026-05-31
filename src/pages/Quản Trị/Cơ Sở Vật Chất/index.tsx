@@ -2,6 +2,7 @@
   DeleteOutlined,
   EditOutlined,
   PlusOutlined,
+  ReloadOutlined,
   TableOutlined,
   TeamOutlined,
   ToolOutlined,
@@ -12,9 +13,13 @@ import {
   Input,
   Modal,
   Select,
+  Tooltip,
   message,
 } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ETrangThaiTrucTiep } from '@/services/Quản Trị/Tổng Quan/typing';
+import { mockData } from '@/services/Quản Trị/Tổng Quan';
+import { KEYS, store } from '@/utils/storage';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import {
   DANH_SACH_KHU_VUC,
@@ -302,6 +307,47 @@ const KhuVucModal: React.FC<KhuVucModalProps> = ({ open, initial, onCancel, onSu
 
 const CoSoVatChat: React.FC = () => {
   const [khuVucs, setKhuVucs] = useState<IKhuVuc[]>(DANH_SACH_KHU_VUC);
+  const [lastSync, setLastSync] = useState<string>('');
+
+  // ── Auto-sync bàn theo đơn hàng ─────────────────────────────────
+  const syncTrangThaiBan = useCallback(() => {
+    const orders = store.get<typeof mockData.trucTiep.donHang>(KEYS.orders, mockData.trucTiep.donHang);
+    const cancelledIds = new Set<string>();
+    orders.forEach((o) => { if ((o.trangThai as any) === 'da_huy') cancelledIds.add(o.maDon); });
+
+    const activeDang = orders.filter(
+      (o) => !cancelledIds.has(o.maDon) &&
+      (o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN ||
+       o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN ||
+       o.trangThai === ETrangThaiTrucTiep.SAN_SANG),
+    ).length;
+
+    setKhuVucs((prev) => {
+      let dangCount = activeDang;
+      return prev.map((khu) => ({
+        ...khu,
+        danhSachBan: khu.danhSachBan.map((ban) => {
+          if (ban.trangThai === ETrangThaiBan.BAO_TRI) return ban;
+          if (dangCount > 0) {
+            dangCount--;
+            return { ...ban, trangThai: ETrangThaiBan.DANG_DUNG };
+          }
+          return { ...ban, trangThai: ETrangThaiBan.SAN_SANG };
+        }),
+      }));
+    });
+
+    const now = new Date();
+    setLastSync(`${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`);
+  }, []);
+
+  // Auto-sync mỗi 30 giây
+  const intervalRef = useRef<ReturnType<typeof setInterval>>();
+  useEffect(() => {
+    syncTrangThaiBan();
+    intervalRef.current = setInterval(syncTrangThaiBan, 30000);
+    return () => clearInterval(intervalRef.current);
+  }, [syncTrangThaiBan]);
 
   // Modal state
   const [khuModal,  setKhuModal]  = useState(false);
@@ -360,9 +406,9 @@ const CoSoVatChat: React.FC = () => {
     Modal.confirm({
       title: `Xoá khu vực "${khu.ten}"?`,
       content: `Khu vực này có ${khu.danhSachBan.length} bàn. Toàn bộ dữ liệu bàn sẽ bị xoá.`,
-      okText: 'Xoá',
-      okType: 'danger',
-      cancelText: 'Huỷ',
+      okText: 'Xoá', okType: 'danger', cancelText: 'Huỷ', centered: true,
+      okButtonProps: { style: { borderRadius: 8 } },
+      cancelButtonProps: { style: { borderRadius: 8 } },
       onOk: () => {
         setKhuVucs((prev) => prev.filter((k) => k.id !== khu.id));
         message.success(`Đã xoá khu vực "${khu.ten}"`);
@@ -415,9 +461,9 @@ const CoSoVatChat: React.FC = () => {
     if (!targetKhuId || !editingBan) return;
     Modal.confirm({
       title: `Xoá bàn ${editingBan.so}?`,
-      okText: 'Xoá',
-      okType: 'danger',
-      cancelText: 'Huỷ',
+      okText: 'Xoá', okType: 'danger', cancelText: 'Huỷ', centered: true,
+      okButtonProps: { style: { borderRadius: 8 } },
+      cancelButtonProps: { style: { borderRadius: 8 } },
       onOk: () => {
         setKhuVucs((prev) => prev.map((k) =>
           k.id === targetKhuId
@@ -450,16 +496,43 @@ const CoSoVatChat: React.FC = () => {
             ))}
           </div>
 
-          <div className={styles.legend}>
-            {Object.entries(TRANG_THAI_BAN_CONFIG).map(([, cfg]) => (
-              <div key={cfg.label} className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: cfg.color }} />
-                {cfg.label}
-              </div>
-            ))}
-            <span className={styles.legendItem} style={{ marginLeft: 4, fontStyle: 'italic' }}>
-              · Click vào bàn để đổi trạng thái
-            </span>
+          {/* Legend + actions toolbar */}
+          <div className={styles.legendBar}>
+            {/* CỤM TRÁI: Legend màu */}
+            <div className={styles.legend}>
+              {Object.entries(TRANG_THAI_BAN_CONFIG).map(([, cfg]) => (
+                <div key={cfg.label} className={styles.legendItem}>
+                  <span className={styles.legendDot} style={{ background: cfg.color }} />
+                  {cfg.label}
+                </div>
+              ))}
+              <span className={styles.legendHint}>· Click vào bàn để đổi trạng thái</span>
+            </div>
+            {/* CỤM PHẢI: Sync + Thêm khu vực */}
+            <div className={styles.legendActions}>
+              {lastSync && (
+                <span className={styles.lastSyncText}>Đồng bộ lúc {lastSync}</span>
+              )}
+              <Tooltip title="Đồng bộ trạng thái bàn theo đơn hàng hiện tại">
+                <Button
+                  icon={<ReloadOutlined />}
+                  size="small"
+                  className={styles.syncBtn}
+                  onClick={() => { syncTrangThaiBan(); message.success('Đã đồng bộ trạng thái bàn'); }}
+                >
+                  Sync bàn
+                </Button>
+              </Tooltip>
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                size="small"
+                className={styles.addBtn}
+                onClick={openAddKhu}
+              >
+                Thêm khu vực
+              </Button>
+            </div>
           </div>
 
           <div className={styles.areaGrid}>

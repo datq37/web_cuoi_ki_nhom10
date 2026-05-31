@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { message } from 'antd';
 import { useModel } from 'umi';
 import { SEED_MENU } from '@/services/Khách hàng/Thực đơn';
@@ -12,8 +12,7 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
     const [comment, setComment] = useState('');
     const [images, setImages] = useState<string[]>([]);
     // tải ảnh đánh giá
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(e.target.files || []);
+    const handleImageFiles = (files: File[]) => {
         files.forEach((file) => {
             const reader = new FileReader();
             reader.onload = (ev) => {
@@ -23,7 +22,6 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
             };
             reader.readAsDataURL(file);
         });
-        e.target.value = '';
     };
 
     const handleRemoveImage = (idx: number) => {
@@ -64,7 +62,7 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
         rating, setRating,
         comment, setComment,
         images,
-        handleImageChange,
+        handleImageFiles,
         handleRemoveImage,
         handleSubmit,
         handleBackdropClick,

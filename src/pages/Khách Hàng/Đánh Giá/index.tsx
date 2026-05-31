@@ -1,5 +1,6 @@
 import React from 'react';
 import { CloseOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 import './index.less';
 
 import type { RatingPageProps } from '@/services/Khách hàng/Đánh giá/typing';
@@ -11,7 +12,7 @@ const RatingPage: React.FC<RatingPageProps> = ({ order, onClose }) => {
         rating, setRating,
         comment, setComment,
         images,
-        handleImageChange, handleRemoveImage,
+        handleImageFiles, handleRemoveImage,
         handleSubmit, handleBackdropClick,
         dishDetails, dishNames
     } = useDanhGiaModel(order, onClose);
@@ -19,7 +20,13 @@ const RatingPage: React.FC<RatingPageProps> = ({ order, onClose }) => {
         <div className="baoBocDanhGia" onClick={handleBackdropClick}>
             <div className="khungDanhGia">
                 <div className="tieuDeDanhGia">
-                    <CloseOutlined className="nutDong" onClick={onClose} />
+                    <Button
+                        type="text"
+                        shape="circle"
+                        className="nutDong"
+                        icon={<CloseOutlined />}
+                        onClick={onClose}
+                    />
                     <span className="chuTieuDe">Đánh giá món ăn</span>
                     <div style={{ width: 24 }}></div>
                 </div>
@@ -32,17 +39,19 @@ const RatingPage: React.FC<RatingPageProps> = ({ order, onClose }) => {
                     comment={comment}
                     setComment={setComment}
                     images={images}
-                    handleImageChange={handleImageChange}
+                    handleImageFiles={handleImageFiles}
                     handleRemoveImage={handleRemoveImage}
                 />
                 <div className="chanDanhGia">
-                    <button
-                        className={`nutGui ${rating > 0 ? 'hoatDong' : ''}`}
+                    <Button
+                        type="primary"
+                        block
+                        className="nutGui"
                         onClick={handleSubmit}
                         disabled={rating === 0}
                     >
                         Gửi đi
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>

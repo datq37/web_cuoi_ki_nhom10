@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import { GoogleOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 import { history } from 'umi';
-
-interface LoginFormProps {
-  onToggle?: () => void;
-}
+import { LoginFormProps } from '@/services/Khách hàng/Login/typing';
 
 const LoginForm: React.FC<LoginFormProps> = ({ onToggle }) => {
   const [phone, setPhone] = useState('');

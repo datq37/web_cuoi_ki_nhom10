@@ -101,7 +101,7 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
                     </div>
 
                     {isFuture ? (
-                        <button className="nutThemChiTiet disabled" disabled style={{ background: '#f5f5f5', color: '#999', cursor: 'not-allowed', border: '1px solid #e9ecef', boxShadow: 'none' }}>
+                        <button className="nutThemChiTiet disabled" disabled>
                             Chưa mở bán
                         </button>
                     ) : qty === 0 ? (

@@ -5,6 +5,7 @@ export interface Dish {
   price: number;
   desc: string;
   emoji: string;
+  hinhAnh?: string;
   tags: string[];
   rating: number;
   sold: number;

@@ -213,10 +213,44 @@ export default function useOrderModel() {
         setOrders(prev => prev.map(o => o.id === orderId ? { ...o, isReviewed: true } : o));
     }, []);
 
+    const cancelOrder = useCallback((orderId: string) => {
+        setOrders(prev => prev.map(o => (
+            o.id === orderId ? { ...o, status: OrderStatus.Cancelled } : o
+        )));
+
+        if (typeof window !== 'undefined') {
+            try {
+                const savedAdmin = localStorage.getItem('admin_orders');
+                if (savedAdmin) {
+                    const adminList = JSON.parse(savedAdmin);
+                    const newAdminList = adminList.map((ao: any) => (
+                        ao.maDon === orderId ? { ...ao, trangThai: 'da_huy' } : ao
+                    ));
+                    localStorage.setItem('admin_orders', JSON.stringify(newAdminList));
+                    window.dispatchEvent(new Event('admin_orders_updated'));
+                }
+
+                window.dispatchEvent(new CustomEvent('new_notification', {
+                    detail: {
+                        id: `notif_cancel_${Date.now()}_${orderId}`,
+                        title: 'Đơn hàng đã huỷ',
+                        message: `Đơn hàng ${orderId} đã được huỷ thanh toán.`,
+                        time: formatDateTimeViVN(),
+                        isRead: false,
+                        image: 'https://cdn-icons-png.flaticon.com/512/1828/1828843.png'
+                    }
+                }));
+            } catch (e) {
+                console.error("Lỗi đồng bộ cancelOrder:", e);
+            }
+        }
+    }, []);
+
     return {
         orders,
         addOrder,
         advanceOrder,
-        markAsReviewed
+        markAsReviewed,
+        cancelOrder
     };
 }

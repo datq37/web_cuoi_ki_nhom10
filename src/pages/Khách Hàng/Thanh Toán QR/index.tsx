@@ -12,7 +12,7 @@ const LOGO_SRC = '/logo.webp';
 
 const QRPaymentPage: React.FC = () => {
   const { setPage } = useModel('Khách Hàng.GlobalState.index');
-  const { orders } = useModel('Khách Hàng.Đơn Hàng.Orders');
+  const { orders, cancelOrder } = useModel('Khách Hàng.Đơn Hàng.Orders');
   const {
     pendingOrder,
     setPendingOrder,
@@ -44,6 +44,9 @@ const QRPaymentPage: React.FC = () => {
   };
 
   const cancelPayment = () => {
+    if (paymentOrder) {
+      cancelOrder(paymentOrder.id);
+    }
     clearPendingOrder();
     setPage('history');
   };

@@ -1,4 +1,4 @@
-import { CalendarOutlined, DownloadOutlined, FileExcelOutlined } from '@ant-design/icons';
+import { DownloadOutlined, FileExcelOutlined } from '@ant-design/icons';
 import { Button, message } from 'antd';
 import moment from 'moment';
 import React, { useState } from 'react';
@@ -121,12 +121,7 @@ const TongQuan: React.FC = () => {
             ))}
           </div>
 
-          {/* Hàng 2: Date + Buttons */}
           <div className={styles.pageHeader}>
-            <span className={styles.dateChip}>
-              <CalendarOutlined style={{ marginRight: 5, color: '#9ca3af' }} />
-              Hôm nay · {moment().format('D/M/YYYY')}
-            </span>
             <div style={{ display: 'flex', gap: 8 }}>
               <Button
                 icon={<FileExcelOutlined />}

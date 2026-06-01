@@ -215,7 +215,10 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
           }
         >
           <Badge count={unreadCount} offset={[-2, 2]}>
-            <Button className={styles.iconBtn} icon={<BellOutlined />} />
+            <Button
+              className={`${styles.iconBtn} ${unreadCount > 0 ? styles.bellActive : ''}`}
+              icon={<BellOutlined />}
+            />
           </Badge>
         </Popover>
 

@@ -233,7 +233,6 @@ const ChiTietKhachDrawer: React.FC<{
           <Button
             danger={!daDong}
             icon={daDong ? <UnlockOutlined /> : <LockOutlined />}
-            style={{ borderRadius: 8 }}
             onClick={() => { if (khach) { onKhoa(khach.id); onClose(); } }}
           >
             {daDong ? 'Mở khoá' : 'Khoá tài khoản'}
@@ -241,7 +240,7 @@ const ChiTietKhachDrawer: React.FC<{
           <Button
             danger
             icon={<DeleteOutlined />}
-            style={{ marginLeft: 'auto', borderRadius: 8 }}
+            style={{ marginLeft: 'auto' }}
             onClick={() => { if (khach) { onXoa(khach.id); onClose(); } }}
           >
             Xoá

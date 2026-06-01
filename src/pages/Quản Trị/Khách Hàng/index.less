@@ -62,8 +62,14 @@
 .searchInput { width: 340px; border-radius: 8px !important; :global(.ant-input-prefix) { margin-right: 6px; } }
 .searchIcon { color: #9ca3af; }
 .toolbarRight { display: flex; align-items: center; gap: 8px; }
-.btnOutline { border-radius: 8px !important; color: #374151 !important; border-color: #d1d5db !important; font-weight: 500; }
-.btnAdd { background: @primary !important; border-color: @primary !important; border-radius: 8px !important; font-weight: 600; &:hover { background: @primary-hover !important; border-color: @primary-hover !important; } }
+.btnOutline {
+  border-radius: 8px !important;
+  font-weight: 500;
+  color: #374151 !important;
+  border-color: #d1d5db !important;
+  &:hover { border-color: @primary !important; color: @primary !important; }
+}
+.addBtn { background: @primary !important; border-color: @primary !important; border-radius: 8px !important; font-weight: 500; height: 36px; &:hover { background: @primary-hover !important; border-color: @primary-hover !important; } }
 
 .table {
   :global(.ant-table-thead > tr > th) { background: #f8fafc; font-size: @fs-xs; font-weight: 700; color: #9ca3af; letter-spacing: 0.4px; border-bottom: 1px solid #f1f5f9 !important; padding: 10px 16px; }
@@ -165,12 +171,7 @@
   .tabsRow { background: #1e293b; border-color: #334155; }
   .tabBtn  { color: #64748b; &:hover { background: #0f172a; color: #cbd5e1; } }
 
-  .statCard { background: #1e293b; border-color: #334155; }
-  .statValue { color: #f1f5f9; }
-  .statLabel { color: #64748b; }
-  .statSub   { color: #94a3b8; }
-
-  .tableSection { background: #1e293b; border-color: #334155; }
+  .tableSection { background: transparent; border-color: transparent; }
   .tableToolbar { border-bottom-color: #334155; }
 
   .table {

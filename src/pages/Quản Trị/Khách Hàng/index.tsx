@@ -1,22 +1,14 @@
 import {
-  CheckCircleFilled,
   CheckOutlined,
-  CloseCircleOutlined,
   DeleteOutlined,
-  EyeOutlined,
   FilterOutlined,
   LockOutlined,
-  MoreOutlined,
-  TeamOutlined,
-  TrophyOutlined,
   UnlockOutlined,
-  WalletOutlined,
 } from '@ant-design/icons';
 import {
   Avatar,
   Badge,
   Button,
-  Drawer,
   Dropdown,
   Form,
   Input,
@@ -28,7 +20,8 @@ import {
   message,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import Highlight from '@/components/Highlight';
 import TableStaticData from '@/components/TableStaticData';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import PageToolbar from '@/pages/Quản Trị/components/PageToolbar';
@@ -52,144 +45,7 @@ function formatChiTieu(val: number): string {
   return new Intl.NumberFormat('vi-VN').format(val) + 'đ';
 }
 
-const MAU_NEN_PALETTE = [
-  '#3b82f6', '#f97316', '#0891b2', '#65a30d', '#c026d3',
-  '#16a34a', '#e11d48', '#d97706', '#64748b', '#4f46e5',
-  '#f9a8d4', '#93c5fd', '#86efac', '#c4b5fd', '#fca5a5',
-];
 
-function taoVietTat(hoTen: string): string {
-  const words = hoTen.trim().split(/\s+/);
-  if (words.length >= 2) {
-    const n = words.length;
-    return (words[n - 2][0] + words[n - 1][0]).toUpperCase();
-  }
-  return hoTen.slice(0, 2).toUpperCase();
-}
-
-function chonMauNen(danhSach: IKhachHang[]): string {
-  const daDung = new Set(danhSach.map((k) => k.mauNen));
-  const chuaDung = MAU_NEN_PALETTE.filter((m) => !daDung.has(m));
-  return chuaDung.length > 0
-    ? chuaDung[0]
-    : MAU_NEN_PALETTE[Math.floor(Math.random() * MAU_NEN_PALETTE.length)];
-}
-
-function ngayHomNay(): string {
-  const d = new Date();
-  return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
-}
-
-// ── Drawer bộ lọc ────────────────────────────────────────────────
-const LocKhachDrawer: React.FC<{
-  open: boolean;
-  locVaiTro: EVaiTro | '';
-  locTrangThai: ETrangThaiKhach | '';
-  onClose: () => void;
-  onApply: (vaiTro: EVaiTro | '', trangThai: ETrangThaiKhach | '') => void;
-}> = ({ open, locVaiTro, locTrangThai, onClose, onApply }) => {
-  const [vaiTro,    setVaiTro]    = useState<EVaiTro | ''>(locVaiTro);
-  const [trangThai, setTrangThai] = useState<ETrangThaiKhach | ''>(locTrangThai);
-
-  useEffect(() => {
-    setVaiTro(locVaiTro);
-    setTrangThai(locTrangThai);
-  }, [locVaiTro, locTrangThai, open]);
-
-  return (
-    <Drawer
-      title="Bộ lọc khách hàng"
-      placement="right"
-      width={320}
-      visible={open}
-      onClose={onClose}
-      footer={
-        <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-          <Button onClick={() => { setVaiTro(''); setTrangThai(''); onApply('', ''); onClose(); }}>Đặt lại</Button>
-          <Button type="primary" className={styles.btnApply} onClick={() => { onApply(vaiTro, trangThai); onClose(); }}>
-            Áp dụng
-          </Button>
-        </div>
-      }
-    >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-        <div>
-          <div style={{ fontSize: 12, fontWeight: 600, color: '#6b7280', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Vai trò</div>
-          <Select value={vaiTro || undefined} onChange={(v) => setVaiTro((v as EVaiTro) ?? '')} style={{ width: '100%' }} placeholder="Tất cả vai trò" allowClear onClear={() => setVaiTro('')} size="large">
-            {Object.entries(VAI_TRO_CONFIG).map(([k, c]) => <Select.Option key={k} value={k}>{c.label}</Select.Option>)}
-          </Select>
-        </div>
-        <div>
-          <div style={{ fontSize: 12, fontWeight: 600, color: '#6b7280', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Trạng thái</div>
-          <Select value={trangThai || undefined} onChange={(v) => setTrangThai((v as ETrangThaiKhach) ?? '')} style={{ width: '100%' }} placeholder="Tất cả trạng thái" allowClear onClear={() => setTrangThai('')} size="large">
-            {Object.entries(TRANG_THAI_KHACH_CONFIG).map(([k, c]) => <Select.Option key={k} value={k}>{c.label}</Select.Option>)}
-          </Select>
-        </div>
-      </div>
-    </Drawer>
-  );
-};
-
-// ── Modal thêm người dùng ────────────────────────────────────────
-const ThemNguoiDungModal: React.FC<{
-  open: boolean;
-  danhSach: IKhachHang[];
-  onClose: () => void;
-  onConfirm: (kh: Omit<IKhachHang, 'id'>) => void;
-}> = ({ open, danhSach, onClose, onConfirm }) => {
-  const [form] = Form.useForm();
-  const hoTenWatch = Form.useWatch('hoTen', form) as string | undefined;
-  const vietTat = hoTenWatch?.trim() ? taoVietTat(hoTenWatch) : '?';
-  const mauNen  = chonMauNen(danhSach);
-
-  const handleOk = () => {
-    form.validateFields().then((values) => {
-      onConfirm({
-        hoTen: values.hoTen.trim(), email: values.email.trim(),
-        phongBan: values.phongBan.trim(), vaiTro: values.vaiTro,
-        trangThai: values.trangThai,
-        vietTat: taoVietTat(values.hoTen), mauNen: chonMauNen(danhSach),
-        soDon: 0, chiTieu: 0, thamGia: ngayHomNay(),
-      });
-      form.resetFields();
-    });
-  };
-
-  return (
-    <Modal visible={open} title="Thêm người dùng mới" onCancel={onClose} onOk={handleOk}
-      okText="Thêm người dùng" cancelText="Huỷ" width={460} destroyOnClose className={styles.adminModal}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', background: '#f9fafb', borderRadius: 10, marginBottom: 20 }}>
-        <Avatar size={48} style={{ background: mauNen, color: '#fff', fontWeight: 700, fontSize: 16, flexShrink: 0 }}>{vietTat}</Avatar>
-        <div style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.5 }}>
-          Ảnh đại diện được tạo tự động<br /><span style={{ fontSize: 12 }}>Viết tắt từ hai chữ cuối của tên</span>
-        </div>
-      </div>
-      <Form form={form} layout="vertical" preserve={false}>
-        <Form.Item label="Họ và tên" name="hoTen" rules={[{ required: true, message: 'Vui lòng nhập họ và tên' }, { min: 3, message: 'Tối thiểu 3 ký tự' }]}>
-          <Input placeholder="VD: Nguyễn Văn An" />
-        </Form.Item>
-        <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Vui lòng nhập email' }, { type: 'email', message: 'Email không hợp lệ' }]}>
-          <Input placeholder="VD: an.nv@ct.vn" />
-        </Form.Item>
-        <Form.Item label="Phòng ban" name="phongBan" rules={[{ required: true, message: 'Vui lòng nhập phòng ban' }]}>
-          <Input placeholder="VD: IT, Marketing, HR..." />
-        </Form.Item>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-          <Form.Item label="Vai trò" name="vaiTro" rules={[{ required: true, message: 'Vui lòng chọn vai trò' }]}>
-            <Select placeholder="Chọn vai trò">
-              {Object.entries(VAI_TRO_CONFIG).map(([k, c]) => <Select.Option key={k} value={k}>{c.label}</Select.Option>)}
-            </Select>
-          </Form.Item>
-          <Form.Item label="Trạng thái" name="trangThai" initialValue={ETrangThaiKhach.HOAT_DONG}>
-            <Select>
-              {Object.entries(TRANG_THAI_KHACH_CONFIG).map(([k, c]) => <Select.Option key={k} value={k}>{c.label}</Select.Option>)}
-            </Select>
-          </Form.Item>
-        </div>
-      </Form>
-    </Modal>
-  );
-};
 
 // ── Drawer chi tiết khách hàng ───────────────────────────────────
 const ChiTietKhachDrawer: React.FC<{
@@ -258,7 +114,7 @@ const ChiTietKhachDrawer: React.FC<{
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
               <span style={{ fontSize: 12, fontWeight: 600, padding: '2px 10px', borderRadius: 20, background: '#f3f4f6', color: vaiTroCfg.color }}>{vaiTroCfg.label}</span>
               <Tag color={daDong ? 'default' : 'success'} style={{ margin: 0, borderRadius: 20 }}>
-                {daDong ? '🔒 Tạm khoá' : '✅ Hoạt động'}
+                {daDong ? 'Tạm khoá' : 'Hoạt động'}
               </Tag>
             </div>
           </div>
@@ -324,29 +180,6 @@ const KhachHang: React.FC = () => {
   const [locTrangThai, setLocTrangThai] = useState<ETrangThaiKhach | ''>('');
   const [chiTietKhach, setChiTietKhach] = useState<IKhachHang | null>(null);
 
-  // ── Stat cards từ data thật ──────────────────────────────────
-  const stats = useMemo(() => {
-    const tongKhach = danhSach.length;
-    const hoatDong  = danhSach.filter((k) => k.trangThai === ETrangThaiKhach.HOAT_DONG).length;
-    const tongCT    = danhSach.reduce((s, k) => s + k.chiTieu, 0);
-    const chiTieuTB = tongKhach > 0 ? formatChiTieu(Math.round(tongCT / tongKhach)) : '0đ';
-    const top = [...danhSach].sort((a, b) => b.soDon - a.soDon)[0];
-    return { tongKhach, hoatDong, chiTieuTB, top };
-  }, [danhSach]);
-
-  const statCards = [
-    { label: 'TỔNG KHÁCH HÀNG', value: String(stats.tongKhach), icon: TeamOutlined,       iconBg: '#dcfce7', iconColor: '#16a34a', sub: null },
-    { label: 'ĐANG HOẠT ĐỘNG',  value: String(stats.hoatDong),  icon: CheckCircleFilled,   iconBg: '#dcfce7', iconColor: '#16a34a', sub: null },
-    { label: 'CHI TIÊU TB',     value: stats.chiTieuTB,          icon: WalletOutlined,      iconBg: '#fed7aa', iconColor: '#ea580c', sub: 'mỗi khách' },
-    {
-      label: 'ĐẶT NHIỀU NHẤT',
-      value: stats.top?.hoTen.split(' ').pop() ?? '—',
-      icon: TrophyOutlined,
-      iconBg: '#fef9c3',
-      iconColor: '#ca8a04',
-      sub: stats.top ? `${stats.top.soDon} đơn` : null,
-    },
-  ];
 
   const danhSachLoc = useMemo(() => {
     const kw = tuKhoa.toLowerCase();
@@ -404,13 +237,13 @@ const KhachHang: React.FC = () => {
         <div className={styles.colHoTen} onClick={() => setChiTietKhach(r)} style={{ cursor: 'pointer' }}>
           <Avatar size={36} className={styles.khachAvatar} style={{ background: r.mauNen }}>{r.vietTat}</Avatar>
           <div>
-            <div className={styles.khachTen}>{r.hoTen}</div>
-            <div className={styles.khachEmail}>{r.email}</div>
+            <div className={styles.khachTen}><Highlight text={r.hoTen} search={tuKhoa} /></div>
+            <div className={styles.khachEmail}><Highlight text={r.email} search={tuKhoa} /></div>
           </div>
         </div>
       ),
     },
-    { title: 'PHÒNG BAN', dataIndex: 'phongBan', key: 'phongBan', width: 120, render: (v) => <span className={styles.phongBan}>{v}</span> },
+    { title: 'PHÒNG BAN', dataIndex: 'phongBan', key: 'phongBan', width: 120, render: (v) => <span className={styles.phongBan}><Highlight text={v} search={tuKhoa} /></span> },
     {
       title: 'VAI TRÒ', dataIndex: 'vaiTro', key: 'vaiTro', width: 140,
       render: (v) => {
@@ -428,33 +261,6 @@ const KhachHang: React.FC = () => {
         return <span className={styles.trangThaiBadge} data-trangthai={v} style={{ color: cfg.color }}><CheckOutlined style={{ fontSize: 10, marginRight: 4 }} />{cfg.label}</span>;
       },
     },
-    {
-      title: '', key: 'actions', width: 48,
-      render: (_, r) => {
-        const daDong = r.trangThai === ETrangThaiKhach.TAM_KHOA;
-        const menu = (
-          <Menu onClick={(e) => e.domEvent.stopPropagation()}>
-            <Menu.Item key="detail" icon={<EyeOutlined />} onClick={() => setChiTietKhach(r)}>Xem chi tiết</Menu.Item>
-            <Menu.Item
-              key="khoa"
-              icon={daDong ? <UnlockOutlined /> : <LockOutlined />}
-              onClick={() => handleKhoa(r.id)}
-            >
-              {daDong ? 'Mở khoá' : 'Khoá tài khoản'}
-            </Menu.Item>
-            <Menu.Divider />
-            <Menu.Item key="xoa" icon={<DeleteOutlined />} danger onClick={() => handleXoa(r.id)}>Xoá</Menu.Item>
-          </Menu>
-        );
-        return (
-          <Dropdown overlay={menu} trigger={['click']} placement="bottomRight">
-            <button className={styles.moreBtn} onClick={(e) => e.stopPropagation()}>
-              <MoreOutlined />
-            </button>
-          </Dropdown>
-        );
-      },
-    },
   ];
 
   return (
@@ -462,28 +268,12 @@ const KhachHang: React.FC = () => {
       <Topbar title="Khách hàng" />
 
       <div className={styles.pageBody}>
-        {/* Stat cards từ data thật */}
-        <div className={styles.statGrid}>
-          {statCards.map((card) => (
-            <div key={card.label} className={styles.statCard}>
-              <div className={styles.statLeft}>
-                <div className={styles.statLabel}>{card.label}</div>
-                <div className={styles.statValue}>{card.value}</div>
-                {card.sub && <div className={styles.statSub}>{card.sub}</div>}
-              </div>
-              <div className={styles.statIconWrap} style={{ background: card.iconBg }}>
-                <card.icon style={{ fontSize: 20, color: card.iconColor }} />
-              </div>
-            </div>
-          ))}
-        </div>
-
         {/* Tab trạng thái */}
         <div className={styles.tabsRow}>
           {([
             { key: '',                             label: 'Tất cả',       count: danhSach.length },
-            { key: ETrangThaiKhach.HOAT_DONG,      label: '✅ Hoạt động', count: danhSach.filter(k => k.trangThai === ETrangThaiKhach.HOAT_DONG).length },
-            { key: ETrangThaiKhach.TAM_KHOA,       label: '🔒 Tạm khoá', count: danhSach.filter(k => k.trangThai === ETrangThaiKhach.TAM_KHOA).length },
+            { key: ETrangThaiKhach.HOAT_DONG,      label: 'Hoạt động', count: danhSach.filter(k => k.trangThai === ETrangThaiKhach.HOAT_DONG).length },
+            { key: ETrangThaiKhach.TAM_KHOA,       label: 'Tạm khoá', count: danhSach.filter(k => k.trangThai === ETrangThaiKhach.TAM_KHOA).length },
           ] as const).map((t) => (
             <button
               key={t.key}
@@ -498,8 +288,7 @@ const KhachHang: React.FC = () => {
           ))}
         </div>
 
-        <div className={styles.tableSection}>
-          <PageToolbar
+        <PageToolbar
             searchPlaceholder="Tìm theo tên, email, phòng ban..."
             searchValue={tuKhoa}
             onSearch={setTuKhoa}
@@ -530,6 +319,7 @@ const KhachHang: React.FC = () => {
             }
           />
 
+        <div className={styles.tableSection}>
           {danhSachLoc.length === 0 ? (
             <EmptyState
               kind="customers"

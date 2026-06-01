@@ -32,8 +32,8 @@
   box-shadow: 0 1px 4px rgba(0,0,0,.04);
 }
 
-.monStatValue { font-size: 28px; font-weight: 800; line-height: 1; }
-.monStatLabel { font-size: 11px; font-weight: 600; color: @text-light; text-transform: uppercase; letter-spacing: 0.5px; }
+.monStatValue { font-size: @fs-4xl; font-weight: 800; line-height: 1; }
+.monStatLabel { font-size: @fs-xs; font-weight: 600; color: @text-light; text-transform: uppercase; letter-spacing: 0.5px; }
 .monStatBar   { height: 4px; border-radius: 99px; overflow: hidden; margin-top: 4px; }
 
 // ── Bulk action bar ───────────────────────────────────────────────
@@ -48,7 +48,7 @@
   border-radius: 10px;
 }
 
-.bulkMonCount { font-size: 13.5px; color: @primary-dark; }
+.bulkMonCount { font-size: @fs-base; color: @primary-dark; }
 
 // ── Card + checkbox wrapper ───────────────────────────────────────
 .monCardWrap {
@@ -88,7 +88,7 @@
   border-radius: 8px;
   background: transparent;
   color: #6b7280;
-  font-size: 13px;
+  font-size: @fs-base;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -107,7 +107,7 @@
 .tabCount {
   background: rgba(0, 0, 0, 0.12);
   color: inherit;
-  font-size: 11px;
+  font-size: @fs-xs;
   font-weight: 600;
   border-radius: 10px;
   padding: 1px 7px;
@@ -155,7 +155,7 @@
   background: #fff;
   color: #6b7280;
   cursor: pointer;
-  font-size: 15px;
+  font-size: @fs-md;
   transition: all 0.15s;
 
   &:hover {
@@ -234,7 +234,7 @@
   text-align: center;
   color: #9ca3af;
   padding: 48px 0;
-  font-size: 14px;
+  font-size: @fs-md;
 }
 
 .monCard {
@@ -274,7 +274,7 @@
   right: 10px;
   background: rgba(220, 38, 38, 0.88);
   color: #fff;
-  font-size: 11px;
+  font-size: @fs-xs;
   font-weight: 700;
   padding: 3px 9px;
   border-radius: 20px;
@@ -301,7 +301,7 @@
 }
 
 .coSanBtn {
-  font-size: 12.5px;
+  font-size: @fs-sm;
   font-weight: 500;
   color: @text-muted;
   border: none;
@@ -327,7 +327,7 @@
   right: 10px;
   background: #ea580c;
   color: #fff;
-  font-size: 11px;
+  font-size: @fs-xs;
   font-weight: 700;
   padding: 3px 9px;
   border-radius: 20px;
@@ -345,7 +345,7 @@
 }
 
 .cardName {
-  font-size: 14px;
+  font-size: @fs-md;
   font-weight: 700;
   color: #111827;
   white-space: nowrap;
@@ -354,7 +354,7 @@
 }
 
 .cardMoTa {
-  font-size: 12px;
+  font-size: @fs-sm;
   color: #9ca3af;
   line-height: 1.5;
   display: -webkit-box;
@@ -374,19 +374,19 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
+  font-size: @fs-xs;
   color: #6b7280;
   white-space: nowrap;
 }
 
 .statIcon {
   color: #9ca3af;
-  font-size: 11px;
+  font-size: @fs-xs;
 }
 
 .starIcon {
   color: #f59e0b;
-  font-size: 11px;
+  font-size: @fs-xs;
 }
 
 .cardFooter {
@@ -399,7 +399,7 @@
 }
 
 .cardGia {
-  font-size: 16px;
+  font-size: @fs-lg;
   font-weight: 700;
   color: @primary;
 }
@@ -420,7 +420,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 13px;
+  font-size: @fs-base;
   transition: all 0.15s;
 
   &:hover {
@@ -484,7 +484,7 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.48);
   color: #fff;
-  font-size: 14px;
+  font-size: @fs-md;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -504,25 +504,25 @@
 }
 
 .imgEmptyIcon {
-  font-size: 32px;
+  font-size: @fs-5xl;
   color: #d1d5db;
 }
 
 .imgEmptyText {
-  font-size: 13.5px;
+  font-size: @fs-base;
   font-weight: 500;
   color: #6b7280;
 }
 
 .imgEmptyHint {
-  font-size: 12px;
+  font-size: @fs-sm;
   color: #9ca3af;
 }
 
 .imgRemoveBtn {
   display: inline-flex;
   align-items: center;
-  font-size: 12px;
+  font-size: @fs-sm;
   color: #9ca3af;
   background: none;
   border: none;
@@ -545,7 +545,7 @@
     border-radius: @modal-radius @modal-radius 0 0;
   }
   :global(.ant-modal-title) {
-    font-size: 16px;
+    font-size: @fs-lg;
     font-weight: 700;
     color: @text-dark;
   }
@@ -564,7 +564,7 @@
     border-radius: 8px;
     height: 36px;
     font-weight: 500;
-    font-size: 13.5px;
+    font-size: @fs-base;
     transition: all 180ms @ease;
   }
   :global(.ant-modal-footer .ant-btn-primary) {
@@ -587,7 +587,7 @@
   :global(.ant-modal-close-x) {
     width: 32px;
     height: 32px;
-    font-size: 13px;
+    font-size: @fs-base;
     line-height: 32px;
   }
 }
@@ -609,7 +609,7 @@
     border-radius: 8px;
     height: 36px;
     font-weight: 500;
-    font-size: 13.5px;
+    font-size: @fs-base;
     transition: all 180ms @ease;
   }
   :global(.ant-modal-footer .ant-btn-primary) {
@@ -634,7 +634,7 @@
   :global(.ant-modal-close-x) {
     width: 30px;
     height: 30px;
-    font-size: 13px;
+    font-size: @fs-base;
     line-height: 30px;
   }
 }
@@ -645,12 +645,12 @@
   overflow: hidden;
 }
 :global(.ant-modal-confirm-title) {
-  font-size: 15px !important;
+  font-size: @fs-md !important;
   font-weight: 700 !important;
   color: @text-dark !important;
 }
 :global(.ant-modal-confirm-content) {
-  font-size: 13.5px !important;
+  font-size: @fs-base !important;
   color: @text-muted !important;
   margin-top: 8px !important;
   line-height: 1.6 !important;
@@ -659,7 +659,7 @@
   border-radius: 8px !important;
   height: 36px !important;
   font-weight: 500 !important;
-  font-size: 13.5px !important;
+  font-size: @fs-base !important;
   transition: all 180ms @ease !important;
 }
 :global(.ant-modal-confirm-btns .ant-btn-dangerous.ant-btn-primary) {

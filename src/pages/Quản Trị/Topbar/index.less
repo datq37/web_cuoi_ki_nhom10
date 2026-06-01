@@ -1,4 +1,4 @@
-@import '~@/styles/admin-tokens.less';
+﻿@import '~@/styles/admin-tokens.less';
 
 @ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 @popup-shadow: 0 12px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -27,7 +27,7 @@
 }
 
 .pageTitle {
-  font-size: 22px;
+  font-size: @fs-2xl;
   font-weight: 600;
   color: @text-dark;
   margin: 0;
@@ -39,12 +39,12 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 13px;
+  font-size: @fs-base;
   color: @text-muted;
   margin-top: 2px;
 }
 
-.calIcon { font-size: 12px; }
+.calIcon { font-size: @fs-sm; }
 
 .right {
   display: flex;
@@ -91,7 +91,7 @@
   color: @text-mid !important;
   padding: 0 !important;
   box-shadow: none !important;
-  font-size: 15px !important;
+  font-size: @fs-md !important;
   transition: all 180ms @ease !important;
 
   &:hover {
@@ -106,7 +106,7 @@
 :global(.ant-badge .ant-badge-count) {
   background: @danger;
   box-shadow: 0 0 0 2px @surface;
-  font-size: 10px;
+  font-size: @fs-xs;
   min-width: 16px;
   height: 16px;
   line-height: 16px;
@@ -135,12 +135,12 @@
 .userAvatar {
   background: @primary !important;
   font-weight: 700 !important;
-  font-size: 12px !important;
+  font-size: @fs-sm !important;
   flex-shrink: 0;
 }
 
 .pillArrow {
-  font-size: 10px;
+  font-size: @fs-xs;
   color: @text-light;
   transition: transform 200ms @ease;
 }
@@ -191,13 +191,13 @@
 }
 
 .notifTitle {
-  font-size: 14px;
+  font-size: @fs-md;
   font-weight: 700;
   color: @text-dark;
 }
 
 .notifUnreadBadge {
-  font-size: 11px;
+  font-size: @fs-xs;
   font-weight: 600;
   color: @primary;
   background: @primary-100;
@@ -209,7 +209,7 @@
   background: none;
   border: none;
   padding: 0;
-  font-size: 12px;
+  font-size: @fs-sm;
   color: @primary;
   cursor: pointer;
   font-weight: 500;
@@ -229,7 +229,7 @@
 .notifEmpty {
   padding: 36px 16px;
   text-align: center;
-  font-size: 13px;
+  font-size: @fs-base;
   color: @text-light;
 }
 
@@ -258,7 +258,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: @fs-lg;
   flex-shrink: 0;
 }
 
@@ -268,14 +268,14 @@
 }
 
 .notifItemTitle {
-  font-size: 13px;
+  font-size: @fs-base;
   font-weight: 600;
   color: @text-dark;
   margin-bottom: 3px;
 }
 
 .notifDesc {
-  font-size: 12px;
+  font-size: @fs-sm;
   color: @text-muted;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -285,7 +285,7 @@
 }
 
 .notifTime {
-  font-size: 10.5px;
+  font-size: @fs-xs;
   color: @text-light;
   margin-top: 4px;
 }
@@ -330,7 +330,7 @@
 .dropdownAvatar {
   background: @primary !important;
   font-weight: 700 !important;
-  font-size: 13px !important;
+  font-size: @fs-base !important;
   flex-shrink: 0;
   box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25);
 }
@@ -341,7 +341,7 @@
 }
 
 .dropdownName {
-  font-size: 13.5px;
+  font-size: @fs-base;
   font-weight: 700;
   color: @text-dark;
   white-space: nowrap;
@@ -350,7 +350,7 @@
 }
 
 .dropdownEmail {
-  font-size: 11.5px;
+  font-size: @fs-xs;
   color: @text-muted;
   margin-top: 2px;
   white-space: nowrap;
@@ -377,7 +377,7 @@
   border: none;
   background: transparent;
   color: @text-mid;
-  font-size: 13px;
+  font-size: @fs-base;
   cursor: pointer;
   border-radius: 8px;
   text-align: left;
@@ -390,7 +390,7 @@
 }
 
 .dropdownItemIcon {
-  font-size: 15px;
+  font-size: @fs-md;
   color: @text-muted;
   flex-shrink: 0;
   width: 16px;

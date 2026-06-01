@@ -7,7 +7,7 @@
 
 // Badge "Data thật" / "Mô phỏng"
 .realDataBadge {
-  font-size: 11px;
+  font-size: @fs-xs;
   font-weight: 600;
   padding: 2px 8px;
   border-radius: 20px;
@@ -16,7 +16,7 @@
 }
 
 .mockNote {
-  font-size: 12px;
+  font-size: @fs-sm;
   color: @text-light;
   font-style: italic;
   margin-left: 6px;
@@ -28,7 +28,7 @@
   border-radius: 50%;
   background: #f3f4f6;
   color: @text-muted;
-  font-size: 11px;
+  font-size: @fs-xs;
   font-weight: 700;
   display: inline-flex;
   align-items: center;
@@ -48,9 +48,9 @@
 .bannerDiv   { width: 1px; background: rgba(255,255,255,0.15); margin: 0 6px; flex-shrink: 0; }
 .bannerItem  { flex: 1; padding: 0 16px; }
 .bannerTop   { display: flex; align-items: center; justify-content: space-between; }
-.bannerLabel { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.65); letter-spacing: 0.05em; margin-bottom: 6px; }
-.bannerValue { font-size: 28px; font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 6px; }
-.bannerChange { font-size: 12px; color: #86efac; display: flex; align-items: center; }
+.bannerLabel { font-size: @fs-xs; font-weight: 600; color: rgba(255,255,255,0.65); letter-spacing: 0.05em; margin-bottom: 6px; }
+.bannerValue { font-size: @fs-4xl; font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 6px; }
+.bannerChange { font-size: @fs-sm; color: #86efac; display: flex; align-items: center; }
 
 .bannerIconWrap {
   width: 40px; height: 40px;
@@ -79,8 +79,8 @@
   margin-bottom: 4px;
 }
 
-.chartTitle2  { font-size: 15px; font-weight: 700; color: @text-dark; }
-.chartLegend  { display: flex; align-items: center; gap: 8px; font-size: 12px; color: @text-muted; }
+.chartTitle2  { font-size: @fs-md; font-weight: 700; color: @text-dark; }
+.chartLegend  { display: flex; align-items: center; gap: 8px; font-size: @fs-sm; color: @text-muted; }
 .legendBox    { width: 12px; height: 12px; border-radius: 3px; }
 
 .legendDash {
@@ -88,13 +88,13 @@
   background: repeating-linear-gradient(to right, #9ca3af 0, #9ca3af 4px, transparent 4px, transparent 8px);
 }
 
-.donutSubtitle { font-size: 12px; color: @text-muted; margin-bottom: 8px; }
+.donutSubtitle { font-size: @fs-sm; color: @text-muted; margin-bottom: 8px; }
 .donutWrap2    { display: flex; align-items: center; gap: 12px; }
 .donutLeg      { display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .donutLegRow   { display: flex; align-items: center; gap: 7px; }
 .donutLegDot   { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.donutLegLabel { flex: 1; font-size: 13px; color: @text-mid; }
-.donutLegPct   { font-size: 13px; font-weight: 600; color: @text-dark; }
+.donutLegLabel { flex: 1; font-size: @fs-base; color: @text-mid; }
+.donutLegPct   { font-size: @fs-base; font-weight: 600; color: @text-dark; }
 
 .rangeToggle {
   display: flex;
@@ -106,7 +106,7 @@
 }
 
 .rangeBtn {
-  font-size: 12px;
+  font-size: @fs-sm;
   font-weight: 500;
   color: #6b7280;
   border: none;
@@ -135,7 +135,7 @@
 }
 
 .heatLegendLabel {
-  font-size: 10px;
+  font-size: @fs-xs;
   color: #9ca3af;
   white-space: nowrap;
 }
@@ -160,7 +160,7 @@
 .heatEmpty {}
 
 .heatHourLabel {
-  font-size: 9px;
+  font-size: @fs-xs;
   color: #9ca3af;
   text-align: center;
   white-space: nowrap;
@@ -168,7 +168,7 @@
 }
 
 .heatDayLabel {
-  font-size: 10px;
+  font-size: @fs-xs;
   color: #9ca3af;
   display: flex;
   align-items: center;
@@ -206,13 +206,13 @@
 }
 
 .heatTooltipHead {
-  font-size: 11px;
+  font-size: @fs-xs;
   color: #94a3b8;
   margin-bottom: 2px;
 }
 
 .heatTooltipVal {
-  font-size: 13px;
+  font-size: @fs-base;
   font-weight: 700;
   color: #f1f5f9;
 }
@@ -236,15 +236,15 @@
   margin-bottom: 14px;
 }
 
-.cardTitle { font-size: 14px; font-weight: 700; color: @text-dark; }
-.viewAll   { font-size: 12.5px; color: @primary; font-weight: 500; &:hover { color: @primary-hover; } }
+.cardTitle { font-size: @fs-md; font-weight: 700; color: @text-dark; }
+.viewAll   { font-size: @fs-sm; color: @primary; font-weight: 500; &:hover { color: @primary-hover; } }
 
 // Top món table
 .topMonTable {
   width: 100%;
   border-collapse: collapse;
   th {
-    font-size: 10.5px; font-weight: 600; color: @text-light;
+    font-size: @fs-xs; font-weight: 600; color: @text-light;
     letter-spacing: 0.04em;
     padding: 4px 6px 8px;
     border-bottom: 1px solid @border;
@@ -252,7 +252,7 @@
   }
   td {
     padding: 8px 6px;
-    font-size: 13px; color: @text-mid;
+    font-size: @fs-base; color: @text-mid;
     border-bottom: 1px solid #f9fafb;
   }
   tr:last-child td { border-bottom: none; }
@@ -268,12 +268,12 @@
 .trangThaiRow  { display: flex; align-items: center; gap: 8px; }
 .trangThaiLeft { display: flex; align-items: center; gap: 6px; min-width: 120px; }
 .trangThaiDot  { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-.trangThaiTen  { font-size: 12.5px; color: @text-mid; white-space: nowrap; }
-.trangThaiSo   { font-size: 12px; color: @text-muted; min-width: 46px; }
+.trangThaiTen  { font-size: @fs-sm; color: @text-mid; white-space: nowrap; }
+.trangThaiSo   { font-size: @fs-sm; color: @text-muted; min-width: 46px; }
 
 .progressWrap2 { flex: 1; height: 6px; background: #f3f4f6; border-radius: 3px; overflow: hidden; }
 .progressBar   { height: 100%; border-radius: 3px; transition: width 0.3s; }
-.trangThaiPct  { font-size: 12px; font-weight: 600; color: @text-dark; min-width: 32px; text-align: right; }
+.trangThaiPct  { font-size: @fs-sm; font-weight: 600; color: @text-dark; min-width: 32px; text-align: right; }
 
 // Hiệu suất
 .hieuSuatList { display: flex; flex-direction: column; gap: 0; }
@@ -284,22 +284,22 @@
   &:last-child { border-bottom: none; }
 }
 
-.hieuSuatLabel { font-size: 12px; color: @text-muted; margin-bottom: 5px; }
+.hieuSuatLabel { font-size: @fs-sm; color: @text-muted; margin-bottom: 5px; }
 .hieuSuatRow   { display: flex; align-items: flex-end; justify-content: space-between; }
-.hieuSuatValue { font-size: 22px; font-weight: 800; color: @text-dark; }
-.hieuSuatUnit  { font-size: 14px; font-weight: 400; color: @text-muted; margin-left: 2px; }
+.hieuSuatValue { font-size: @fs-2xl; font-weight: 800; color: @text-dark; }
+.hieuSuatUnit  { font-size: @fs-md; font-weight: 400; color: @text-muted; margin-left: 2px; }
 
 .hieuSuatChange {
   display: flex; align-items: center; gap: 3px;
-  font-size: 12px; font-weight: 500;
+  font-size: @fs-sm; font-weight: 500;
   &.up    { color: @primary; }
   &.down2 { color: #3b82f6; }
 }
 
-.changeDetail { font-size: 11px; color: @text-light; font-weight: 400; margin-left: 2px; }
+.changeDetail { font-size: @fs-xs; color: @text-light; font-weight: 400; margin-left: 2px; }
 
 .periodSelect {
-  font-size: 12.5px; color: @text-muted;
+  font-size: @fs-sm; color: @text-muted;
   border: 1px solid @border;
   border-radius: 7px;
   background: #f9fafb;
@@ -344,10 +344,10 @@
 }
 
 .hdInfo  { flex: 1; min-width: 0; }
-.hdTitle { font-size: 13px; font-weight: 600; color: @text-dark; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.hdMota  { font-size: 12px; color: @text-muted; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.hdTime  { font-size: 11px; color: @text-light; }
-.hdArrow { font-size: 11px; color: @text-light; margin-top: 3px; flex-shrink: 0; }
+.hdTitle { font-size: @fs-base; font-weight: 600; color: @text-dark; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hdMota  { font-size: @fs-sm; color: @text-muted; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hdTime  { font-size: @fs-xs; color: @text-light; }
+.hdArrow { font-size: @fs-xs; color: @text-light; margin-top: 3px; flex-shrink: 0; }
 
 @media (max-width: 1200px) {
   .chartRow2 { grid-template-columns: 1fr; }

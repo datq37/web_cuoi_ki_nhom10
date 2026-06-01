@@ -31,8 +31,8 @@
 }
 
 .statLeft { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.statLabel { font-size: 11px; font-weight: 600; color: @text-light; letter-spacing: 0.5px; text-transform: uppercase; }
-.statValue { font-size: 26px; font-weight: 800; color: @text-dark; line-height: 1; }
+.statLabel { font-size: @fs-xs; font-weight: 600; color: @text-light; letter-spacing: 0.5px; text-transform: uppercase; }
+.statValue { font-size: @fs-3xl; font-weight: 800; color: @text-dark; line-height: 1; }
 .statIconWrap { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
 // ── Toolbar ───────────────────────────────────────────────────────
@@ -63,7 +63,7 @@
 .countBadge {
   display: flex;
   align-items: center;
-  font-size: 13px;
+  font-size: @fs-base;
   color: @text-muted;
   white-space: nowrap;
   margin-left: 2px;
@@ -111,7 +111,7 @@
 
 .avatar {
   font-weight: 700 !important;
-  font-size: 16px !important;
+  font-size: @fs-lg !important;
   flex-shrink: 0;
 }
 
@@ -123,7 +123,7 @@
 }
 
 .cardName {
-  font-size: 15px;
+  font-size: @fs-md;
   font-weight: 700;
   color: #111827;
   white-space: nowrap;
@@ -132,19 +132,19 @@
 }
 
 .cardId {
-  font-size: 10.5px;
+  font-size: @fs-xs;
   font-family: monospace;
   color: @text-light;
   margin-bottom: 1px;
 }
 
 .cardEmail {
-  font-size: 12.5px;
+  font-size: @fs-sm;
   color: #9ca3af;
 }
 
 .cardPhone {
-  font-size: 12px;
+  font-size: @fs-sm;
   color: @text-muted;
   margin-top: 2px;
   display: flex;
@@ -160,7 +160,7 @@
 
 .roleBadge {
   display: inline-block;
-  font-size: 12px;
+  font-size: @fs-sm;
   font-weight: 600;
   padding: 3px 12px;
   border-radius: 20px;
@@ -174,12 +174,12 @@
 }
 
 .lastActive {
-  font-size: 12.5px;
+  font-size: @fs-sm;
   color: #9ca3af;
 }
 
 .cardLuong {
-  font-size: 14px;
+  font-size: @fs-md;
   font-weight: 700;
   color: @primary;
   padding: 4px 0 2px;
@@ -202,7 +202,7 @@
   border-radius: 10px;
   background: #fff;
   color: #374151;
-  font-size: 13px;
+  font-size: @fs-base;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -214,7 +214,7 @@
   }
 }
 
-.actionIcon { font-size: 13px; }
+.actionIcon { font-size: @fs-base; }
 
 // 3 icon buttons nhỏ gọn
 .iconActionBtn {
@@ -227,7 +227,7 @@
   border-radius: 8px;
   background: #fff;
   color: @text-muted;
-  font-size: 14px;
+  font-size: @fs-md;
   cursor: pointer;
   transition: all 0.15s;
   flex-shrink: 0;
@@ -287,20 +287,20 @@
 }
 
 .addIcon {
-  font-size: 18px;
+  font-size: @fs-xl;
   color: @primary;
   transition: color 0.2s;
 }
 
 .addTitle {
-  font-size: 14.5px;
+  font-size: @fs-md;
   font-weight: 700;
   color: #374151;
   transition: color 0.2s;
 }
 
 .addSub {
-  font-size: 12.5px;
+  font-size: @fs-sm;
   color: #9ca3af;
   text-align: center;
 }
@@ -326,7 +326,7 @@
     border-radius: 8px;
     height: 36px;
     font-weight: 500;
-    font-size: 13.5px;
+    font-size: @fs-base;
   }
   :global(.ant-modal-footer .ant-btn-primary) {
     background: @primary;
@@ -354,8 +354,8 @@
   gap: 10px;
 }
 
-.detailHeroName  { font-size: 18px; font-weight: 700; color: #111827; text-align: center; }
-.detailHeroEmail { font-size: 13px; color: #9ca3af; text-align: center; margin-top: -4px; }
+.detailHeroName  { font-size: @fs-xl; font-weight: 700; color: #111827; text-align: center; }
+.detailHeroEmail { font-size: @fs-base; color: #9ca3af; text-align: center; margin-top: -4px; }
 
 .detailBody {
   padding: 20px 24px 12px;
@@ -367,14 +367,14 @@
 .detailRow { display: flex; flex-direction: column; gap: 3px; }
 
 .detailLabel {
-  font-size: 11px;
+  font-size: @fs-xs;
   font-weight: 700;
   color: #9ca3af;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.detailValue { font-size: 14px; font-weight: 500; color: #374151; }
+.detailValue { font-size: @fs-md; font-weight: 500; color: #374151; }
 
 .adminModal {
   :global(.ant-modal-content) {
@@ -387,7 +387,7 @@
     border-bottom: 1px solid @border;
   }
   :global(.ant-modal-title) {
-    font-size: 16px;
+    font-size: @fs-lg;
     font-weight: 700;
     color: #111827;
   }
@@ -406,7 +406,7 @@
     border-radius: 8px;
     height: 36px;
     font-weight: 500;
-    font-size: 13.5px;
+    font-size: @fs-base;
   }
   :global(.ant-modal-footer .ant-btn-primary) {
     background: @primary;

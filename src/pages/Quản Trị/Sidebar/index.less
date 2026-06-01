@@ -60,7 +60,7 @@
 }
 
 .brandName {
-  font-size: 19px;
+  font-size: @fs-xl;
   font-weight: 850;
   color: @primary-hover;
   line-height: 1;
@@ -68,7 +68,7 @@
 }
 
 .brandSub {
-  font-size: 11px;
+  font-size: @fs-xs;
   color: @text-muted;
   line-height: 1.15;
   white-space: nowrap;
@@ -95,7 +95,7 @@
 
 .groupLabel {
   display: block;
-  font-size: 10px;
+  font-size: @fs-xs;
   font-weight: 800;
   color: @text-light;
   letter-spacing: 0.08em;
@@ -121,7 +121,7 @@
   border-radius: 12px;
   cursor: pointer;
   color: @text-mid;
-  font-size: 13.5px;
+  font-size: @fs-base;
   transition: transform 220ms @ease, color 220ms @ease, background 220ms @ease, border-color 220ms @ease, box-shadow 220ms @ease;
   margin-bottom: 5px;
   user-select: none;
@@ -167,7 +167,7 @@
 }
 
 .menuIcon {
-  font-size: 15px;
+  font-size: @fs-md;
   color: @text-muted;
   width: 18px;
   display: flex;
@@ -189,7 +189,7 @@
   :global(.ant-badge-count) {
     background: @danger;
     box-shadow: none;
-    font-size: 10px;
+    font-size: @fs-xs;
     min-width: 18px;
     height: 18px;
     line-height: 18px;
@@ -226,13 +226,13 @@
   border: none;
   background: transparent;
   color: @text-muted;
-  font-size: 12.5px;
+  font-size: @fs-sm;
   cursor: pointer;
   border-radius: 12px;
   transition: all 180ms @ease;
 
   span { letter-spacing: 0.01em; }
-  :global(.anticon) { font-size: 11px; }
+  :global(.anticon) { font-size: @fs-xs; }
 
   &:hover {
     background: @surface-hover;

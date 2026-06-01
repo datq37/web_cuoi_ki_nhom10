@@ -24,7 +24,7 @@
   border-radius: 7px;
   background: transparent;
   color: @text-muted;
-  font-size: 13px;
+  font-size: @fs-base;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -40,7 +40,7 @@
 .tabCount {
   background: rgba(0,0,0,.12);
   color: inherit;
-  font-size: 11px;
+  font-size: @fs-xs;
   font-weight: 700;
   border-radius: 99px;
   padding: 1px 7px;
@@ -51,9 +51,9 @@
 .statGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; @media (max-width: 1100px) { grid-template-columns: repeat(2, 1fr); } }
 .statCard { background: #fff; border-radius: @radius; padding: 20px; display: flex; align-items: flex-start; justify-content: space-between; border: 1px solid #f1f5f9; box-shadow: 0 1px 4px rgba(0,0,0,.05); gap: 12px; }
 .statLeft { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.statLabel { font-size: 11px; font-weight: 600; color: #9ca3af; letter-spacing: 0.5px; text-transform: uppercase; }
-.statValue { font-size: 28px; font-weight: 700; color: #111827; line-height: 1; }
-.statSub { font-size: 12px; color: #6b7280; }
+.statLabel { font-size: @fs-xs; font-weight: 600; color: #9ca3af; letter-spacing: 0.5px; text-transform: uppercase; }
+.statValue { font-size: @fs-4xl; font-weight: 700; color: #111827; line-height: 1; }
+.statSub { font-size: @fs-sm; color: #6b7280; }
 .subUp { color: #16a34a; }
 .statIconWrap { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
@@ -66,20 +66,20 @@
 .btnAdd { background: @primary !important; border-color: @primary !important; border-radius: 8px !important; font-weight: 600; &:hover { background: @primary-hover !important; border-color: @primary-hover !important; } }
 
 .table {
-  :global(.ant-table-thead > tr > th) { background: #f8fafc; font-size: 11px; font-weight: 700; color: #9ca3af; letter-spacing: 0.4px; border-bottom: 1px solid #f1f5f9 !important; padding: 10px 16px; }
+  :global(.ant-table-thead > tr > th) { background: #f8fafc; font-size: @fs-xs; font-weight: 700; color: #9ca3af; letter-spacing: 0.4px; border-bottom: 1px solid #f1f5f9 !important; padding: 10px 16px; }
   :global(.ant-table-tbody > tr > td) { padding: 14px 16px; border-bottom: 1px solid #f8fafc; vertical-align: middle; }
   :global(.ant-table-tbody > tr:last-child > td) { border-bottom: none; }
 }
 .tableRow { &:global(.ant-table-row:hover) > td { background: #f9fafb !important; } }
 
 .colHoTen { display: flex; align-items: center; gap: 12px; }
-.khachAvatar { font-weight: 700 !important; font-size: 12px !important; flex-shrink: 0; }
-.khachTen { font-size: 13.5px; font-weight: 600; color: #111827; }
-.khachEmail { font-size: 12px; color: #9ca3af; margin-top: 2px; }
-.phongBan { font-size: 13.5px; color: #374151; }
+.khachAvatar { font-weight: 700 !important; font-size: @fs-sm !important; flex-shrink: 0; }
+.khachTen { font-size: @fs-base; font-weight: 600; color: #111827; }
+.khachEmail { font-size: @fs-sm; color: #9ca3af; margin-top: 2px; }
+.phongBan { font-size: @fs-base; color: #374151; }
 .vaiTroBadge {
   display: inline-block;
-  font-size: 12px;
+  font-size: @fs-sm;
   font-weight: 500;
   padding: 3px 10px;
   border-radius: 20px;
@@ -88,13 +88,13 @@
   &[data-vaitro="truong_phong"] { background: @primary-100; }
   &[data-vaitro="giam_doc"]     { background: #dbeafe; }
 }
-.soDon { font-size: 13.5px; font-weight: 700; color: #111827; }
-.chiTieu { font-size: 13.5px; font-weight: 500; color: #374151; }
-.thamGia { font-size: 13px; color: #9ca3af; }
+.soDon { font-size: @fs-base; font-weight: 700; color: #111827; }
+.chiTieu { font-size: @fs-base; font-weight: 500; color: #374151; }
+.thamGia { font-size: @fs-base; color: #9ca3af; }
 .trangThaiBadge {
   display: inline-flex;
   align-items: center;
-  font-size: 12.5px;
+  font-size: @fs-sm;
   font-weight: 600;
   padding: 4px 12px;
   border-radius: 20px;
@@ -102,7 +102,7 @@
   &[data-trangthai="hoat_dong"] { background: @primary-100; }
   &[data-trangthai="tam_khoa"]  { background: #f3f4f6; }
 }
-.moreBtn { width: 30px; height: 30px; border: 1px solid #e5e7eb; border-radius: 7px; background: #fff; color: #6b7280; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; transition: all 0.15s; &:hover { background: #f3f4f6; color: #111827; } }
+.moreBtn { width: 30px; height: 30px; border: 1px solid #e5e7eb; border-radius: 7px; background: #fff; color: #6b7280; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: @fs-md; transition: all 0.15s; &:hover { background: #f3f4f6; color: #111827; } }
 
 .adminModal {
   :global(.ant-modal-content) {
@@ -115,7 +115,7 @@
     border-bottom: 1px solid #f1f5f9;
   }
   :global(.ant-modal-title) {
-    font-size: 16px;
+    font-size: @fs-lg;
     font-weight: 700;
     color: #111827;
   }
@@ -134,7 +134,7 @@
     border-radius: 8px;
     height: 36px;
     font-weight: 500;
-    font-size: 13.5px;
+    font-size: @fs-base;
   }
   :global(.ant-modal-footer .ant-btn-primary) {
     background: @primary;

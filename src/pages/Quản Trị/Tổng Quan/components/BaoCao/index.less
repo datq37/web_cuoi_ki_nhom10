@@ -1,4 +1,4 @@
-@import '~@/styles/admin-tokens.less';
+﻿@import '~@/styles/admin-tokens.less';
 
 .baoCaoModal {
   :global(.ant-modal-content) {
@@ -45,21 +45,21 @@
 }
 
 .modalTitle {
-  font-size: 14px;
+  font-size: @fs-md;
   font-weight: 600;
   color: #f1f5f9;
   letter-spacing: 0.2px;
 }
 
 .modalSub {
-  font-size: 11px;
+  font-size: @fs-xs;
   color: #64748b;
 }
 
 .printBtn {
   height: 34px;
   padding: 0 16px;
-  font-size: 13px;
+  font-size: @fs-base;
   font-weight: 600;
   border-radius: 8px;
   background: @primary !important;
@@ -80,7 +80,7 @@
   background: rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   color: #94a3b8;
-  font-size: 13px;
+  font-size: @fs-base;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -111,7 +111,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06);
   padding: 36px 44px 40px;
   font-family: 'Segoe UI', 'Arial', sans-serif;
-  font-size: 13px;
+  font-size: @fs-base;
   color: #1e293b;
   min-height: 600px;
 }
@@ -138,7 +138,7 @@
   background: @primary;
   border-radius: 8px;
   color: #fff;
-  font-size: 14px;
+  font-size: @fs-md;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -148,13 +148,13 @@
 }
 
 :global(.rpt-company-name) {
-  font-size: 14px;
+  font-size: @fs-md;
   font-weight: 700;
   color: #0f172a;
 }
 
 :global(.rpt-company-sub) {
-  font-size: 11px;
+  font-size: @fs-xs;
   color: #64748b;
   margin-top: 2px;
 }
@@ -164,7 +164,7 @@
 }
 
 :global(.rpt-title) {
-  font-size: 15px;
+  font-size: @fs-md;
   font-weight: 800;
   color: #0f172a;
   letter-spacing: 0.6px;
@@ -172,7 +172,7 @@
 }
 
 :global(.rpt-sub) {
-  font-size: 11px;
+  font-size: @fs-xs;
   color: #64748b;
   margin-top: 3px;
 }
@@ -193,7 +193,7 @@
 }
 
 :global(.rpt-stat-label) {
-  font-size: 10px;
+  font-size: @fs-xs;
   font-weight: 600;
   color: #64748b;
   text-transform: uppercase;
@@ -202,14 +202,14 @@
 }
 
 :global(.rpt-stat-value) {
-  font-size: 20px;
+  font-size: @fs-2xl;
   font-weight: 700;
   color: #0f172a;
   line-height: 1;
 }
 
 :global(.rpt-stat-change) {
-  font-size: 10px;
+  font-size: @fs-xs;
   color: @primary;
   margin-top: 3px;
   font-weight: 500;
@@ -221,7 +221,7 @@
 }
 
 :global(.rpt-section-title) {
-  font-size: 11px;
+  font-size: @fs-xs;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.6px;
@@ -246,14 +246,14 @@
 :global(table.rpt-table) {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12.5px;
+  font-size: @fs-sm;
 }
 
 :global(table.rpt-table th) {
   background: #f1f5f9;
   padding: 8px 12px;
   text-align: left;
-  font-size: 10.5px;
+  font-size: @fs-xs;
   font-weight: 700;
   color: #475569;
   border: 1px solid #e2e8f0;
@@ -297,7 +297,7 @@
 }
 
 :global(.rpt-footer-note) {
-  font-size: 10px;
+  font-size: @fs-xs;
   color: #94a3b8;
 }
 
@@ -307,7 +307,7 @@
 }
 
 :global(.rpt-sign-title) {
-  font-size: 11px;
+  font-size: @fs-xs;
   font-weight: 600;
   color: #374151;
   margin-bottom: 36px;
@@ -319,7 +319,7 @@
 }
 
 :global(.rpt-sign-name) {
-  font-size: 11px;
+  font-size: @fs-xs;
   color: #374151;
 }
 

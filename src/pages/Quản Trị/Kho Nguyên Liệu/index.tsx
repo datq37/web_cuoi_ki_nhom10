@@ -1,7 +1,7 @@
 ﻿import {
+  AppstoreOutlined,
   DeleteOutlined,
   EditOutlined,
-  ExclamationCircleFilled,
   ExclamationCircleOutlined,
   FilterOutlined,
   ImportOutlined,
@@ -11,7 +11,7 @@
   SearchOutlined,
   ShoppingCartOutlined,
   SortAscendingOutlined,
-  WarningFilled,
+  UnorderedListOutlined,
 } from '@ant-design/icons';
 import {
   AutoComplete,
@@ -31,6 +31,7 @@ import {
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Highlight from '@/components/Highlight';
 import TableStaticData from '@/components/TableStaticData';
 import EmptyState from '@/pages/Quản Trị/components/EmptyState';
 import PageToolbar from '@/pages/Quản Trị/components/PageToolbar';
@@ -474,7 +475,8 @@ const NguyenLieuDetail: React.FC<{
   onClose: () => void;
   onEdit: () => void;
   onRestock: () => void;
-}> = ({ item, onClose, onEdit, onRestock }) => {
+  onDelete: () => void;
+}> = ({ item, onClose, onEdit, onRestock, onDelete }) => {
   const lastRef = useRef<INguyenLieu | null>(null);
   if (item) lastRef.current = item;
   const d = lastRef.current;
@@ -493,14 +495,12 @@ const NguyenLieuDetail: React.FC<{
       width={520}
       onCancel={onClose}
       footer={
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-          <Button onClick={onClose}>Đóng</Button>
-          <Button icon={<ImportOutlined />} onClick={onRestock}>
-            Nhập kho
-          </Button>
-          <Button type="primary" icon={<EditOutlined />} onClick={onEdit} className={styles.btnPrimary}>
-            Chỉnh sửa
-          </Button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Button danger ghost icon={<DeleteOutlined />} style={{ borderRadius: 8, height: 36 }} onClick={() => { onClose(); onDelete(); }}>Xoá</Button>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+            <Button icon={<ImportOutlined />} style={{ borderRadius: 8, height: 36 }} onClick={onRestock}>Nhập kho</Button>
+            <Button type="primary" icon={<EditOutlined />} style={{ borderRadius: 8, height: 36 }} onClick={onEdit} className={styles.btnPrimary}>Chỉnh sửa</Button>
+          </div>
         </div>
       }
       destroyOnClose
@@ -589,6 +589,7 @@ const KhoNguyenLieu: React.FC = () => {
   const [filterTrangThai, setFilterTrangThai] = useState<TrangThaiFilter>('all');
   const [filterNCC,       setFilterNCC]       = useState<string>('');
   const [sortBy,          setSortBy]          = useState<'mac_dinh' | 'ton_thap' | 'ton_cao' | 'gia_cao'>('mac_dinh');
+  const [isGrid,          setIsGrid]          = useState(false);
   const [activeTab,       setActiveTab]       = useState<ViewTab>('danh_sach');
   const [lichSuNhap,      setLichSuNhap]      = useState<ILichSuNhap[]>(() =>
     store.get<ILichSuNhap[]>(KEYS.importHistory, []),
@@ -609,15 +610,6 @@ const KhoNguyenLieu: React.FC = () => {
     return { tongNguyenLieu, sapHetHet, giaTri, nhaCungCap };
   }, [items]);
 
-  const statCards = useMemo(
-    () => [
-      { label: 'TỔNG NGUYÊN LIỆU', value: String(stats.tongNguyenLieu), iconBg: '#dcfce7', iconColor: '#16a34a', Icon: InboxOutlined, sub: null },
-      { label: 'SẮP HẾT / HẾT', value: String(stats.sapHetHet), iconBg: '#ffedd5', iconColor: '#ea580c', Icon: WarningFilled, sub: null, subTrend: 'down' as const },
-      { label: 'GIÁ TRỊ KHO', value: stats.giaTri, iconBg: '#dcfce7', iconColor: '#16a34a', Icon: ShoppingCartOutlined, sub: null },
-      { label: 'NHÀ CUNG CẤP', value: String(stats.nhaCungCap), iconBg: '#dcfce7', iconColor: '#16a34a', Icon: ImportOutlined, sub: null },
-    ],
-    [stats],
-  );
 
   const danhSachLoc = useMemo(() => {
     let list = items;
@@ -720,7 +712,7 @@ const KhoNguyenLieu: React.FC = () => {
             <InboxOutlined className={styles.nlIconSvg} />
           </div>
           <div>
-            <div className={styles.nlTen}>{record.ten}</div>
+            <div className={styles.nlTen}><Highlight text={record.ten} search={tuKhoa} /></div>
             <div className={styles.nlDonVi}>Đơn vị: {record.donVi}</div>
           </div>
         </div>
@@ -781,39 +773,6 @@ const KhoNguyenLieu: React.FC = () => {
         );
       },
     },
-    {
-      title: '',
-      key: 'actions',
-      width: 120,
-      render: (_, record) => {
-        const moreMenu = (
-          <Menu
-            onClick={({ key }) => {
-              if (key === 'edit') { setEditing(record); setFormOpen(true); }
-              if (key === 'delete') handleDelete(record);
-            }}
-          >
-            <Menu.Item key="edit" icon={<EditOutlined />}>Chỉnh sửa</Menu.Item>
-            <Menu.Item key="delete" icon={<DeleteOutlined />} danger>Xoá</Menu.Item>
-          </Menu>
-        );
-        return (
-          <div className={styles.rowActions} onClick={(e) => e.stopPropagation()}>
-            <button
-              className={styles.btnNhap}
-              onClick={() => { setRestocking(record); setRestockOpen(true); }}
-            >
-              <PlusOutlined style={{ fontSize: 11 }} /> Nhập
-            </button>
-            <Dropdown overlay={moreMenu} trigger={['click']}>
-              <button className={styles.btnMore}>
-                <MoreOutlined />
-              </button>
-            </Dropdown>
-          </div>
-        );
-      },
-    },
   ];
 
   const lichSuColumns: ColumnsType<ILichSuNhap> = [
@@ -838,24 +797,6 @@ const KhoNguyenLieu: React.FC = () => {
       <Topbar title="Kho nguyên liệu" />
 
       <div className={styles.pageBody}>
-          <div className={styles.statGrid}>
-            {statCards.map((card) => (
-              <div key={card.label} className={styles.statCard}>
-                <div className={styles.statLeft}>
-                  <div className={styles.statLabel}>{card.label}</div>
-                  <div className={styles.statValue}>{card.value}</div>
-                  {card.sub && (
-                    <div className={`${styles.statSub} ${card.subTrend === 'down' ? styles.statSubDown : ''}`}>
-                      {card.subTrend === 'down' && '↘ '}{card.sub}
-                    </div>
-                  )}
-                </div>
-                <div className={styles.statIconWrap} style={{ background: card.iconBg }}>
-                  <card.Icon style={{ fontSize: 20, color: card.iconColor }} />
-                </div>
-              </div>
-            ))}
-          </div>
 
           {/* Tabs — sau stat cards */}
           <div className={styles.khoTabs}>
@@ -922,7 +863,7 @@ const KhoNguyenLieu: React.FC = () => {
           {activeTab === 'danh_sach' && canNhapThemItems.length > 0 && (
             <div className={styles.warnBanner}>
               <div className={styles.warnLeft}>
-                <ExclamationCircleFilled className={styles.warnIcon} />
+                <ExclamationCircleOutlined className={styles.warnIcon} />
                 <span>
                   <strong>Cần nhập thêm nguyên liệu:</strong>{' '}
                   {canNhapThemItems.map((n) => n.ten).join(', ')}
@@ -941,13 +882,23 @@ const KhoNguyenLieu: React.FC = () => {
             </div>
           )}
 
-          {activeTab === 'danh_sach' && <div className={styles.tableSection}>
+          {activeTab === 'danh_sach' && <>
             <PageToolbar
               searchPlaceholder="Tìm nguyên liệu, nhà cung cấp..."
               searchValue={tuKhoa}
               onSearch={setTuKhoa}
               filters={
                 <>
+                  {/* View toggle — List trước, Grid sau */}
+                  <div className={styles.viewToggle}>
+                    <button className={`${styles.toggleBtn} ${!isGrid ? styles.toggleActive : ''}`} onClick={() => setIsGrid(false)} title="Dạng danh sách">
+                      <UnorderedListOutlined />
+                    </button>
+                    <button className={`${styles.toggleBtn} ${isGrid ? styles.toggleActive : ''}`} onClick={() => setIsGrid(true)} title="Dạng lưới">
+                      <AppstoreOutlined />
+                    </button>
+                  </div>
+
                   {/* NCC — Button dropdown đồng bộ với các trang khác */}
                   <Dropdown
                     trigger={['click']}
@@ -1017,26 +968,71 @@ const KhoNguyenLieu: React.FC = () => {
               }
             />
 
-            <TableStaticData<INguyenLieu>
-              dataSource={danhSachLoc}
-              columns={columns}
-              rowKey="id"
-              searchValue={tuKhoa}
-              searchFields={['ten', 'nhaCungCap']}
-              pageSize={10}
-              className={styles.table}
-              rowClassName={(record: INguyenLieu) => {
-                if (record.trangThai === ETrangThaiNguyenLieu.HET_HANG) return `${styles.tableRow} ${styles.rowHetHang}`;
-                if (record.trangThai === ETrangThaiNguyenLieu.SAP_HET)  return `${styles.tableRow} ${styles.rowSapHet}`;
-                return styles.tableRow;
-              }}
-              locale={{ emptyText: <EmptyState kind="search" desc="Không tìm thấy nguyên liệu nào" /> }}
-              onRow={(record) => ({
-                onClick: () => setViewing(record),
-                style: { cursor: 'pointer' },
-              })}
-            />
-          </div>}
+            {isGrid ? (
+              <div className={styles.nlGrid}>
+                {danhSachLoc.length === 0 ? (
+                  <div style={{ gridColumn: '1/-1' }}>
+                    <EmptyState kind="search" desc="Không tìm thấy nguyên liệu nào" />
+                  </div>
+                ) : danhSachLoc.map((record) => {
+                  const cfg = TRANG_THAI_CONFIG[record.trangThai];
+                  const pct = record.mucToiThieu > 0
+                    ? Math.min(100, Math.round((record.tonKho / (record.mucToiThieu * 2)) * 100))
+                    : 100;
+                  return (
+                    <div key={record.id} className={styles.nlCard} onClick={() => setViewing(record)}>
+                      <div className={styles.nlCardTop}>
+                        <div className={styles.nlCardIcon}><InboxOutlined /></div>
+                        <span className={styles.nlCardBadge} style={{ color: cfg.color, background: cfg.bg }}>{cfg.label}</span>
+                      </div>
+                      <div className={styles.nlCardName}><Highlight text={record.ten} search={tuKhoa} /></div>
+                      <div className={styles.nlCardNCC}><Highlight text={record.nhaCungCap} search={tuKhoa} /></div>
+                      <div className={styles.nlCardProgress}>
+                        <div className={styles.nlProgressRow}>
+                          <span className={styles.nlProgressVal}>{record.tonKho} {record.donVi}</span>
+                          <span className={styles.nlProgressMin}>Min: {record.mucToiThieu}</span>
+                        </div>
+                        <div className={styles.progressBar}>
+                          <div className={styles.progressFill} style={{ width: `${pct}%`, background: cfg.barColor }} />
+                        </div>
+                      </div>
+                      <div className={styles.nlCardFooter}>
+                        <span className={styles.nlCardGia}>{formatGia(record.giaNhap)}</span>
+                        <button
+                          className={styles.nlCardNhap}
+                          onClick={(e) => { e.stopPropagation(); setBulkPreSelectIds([record.id]); setBulkRestockOpen(true); }}
+                        >
+                          + Nhập
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className={styles.tableSection}>
+              <TableStaticData<INguyenLieu>
+                dataSource={danhSachLoc}
+                columns={columns}
+                rowKey="id"
+                searchValue={tuKhoa}
+                searchFields={['ten', 'nhaCungCap']}
+                pageSize={10}
+                className={styles.table}
+                rowClassName={(record: INguyenLieu) => {
+                  if (record.trangThai === ETrangThaiNguyenLieu.HET_HANG) return `${styles.tableRow} ${styles.rowHetHang}`;
+                  if (record.trangThai === ETrangThaiNguyenLieu.SAP_HET)  return `${styles.tableRow} ${styles.rowSapHet}`;
+                  return styles.tableRow;
+                }}
+                locale={{ emptyText: <EmptyState kind="search" desc="Không tìm thấy nguyên liệu nào" /> }}
+                onRow={(record) => ({
+                  onClick: () => setViewing(record),
+                  style: { cursor: 'pointer' },
+                })}
+              />
+              </div>
+            )}
+          </> }
       </div>
 
       <NguyenLieuForm
@@ -1064,6 +1060,7 @@ const KhoNguyenLieu: React.FC = () => {
         onClose={() => setViewing(null)}
         onEdit={() => { setEditing(viewing); setViewing(null); setFormOpen(true); }}
         onRestock={() => { setRestocking(viewing); setViewing(null); setRestockOpen(true); }}
+        onDelete={() => { if (viewing) handleDelete(viewing); setViewing(null); }}
       />
     </>
   );

@@ -188,17 +188,148 @@
   gap: 8px;
 }
 
+.viewToggle {
+  display: flex;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.toggleBtn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: #fff;
+  color: @text-muted;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: @fs-md;
+  cursor: pointer;
+  transition: all 0.15s;
+  &:hover { background: @divider; color: @text-dark; }
+}
+
+.toggleActive {
+  background: @primary !important;
+  color: #fff !important;
+}
+
 .btnOutline {
   border-radius: 8px !important;
   font-weight: 500;
-  color: #374151;
+  color: #374151 !important;
   border-color: #d1d5db !important;
+  &:hover { border-color: @primary !important; color: @primary !important; }
+}
+
+// ── Card grid view ───────────────────────────────────────────────
+.nlGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  @media (max-width: 1300px) { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 900px)  { grid-template-columns: repeat(2, 1fr); }
+}
+
+.nlCard {
+  background: #fff;
+  border-radius: @radius;
+  border: 1px solid #f1f5f9;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  transition: box-shadow 0.2s, transform 0.2s;
+  &:hover { box-shadow: 0 6px 20px rgba(0,0,0,.08); transform: translateY(-2px); }
+}
+
+.nlCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nlCardIcon {
+  width: 36px;
+  height: 36px;
+  background: #f1f5f9;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: @fs-lg;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.nlCardBadge {
+  font-size: @fs-xs;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.nlCardName {
+  font-size: @fs-md;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nlCardNCC {
+  font-size: @fs-sm;
+  color: #9ca3af;
+}
+
+.nlCardProgress { display: flex; flex-direction: column; gap: 5px; }
+
+.nlProgressRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: @fs-sm;
+}
+
+.nlProgressVal { font-weight: 600; color: #374151; }
+.nlProgressMin { color: #9ca3af; }
+
+.nlCardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 4px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.nlCardGia {
+  font-size: @fs-md;
+  font-weight: 700;
+  color: @primary;
+}
+
+.nlCardNhap {
+  font-size: @fs-sm;
+  font-weight: 600;
+  color: @primary;
+  background: @primary-50;
+  border: 1px solid @primary-200;
+  border-radius: 7px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  &:hover { background: @primary; color: #fff; }
 }
 
 .addBtn {
   background: @primary !important;
   border-color: @primary !important;
   border-radius: 8px !important;
+  height: 36px;
   font-weight: 500;
 
   &:hover {
@@ -622,20 +753,27 @@
   .khoTabs   { background: #1e293b; border-color: #334155; }
   .khoTabBtn { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
 
-  .statCard { background: #1e293b; border-color: #334155; }
-  .statValue { color: #f1f5f9; }
-  .statLabel { color: #64748b; }
-  .statSub   { color: #94a3b8; }
+  .viewToggle { border-color: #334155; }
+  .toggleBtn  { background: #1e293b; color: #64748b; &:hover { background: #0f172a; color: #cbd5e1; } }
+  .toggleActive { background: @primary !important; color: #fff !important; }
+
+  .nlCard { background: #1e293b; border-color: #334155; &:hover { box-shadow: 0 6px 20px rgba(0,0,0,.35); } }
+  .nlCardIcon { background: #0f172a; color: #64748b; }
+  .nlCardName { color: #f1f5f9; }
+  .nlCardNCC  { color: #64748b; }
+  .nlProgressVal { color: #cbd5e1; }
+  .nlCardFooter { border-top-color: #334155; }
+  .nlCardNhap { background: rgba(22,163,74,.1); border-color: rgba(22,163,74,.3); &:hover { background: @primary; } }
 
   .warnBanner { background: rgba(251,191,36,.08); border-color: rgba(251,191,36,.25); }
   .warnLeft   { color: #fcd34d; strong { color: #fde68a; } }
   .warnIcon   { color: #fbbf24; }
   .btnTaoDon  { background: #1e293b; border-color: #334155; color: #cbd5e1; &:hover { background: #0f172a; border-color: #475569; } }
 
-  .tableSection { background: #1e293b; border-color: #334155; }
+  .tableSection { background: transparent; border-color: transparent; }
   .tableToolbar { border-bottom-color: #334155; }
   .searchIcon   { color: #475569; }
-  .btnOutline   { border-color: #334155 !important; color: #94a3b8 !important; background: #0f172a !important; }
+  .btnOutline { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; &:hover { background: #334155 !important; border-color: @primary !important; color: @primary !important; } }
 
   .table {
     :global(.ant-table-thead > tr > th) {

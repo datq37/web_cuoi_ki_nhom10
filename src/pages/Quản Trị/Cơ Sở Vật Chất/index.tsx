@@ -5,7 +5,6 @@
   EditOutlined,
   FilterOutlined,
   PlusOutlined,
-  ReloadOutlined,
   TableOutlined,
   TeamOutlined,
   ToolOutlined,
@@ -21,17 +20,13 @@ import {
   Menu,
   Modal,
   Select,
-  Tooltip,
   message,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import TableStaticData from '@/components/TableStaticData';
 import EmptyState from '@/pages/Quản Trị/components/EmptyState';
 import PageToolbar from '@/pages/Quản Trị/components/PageToolbar';
-import { ETrangThaiTrucTiep } from '@/services/Quản Trị/Tổng Quan/typing';
-import { mockData } from '@/services/Quản Trị/Tổng Quan';
-import { KEYS, store } from '@/utils/storage';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import {
   DANH_SACH_KHU_VUC,
@@ -432,47 +427,6 @@ const VatDungModal: React.FC<{
 
 const CoSoVatChat: React.FC = () => {
   const [khuVucs, setKhuVucs] = useState<IKhuVuc[]>(DANH_SACH_KHU_VUC);
-  const [lastSync, setLastSync] = useState<string>('');
-
-  // ── Auto-sync bàn theo đơn hàng ─────────────────────────────────
-  const syncTrangThaiBan = useCallback(() => {
-    const orders = store.get<typeof mockData.trucTiep.donHang>(KEYS.orders, mockData.trucTiep.donHang);
-    const cancelledIds = new Set<string>();
-    orders.forEach((o) => { if ((o.trangThai as any) === 'da_huy') cancelledIds.add(o.maDon); });
-
-    const activeDang = orders.filter(
-      (o) => !cancelledIds.has(o.maDon) &&
-      (o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN ||
-       o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN ||
-       o.trangThai === ETrangThaiTrucTiep.SAN_SANG),
-    ).length;
-
-    setKhuVucs((prev) => {
-      let dangCount = activeDang;
-      return prev.map((khu) => ({
-        ...khu,
-        danhSachBan: khu.danhSachBan.map((ban) => {
-          if (ban.trangThai === ETrangThaiBan.BAO_TRI) return ban;
-          if (dangCount > 0) {
-            dangCount--;
-            return { ...ban, trangThai: ETrangThaiBan.DANG_DUNG };
-          }
-          return { ...ban, trangThai: ETrangThaiBan.SAN_SANG };
-        }),
-      }));
-    });
-
-    const now = new Date();
-    setLastSync(`${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`);
-  }, []);
-
-  // Auto-sync mỗi 30 giây
-  const intervalRef = useRef<ReturnType<typeof setInterval>>();
-  useEffect(() => {
-    syncTrangThaiBan();
-    intervalRef.current = setInterval(syncTrangThaiBan, 30000);
-    return () => clearInterval(intervalRef.current);
-  }, [syncTrangThaiBan]);
 
   // trạng thái modal
   const [khuModal,  setKhuModal]  = useState(false);
@@ -783,13 +737,6 @@ const CoSoVatChat: React.FC = () => {
                 <span className={styles.legendHint}>· Click vào bàn để đổi trạng thái</span>
               </div>
               <div className={styles.legendActions}>
-                {lastSync && <span className={styles.lastSyncText}>Đồng bộ lúc {lastSync}</span>}
-                <Tooltip title="Đồng bộ trạng thái bàn theo đơn hàng hiện tại">
-                  <Button icon={<ReloadOutlined />} className={styles.syncBtn}
-                    onClick={() => { syncTrangThaiBan(); message.success('Đã đồng bộ trạng thái bàn'); }}>
-                    Sync bàn
-                  </Button>
-                </Tooltip>
                 <Button type="primary" icon={<PlusOutlined />} className={styles.addBtn} onClick={openAddKhu}>
                   Thêm khu vực
                 </Button>

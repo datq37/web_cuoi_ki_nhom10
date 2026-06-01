@@ -3,7 +3,6 @@
   EditOutlined,
   ExclamationCircleOutlined,
   FilterOutlined,
-  MoreOutlined,
   PlusOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
@@ -268,7 +267,9 @@ const KhuyenMaiDetail: React.FC<{
   item: IKhuyenMai | null;
   onClose: () => void;
   onEdit: () => void;
-}> = ({ item, onClose, onEdit }) => {
+  onDelete: () => void;
+  onToggle: (v: boolean) => void;
+}> = ({ item, onClose, onEdit, onDelete, onToggle }) => {
   const lastRef = React.useRef<IKhuyenMai | null>(null);
   if (item) lastRef.current = item;
   const d   = lastRef.current;
@@ -282,11 +283,17 @@ const KhuyenMaiDetail: React.FC<{
       width={520}
       onCancel={onClose}
       footer={
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-          <Button onClick={onClose}>Đóng</Button>
-          <Button type="primary" icon={<EditOutlined />} onClick={onEdit} className={styles.btnPrimary}>
-            Chỉnh sửa
-          </Button>
+        <div className={styles.modalFooter}>
+          {d && (
+            <div className={styles.modalFooterLeft}>
+              <Switch checked={d.hoatDong} onChange={onToggle} />
+              <span className={styles.modalFooterSwitchLabel}>{d.hoatDong ? 'Đang hoạt động' : 'Tạm dừng'}</span>
+            </div>
+          )}
+          <div className={styles.modalFooterRight}>
+            <Button danger ghost icon={<DeleteOutlined />} className={styles.modalBtnDanger} onClick={() => { onClose(); onDelete(); }}>Xoá</Button>
+            <Button type="primary" icon={<EditOutlined />} className={`${styles.btnPrimary} ${styles.modalBtnPrimary}`} onClick={onEdit}>Chỉnh sửa</Button>
+          </div>
         </div>
       }
       destroyOnClose
@@ -651,19 +658,9 @@ const ComboForm: React.FC<{
 const KhuyenMaiRow: React.FC<{
   item: IKhuyenMai;
   onClick: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
-  onToggle: (v: boolean) => void;
-}> = ({ item, onClick, onEdit, onDelete, onToggle }) => {
+}> = ({ item, onClick }) => {
   const cfg = TRANG_THAI_KM_CONFIG[item.trangThai];
   const pct = Math.min(100, Math.round((item.daDung / item.gioiHan) * 100));
-
-  const moreMenu = (
-    <Menu onClick={({ key }) => { if (key === 'edit') onEdit(); else if (key === 'delete') onDelete(); }}>
-      <Menu.Item key="edit" icon={<EditOutlined />}>Chỉnh sửa</Menu.Item>
-      <Menu.Item key="delete" icon={<DeleteOutlined />} danger>Xoá</Menu.Item>
-    </Menu>
-  );
 
   return (
     <div className={styles.promoRow} onClick={onClick}>
@@ -684,28 +681,13 @@ const KhuyenMaiRow: React.FC<{
           <span className={styles.usageCount}>{item.daDung} / {item.gioiHan}</span>
         </div>
         <div className={styles.usageBar}>
-          <div
-            className={styles.usageFill}
-            style={{ width: `${pct}%`, background: pct >= 90 ? '#ef4444' : '#22c55e' }}
-          />
+          <div className={styles.usageFill} style={{ width: `${pct}%`, background: pct >= 90 ? '#ef4444' : '#22c55e' }} />
         </div>
       </div>
 
-      <div className={styles.promoRight} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.expiryWrap}>
-          <span className={styles.expiryLabel}>Hết hạn</span>
-          <span className={styles.expiryDate}>{item.hetHan}</span>
-        </div>
-        <Switch
-          checked={item.hoatDong}
-          onChange={onToggle}
-          className={item.hoatDong ? styles.switchOn : styles.switchOff}
-        />
-        <Dropdown overlay={moreMenu} trigger={['click']}>
-          <button className={styles.moreBtn}>
-            <MoreOutlined />
-          </button>
-        </Dropdown>
+      <div className={styles.expiryWrap}>
+        <span className={styles.expiryLabel}>Hết hạn</span>
+        <span className={styles.expiryDate}>{item.hetHan}</span>
       </div>
     </div>
   );
@@ -714,23 +696,13 @@ const KhuyenMaiRow: React.FC<{
 const ComboRow: React.FC<{
   item: ICombo;
   onClick: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
-  onToggle: (v: boolean) => void;
-}> = ({ item, onClick, onEdit, onDelete, onToggle }) => {
+}> = ({ item, onClick }) => {
   const cfg = TRANG_THAI_KM_CONFIG[item.trangThai];
   const { tongLe, giaCombo, tietKiem } = tinhGiaCombo(item);
 
   const monList = item.monAnIds
     .map((id) => DANH_SACH_MON.find((m) => m.id === id))
     .filter(Boolean) as (typeof DANH_SACH_MON[number])[];
-
-  const moreMenu = (
-    <Menu onClick={({ key }) => { if (key === 'edit') onEdit(); else if (key === 'delete') onDelete(); }}>
-      <Menu.Item key="edit" icon={<EditOutlined />}>Chỉnh sửa</Menu.Item>
-      <Menu.Item key="delete" icon={<DeleteOutlined />} danger>Xoá</Menu.Item>
-    </Menu>
-  );
 
   return (
     <div className={styles.comboCard} onClick={onClick}>
@@ -743,19 +715,6 @@ const ComboRow: React.FC<{
             </span>
           </div>
           <div className={styles.comboCardMoTa}>{item.moTa}</div>
-        </div>
-
-        <div className={styles.comboCardActions} onClick={(e) => e.stopPropagation()}>
-          <Switch
-            checked={item.hoatDong}
-            onChange={onToggle}
-            className={item.hoatDong ? styles.switchOn : styles.switchOff}
-          />
-          <Dropdown overlay={moreMenu} trigger={['click']}>
-            <button className={styles.moreBtn}>
-              <MoreOutlined />
-            </button>
-          </Dropdown>
         </div>
       </div>
 
@@ -782,6 +741,120 @@ const ComboRow: React.FC<{
         </div>
       </div>
     </div>
+  );
+};
+
+const ComboDetail: React.FC<{
+  item: ICombo | null;
+  onClose: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
+  onToggle: (v: boolean) => void;
+}> = ({ item, onClose, onEdit, onDelete, onToggle }) => {
+  const lastRef = React.useRef<ICombo | null>(null);
+  if (item) lastRef.current = item;
+  const d = lastRef.current;
+  const cfg = d ? TRANG_THAI_KM_CONFIG[d.trangThai] : null;
+
+  const monList = d
+    ? d.monAnIds.map((id) => DANH_SACH_MON.find((m) => m.id === id)).filter(Boolean) as (typeof DANH_SACH_MON[number])[]
+    : [];
+
+  const { tongLe, giaCombo, tietKiem } = d ? tinhGiaCombo(d) : { tongLe: 0, giaCombo: 0, tietKiem: 0 };
+
+  return (
+    <Modal
+      visible={!!item}
+      title={null}
+      width={520}
+      centered
+      onCancel={onClose}
+      destroyOnClose
+      className={styles.detailModal}
+      footer={
+        <div className={styles.modalFooter}>
+          {d && (
+            <div className={styles.modalFooterLeft}>
+              <Switch checked={d.hoatDong} onChange={onToggle} />
+              <span className={styles.modalFooterSwitchLabel}>{d.hoatDong ? 'Đang hoạt động' : 'Tạm dừng'}</span>
+            </div>
+          )}
+          <div className={styles.modalFooterRight}>
+            <Button danger ghost icon={<DeleteOutlined />} className={styles.modalBtnDanger} onClick={() => { onClose(); onDelete(); }}>Xoá</Button>
+            <Button type="primary" icon={<EditOutlined />} className={`${styles.btnPrimary} ${styles.modalBtnPrimary}`} onClick={onEdit}>Chỉnh sửa</Button>
+          </div>
+        </div>
+      }
+    >
+      {d && cfg && (
+        <div className={styles.detailBody}>
+          {/* Header */}
+          <div className={styles.detailHeader}>
+            <span className={styles.detailTitle} style={{ fontSize: 17, fontWeight: 700 }}>{d.ten}</span>
+            <span className={styles.detailStatusTag} data-status={d.trangThai} style={{ color: cfg.color }}>
+              {cfg.label}
+            </span>
+          </div>
+          {d.moTa && <div className={styles.detailDesc}>{d.moTa}</div>}
+
+          <div className={styles.detailDivider} />
+
+          {/* Món trong combo */}
+          <div style={{ marginBottom: 4 }}>
+            <div className={styles.detailGridLabel}>MÓN TRONG COMBO</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
+              {monList.map((mon) => (
+                <span
+                  key={mon.id}
+                  style={{
+                    background: mon.mauNen,
+                    color: '#fff',
+                    borderRadius: 20,
+                    padding: '4px 12px',
+                    fontSize: 12,
+                    fontWeight: 600,
+                  }}
+                >
+                  {mon.ten}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.detailDivider} />
+
+          {/* Giá */}
+          <div className={styles.detailGrid2}>
+            <div className={styles.detailGridItem}>
+              <div className={styles.detailGridLabel}>TỔNG GIÁ LẺ</div>
+              <div className={styles.detailGridValue} style={{ textDecoration: 'line-through', color: '#9ca3af' }}>{fmtVnd(tongLe)}</div>
+            </div>
+            <div className={styles.detailGridItem}>
+              <div className={styles.detailGridLabel}>GIÁ COMBO</div>
+              <div className={styles.detailValueBig}>{fmtVnd(giaCombo)}</div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: 8, padding: '10px 14px', background: '#f0fdf4', borderRadius: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: 13, color: '#16a34a', fontWeight: 500 }}>Tiết kiệm</span>
+            <span style={{ fontSize: 15, fontWeight: 700, color: '#16a34a' }}>{fmtVnd(tietKiem)}</span>
+          </div>
+
+          <div className={styles.detailDivider} />
+
+          <div className={styles.detailGrid2}>
+            <div className={styles.detailGridItem}>
+              <div className={styles.detailGridLabel}>NGÀY HẾT HẠN</div>
+              <div className={styles.detailGridValue}>{d.hetHan}</div>
+            </div>
+            <div className={styles.detailGridItem}>
+              <div className={styles.detailGridLabel}>TRẠNG THÁI</div>
+              <div className={styles.detailGridValue} style={{ color: cfg.color, fontWeight: 600 }}>{cfg.label}</div>
+            </div>
+          </div>
+        </div>
+      )}
+    </Modal>
   );
 };
 
@@ -826,6 +899,7 @@ const KhuyenMai: React.FC = () => {
   }, [comboItems]);
   const [comboFormOpen,       setComboFormOpen]       = useState(false);
   const [editingCombo,        setEditingCombo]        = useState<ICombo | null>(null);
+  const [viewingCombo,        setViewingCombo]        = useState<ICombo | null>(null);
   const [comboTuKhoa,         setComboTuKhoa]         = useState('');
   const [comboFilterTrangThai, setComboFilterTrangThai] = useState<ETrangThaiKhuyenMai | null>(null);
 
@@ -1048,9 +1122,6 @@ const KhuyenMai: React.FC = () => {
                   <KhuyenMaiRow
                     item={item}
                     onClick={() => setViewing(item)}
-                    onEdit={() => { setEditing(item); setFormOpen(true); }}
-                    onDelete={() => handleDelete(item)}
-                    onToggle={(v) => handleToggleHoatDong(item.id, v)}
                   />
                   {idx < danhSachLoc.length - 1 && <div className={styles.divider} />}
                 </React.Fragment>
@@ -1067,10 +1138,7 @@ const KhuyenMai: React.FC = () => {
                 <ComboRow
                   key={item.id}
                   item={item}
-                  onClick={() => {}}
-                  onEdit={() => { setEditingCombo(item); setComboFormOpen(true); }}
-                  onDelete={() => handleComboDelete(item)}
-                  onToggle={(v) => handleComboToggle(item.id, v)}
+                  onClick={() => setViewingCombo(item)}
                 />
               ))}
               {danhSachComboLoc.length === 0 && (
@@ -1090,12 +1158,21 @@ const KhuyenMai: React.FC = () => {
         item={viewing}
         onClose={() => setViewing(null)}
         onEdit={() => { setEditing(viewing); setViewing(null); setFormOpen(true); }}
+        onDelete={() => { if (viewing) handleDelete(viewing); setViewing(null); }}
+        onToggle={(v) => { if (viewing) { handleToggleHoatDong(viewing.id, v); setViewing(prev => prev ? { ...prev, hoatDong: v } : null); } }}
       />
       <ComboForm
         open={comboFormOpen}
         initial={editingCombo}
         onCancel={() => { setComboFormOpen(false); setEditingCombo(null); }}
         onSubmit={handleComboSubmit}
+      />
+      <ComboDetail
+        item={viewingCombo}
+        onClose={() => setViewingCombo(null)}
+        onEdit={() => { setEditingCombo(viewingCombo); setViewingCombo(null); setComboFormOpen(true); }}
+        onDelete={() => { if (viewingCombo) handleComboDelete(viewingCombo); setViewingCombo(null); }}
+        onToggle={(v) => { if (viewingCombo) { handleComboToggle(viewingCombo.id, v); setViewingCombo(prev => prev ? { ...prev, hoatDong: v } : null); } }}
       />
     </>
   );

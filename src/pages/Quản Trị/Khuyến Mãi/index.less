@@ -89,12 +89,14 @@
   font-weight: 500;
   color: #374151 !important;
   border-color: #d1d5db !important;
+  &:hover { border-color: @primary !important; color: @primary !important; }
 }
 
 .addBtn {
   background: @primary !important;
   border-color: @primary !important;
   border-radius: 8px !important;
+  height: 36px;
   font-weight: 500;
 
   &:hover {
@@ -279,6 +281,57 @@
 }
 
 .btnPrimary {
+  background: @primary !important;
+  border-color: @primary !important;
+  &:hover { background: @primary-hover !important; border-color: @primary-hover !important; }
+}
+
+// ── Modal footer buttons ──────────────────────────────────────────
+.modalFooter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modalFooterLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.modalFooterSwitchLabel {
+  font-size: @fs-sm;
+  color: @text-muted;
+  white-space: nowrap;
+}
+
+.modalFooterRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.modalBtnDanger {
+  border-radius: 8px !important;
+  height: 36px !important;
+  font-weight: 500 !important;
+  font-size: @fs-base !important;
+}
+
+.modalBtnClose {
+  border-radius: 8px !important;
+  height: 36px !important;
+  font-weight: 500 !important;
+  font-size: @fs-base !important;
+}
+
+.modalBtnPrimary {
+  border-radius: 8px !important;
+  height: 36px !important;
+  font-weight: 500 !important;
+  font-size: @fs-base !important;
   background: @primary !important;
   border-color: @primary !important;
   &:hover { background: @primary-hover !important; border-color: @primary-hover !important; }
@@ -922,7 +975,6 @@
   .tabsRow { background: #1e293b; border-color: #334155; }
   .tabBtn  { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
 
-  .statCard { background: #1e293b; border-color: #334155; }
   .statValue { color: #f1f5f9; }
   .statLabel { color: #64748b; }
   .statSub   { color: #94a3b8; }
@@ -1067,12 +1119,7 @@
     :global(.ant-input-prefix) { color: #475569; }
   }
 
-  .btnOutline {
-    color: #94a3b8 !important;
-    border-color: #334155 !important;
-    background: #1e293b !important;
-    &:hover { color: #f1f5f9 !important; border-color: #475569 !important; background: #0f172a !important; }
-  }
+  .btnOutline { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; &:hover { background: #334155 !important; border-color: @primary !important; color: @primary !important; } }
 
   .statSubComplex { color: #94a3b8; }
   .statSubSuffix  { color: #64748b; }

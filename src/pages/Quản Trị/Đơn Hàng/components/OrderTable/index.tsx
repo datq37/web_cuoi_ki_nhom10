@@ -13,8 +13,6 @@ import styles from './index.less';
 
 interface OrderTableProps {
   orders: DonTrucTiep[];
-  selectedRows: string[];
-  setSelectedRows: (keys: string[]) => void;
   onRowClick: (order: DonTrucTiep) => void;
   cancelledIds: Set<string>;
   searchValue?: string;
@@ -39,8 +37,6 @@ const getStatusCfg = (trangThai: ETrangThaiTrucTiep, cancelled: boolean) =>
 
 const OrderTable: React.FC<OrderTableProps> = ({
   orders,
-  selectedRows,
-  setSelectedRows,
   onRowClick,
   cancelledIds,
   searchValue,
@@ -160,10 +156,6 @@ const OrderTable: React.FC<OrderTableProps> = ({
     <Table
       className={styles.orderTable}
       rowKey="maDon"
-      rowSelection={{
-        selectedRowKeys: selectedRows,
-        onChange: (keys) => setSelectedRows(keys as string[]),
-      }}
       columns={columns}
       dataSource={orders}
       pagination={{ pageSize: 10, showTotal: (t) => `Tổng ${t} đơn`, showSizeChanger: false, size: 'small' }}

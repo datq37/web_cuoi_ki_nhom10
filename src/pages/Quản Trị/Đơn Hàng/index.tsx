@@ -3,7 +3,6 @@ import {
   CalendarOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
-  CloseOutlined,
   CloseCircleOutlined,
   HistoryOutlined,
   SearchOutlined,
@@ -179,7 +178,6 @@ const DonHang: React.FC = () => {
   const [activeTab,     setActiveTab]     = useState<TabKey>('tat_ca');
   const [view,          setView]          = useState<'table' | 'kanban'>('table');
   const [searchKw,      setSearchKw]      = useState('');
-  const [selectedRows,  setSelectedRows]  = useState<string[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<DonTrucTiep | null>(null);
 
   // ── Lịch sử state ────────────────────────────────────────────────
@@ -268,23 +266,6 @@ const DonHang: React.FC = () => {
     });
   };
 
-  const handleBulkAction = (action: 'confirm' | 'done' | 'cancel') => {
-    const statusMap: Record<string, ETrangThaiTrucTiep | 'da_huy'> = {
-      confirm: ETrangThaiTrucTiep.DANG_CHE_BIEN,
-      done:    ETrangThaiTrucTiep.HOAN_THANH,
-      cancel:  'da_huy',
-    };
-    const newStatus = statusMap[action];
-    const eligibleRows = action === 'confirm'
-      ? selectedRows.filter((id) => orders.find((o) => o.maDon === id)?.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN)
-      : selectedRows;
-    if (eligibleRows.length === 0) { message.warning('Không có đơn nào đủ điều kiện.'); return; }
-    if (eligibleRows.length < selectedRows.length) message.info(`Chỉ ${eligibleRows.length}/${selectedRows.length} đơn đủ điều kiện.`);
-    if (newStatus === 'da_huy') { setCancelledIds((prev) => new Set([...prev, ...eligibleRows])); }
-    setOrders((prev) => prev.map((o) => eligibleRows.includes(o.maDon) ? { ...o, trangThai: newStatus as any } : o));
-    message.success(`Đã ${action === 'cancel' ? 'huỷ' : 'cập nhật'} ${eligibleRows.length} đơn`);
-    setSelectedRows([]);
-  };
 
   const handlePrint = (order: DonTrucTiep) => {
     const w = window.open('', '_blank');
@@ -381,29 +362,6 @@ const DonHang: React.FC = () => {
           actions={undefined}
         />
 
-        {/* ── Bulk bar ─────────────────────────────────────────── */}
-        {selectedRows.length > 0 && (
-          <div className={styles.bulkBar}>
-            <span className={styles.bulkCount}>
-              Đã chọn <strong>{selectedRows.length}</strong> đơn
-            </span>
-            <div className={styles.bulkActions}>
-              <Button size="small" type="primary" onClick={() => handleBulkAction('confirm')}>
-                Xác nhận
-              </Button>
-              <Button size="small" onClick={() => handleBulkAction('done')}>
-                Hoàn tất
-              </Button>
-              <Button size="small" danger onClick={() => handleBulkAction('cancel')}>
-                Huỷ
-              </Button>
-              <button className={styles.bulkClear} onClick={() => setSelectedRows([])} title="Bỏ chọn">
-                <CloseOutlined />
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* ── Content ──────────────────────────────────────────── */}
         {filteredOrders.length === 0 ? (
           <EmptyState
@@ -413,8 +371,6 @@ const DonHang: React.FC = () => {
         ) : view === 'table' ? (
           <OrderTable
             orders={filteredOrders}
-            selectedRows={selectedRows}
-            setSelectedRows={setSelectedRows}
             onRowClick={setSelectedOrder}
             cancelledIds={cancelledIds}
             searchValue={searchKw}

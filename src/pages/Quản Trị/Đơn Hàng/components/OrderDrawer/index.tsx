@@ -1,13 +1,11 @@
 ﻿import {
-  ArrowLeftOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
   MessageOutlined,
-  MoreOutlined,
   PhoneOutlined,
   PrinterOutlined,
 } from '@ant-design/icons';
-import { Avatar, Button, Drawer } from 'antd';
+import { Avatar, Button, Modal } from 'antd';
 import React, { useRef } from 'react';
 import { COT_CONFIG, GHI_CHU_CONFIG, fmt } from '@/models/Quản Trị/Tổng Quan';
 import type { DonTrucTiep } from '@/services/Quản Trị/Tổng Quan/typing';
@@ -261,20 +259,17 @@ const OrderDrawer: React.FC<OrderDrawerProps> = ({
     : null;
 
   return (
-    <Drawer
+    <Modal
       visible={!!order}
-      onClose={onClose}
-      placement="right"
-      width={520}
-      closable={false}
+      onCancel={onClose}
+      width={620}
+      centered
+      destroyOnClose
       className={styles.orderDrawer}
       title={
         <div className={styles.drawerHeader}>
-          <button className={styles.backBtn} onClick={onClose}>
-            <ArrowLeftOutlined />
-          </button>
           <div className={styles.headerMid}>
-            <span className={styles.headerLabel}>Đơn hàng</span>
+            <span className={styles.headerLabel}>Chi tiết đơn hàng</span>
             <span className={styles.headerMaDon}>{displayOrder?.maDon}</span>
           </div>
           <div className={styles.headerActions}>
@@ -285,28 +280,26 @@ const OrderDrawer: React.FC<OrderDrawerProps> = ({
             >
               <PrinterOutlined />
             </button>
-            <button className={styles.iconBtn} title="Thêm">
-              <MoreOutlined />
-            </button>
           </div>
         </div>
       }
       footer={
         <div className={styles.drawerFooter}>
           {!isCancelled && !isDone && displayOrder && (
-            <Button danger ghost onClick={() => onCancel(displayOrder.maDon)}>
+            <Button danger ghost style={{ borderRadius: 8 }} onClick={() => onCancel(displayOrder.maDon)}>
               Huỷ đơn
             </Button>
           )}
           <div className={styles.footerRight}>
             {isCancelled || isDone ? (
-              <Button type="primary" onClick={onClose}>
+              <Button type="primary" style={{ borderRadius: 8 }} onClick={onClose}>
                 Đóng
               </Button>
             ) : nextAction && displayOrder ? (
               <Button
                 type="primary"
                 icon={<CheckCircleOutlined />}
+                style={{ borderRadius: 8 }}
                 onClick={() => onMoveStatus(displayOrder.maDon, nextAction.next)}
               >
                 {nextAction.label}
@@ -315,11 +308,8 @@ const OrderDrawer: React.FC<OrderDrawerProps> = ({
           </div>
         </div>
       }
-      bodyStyle={{ padding: 0, overflowY: 'auto' }}
-      headerStyle={{ padding: 0, borderBottom: '1px solid #f0f0f0' }}
-      footerStyle={{ padding: '12px 20px' }}
     >
-      <div className={styles.drawerBody}>
+      <div className={styles.drawerBody} style={{ maxHeight: '65vh', overflowY: 'auto' }}>
         {displayOrder && (
           <DrawerContent
             order={displayOrder}
@@ -331,7 +321,7 @@ const OrderDrawer: React.FC<OrderDrawerProps> = ({
           />
         )}
       </div>
-    </Drawer>
+    </Modal>
   );
 };
 

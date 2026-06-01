@@ -391,27 +391,50 @@
 .khoModal {
   :global(.ant-modal-content) {
     border-radius: 16px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.14);
     overflow: hidden;
   }
   :global(.ant-modal-header) {
     padding: 20px 24px 16px;
     border-bottom: 1px solid #f1f5f9;
   }
+  :global(.ant-modal-title) {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+  }
   :global(.ant-modal-body) {
     padding: 20px 24px;
-    max-height: 74vh;
+    max-height: 72vh;
     overflow-y: auto;
     &::-webkit-scrollbar { width: 4px; }
     &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
   }
   :global(.ant-modal-footer) {
-    padding: 12px 24px;
+    padding: 12px 24px 16px;
     border-top: 1px solid #f1f5f9;
   }
-  :global(.ant-btn-primary) {
+  :global(.ant-modal-footer .ant-btn) {
+    border-radius: 8px;
+    height: 36px;
+    font-weight: 500;
+    font-size: 13.5px;
+  }
+  :global(.ant-modal-footer .ant-btn-primary) {
     background: @primary;
     border-color: @primary;
     &:hover { background: @primary-hover; border-color: @primary-hover; }
+  }
+  :global(.ant-modal-close) {
+    top: 14px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover { background: #f1f5f9; }
   }
 }
 

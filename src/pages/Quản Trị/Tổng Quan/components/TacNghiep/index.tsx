@@ -177,7 +177,7 @@ const TacNghiepView: React.FC = () => {
             <ShoppingCartOutlined style={{ marginRight: 8, color: '#16a34a' }} />
             Trạng thái đơn hàng
           </div>
-          <Button size="small" type="link" className={styles.sectionLink}
+          <Button type="link" className={styles.sectionLink}
             onClick={() => history.push('/quan-tri/don-hang')}>
             Xem tất cả <ArrowRightOutlined />
           </Button>
@@ -237,7 +237,7 @@ const TacNghiepView: React.FC = () => {
           <div className={styles.urgentBanner}>
             <ExclamationCircleOutlined style={{ color: '#ea580c', marginRight: 8 }} />
             <span><strong>{choXacNhan.length} đơn</strong> đang chờ xác nhận</span>
-            <Button size="small" type="primary" className={styles.urgentBtn}
+            <Button type="primary" className={styles.urgentBtn}
               onClick={() => history.push('/quan-tri/don-hang')}>
               Xử lý ngay
             </Button>
@@ -314,7 +314,7 @@ const TacNghiepView: React.FC = () => {
             <InboxOutlined style={{ marginRight: 8, color: '#ea580c' }} />
             Cảnh báo nguyên liệu
           </div>
-          <Button size="small" type="link" className={styles.sectionLink}
+          <Button type="link" className={styles.sectionLink}
             onClick={() => history.push('/quan-tri/kho-nguyen-lieu')}>
             Vào kho <ArrowRightOutlined />
           </Button>

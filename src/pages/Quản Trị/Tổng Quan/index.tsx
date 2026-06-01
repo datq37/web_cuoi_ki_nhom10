@@ -132,7 +132,7 @@ const TongQuan: React.FC = () => {
                 icon={<FileExcelOutlined />}
                 loading={exporting}
                 onClick={handleExportExcel}
-                style={{ borderRadius: 9, fontWeight: 500 }}
+                className={styles.xuatExcelBtn}
               >
                 Xuất Excel
               </Button>

@@ -459,7 +459,7 @@ const KhachHang: React.FC = () => {
 
   return (
     <>
-      <Topbar title="Khách hàng" subtitle="Nhân viên công ty đặt món tại căng tin" />
+      <Topbar title="Khách hàng" />
 
       <div className={styles.pageBody}>
         {/* Stat cards từ data thật */}

@@ -515,7 +515,7 @@ const NhanVienCangTin: React.FC = () => {
 
   return (
     <>
-      <Topbar title="Nhân viên căng tin" subtitle="Đội ngũ quản lý, bếp và thu ngân" />
+      <Topbar title="Nhân viên căng tin" />
 
       <div className={styles.pageBody}>
         {/* Stat cards */}

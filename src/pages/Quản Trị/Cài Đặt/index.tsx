@@ -393,7 +393,7 @@ const CaiDat: React.FC = () => {
 
   return (
     <>
-      <Topbar title="Cài đặt" subtitle="Tuỳ chỉnh thông tin và cấu hình căng tin" />
+      <Topbar title="Cài đặt" />
 
       <div className={styles.pageBody}>
         <div className={styles.settingsWrap}>

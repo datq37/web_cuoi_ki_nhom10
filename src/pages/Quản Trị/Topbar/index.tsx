@@ -72,12 +72,11 @@ const NotifPopup: React.FC<{
 
 interface TopbarProps {
   title?: string;
-  subtitle?: string;
 }
 
 
 
-const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
+const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
   const dateStr = moment().format('D [tháng] M, YYYY');
   const { isDark, toggleDark } = useTheme();
   const { notifs, markRead, markAll } = useNotif();
@@ -181,14 +180,10 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan', subtitle }) => {
     <header className={styles.topbar}>
       <div className={styles.left}>
         <h1 className={styles.pageTitle}>{title}</h1>
-        {subtitle ? (
-          <div className={styles.pageDate}>{subtitle}</div>
-        ) : (
-          <div className={styles.pageDate}>
-            <CalendarOutlined className={styles.calIcon} />
-            <span>Hôm nay, {dateStr}</span>
-          </div>
-        )}
+        <div className={styles.pageDate}>
+          <CalendarOutlined className={styles.calIcon} />
+          <span>Hôm nay, {dateStr}</span>
+        </div>
       </div>
       <div className={styles.right}>
         <Button

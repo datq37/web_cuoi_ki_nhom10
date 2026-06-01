@@ -2,7 +2,6 @@
   AppstoreOutlined,
   ClockCircleOutlined,
   CloseOutlined,
-  CopyOutlined,
   DeleteOutlined,
   EditOutlined,
   FilterOutlined,
@@ -11,7 +10,7 @@
   PlusOutlined,
   SearchOutlined,
   SortAscendingOutlined,
-  StarFilled,
+  StarOutlined,
   UnorderedListOutlined,
 } from '@ant-design/icons';
 import {
@@ -32,6 +31,7 @@ import {
   notification,
 } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import Highlight from '@/components/Highlight';
 import TinyEditor from '@/components/TinyEditor';
 import Topbar from '@/pages/Quản Trị/Topbar';
 import ConfirmModal from '@/pages/Quản Trị/components/ConfirmModal';
@@ -83,9 +83,10 @@ interface MonCardProps {
   onDelete: () => void;
   onToggleCoSan: (id: string, coSan: boolean) => void;
   onDuplicate?: () => void;
+  searchKw?: string;
 }
 
-const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete, onToggleCoSan, onDuplicate }) => {
+const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete, onToggleCoSan, onDuplicate, searchKw }) => {
   const dangBan = mon.coSan !== false;
   return (
     <div
@@ -110,8 +111,8 @@ const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete, onTog
       </div>
 
       <div className={styles.cardBody}>
-        <div className={styles.cardName}>{mon.ten}</div>
-        <div className={styles.cardMoTa}>{mon.moTa}</div>
+        <div className={styles.cardName}><Highlight text={mon.ten} search={searchKw} /></div>
+        <div className={styles.cardMoTa}><Highlight text={mon.moTa || ''} search={searchKw} /></div>
 
         <div className={styles.cardStats}>
           <span className={styles.statItem}>
@@ -120,47 +121,13 @@ const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete, onTog
           </span>
           <span className={styles.statItem}><FireOutlined className={styles.statIcon} /> {mon.calo} kcal</span>
           <span className={styles.statItem}>
-            <StarFilled className={styles.starIcon} />
+            <StarOutlined className={styles.starIcon} />
             {mon.danhGia}
           </span>
         </div>
 
         <div className={styles.cardFooter}>
           <span className={styles.cardGia}>{formatGia(mon.giaBan)}</span>
-          <div className={styles.cardActions}>
-            <Switch
-              size="small"
-              checked={dangBan}
-              onClick={(checked, e) => {
-                e.stopPropagation();
-                onToggleCoSan(mon.id, checked);
-              }}
-              title={dangBan ? 'Đang bán — click để tắt' : 'Tạm hết — click để bật'}
-            />
-            {onDuplicate && (
-              <button
-                className={styles.actionBtn}
-                title="Nhân bản"
-                onClick={(e) => { e.stopPropagation(); onDuplicate(); }}
-              >
-                <CopyOutlined />
-              </button>
-            )}
-            <button
-              className={styles.actionBtn}
-              title="Chỉnh sửa"
-              onClick={(e) => { e.stopPropagation(); onEdit(); }}
-            >
-              <EditOutlined />
-            </button>
-            <button
-              className={`${styles.actionBtn} ${styles.actionDelete}`}
-              title="Xóa"
-              onClick={(e) => { e.stopPropagation(); onDelete(); }}
-            >
-              <DeleteOutlined />
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -382,9 +349,11 @@ interface MonDetailProps {
   mon: IMonAnLocal | null;
   onClose: () => void;
   onEdit: () => void;
+  onDelete: () => void;
+  onToggle: () => void;
 }
 
-const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
+const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit, onDelete, onToggle }) => {
   if (!mon) return null;
 
   const ingredientList = (mon.nguyenLieu ?? [])
@@ -396,10 +365,20 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
       visible={!!mon}
       onCancel={onClose}
       width={520}
-      footer={[
-        <Button key="close" onClick={onClose}>Đóng</Button>,
-        <Button key="edit" type="primary" icon={<EditOutlined />} onClick={onEdit}>Chỉnh sửa</Button>,
-      ]}
+      footer={
+        <div className={styles.modalFooter}>
+          {mon && (
+            <div className={styles.modalFooterLeft}>
+              <Switch checked={mon.coSan !== false} onChange={onToggle} />
+              <span className={styles.modalFooterSwitchLabel}>{mon.coSan !== false ? 'Đang bán' : 'Tạm hết'}</span>
+            </div>
+          )}
+          <div className={styles.modalFooterRight}>
+            <Button danger ghost icon={<DeleteOutlined />} className={styles.modalBtnDanger} onClick={() => { onClose(); onDelete(); }}>Xoá</Button>
+            <Button type="primary" icon={<EditOutlined />} className={styles.modalBtnPrimary} onClick={onEdit}>Chỉnh sửa</Button>
+          </div>
+        </div>
+      }
       title={null}
       destroyOnClose
       className={styles.detailModal}
@@ -464,7 +443,7 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit }) => {
               borderRadius: 8,
             }}>
               <div style={{ fontSize: 18, fontWeight: 700, color: s.color, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
-                {s.star && <StarFilled style={{ fontSize: 14 }} />}
+                {s.star && <StarOutlined style={{ fontSize: 14 }} />}
                 {s.value}
               </div>
               <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2 }}>{s.unit}</div>
@@ -509,7 +488,7 @@ const QuanLyMon: React.FC = () => {
 
   const [activeTab,   setActiveTab]   = useState<EDanhMuc | 'tat_ca'>('tat_ca');
   const [tuKhoa,      setTuKhoa]      = useState('');
-  const [isGrid,      setIsGrid]      = useState(true);
+  const [isGrid,      setIsGrid]      = useState(false);
   const [formOpen,    setFormOpen]    = useState(false);
   const [editing,     setEditing]     = useState<IMonAnLocal | null>(null);
   const [viewing,     setViewing]     = useState<IMonAnLocal | null>(null);
@@ -639,15 +618,15 @@ const QuanLyMon: React.FC = () => {
               <>
                 {/* View toggle sát search — giống Đơn Hàng */}
                 <div className={styles.viewToggle}>
-                  <button className={`${styles.toggleBtn} ${isGrid ? styles.toggleActive : ''}`} onClick={() => setIsGrid(true)} title="Dạng lưới"><AppstoreOutlined /></button>
                   <button className={`${styles.toggleBtn} ${!isGrid ? styles.toggleActive : ''}`} onClick={() => setIsGrid(false)} title="Dạng danh sách"><UnorderedListOutlined /></button>
+                  <button className={`${styles.toggleBtn} ${isGrid ? styles.toggleActive : ''}`} onClick={() => setIsGrid(true)} title="Dạng lưới"><AppstoreOutlined /></button>
                 </div>
 
                 <Dropdown trigger={['click']} overlay={
                   <Menu selectedKeys={[filterCoSan]} onClick={({ key }) => setFilterCoSan(key as typeof filterCoSan)}>
                     <Menu.Item key="all">Tất cả</Menu.Item>
-                    <Menu.Item key="dang_ban">🟢 Đang bán</Menu.Item>
-                    <Menu.Item key="tam_het">🔴 Tạm hết</Menu.Item>
+                    <Menu.Item key="dang_ban">Đang bán</Menu.Item>
+                    <Menu.Item key="tam_het">Tạm hết</Menu.Item>
                   </Menu>
                 }>
                   <Button icon={<FilterOutlined />} className={styles.btnOutline}>
@@ -686,8 +665,8 @@ const QuanLyMon: React.FC = () => {
             <div className={styles.bulkMonBar}>
               <span className={styles.bulkMonCount}>Đã chọn <strong>{selectedIds.length}</strong> món</span>
               <div style={{ display: 'flex', gap: 8 }}>
-                <Button size="small" type="primary" onClick={() => handleBulkToggle(true)}>🟢 Bật tất cả</Button>
-                <Button size="small" danger onClick={() => handleBulkToggle(false)}>🔴 Tắt tất cả</Button>
+                <Button size="small" type="primary" onClick={() => handleBulkToggle(true)}>Bật tất cả</Button>
+                <Button size="small" danger onClick={() => handleBulkToggle(false)}>Tắt tất cả</Button>
                 <Button size="small" onClick={() => setSelectedIds([])}>Bỏ chọn</Button>
               </div>
             </div>
@@ -709,6 +688,7 @@ const QuanLyMon: React.FC = () => {
                   onDelete={() => handleDelete(mon)}
                   onToggleCoSan={handleToggleCoSan}
                   onDuplicate={() => handleDuplicate(mon)}
+                  searchKw={tuKhoa}
                 />
               </div>
             ))}
@@ -728,6 +708,8 @@ const QuanLyMon: React.FC = () => {
         mon={viewing}
         onClose={() => setViewing(null)}
         onEdit={() => { setEditing(viewing); setViewing(null); setFormOpen(true); }}
+        onDelete={() => { if (viewing) handleDelete(viewing.id); setViewing(null); }}
+        onToggle={() => { if (viewing) { const next = !(viewing.coSan !== false); setItems((prev) => prev.map((m) => m.id === viewing.id ? { ...m, coSan: next } : m)); setViewing(prev => prev ? { ...prev, coSan: next } : null); } }}
       />
     </>
   );

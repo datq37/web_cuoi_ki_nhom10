@@ -504,39 +504,12 @@ const NhanVienCangTin: React.FC = () => {
 
   const daBoBoc = tuKhoa.trim() !== '' || locVaiTro !== '';
 
-  const staffStats = useMemo(() => {
-    const quan_ly = danhSach.filter((nv) =>
-      [EVaiTroNhanVien.QUAN_TRI_VIEN, EVaiTroNhanVien.BEP_TRUONG, EVaiTroNhanVien.THU_NGAN].includes(nv.vaiTro),
-    ).length;
-    const bep     = danhSach.filter((nv) => nv.vaiTro === EVaiTroNhanVien.NHAN_VIEN_BEP).length;
-    const phucVu  = danhSach.filter((nv) => nv.vaiTro === EVaiTroNhanVien.NHAN_VIEN_PHUC_VU).length;
-    return { tong: danhSach.length, quan_ly, bep, phucVu };
-  }, [danhSach]);
 
   return (
     <>
       <Topbar title="Nhân viên căng tin" />
 
       <div className={styles.pageBody}>
-        {/* Stat cards */}
-        <div className={styles.statGrid}>
-          {[
-            { label: 'TỔNG NHÂN VIÊN', value: staffStats.tong,    iconBg: '#dcfce7', iconColor: '#16a34a', Icon: TeamOutlined    },
-            { label: 'QUẢN LÝ',        value: staffStats.quan_ly, iconBg: '#dbeafe', iconColor: '#2563eb', Icon: CrownOutlined   },
-            { label: 'NHÂN VIÊN BẾP',  value: staffStats.bep,     iconBg: '#ffedd5', iconColor: '#ea580c', Icon: UserOutlined    },
-            { label: 'PHỤC VỤ',        value: staffStats.phucVu,  iconBg: '#fef9c3', iconColor: '#ca8a04', Icon: UserOutlined    },
-          ].map((c) => (
-            <div key={c.label} className={styles.statCard}>
-              <div className={styles.statLeft}>
-                <div className={styles.statLabel}>{c.label}</div>
-                <div className={styles.statValue}>{c.value}</div>
-              </div>
-              <div className={styles.statIconWrap} style={{ background: c.iconBg }}>
-                <c.Icon style={{ fontSize: 20, color: c.iconColor }} />
-              </div>
-            </div>
-          ))}
-        </div>
 
         <PageToolbar
           searchPlaceholder="Tìm tên, email, SĐT, mã NV..."

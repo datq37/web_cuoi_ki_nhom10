@@ -3,13 +3,9 @@
   EditOutlined,
   ExclamationCircleOutlined,
   FilterOutlined,
-  GiftOutlined,
   MoreOutlined,
-  PercentageOutlined,
   PlusOutlined,
-  RiseOutlined,
   SearchOutlined,
-  TagOutlined,
 } from '@ant-design/icons';
 import {
   Badge,
@@ -35,7 +31,7 @@ import PageToolbar from '@/pages/Quản Trị/components/PageToolbar';
 import {
   DANH_SACH_KHUYEN_MAI,
   DANH_SACH_COMBO,
-  STAT_KHUYEN_MAI,
+
   TRANG_THAI_KM_CONFIG,
 } from '@/services/Quản Trị/Khuyến Mãi';
 import {
@@ -80,18 +76,6 @@ function tinhGiaCombo(combo: ICombo): { tongLe: number; giaCombo: number; tietKi
   return { tongLe, giaCombo, tietKiem: tongLe - giaCombo };
 }
 
-type StatCard = {
-  label: string;
-  value: string;
-  icon: React.ComponentType<any>;
-  iconBg: string;
-  iconColor: string;
-  sub?: string | null;
-  subTrend?: 'up';
-  subBold?: string;
-  subBoldColor?: string;
-  subSuffix?: string;
-};
 
 const KhuyenMaiForm: React.FC<{
   open: boolean;
@@ -845,48 +829,6 @@ const KhuyenMai: React.FC = () => {
   const [comboTuKhoa,         setComboTuKhoa]         = useState('');
   const [comboFilterTrangThai, setComboFilterTrangThai] = useState<ETrangThaiKhuyenMai | null>(null);
 
-  const stats = useMemo(() => ({
-    dangHoatDong: items.filter((k) => k.hoatDong && k.trangThai === ETrangThaiKhuyenMai.DANG_CHAY).length,
-    luotSuDung:   items.reduce((s, k) => s + k.daDung, 0),
-  }), [items]);
-
-  const statCards: StatCard[] = useMemo(() => [
-    {
-      label: 'ĐANG HOẠT ĐỘNG',
-      value: String(stats.dangHoatDong),
-      icon: TagOutlined,
-      iconBg: '#dcfce7',
-      iconColor: '#16a34a',
-    },
-    {
-      label: 'LƯỢT SỬ DỤNG',
-      value: String(stats.luotSuDung),
-      icon: GiftOutlined,
-      iconBg: '#dcfce7',
-      iconColor: '#16a34a',
-      sub: '+18% so với tuần trước',
-      subTrend: 'up',
-    },
-    {
-      label: 'DOANH THU ĐƯỢC TẠO',
-      value: STAT_KHUYEN_MAI.doanhThuTao,
-      icon: RiseOutlined,
-      iconBg: '#fed7aa',
-      iconColor: '#ea580c',
-      sub: '+8.4% so với tuần trước',
-      subTrend: 'up',
-    },
-    {
-      label: 'TỶ LỆ CHUYỂN ĐỔI',
-      value: `${STAT_KHUYEN_MAI.tyLeChuyenDoi}%`,
-      icon: PercentageOutlined,
-      iconBg: '#dcfce7',
-      iconColor: '#16a34a',
-      subBold: '3 mã sắp hết',
-      subBoldColor: '#dc2626',
-      subSuffix: 'so với tuần trước',
-    },
-  ], [stats]);
 
   const danhSachLoc = useMemo(() => {
     let list = items;
@@ -1027,33 +969,6 @@ const KhuyenMai: React.FC = () => {
       <Topbar title="Khuyến mãi" />
 
       <div className={styles.pageBody}>
-          <div className={styles.statGrid}>
-            {statCards.map((card) => (
-              <div key={card.label} className={styles.statCard}>
-                <div className={styles.statLeft}>
-                  <div className={styles.statLabel}>{card.label}</div>
-                  <div className={styles.statValue}>{card.value}</div>
-                  {card.sub && (
-                    <div className={`${styles.statSub} ${card.subTrend === 'up' ? styles.subUp : ''}`}>
-                      {card.subTrend === 'up' && '↗ '}{card.sub}
-                    </div>
-                  )}
-                  {card.subBold && (
-                    <div className={styles.statSubComplex}>
-                      <span style={{ color: card.subBoldColor, fontWeight: 600 }}>
-                        ↘ {card.subBold}
-                      </span>{' '}
-                      <span className={styles.statSubSuffix}>{card.subSuffix}</span>
-                    </div>
-                  )}
-                </div>
-                <div className={styles.statIconWrap} style={{ background: card.iconBg }}>
-                  <card.icon style={{ fontSize: 20, color: card.iconColor }} />
-                </div>
-              </div>
-            ))}
-          </div>
-
           <div className={styles.tabsRow}>
             <button
               className={`${styles.tabBtn} ${activeTab === 'ma-giam-gia' ? styles.tabActive : ''}`}

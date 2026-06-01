@@ -208,105 +208,112 @@ const ChiTietKhachDrawer: React.FC<{
     return orders.filter((o) => o.khachHang.ten.toLowerCase().includes(kw));
   }, [khach, orders]);
 
-  if (!khach) return null;
-  const cfg = TRANG_THAI_KHACH_CONFIG[khach.trangThai];
-  const vaiTroCfg = VAI_TRO_CONFIG[khach.vaiTro];
-  const daDong = khach.trangThai === ETrangThaiKhach.TAM_KHOA;
+  const cfg        = khach ? TRANG_THAI_KHACH_CONFIG[khach.trangThai] : null;
+  const vaiTroCfg  = khach ? VAI_TRO_CONFIG[khach.vaiTro] : null;
+  const daDong     = khach?.trangThai === ETrangThaiKhach.TAM_KHOA;
 
   const donColumns: ColumnsType<any> = [
-    { title: 'Mã đơn',    dataIndex: 'maDon',    key: 'maDon',    width: 100, render: (v) => <span style={{ fontFamily: 'monospace', fontSize: 12, fontWeight: 600 }}>{v}</span> },
-    { title: 'Giờ',       dataIndex: 'thoiGian', key: 'thoiGian', width: 70,  render: (v) => <span style={{ color: '#9ca3af', fontSize: 12 }}>{v}</span> },
-    { title: 'Tổng tiền', dataIndex: 'tongTien', key: 'tongTien', render: (v) => <span style={{ fontWeight: 700, color: '#16a34a' }}>{fmt(v)}</span> },
+    { title: 'Mã đơn',    dataIndex: 'maDon',    key: 'maDon',    width: 100, render: (v: string) => <span style={{ fontFamily: 'monospace', fontSize: 12, fontWeight: 600 }}>{v}</span> },
+    { title: 'Giờ',       dataIndex: 'thoiGian', key: 'thoiGian', width: 70,  render: (v: string) => <span style={{ color: '#9ca3af', fontSize: 12 }}>{v}</span> },
+    { title: 'Tổng tiền', dataIndex: 'tongTien', key: 'tongTien', render: (v: number) => <span style={{ fontWeight: 700, color: '#16a34a' }}>{fmt(v)}</span> },
   ];
 
   return (
-    <Drawer
-      title={null}
-      placement="right"
-      width={400}
+    <Modal
       visible={!!khach}
-      onClose={onClose}
+      title={null}
+      width={580}
+      centered
+      onCancel={onClose}
+      destroyOnClose
       bodyStyle={{ padding: 0 }}
+      className={styles.adminModal}
       footer={
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <Button
             danger={!daDong}
             icon={daDong ? <UnlockOutlined /> : <LockOutlined />}
-            onClick={() => { onKhoa(khach.id); onClose(); }}
+            style={{ borderRadius: 8 }}
+            onClick={() => { if (khach) { onKhoa(khach.id); onClose(); } }}
           >
             {daDong ? 'Mở khoá' : 'Khoá tài khoản'}
           </Button>
           <Button
-            danger icon={<DeleteOutlined />}
-            style={{ marginLeft: 'auto' }}
-            onClick={() => { onXoa(khach.id); onClose(); }}
+            danger
+            icon={<DeleteOutlined />}
+            style={{ marginLeft: 'auto', borderRadius: 8 }}
+            onClick={() => { if (khach) { onXoa(khach.id); onClose(); } }}
           >
             Xoá
           </Button>
         </div>
       }
     >
-      {/* Hero */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px 24px 20px', background: 'linear-gradient(160deg, #f0fdf4 0%, #f8fafc 100%)', borderBottom: '1px solid #f1f5f9', gap: 10 }}>
-        <Avatar size={72} style={{ background: khach.mauNen, color: '#fff', fontWeight: 700, fontSize: 24 }}>{khach.vietTat}</Avatar>
-        <div style={{ fontWeight: 700, fontSize: 17, color: '#111827', textAlign: 'center' }}>{khach.hoTen}</div>
-        <div style={{ fontSize: 12.5, color: '#9ca3af' }}>{khach.email}</div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <span style={{ fontSize: 12, fontWeight: 600, padding: '2px 10px', borderRadius: 20, background: '#f3f4f6', color: vaiTroCfg.color }}>{vaiTroCfg.label}</span>
-          <Tag color={daDong ? 'default' : 'success'} style={{ margin: 0, borderRadius: 20 }}>
-            {daDong ? '🔒 Tạm khoá' : '✅ Hoạt động'}
-          </Tag>
-        </div>
-      </div>
-
-      {/* Thống kê */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 1, borderBottom: '1px solid #f1f5f9', background: '#f1f5f9' }}>
-        {[
-          { label: 'Tổng đơn', value: khach.soDon },
-          { label: 'Chi tiêu', value: formatChiTieu(khach.chiTieu) },
-          { label: 'Tham gia', value: khach.thamGia },
-        ].map((item) => (
-          <div key={item.label} style={{ background: '#fff', padding: '14px 12px', textAlign: 'center' }}>
-            <div style={{ fontSize: 11, color: '#9ca3af', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 4 }}>{item.label}</div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: '#111827' }}>{item.value}</div>
+      {khach && cfg && vaiTroCfg && (
+        <>
+          {/* Hero */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px 24px 20px', background: 'linear-gradient(160deg, #f0fdf4 0%, #f8fafc 100%)', borderBottom: '1px solid #f1f5f9', gap: 10 }}>
+            <Avatar size={72} style={{ background: khach.mauNen, color: '#fff', fontWeight: 700, fontSize: 24 }}>{khach.vietTat}</Avatar>
+            <div style={{ fontWeight: 700, fontSize: 17, color: '#111827', textAlign: 'center' }}>{khach.hoTen}</div>
+            <div style={{ fontSize: 12.5, color: '#9ca3af' }}>{khach.email}</div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <span style={{ fontSize: 12, fontWeight: 600, padding: '2px 10px', borderRadius: 20, background: '#f3f4f6', color: vaiTroCfg.color }}>{vaiTroCfg.label}</span>
+              <Tag color={daDong ? 'default' : 'success'} style={{ margin: 0, borderRadius: 20 }}>
+                {daDong ? '🔒 Tạm khoá' : '✅ Hoạt động'}
+              </Tag>
+            </div>
           </div>
-        ))}
-      </div>
 
-      {/* Thêm thông tin */}
-      <div style={{ padding: '16px 20px', borderBottom: '1px solid #f1f5f9' }}>
-        <div style={{ fontSize: 11, fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 10 }}>Thông tin</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
-            <span style={{ color: '#6b7280' }}>Phòng ban</span>
-            <span style={{ fontWeight: 500, color: '#111827' }}>{khach.phongBan}</span>
+          {/* Thống kê */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 1, borderBottom: '1px solid #f1f5f9', background: '#f1f5f9' }}>
+            {[
+              { label: 'Tổng đơn', value: khach.soDon },
+              { label: 'Chi tiêu', value: formatChiTieu(khach.chiTieu) },
+              { label: 'Tham gia', value: khach.thamGia },
+            ].map((item) => (
+              <div key={item.label} style={{ background: '#fff', padding: '14px 12px', textAlign: 'center' }}>
+                <div style={{ fontSize: 11, color: '#9ca3af', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 4 }}>{item.label}</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: '#111827' }}>{item.value}</div>
+              </div>
+            ))}
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
-            <span style={{ color: '#6b7280' }}>Mã khách</span>
-            <span style={{ fontWeight: 500, color: '#111827', fontFamily: 'monospace', fontSize: 12 }}>{khach.id.toUpperCase()}</span>
-          </div>
-        </div>
-      </div>
 
-      {/* Lịch sử đơn */}
-      <div style={{ padding: '16px 20px' }}>
-        <div style={{ fontSize: 11, fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 10 }}>
-          Lịch sử đơn ({lichSuDon.length})
-        </div>
-        {lichSuDon.length === 0 ? (
-          <div style={{ textAlign: 'center', color: '#9ca3af', fontSize: 13, padding: '16px 0' }}>Chưa có đơn nào</div>
-        ) : (
-          <Table
-            dataSource={lichSuDon}
-            columns={donColumns}
-            rowKey="maDon"
-            size="small"
-            pagination={lichSuDon.length > 5 ? { pageSize: 5, simple: true } : false}
-            style={{ fontSize: 12 }}
-          />
-        )}
-      </div>
-    </Drawer>
+          {/* Thông tin */}
+          <div style={{ padding: '16px 24px', borderBottom: '1px solid #f1f5f9' }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 10 }}>Thông tin</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
+                <span style={{ color: '#6b7280' }}>Phòng ban</span>
+                <span style={{ fontWeight: 500, color: '#111827' }}>{khach.phongBan}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
+                <span style={{ color: '#6b7280' }}>Mã khách</span>
+                <span style={{ fontWeight: 500, color: '#111827', fontFamily: 'monospace', fontSize: 12 }}>{khach.id.toUpperCase()}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Lịch sử đơn */}
+          <div style={{ padding: '16px 24px' }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 10 }}>
+              Lịch sử đơn ({lichSuDon.length})
+            </div>
+            {lichSuDon.length === 0 ? (
+              <div style={{ textAlign: 'center', color: '#9ca3af', fontSize: 13, padding: '16px 0' }}>Chưa có đơn nào</div>
+            ) : (
+              <Table
+                dataSource={lichSuDon}
+                columns={donColumns}
+                rowKey="maDon"
+                size="small"
+                pagination={lichSuDon.length > 5 ? { pageSize: 5, simple: true } : false}
+                style={{ fontSize: 12 }}
+              />
+            )}
+          </div>
+        </>
+      )}
+    </Modal>
   );
 };
 

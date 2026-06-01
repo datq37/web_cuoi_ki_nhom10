@@ -1,16 +1,19 @@
 import {
   AppstoreOutlined,
+  CalendarOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
   CloseOutlined,
-  FireOutlined,
+  CloseCircleOutlined,
+  HistoryOutlined,
   SearchOutlined,
-  ShoppingCartOutlined,
   UnorderedListOutlined,
-  WalletOutlined,
 } from '@ant-design/icons';
-import { Button, DatePicker, Input, Modal, message } from 'antd';
-import dayjs, { Dayjs } from 'dayjs';
+import { Button, DatePicker, Input, Modal, Table, message } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import dayjs from 'dayjs';
+import moment from 'moment';
+import 'moment/locale/vi';
 import React, { useMemo, useState, useEffect } from 'react';
 import { useNotif } from '@/context/NotifContext';
 import Topbar from '@/pages/Quản Trị/Topbar';
@@ -27,16 +30,96 @@ import styles from './index.less';
 
 type TabKey = 'tat_ca' | ETrangThaiTrucTiep | 'da_huy';
 
-const TABS: { key: TabKey; label: string }[] = [
-  { key: 'tat_ca',                         label: 'Tất cả'        },
-  { key: ETrangThaiTrucTiep.CHO_XAC_NHAN, label: 'Chờ xác nhận' },
-  { key: ETrangThaiTrucTiep.DANG_CHE_BIEN, label: 'Đang chế biến'},
-  { key: ETrangThaiTrucTiep.SAN_SANG,      label: 'Sẵn sàng'     },
-  { key: ETrangThaiTrucTiep.HOAN_THANH,   label: 'Hoàn thành'   },
-  { key: 'da_huy',                         label: 'Đã huỷ'       },
+const TABS: { key: TabKey; label: string; dot?: string }[] = [
+  { key: 'tat_ca',                          label: 'Tất cả'         },
+  { key: ETrangThaiTrucTiep.CHO_XAC_NHAN,  label: 'Chờ xác nhận',  dot: '#ea580c' },
+  { key: ETrangThaiTrucTiep.DANG_CHE_BIEN, label: 'Đang chế biến', dot: '#2563eb' },
+  { key: ETrangThaiTrucTiep.SAN_SANG,      label: 'Sẵn sàng',      dot: '#7c3aed' },
+  { key: ETrangThaiTrucTiep.HOAN_THANH,    label: 'Hoàn thành',    dot: '#16a34a' },
+  { key: 'da_huy',                          label: 'Đã huỷ',        dot: '#9ca3af' },
 ];
 
-const TODAY = dayjs().format('DD/MM/YYYY');
+
+// ── Component bảng lịch sử ───────────────────────────────────────
+const LICH_SU_STATUS: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
+  [ETrangThaiTrucTiep.HOAN_THANH]:    { label: 'Hoàn thành',    color: '#16a34a', icon: <CheckCircleOutlined /> },
+  [ETrangThaiTrucTiep.DANG_CHE_BIEN]: { label: 'Đang chế biến', color: '#2563eb', icon: <ClockCircleOutlined /> },
+  [ETrangThaiTrucTiep.CHO_XAC_NHAN]: { label: 'Chờ xác nhận',  color: '#ea580c', icon: <ClockCircleOutlined /> },
+  [ETrangThaiTrucTiep.SAN_SANG]:      { label: 'Sẵn sàng',      color: '#7c3aed', icon: <CheckCircleOutlined /> },
+  da_huy:                              { label: 'Đã huỷ',        color: '#9ca3af', icon: <CloseCircleOutlined /> },
+};
+
+const LichSuTable: React.FC<{
+  orders: DonTrucTiep[];
+  cancelledIds: Set<string>;
+  onRowClick: (o: DonTrucTiep) => void;
+}> = ({ orders, cancelledIds, onRowClick }) => {
+  const columns: ColumnsType<DonTrucTiep> = [
+    {
+      title: 'Mã đơn',
+      dataIndex: 'maDon',
+      width: 110,
+      render: (v: string) => <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: 12 }}>{v}</span>,
+    },
+    {
+      title: 'Khách hàng',
+      key: 'kh',
+      render: (_: any, r: DonTrucTiep) => (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>{r.khachHang.ten}</span>
+          <span style={{ fontSize: 11.5, color: '#9ca3af' }}>{r.khachHang.phong}</span>
+        </div>
+      ),
+    },
+    {
+      title: 'Món ăn',
+      key: 'mon',
+      render: (_: any, r: DonTrucTiep) => (
+        <span style={{ fontSize: 12.5, color: '#6b7280' }}>
+          {r.monAn.map((m) => `${m.ten} ×${m.soLuong}`).join(', ')}
+        </span>
+      ),
+    },
+    {
+      title: 'Tổng tiền',
+      dataIndex: 'tongTien',
+      width: 110,
+      align: 'right',
+      render: (v: number) => <span style={{ fontWeight: 700, color: '#16a34a' }}>{fmt(v)}</span>,
+    },
+    {
+      title: 'Giờ',
+      dataIndex: 'thoiGian',
+      width: 75,
+      render: (v: string) => <span style={{ color: '#9ca3af', fontSize: 12 }}>{v}</span>,
+    },
+    {
+      title: 'Trạng thái',
+      width: 140,
+      render: (_: any, r: DonTrucTiep) => {
+        const key = cancelledIds.has(r.maDon) ? 'da_huy' : r.trangThai as string;
+        const cfg = LICH_SU_STATUS[key] ?? LICH_SU_STATUS['da_huy'];
+        return (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12.5, fontWeight: 600, color: cfg.color }}>
+            {cfg.icon} {cfg.label}
+          </span>
+        );
+      },
+    },
+  ];
+
+  return (
+    <Table<DonTrucTiep>
+      dataSource={orders}
+      columns={columns}
+      rowKey="maDon"
+      size="small"
+      pagination={{ pageSize: 15, showTotal: (t) => `${t} đơn`, showSizeChanger: false }}
+      onRow={(r) => ({ onClick: () => onRowClick(r), style: { cursor: 'pointer' } })}
+      locale={{ emptyText: 'Không có đơn nào trong ngày này' }}
+    />
+  );
+};
 
 const DonHang: React.FC = () => {
   const { addNotif } = useNotif();
@@ -92,21 +175,36 @@ const DonHang: React.FC = () => {
   }, [orders, cancelledIds]);
 
   // ── UI state (cục bộ) ─────────────────────────────────────────────
+  const [viewMode,      setViewMode]      = useState<'homnay' | 'lichsu'>('homnay');
   const [activeTab,     setActiveTab]     = useState<TabKey>('tat_ca');
   const [view,          setView]          = useState<'table' | 'kanban'>('table');
   const [searchKw,      setSearchKw]      = useState('');
   const [selectedRows,  setSelectedRows]  = useState<string[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<DonTrucTiep | null>(null);
-  const [filterDate,    setFilterDate]    = useState<Dayjs>(dayjs());
 
-  const isToday = filterDate.format('DD/MM/YYYY') === TODAY;
+  // ── Lịch sử state ────────────────────────────────────────────────
+  const [lichSuDate,    setLichSuDate]    = useState<any>(moment());
+  const [lichSuSearch,  setLichSuSearch]  = useState('');
+
+  // Đơn lịch sử: hoàn thành + đã huỷ (dùng tất cả orders làm demo)
+  const lichSuOrders = useMemo(() => {
+    let list = [...orders];
+    if (lichSuSearch.trim()) {
+      const kw = lichSuSearch.toLowerCase();
+      list = list.filter((o) =>
+        o.maDon.toLowerCase().includes(kw) ||
+        o.khachHang.ten.toLowerCase().includes(kw) ||
+        o.monAn.some((m) => m.ten.toLowerCase().includes(kw)),
+      );
+    }
+    return list;
+  }, [orders, lichSuSearch]);
 
   // stats và tabCounts đã lấy từ useModel phía trên
 
   // ── Filtered orders ──────────────────────────────────────────────
   const filteredOrders = useMemo(() => {
     // Nếu không phải hôm nay → không có đơn (mock chỉ có dữ liệu hôm nay)
-    if (!isToday) return [];
 
     let list =
       activeTab === 'da_huy'
@@ -122,11 +220,12 @@ const DonHang: React.FC = () => {
       list = list.filter(
         (o) =>
           o.maDon.toLowerCase().includes(kw) ||
-          o.khachHang.ten.toLowerCase().includes(kw),
+          o.khachHang.ten.toLowerCase().includes(kw) ||
+          o.monAn.some((m) => m.ten.toLowerCase().includes(kw)),
       );
     }
     return list;
-  }, [orders, activeTab, searchKw, cancelledIds, isToday]);
+  }, [orders, activeTab, searchKw, cancelledIds]);
 
   // ── Handlers ─────────────────────────────────────────────────────
   const handleMoveStatus = (
@@ -228,52 +327,27 @@ const DonHang: React.FC = () => {
 
       <div className={styles.pageBody}>
 
-        {/* ── Stat cards ───────────────────────────────────────── */}
-        <div className={styles.statGrid}>
-          <div className={styles.statCard}>
-            <div className={styles.statLeft}>
-              <div className={styles.statLabel}>TỔNG ĐƠN HÔM NAY</div>
-              <div className={styles.statValue}>{stats.tong}</div>
-            </div>
-            <div className={styles.statIconWrap} style={{ background: '#dcfce7' }}>
-              <ShoppingCartOutlined style={{ fontSize: 20, color: '#16a34a' }} />
-            </div>
-          </div>
-
-          <div className={`${styles.statCard} ${stats.choXacNhan > 0 ? styles.statCardAlert : ''}`}>
-            <div className={styles.statLeft}>
-              <div className={styles.statLabel}>CHỜ XÁC NHẬN</div>
-              <div className={styles.statValue}>{stats.choXacNhan}</div>
-              {stats.choXacNhan > 0 && (
-                <div className={styles.statSub} style={{ color: '#ea580c' }}>Cần xử lý ngay</div>
-              )}
-            </div>
-            <div className={styles.statIconWrap} style={{ background: stats.choXacNhan > 0 ? '#ffedd5' : '#f3f4f6' }}>
-              <ClockCircleOutlined style={{ fontSize: 20, color: stats.choXacNhan > 0 ? '#ea580c' : '#9ca3af' }} />
-            </div>
-          </div>
-
-          <div className={styles.statCard}>
-            <div className={styles.statLeft}>
-              <div className={styles.statLabel}>ĐANG CHẾ BIẾN</div>
-              <div className={styles.statValue}>{stats.dangCheBien}</div>
-            </div>
-            <div className={styles.statIconWrap} style={{ background: '#eff6ff' }}>
-              <FireOutlined style={{ fontSize: 20, color: '#3b82f6' }} />
-            </div>
-          </div>
-
-          <div className={styles.statCard}>
-            <div className={styles.statLeft}>
-              <div className={styles.statLabel}>DOANH THU HÔM NAY</div>
-              <div className={styles.statValue} style={{ fontSize: 20 }}>{fmt(stats.doanhThu)}</div>
-            </div>
-            <div className={styles.statIconWrap} style={{ background: '#dcfce7' }}>
-              <WalletOutlined style={{ fontSize: 20, color: '#16a34a' }} />
-            </div>
-          </div>
+        {/* ── Outer tabs: Hôm nay / Lịch sử ───────────────────── */}
+        <div className={styles.outerTabsRow}>
+          <button
+            className={`${styles.outerTabBtn} ${viewMode === 'homnay' ? styles.outerTabActive : ''}`}
+            onClick={() => setViewMode('homnay')}
+          >
+            <CalendarOutlined style={{ marginRight: 6 }} />
+            Hôm nay
+          </button>
+          <button
+            className={`${styles.outerTabBtn} ${viewMode === 'lichsu' ? styles.outerTabActive : ''}`}
+            onClick={() => setViewMode('lichsu')}
+          >
+            <HistoryOutlined style={{ marginRight: 6 }} />
+            Lịch sử đơn hàng
+          </button>
         </div>
 
+        {/* ════════ TAB HÔM NAY ════════ */}
+        {viewMode === 'homnay' && (
+          <>
         {/* ── Tabs ─────────────────────────────────────────────── */}
         <div className={styles.tabsRow}>
           {TABS.map((tab) => (
@@ -282,6 +356,9 @@ const DonHang: React.FC = () => {
               className={`${styles.tabBtn} ${activeTab === tab.key ? styles.tabActive : ''}`}
               onClick={() => setActiveTab(tab.key)}
             >
+              {tab.dot && (
+                <span className={styles.tabDot} style={{ background: tab.dot }} />
+              )}
               {tab.label}
               {tabCounts[tab.key] > 0 && (
                 <span className={styles.tabCount}>{tabCounts[tab.key]}</span>
@@ -292,32 +369,16 @@ const DonHang: React.FC = () => {
 
         {/* ── Toolbar ──────────────────────────────────────────── */}
         <PageToolbar
-          searchPlaceholder="Tìm theo mã đơn, tên khách..."
+          searchPlaceholder="Tìm mã đơn, tên khách, tên món..."
           searchValue={searchKw}
           onSearch={setSearchKw}
           filters={
-            <>
-              <DatePicker
-                value={filterDate}
-                onChange={(d) => d && setFilterDate(d)}
-                format="DD/MM/YYYY"
-                allowClear={false}
-                className={styles.datePicker}
-                placeholder="Chọn ngày"
-              />
-              {!isToday && (
-                <Button size="small" onClick={() => setFilterDate(dayjs())} className={styles.btnResetDate}>
-                  Hôm nay
-                </Button>
-              )}
-            </>
-          }
-          actions={
             <div className={styles.viewToggle}>
               <button className={`${styles.toggleBtn} ${view === 'table' ? styles.toggleActive : ''}`} onClick={() => setView('table')} title="Dạng bảng"><UnorderedListOutlined /></button>
               <button className={`${styles.toggleBtn} ${view === 'kanban' ? styles.toggleActive : ''}`} onClick={() => setView('kanban')} title="Dạng kanban"><AppstoreOutlined /></button>
             </div>
           }
+          actions={undefined}
         />
 
         {/* ── Bulk bar ─────────────────────────────────────────── */}
@@ -347,9 +408,7 @@ const DonHang: React.FC = () => {
         {filteredOrders.length === 0 ? (
           <EmptyState
             kind="orders"
-            title={!isToday ? `Không có đơn ngày ${filterDate.format('DD/MM/YYYY')}` : undefined}
-            desc={!isToday ? 'Dữ liệu lịch sử chưa được lưu trữ.' : 'Chưa có đơn hàng nào.'}
-            action={!isToday ? { label: 'Về hôm nay', onClick: () => setFilterDate(dayjs()) } : undefined}
+            desc="Chưa có đơn hàng nào."
           />
         ) : view === 'table' ? (
           <OrderTable
@@ -358,6 +417,8 @@ const DonHang: React.FC = () => {
             setSelectedRows={setSelectedRows}
             onRowClick={setSelectedOrder}
             cancelledIds={cancelledIds}
+            searchValue={searchKw}
+            onQuickConfirm={(maDon) => handleMoveStatus(maDon, ETrangThaiTrucTiep.DANG_CHE_BIEN)}
           />
         ) : (
           <OrderKanban
@@ -367,6 +428,44 @@ const DonHang: React.FC = () => {
             onMoveStatus={handleMoveStatus}
           />
         )}
+          </>
+        )}
+
+        {/* ════════ TAB LỊCH SỬ ════════ */}
+        {viewMode === 'lichsu' && (
+          <div className={styles.lichSuWrap}>
+            {/* Toolbar lịch sử */}
+            <div className={styles.lichSuToolbar}>
+              <DatePicker
+                value={lichSuDate}
+                onChange={(d) => setLichSuDate(d)}
+                format="DD/MM/YYYY"
+                placeholder="Chọn ngày"
+                style={{ width: 160, borderRadius: 8 }}
+                allowClear={false}
+              />
+              <Input
+                prefix={<SearchOutlined style={{ color: '#9ca3af' }} />}
+                placeholder="Tìm mã đơn, tên khách, tên món..."
+                value={lichSuSearch}
+                onChange={(e) => setLichSuSearch(e.target.value)}
+                allowClear
+                style={{ width: 300, borderRadius: 8 }}
+              />
+              <span className={styles.lichSuCount}>
+                {lichSuOrders.length} đơn
+              </span>
+            </div>
+
+            {/* Bảng lịch sử */}
+            <LichSuTable
+              orders={lichSuOrders}
+              cancelledIds={cancelledIds}
+              onRowClick={setSelectedOrder}
+            />
+          </div>
+        )}
+
       </div>
 
       <OrderDrawer

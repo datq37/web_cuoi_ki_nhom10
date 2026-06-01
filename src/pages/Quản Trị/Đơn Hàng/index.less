@@ -10,6 +10,59 @@
   gap: 12px;
 }
 
+// ── Outer tabs: Hôm nay / Lịch sử ────────────────────────────────
+.outerTabsRow {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid @border;
+  margin-bottom: -1px;
+}
+
+.outerTabBtn {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  color: @text-muted;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.15s;
+  border-radius: 8px 8px 0 0;
+
+  &:hover { color: @text-dark; background: @surface-hover; }
+}
+
+.outerTabActive {
+  color: @primary !important;
+  border-bottom-color: @primary !important;
+  font-weight: 700;
+}
+
+// ── Lịch sử ──────────────────────────────────────────────────────
+.lichSuWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lichSuToolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.lichSuCount {
+  font-size: 13px;
+  color: @text-muted;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
 // ── Stat cards (4 cột — đồng nhất với Khách Hàng, Kho) ──────────
 .statGrid {
   display: grid;
@@ -89,6 +142,15 @@
   border-radius: 10px;
   padding: 4px;
   align-self: flex-start;
+}
+
+.tabDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  opacity: 0.7;
+  .tabActive & { opacity: 1; }
 }
 
 .tabBtn {
@@ -224,6 +286,10 @@
 }
 
 :global([data-theme="dark"]) {
+  .outerTabsRow { border-bottom-color: #334155; }
+  .outerTabBtn  { color: #64748b; &:hover { background: #0f172a; color: #cbd5e1; } }
+  .lichSuCount  { color: #64748b; }
+
   .statCard    { background: #1e293b; border-color: #334155; }
   .statCardAlert { background: rgba(234,88,12,.1) !important; border-color: rgba(234,88,12,.3) !important; }
   .statValue   { color: #f1f5f9; }

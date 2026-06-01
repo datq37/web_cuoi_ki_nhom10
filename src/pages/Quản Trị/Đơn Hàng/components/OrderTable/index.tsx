@@ -1,8 +1,9 @@
 import {
   ArrowRightOutlined,
+  CheckOutlined,
   ClockCircleOutlined,
 } from '@ant-design/icons';
-import { Avatar, Table } from 'antd';
+import { Avatar, Button, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import React from 'react';
 import { COT_CONFIG, fmt } from '@/models/Quản Trị/Tổng Quan';
@@ -16,9 +17,22 @@ interface OrderTableProps {
   setSelectedRows: (keys: string[]) => void;
   onRowClick: (order: DonTrucTiep) => void;
   cancelledIds: Set<string>;
+  searchValue?: string;
+  onQuickConfirm?: (maDon: string) => void;
 }
 
 const HUY_CFG = { tieuDe: 'Đã huỷ', mau: '#6b7280', bgLight: '#f3f4f6' };
+
+/** Tính số phút chờ từ thoiGian "HH:mm" đến hiện tại */
+function calcWaitMinutes(thoiGian: string): number {
+  try {
+    const [h, m] = thoiGian.split(':').map(Number);
+    const now = new Date();
+    const orderMin = h * 60 + m;
+    const nowMin   = now.getHours() * 60 + now.getMinutes();
+    return Math.max(0, nowMin - orderMin);
+  } catch { return 0; }
+}
 
 const getStatusCfg = (trangThai: ETrangThaiTrucTiep, cancelled: boolean) =>
   cancelled ? HUY_CFG : COT_CONFIG[trangThai];
@@ -29,6 +43,8 @@ const OrderTable: React.FC<OrderTableProps> = ({
   setSelectedRows,
   onRowClick,
   cancelledIds,
+  searchValue,
+  onQuickConfirm,
 }) => {
   const columns: ColumnsType<DonTrucTiep> = [
     {
@@ -41,23 +57,26 @@ const OrderTable: React.FC<OrderTableProps> = ({
     {
       title: 'Khách hàng',
       key: 'khachHang',
-      render: (_: any, r: DonTrucTiep) => (
-        <div className={styles.khachCell}>
-          <Avatar
-            size={32}
-            style={{
-              background: r.khachHang.mauNen,
-              color: r.khachHang.mauChu,
-              fontWeight: 700,
-              fontSize: 12,
-              flexShrink: 0,
-            }}
-          >
-            {r.khachHang.vietTat}
-          </Avatar>
-          <span className={styles.tenKH}>{r.khachHang.ten}</span>
-        </div>
-      ),
+      render: (_: any, r: DonTrucTiep) => {
+        const isCho = r.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN && !cancelledIds.has(r.maDon);
+        const waitMin = isCho ? calcWaitMinutes(r.thoiGian) : 0;
+        const isLate = waitMin >= 10;
+        return (
+          <div className={styles.khachCell}>
+            <Avatar size={32} style={{ background: r.khachHang.mauNen, color: r.khachHang.mauChu, fontWeight: 700, fontSize: 12, flexShrink: 0 }}>
+              {r.khachHang.vietTat}
+            </Avatar>
+            <div>
+              <span className={styles.tenKH}>{r.khachHang.ten}</span>
+              {isLate && (
+                <div style={{ fontSize: 11, color: '#dc2626', fontWeight: 600, marginTop: 2 }}>
+                  ⏱ Chờ {waitMin} phút
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      },
     },
     {
       title: 'Món ăn',
@@ -113,9 +132,27 @@ const OrderTable: React.FC<OrderTableProps> = ({
     },
     {
       title: '',
-      key: 'arrow',
-      width: 36,
-      render: () => <ArrowRightOutlined className={styles.chevron} />,
+      key: 'actions',
+      width: 80,
+      render: (_: any, r: DonTrucTiep) => {
+        const isCho = r.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN && !cancelledIds.has(r.maDon);
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }} onClick={(e) => e.stopPropagation()}>
+            {isCho && onQuickConfirm && (
+              <Tooltip title="Xác nhận — chuyển sang Đang chế biến">
+                <Button
+                  size="small"
+                  type="primary"
+                  icon={<CheckOutlined />}
+                  style={{ borderRadius: 6, fontSize: 11, padding: '0 7px', height: 26 }}
+                  onClick={() => onQuickConfirm(r.maDon)}
+                />
+              </Tooltip>
+            )}
+            <ArrowRightOutlined className={styles.chevron} />
+          </div>
+        );
+      },
     },
   ];
 
@@ -129,16 +166,8 @@ const OrderTable: React.FC<OrderTableProps> = ({
       }}
       columns={columns}
       dataSource={orders}
-      pagination={{
-        pageSize: 10,
-        showTotal: (total) => `Tổng ${total} đơn`,
-        showSizeChanger: false,
-        size: 'small',
-      }}
-      onRow={(record) => ({
-        onClick: () => onRowClick(record),
-        style: { cursor: 'pointer' },
-      })}
+      pagination={{ pageSize: 10, showTotal: (t) => `Tổng ${t} đơn`, showSizeChanger: false, size: 'small' }}
+      onRow={(record) => ({ onClick: () => onRowClick(record), style: { cursor: 'pointer' } })}
       locale={{ emptyText: 'Không có đơn hàng nào' }}
     />
   );

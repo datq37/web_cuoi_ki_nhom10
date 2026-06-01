@@ -23,7 +23,7 @@ import {
   message,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import TableStaticData from '@/components/TableStaticData';
 import EmptyState from '@/pages/Quản Trị/components/EmptyState';
 import PageToolbar from '@/pages/Quản Trị/components/PageToolbar';

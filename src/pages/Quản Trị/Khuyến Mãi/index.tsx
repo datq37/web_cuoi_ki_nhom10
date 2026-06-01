@@ -960,6 +960,9 @@ const KhuyenMai: React.FC = () => {
       okText: 'Xoá',
       okType: 'danger',
       cancelText: 'Huỷ',
+      centered: true,
+      okButtonProps: { style: { borderRadius: 8 } },
+      cancelButtonProps: { style: { borderRadius: 8 } },
       onOk: () => {
         setComboItems((prev) => prev.filter((c) => c.id !== item.id));
         message.success(`Đã xoá combo "${item.ten}"`);

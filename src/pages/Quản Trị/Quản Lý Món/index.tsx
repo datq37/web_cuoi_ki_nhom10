@@ -226,7 +226,8 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
       width={660}
       title={initial ? `Chỉnh sửa: ${initial.ten}` : 'Thêm món mới'}
       destroyOnClose
-      okButtonProps={{ type: 'primary' }}
+      okButtonProps={{ type: 'primary', style: { borderRadius: 8 } }}
+      cancelButtonProps={{ style: { borderRadius: 8 } }}
       className={styles.formModal}
       transitionName="ant-move-up"
     >

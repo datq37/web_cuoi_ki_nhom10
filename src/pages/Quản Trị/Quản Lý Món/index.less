@@ -13,6 +13,55 @@
   gap: 16px;
 }
 
+// ── Stat cards món ───────────────────────────────────────────────
+.monStatGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  @media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); }
+}
+
+.monStatCard {
+  background: @surface;
+  border: 1px solid @border;
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+
+.monStatValue { font-size: 28px; font-weight: 800; line-height: 1; }
+.monStatLabel { font-size: 11px; font-weight: 600; color: @text-light; text-transform: uppercase; letter-spacing: 0.5px; }
+.monStatBar   { height: 4px; border-radius: 99px; overflow: hidden; margin-top: 4px; }
+
+// ── Bulk action bar ───────────────────────────────────────────────
+.bulkMonBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: @primary-50;
+  border: 1px solid @primary-200;
+  border-radius: 10px;
+}
+
+.bulkMonCount { font-size: 13.5px; color: @primary-dark; }
+
+// ── Card + checkbox wrapper ───────────────────────────────────────
+.monCardWrap {
+  position: relative;
+}
+
+.monCheckbox {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+}
+
 .tabsRow {
   display: flex;
   gap: 4px;
@@ -118,6 +167,18 @@
 .toggleActive {
   background: @primary !important;
   color: #fff !important;
+}
+
+// Button outline — đồng bộ với Đơn Hàng
+.btnOutline {
+  border-radius: 8px !important;
+  font-weight: 500;
+  border-color: #d1d5db !important;
+  color: @text-mid !important;
+  &:hover {
+    border-color: @primary !important;
+    color: @primary !important;
+  }
 }
 
 .addBtn {
@@ -608,6 +669,11 @@
 }
 
 :global([data-theme="dark"]) {
+  .monStatCard  { background: #1e293b; border-color: #334155; }
+  .monStatValue { color: inherit; }
+  .bulkMonBar   { background: rgba(22,163,74,.08); border-color: rgba(22,163,74,.3); }
+  .bulkMonCount { color: #4ade80; }
+
   .coSanFilter { background: #0f172a; }
   .coSanBtn { color: #64748b; &:hover { color: #f1f5f9; } }
   .coSanBtnActive { background: #1e293b; color: #f1f5f9; }

@@ -2,6 +2,7 @@
   AppstoreOutlined,
   ClockCircleOutlined,
   CloseOutlined,
+  CopyOutlined,
   DeleteOutlined,
   EditOutlined,
   FilterOutlined,
@@ -9,11 +10,13 @@
   PictureOutlined,
   PlusOutlined,
   SearchOutlined,
+  SortAscendingOutlined,
   StarFilled,
   UnorderedListOutlined,
 } from '@ant-design/icons';
 import {
   Button,
+  Checkbox,
   Col,
   Dropdown,
   Form,
@@ -79,9 +82,10 @@ interface MonCardProps {
   onEdit: () => void;
   onDelete: () => void;
   onToggleCoSan: (id: string, coSan: boolean) => void;
+  onDuplicate?: () => void;
 }
 
-const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete, onToggleCoSan }) => {
+const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete, onToggleCoSan, onDuplicate }) => {
   const dangBan = mon.coSan !== false;
   return (
     <div
@@ -133,6 +137,15 @@ const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete, onTog
               }}
               title={dangBan ? 'Đang bán — click để tắt' : 'Tạm hết — click để bật'}
             />
+            {onDuplicate && (
+              <button
+                className={styles.actionBtn}
+                title="Nhân bản"
+                onClick={(e) => { e.stopPropagation(); onDuplicate(); }}
+              >
+                <CopyOutlined />
+              </button>
+            )}
             <button
               className={styles.actionBtn}
               title="Chỉnh sửa"
@@ -500,6 +513,8 @@ const QuanLyMon: React.FC = () => {
   const [editing,     setEditing]     = useState<IMonAnLocal | null>(null);
   const [viewing,     setViewing]     = useState<IMonAnLocal | null>(null);
   const [filterCoSan, setFilterCoSan] = useState<'all' | 'dang_ban' | 'tam_het'>('all');
+  const [sortBy,      setSortBy]      = useState<'mac_dinh' | 'gia_tang' | 'gia_giam' | 'danh_gia'>('mac_dinh');
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const tabs = useMemo<TabDanhMuc[]>(() => [
     { key: 'tat_ca',           label: 'Tất cả',    soLuong: items.length },
@@ -508,6 +523,14 @@ const QuanLyMon: React.FC = () => {
     { key: EDanhMuc.AN_VAT,    label: 'Ăn vặt',    soLuong: items.filter((m) => m.danhMuc === EDanhMuc.AN_VAT).length },
     { key: EDanhMuc.MON_CHAY,  label: 'Món chay',  soLuong: items.filter((m) => m.danhMuc === EDanhMuc.MON_CHAY).length },
   ], [items]);
+
+  // ── Stat cards ────────────────────────────────────────────────────
+  const monStats = useMemo(() => ({
+    tong:     items.length,
+    dangBan:  items.filter((m) => m.coSan !== false).length,
+    tamHet:   items.filter((m) => m.coSan === false).length,
+    danhMuc:  new Set(items.map((m) => m.danhMuc)).size,
+  }), [items]);
 
   const danhSachLoc = useMemo(() => {
     let ds = items;
@@ -518,8 +541,12 @@ const QuanLyMon: React.FC = () => {
       const kw = tuKhoa.toLowerCase();
       ds = ds.filter((m) => m.ten.toLowerCase().includes(kw) || m.moTa.toLowerCase().includes(kw));
     }
+    // Sort
+    if (sortBy === 'gia_tang') ds = [...ds].sort((a, b) => a.giaBan - b.giaBan);
+    if (sortBy === 'gia_giam') ds = [...ds].sort((a, b) => b.giaBan - a.giaBan);
+    if (sortBy === 'danh_gia') ds = [...ds].sort((a, b) => b.danhGia - a.danhGia);
     return ds;
-  }, [activeTab, tuKhoa, filterCoSan, items]);
+  }, [activeTab, tuKhoa, filterCoSan, sortBy, items]);
 
   const handleToggleCoSan = (id: string, coSan: boolean) => {
     const mon = items.find((m) => m.id === id);
@@ -560,6 +587,29 @@ const QuanLyMon: React.FC = () => {
     setEditing(null);
   };
 
+  const handleDuplicate = (mon: IMonAnLocal) => {
+    const copy: IMonAnLocal = {
+      ...mon,
+      id:  `mon_${Date.now()}`,
+      ten: `${mon.ten} (copy)`,
+    };
+    setItems((prev) => [copy, ...prev]);
+    message.success(`Đã nhân bản "${mon.ten}"`);
+  };
+
+  const handleBulkToggle = (coSan: boolean) => {
+    if (selectedIds.length === 0) return;
+    setItems((prev) => prev.map((m) => selectedIds.includes(m.id) ? { ...m, coSan } : m));
+    message.success(`Đã ${coSan ? 'bật' : 'tắt'} ${selectedIds.length} món`);
+    setSelectedIds([]);
+  };
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    );
+  };
+
   return (
     <>
       <Topbar title="Quản lý món ăn" />
@@ -585,52 +635,81 @@ const QuanLyMon: React.FC = () => {
             searchValue={tuKhoa}
             onSearch={setTuKhoa}
             filters={
-              <Dropdown
-                trigger={['click']}
-                overlay={
-                  <Menu
-                    selectedKeys={[filterCoSan]}
-                    onClick={({ key }) => setFilterCoSan(key as typeof filterCoSan)}
-                  >
-                    <Menu.Item key="all">Tất cả</Menu.Item>
-                    <Menu.Item key="dang_ban">🟢 Đang bán</Menu.Item>
-                    <Menu.Item key="tam_het">🔴 Tạm hết</Menu.Item>
-                  </Menu>
-                }
-              >
-                <Button icon={<FilterOutlined />} className={styles.btnFilter}>
-                  {filterCoSan === 'all' ? 'Bộ lọc' : filterCoSan === 'dang_ban' ? 'Đang bán' : 'Tạm hết'}
-                </Button>
-              </Dropdown>
-            }
-            actions={
               <>
+                {/* View toggle sát search — giống Đơn Hàng */}
                 <div className={styles.viewToggle}>
                   <button className={`${styles.toggleBtn} ${isGrid ? styles.toggleActive : ''}`} onClick={() => setIsGrid(true)} title="Dạng lưới"><AppstoreOutlined /></button>
                   <button className={`${styles.toggleBtn} ${!isGrid ? styles.toggleActive : ''}`} onClick={() => setIsGrid(false)} title="Dạng danh sách"><UnorderedListOutlined /></button>
                 </div>
-                <Button
-                  type="primary"
-                  icon={<PlusOutlined />}
-                  className={styles.addBtn}
-                  onClick={() => { setEditing(null); setFormOpen(true); }}
-                >
-                  Thêm món mới
-                </Button>
+
+                <Dropdown trigger={['click']} overlay={
+                  <Menu selectedKeys={[filterCoSan]} onClick={({ key }) => setFilterCoSan(key as typeof filterCoSan)}>
+                    <Menu.Item key="all">Tất cả</Menu.Item>
+                    <Menu.Item key="dang_ban">🟢 Đang bán</Menu.Item>
+                    <Menu.Item key="tam_het">🔴 Tạm hết</Menu.Item>
+                  </Menu>
+                }>
+                  <Button icon={<FilterOutlined />} className={styles.btnOutline}>
+                    {filterCoSan === 'all' ? 'Bộ lọc' : filterCoSan === 'dang_ban' ? 'Đang bán' : 'Tạm hết'}
+                  </Button>
+                </Dropdown>
+
+                <Dropdown trigger={['click']} overlay={
+                  <Menu selectedKeys={[sortBy]} onClick={({ key }) => setSortBy(key as typeof sortBy)}>
+                    <Menu.Item key="mac_dinh">Mặc định</Menu.Item>
+                    <Menu.Item key="gia_tang">Giá tăng dần</Menu.Item>
+                    <Menu.Item key="gia_giam">Giá giảm dần</Menu.Item>
+                    <Menu.Item key="danh_gia">Đánh giá cao nhất</Menu.Item>
+                  </Menu>
+                }>
+                  <Button icon={<SortAscendingOutlined />} className={styles.btnOutline}>
+                    {sortBy === 'mac_dinh' ? 'Sắp xếp' : sortBy === 'gia_tang' ? 'Giá ↑' : sortBy === 'gia_giam' ? 'Giá ↓' : 'Đánh giá ↓'}
+                  </Button>
+                </Dropdown>
               </>
+            }
+            actions={
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                className={styles.addBtn}
+                onClick={() => { setEditing(null); setFormOpen(true); }}
+              >
+                Thêm món mới
+              </Button>
             }
           />
 
+          {/* Bulk action bar */}
+          {selectedIds.length > 0 && (
+            <div className={styles.bulkMonBar}>
+              <span className={styles.bulkMonCount}>Đã chọn <strong>{selectedIds.length}</strong> món</span>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <Button size="small" type="primary" onClick={() => handleBulkToggle(true)}>🟢 Bật tất cả</Button>
+                <Button size="small" danger onClick={() => handleBulkToggle(false)}>🔴 Tắt tất cả</Button>
+                <Button size="small" onClick={() => setSelectedIds([])}>Bỏ chọn</Button>
+              </div>
+            </div>
+          )}
+
           <div className={isGrid ? styles.gridView : styles.listView}>
             {danhSachLoc.map((mon) => (
-              <MonCard
-                key={mon.id}
-                mon={mon}
-                onClick={() => setViewing(mon)}
-                onEdit={() => { setEditing(mon); setFormOpen(true); }}
-                onDelete={() => handleDelete(mon)}
-                onToggleCoSan={handleToggleCoSan}
-              />
+              <div key={mon.id} className={styles.monCardWrap}>
+                <Checkbox
+                  checked={selectedIds.includes(mon.id)}
+                  onChange={() => toggleSelect(mon.id)}
+                  className={styles.monCheckbox}
+                  onClick={(e) => e.stopPropagation()}
+                />
+                <MonCard
+                  mon={mon}
+                  onClick={() => setViewing(mon)}
+                  onEdit={() => { setEditing(mon); setFormOpen(true); }}
+                  onDelete={() => handleDelete(mon)}
+                  onToggleCoSan={handleToggleCoSan}
+                  onDuplicate={() => handleDuplicate(mon)}
+                />
+              </div>
             ))}
             {danhSachLoc.length === 0 && (
               <div className={styles.empty}>Không tìm thấy món ăn phù hợp</div>

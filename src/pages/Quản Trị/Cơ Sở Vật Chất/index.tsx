@@ -785,12 +785,12 @@ const CoSoVatChat: React.FC = () => {
               <div className={styles.legendActions}>
                 {lastSync && <span className={styles.lastSyncText}>Đồng bộ lúc {lastSync}</span>}
                 <Tooltip title="Đồng bộ trạng thái bàn theo đơn hàng hiện tại">
-                  <Button icon={<ReloadOutlined />} size="small" className={styles.syncBtn}
+                  <Button icon={<ReloadOutlined />} className={styles.syncBtn}
                     onClick={() => { syncTrangThaiBan(); message.success('Đã đồng bộ trạng thái bàn'); }}>
                     Sync bàn
                   </Button>
                 </Tooltip>
-                <Button type="primary" icon={<PlusOutlined />} size="small" className={styles.addBtn} onClick={openAddKhu}>
+                <Button type="primary" icon={<PlusOutlined />} className={styles.addBtn} onClick={openAddKhu}>
                   Thêm khu vực
                 </Button>
               </div>

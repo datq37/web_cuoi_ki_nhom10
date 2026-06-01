@@ -48,6 +48,7 @@
   background: @primary !important;
   border-color: @primary !important;
   border-radius: 8px !important;
+  height: 36px;
   font-weight: 500;
 
   &:hover { background: @primary-hover !important; border-color: @primary-hover !important; }
@@ -87,6 +88,7 @@
   font-weight: 500;
   color: #374151 !important;
   border-color: #d1d5db !important;
+  &:hover { border-color: @primary !important; color: @primary !important; }
 }
 
 .areaGrid {
@@ -433,14 +435,13 @@
 :global([data-theme="dark"]) {
   .tabsRow  { background: #1e293b; border-color: #334155; }
   .tabBtn   { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
-  .btnOutline { color: #94a3b8 !important; border-color: #334155 !important; background: #1e293b !important; &:hover { color: #f1f5f9 !important; border-color: #475569 !important; } }
+  .btnOutline { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; &:hover { background: #334155 !important; border-color: @primary !important; color: @primary !important; } }
 
   .legendBar    { background: #1e293b; border-color: #334155; }
   .legendHint   { color: #475569; }
   .lastSyncText { color: #475569; }
   .syncBtn { border-color: #334155 !important; color: #94a3b8 !important; background: #0f172a !important; &:hover { border-color: @primary !important; color: #4ade80 !important; background: rgba(22,163,74,.1) !important; } }
 
-  .statCard  { background: #1e293b; border-color: #334155; }
   .statValue { color: #f1f5f9; }
   .statLabel { color: #64748b; }
   .statSub   { color: #94a3b8; }

@@ -1,14 +1,8 @@
 ﻿import {
-  AppstoreOutlined,
-  CheckCircleOutlined,
   DeleteOutlined,
-  EditOutlined,
   FilterOutlined,
   PlusOutlined,
-  TableOutlined,
   TeamOutlined,
-  ToolOutlined,
-  WarningOutlined,
 } from '@ant-design/icons';
 import {
   Badge,
@@ -113,13 +107,12 @@ const BanChip: React.FC<BanChipProps> = ({ ban, onClick }) => {
 interface KhuVucCardProps {
   khu: IKhuVuc;
   onEditKhu: () => void;
-  onDeleteKhu: () => void;
   onAddBan: () => void;
   onClickBan: (ban: IBan) => void;
 }
 
 const KhuVucCard: React.FC<KhuVucCardProps> = ({
-  khu, onEditKhu, onDeleteKhu, onAddBan, onClickBan,
+  khu, onEditKhu, onAddBan, onClickBan,
 }) => {
   const sanSang  = khu.danhSachBan.filter((b) => b.trangThai === ETrangThaiBan.SAN_SANG).length;
   const dangDung = khu.danhSachBan.filter((b) => b.trangThai === ETrangThaiBan.DANG_DUNG).length;
@@ -131,19 +124,11 @@ const KhuVucCard: React.FC<KhuVucCardProps> = ({
       <div className={styles.areaCardTop} style={{ background: khu.mau }} />
 
       <div className={styles.areaCardBody}>
-        {/* Header */}
-        <div className={styles.areaCardHeader}>
+        {/* Header — click tên khu vực để chỉnh sửa */}
+        <div className={styles.areaCardHeader} onClick={onEditKhu} style={{ cursor: 'pointer' }}>
           <div className={styles.areaCardTitleWrap}>
             <div className={styles.areaCardName}>{khu.ten}</div>
-            <div className={styles.areaCardMoTa}>{khu.moTa}</div>
-          </div>
-          <div className={styles.areaCardActions}>
-            <button className={styles.iconBtn} onClick={onEditKhu} title="Chỉnh sửa khu vực">
-              <EditOutlined />
-            </button>
-            <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={onDeleteKhu} title="Xoá khu vực">
-              <DeleteOutlined />
-            </button>
+            <div className={styles.areaCardMoTa}>{khu.moTa || 'Click để chỉnh sửa'}</div>
           </div>
         </div>
 
@@ -281,9 +266,10 @@ interface KhuVucModalProps {
   initial: IKhuVuc | null;
   onCancel: () => void;
   onSubmit: (data: Pick<IKhuVuc, 'ten' | 'moTa' | 'mau'>) => void;
+  onDelete?: () => void;
 }
 
-const KhuVucModal: React.FC<KhuVucModalProps> = ({ open, initial, onCancel, onSubmit }) => {
+const KhuVucModal: React.FC<KhuVucModalProps> = ({ open, initial, onCancel, onSubmit, onDelete }) => {
   const [form]    = Form.useForm();
   const [mau, setMau] = useState(PRESET_COLORS[0]);
 
@@ -310,9 +296,17 @@ const KhuVucModal: React.FC<KhuVucModalProps> = ({ open, initial, onCancel, onSu
       title={initial ? `Chỉnh sửa: ${initial.ten}` : 'Thêm khu vực mới'}
       width={480}
       onCancel={onCancel}
-      onOk={handleOk}
-      okText={initial ? 'Lưu' : 'Thêm khu vực'}
-      cancelText="Huỷ"
+      footer={
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {initial && onDelete && (
+            <Button danger ghost icon={<DeleteOutlined />} style={{ borderRadius: 8, height: 36 }} onClick={() => { onCancel(); onDelete(); }}>Xoá khu vực</Button>
+          )}
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+            <Button style={{ borderRadius: 8, height: 36 }} onClick={onCancel}>Huỷ</Button>
+            <Button type="primary" style={{ borderRadius: 8, height: 36 }} onClick={handleOk}>{initial ? 'Lưu' : 'Thêm khu vực'}</Button>
+          </div>
+        </div>
+      }
       destroyOnClose
       className={styles.modal}
     >
@@ -363,7 +357,8 @@ const VatDungModal: React.FC<{
   initial: IVatDung | null;
   onCancel: () => void;
   onSubmit: (data: Omit<IVatDung, 'id'>) => void;
-}> = ({ open, initial, onCancel, onSubmit }) => {
+  onDelete?: () => void;
+}> = ({ open, initial, onCancel, onSubmit, onDelete }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -386,11 +381,19 @@ const VatDungModal: React.FC<{
       title={initial ? `Chỉnh sửa: ${initial.ten}` : 'Thêm vật dụng mới'}
       width={480}
       onCancel={onCancel}
-      onOk={handleOk}
-      okText={initial ? 'Lưu thay đổi' : 'Thêm'}
-      cancelText="Huỷ"
       destroyOnClose
       className={styles.modal}
+      footer={
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {initial && onDelete && (
+            <Button danger ghost icon={<DeleteOutlined />} style={{ borderRadius: 8, height: 36 }} onClick={() => { onCancel(); onDelete(); }}>Xoá</Button>
+          )}
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+            <Button style={{ borderRadius: 8, height: 36 }} onClick={onCancel}>Huỷ</Button>
+            <Button type="primary" style={{ borderRadius: 8, height: 36 }} onClick={handleOk}>{initial ? 'Lưu thay đổi' : 'Thêm'}</Button>
+          </div>
+        </div>
+      }
     >
       <Form form={form} layout="vertical" preserve={false}>
         <Form.Item name="ten" label="Tên vật dụng" rules={[{ required: true, message: 'Nhập tên vật dụng' }, { max: 80 }]}>
@@ -464,13 +467,6 @@ const CoSoVatChat: React.FC = () => {
     return list;
   }, [vatDungList, vdFilterDanhMuc, vdFilterTinhTrang]);
 
-  const vdStats = useMemo(() => {
-    const tot     = vatDungList.filter((v) => v.tinhTrang === 'tot');
-    const canSua  = vatDungList.filter((v) => v.tinhTrang === 'can_sua');
-    const hong    = vatDungList.filter((v) => v.tinhTrang === 'hong');
-    const tongSoLuong = vatDungList.reduce((s, v) => s + v.soLuong, 0);
-    return { tong: vatDungList.length, tot: tot.length, canSua: canSua.length, hong: hong.length, tongSoLuong };
-  }, [vatDungList]);
 
   const handleVdSubmit = (data: Omit<IVatDung, 'id'>) => {
     if (vdEditing) {
@@ -544,64 +540,8 @@ const CoSoVatChat: React.FC = () => {
         );
       },
     },
-    {
-      title: '',
-      key: 'actions',
-      width: 80,
-      render: (_: any, r: IVatDung) => (
-        <div style={{ display: 'flex', gap: 6 }} onClick={(e) => e.stopPropagation()}>
-          <button className={styles.iconBtn} title="Chỉnh sửa" onClick={() => { setVdEditing(r); setVdFormOpen(true); }}>
-            <EditOutlined />
-          </button>
-          <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} title="Xoá" onClick={() => handleVdDelete(r)}>
-            <DeleteOutlined />
-          </button>
-        </div>
-      ),
-    },
   ];
 
-  const stats = useMemo(() => {
-    const allBan = khuVucs.flatMap((k) => k.danhSachBan);
-    return {
-      tongKhu:   khuVucs.length,
-      tongBan:   allBan.length,
-      sanSang:   allBan.filter((b) => b.trangThai === ETrangThaiBan.SAN_SANG).length,
-      baoTri:    allBan.filter((b) => b.trangThai === ETrangThaiBan.BAO_TRI).length,
-      tongSucChua: allBan.reduce((s, b) => s + b.sucChua, 0),
-    };
-  }, [khuVucs]);
-
-  const STAT_CARDS = [
-    {
-      label: 'KHU VỰC',
-      value: stats.tongKhu,
-      sub: `${stats.tongSucChua} chỗ ngồi tổng`,
-      iconBg: '#eff6ff', iconColor: '#3b82f6',
-      Icon: TableOutlined,
-    },
-    {
-      label: 'TỔNG BÀN',
-      value: stats.tongBan,
-      sub: 'Trong tất cả khu vực',
-      iconBg: '#f0fdf4', iconColor: '#16a34a',
-      Icon: TableOutlined,
-    },
-    {
-      label: 'SẴN SÀNG',
-      value: stats.sanSang,
-      sub: `${stats.tongBan > 0 ? Math.round((stats.sanSang / stats.tongBan) * 100) : 0}% bàn khả dụng`,
-      iconBg: '#f0fdf4', iconColor: '#16a34a',
-      Icon: TeamOutlined,
-    },
-    {
-      label: 'BẢO TRÌ',
-      value: stats.baoTri,
-      sub: stats.baoTri > 0 ? 'Cần kiểm tra' : 'Không có bàn hỏng',
-      iconBg: '#fef2f2', iconColor: '#dc2626',
-      Icon: ToolOutlined,
-    },
-  ];
 
   const openAddKhu = () => { setEditingKhu(null); setKhuModal(true); };
   const openEditKhu = (khu: IKhuVuc) => { setEditingKhu(khu); setKhuModal(true); };
@@ -680,12 +620,6 @@ const CoSoVatChat: React.FC = () => {
     });
   };
 
-  const VD_STAT_CARDS = [
-    { label: 'TỔNG LOẠI',   value: vdStats.tong,   sub: `${vdStats.tongSoLuong} đơn vị`,              iconBg: '#eff6ff', iconColor: '#3b82f6', Icon: AppstoreOutlined   },
-    { label: 'ĐANG TỐT',    value: vdStats.tot,    sub: 'Loại vật dụng trong tình trạng tốt',          iconBg: '#f0fdf4', iconColor: '#16a34a', Icon: CheckCircleOutlined },
-    { label: 'CẦN SỬA',     value: vdStats.canSua, sub: 'Loại vật dụng cần bảo trì / sửa chữa',       iconBg: '#fffbeb', iconColor: '#d97706', Icon: ToolOutlined        },
-    { label: 'HỎNG / HẾT',  value: vdStats.hong,   sub: vdStats.hong > 0 ? 'Cần thay mới sớm' : 'Không có', iconBg: '#fef2f2', iconColor: '#dc2626', Icon: WarningOutlined    },
-  ];
 
   return (
     <>
@@ -711,21 +645,6 @@ const CoSoVatChat: React.FC = () => {
         {/* ── Tab 1: Sơ đồ bàn ─────────────────────────────────── */}
         {activeTab === 'so_do_ban' && (
           <>
-            <div className={styles.statGrid}>
-              {STAT_CARDS.map((c) => (
-                <div key={c.label} className={styles.statCard}>
-                  <div className={styles.statLeft}>
-                    <div className={styles.statLabel}>{c.label}</div>
-                    <div className={styles.statValue}>{c.value}</div>
-                    <div className={styles.statSub}>{c.sub}</div>
-                  </div>
-                  <div className={styles.statIconWrap} style={{ background: c.iconBg }}>
-                    <c.Icon style={{ fontSize: 20, color: c.iconColor }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-
             <div className={styles.legendBar}>
               <div className={styles.legend}>
                 {Object.entries(TRANG_THAI_BAN_CONFIG).map(([, cfg]) => (
@@ -749,7 +668,6 @@ const CoSoVatChat: React.FC = () => {
                   key={khu.id}
                   khu={khu}
                   onEditKhu={() => openEditKhu(khu)}
-                  onDeleteKhu={() => handleDeleteKhu(khu)}
                   onAddBan={() => openAddBan(khu.id)}
                   onClickBan={(ban) => openEditBan(khu.id, ban)}
                 />
@@ -761,21 +679,6 @@ const CoSoVatChat: React.FC = () => {
         {/* ── Tab 2: Vật dụng & Thiết bị ──────────────────────── */}
         {activeTab === 'vat_dung' && (
           <>
-            <div className={styles.statGrid}>
-              {VD_STAT_CARDS.map((c) => (
-                <div key={c.label} className={styles.statCard}>
-                  <div className={styles.statLeft}>
-                    <div className={styles.statLabel}>{c.label}</div>
-                    <div className={styles.statValue}>{c.value}</div>
-                    <div className={styles.statSub}>{c.sub}</div>
-                  </div>
-                  <div className={styles.statIconWrap} style={{ background: c.iconBg }}>
-                    <c.Icon style={{ fontSize: 20, color: c.iconColor }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-
             <PageToolbar
               searchPlaceholder="Tìm tên vật dụng, ghi chú..."
               searchValue={vdTuKhoa}
@@ -846,6 +749,7 @@ const CoSoVatChat: React.FC = () => {
               searchFields={['ten', 'ghiChu']}
               pageSize={12}
               locale={{ emptyText: <EmptyState kind="search" desc="Không tìm thấy vật dụng nào phù hợp" /> }}
+              onRow={(r: IVatDung) => ({ onClick: () => { setVdEditing(r); setVdFormOpen(true); }, style: { cursor: 'pointer' } })}
             />
           </>
         )}
@@ -856,6 +760,7 @@ const CoSoVatChat: React.FC = () => {
         initial={editingKhu}
         onCancel={() => setKhuModal(false)}
         onSubmit={handleSubmitKhu}
+        onDelete={editingKhu ? () => handleDeleteKhu(editingKhu) : undefined}
       />
       <BanModal
         open={banModal}
@@ -869,6 +774,7 @@ const CoSoVatChat: React.FC = () => {
         initial={vdEditing}
         onCancel={() => { setVdFormOpen(false); setVdEditing(null); }}
         onSubmit={handleVdSubmit}
+        onDelete={vdEditing ? () => { handleVdDelete(vdEditing); setVdFormOpen(false); setVdEditing(null); } : undefined}
       />
     </>
   );

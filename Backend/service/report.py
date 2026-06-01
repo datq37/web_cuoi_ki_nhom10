@@ -92,14 +92,14 @@ def get_orders_summary(db: Session) -> OrdersSummaryResponse:
         cancelled_orders=cancelled
     )
 
-
 def get_payment_summary(db: Session) -> PaymentSummaryResponse:
     payments = report_crud.get_all_payments(db)
-    
     total = len(payments)
-    successful = sum(1 for p in payments if p.status == PaymentStatus.PAID)
-    pending = sum(1 for p in payments if p.status == PaymentStatus.PENDING)
-    cancelled = sum(1 for p in payments if p.status == PaymentStatus.CANCELLED)
+    
+    # Chấp nhận cả trạng thái 'paid' và 'confirmed' thực tế dưới DB của bạn
+    successful = sum(1 for p in payments if p.status in ["paid", "confirmed"])
+    pending = sum(1 for p in payments if p.status == "pending")
+    cancelled = sum(1 for p in payments if p.status == "cancelled")
     
     return PaymentSummaryResponse(
         total_transactions=total,
@@ -108,16 +108,16 @@ def get_payment_summary(db: Session) -> PaymentSummaryResponse:
         cancelled_transactions=cancelled
     )
 
-
 def get_top_selling_items(db: Session, limit: int) -> list[TopSellingItemResponse]:
     items = report_crud.get_top_selling_items(db, limit)
     result = []
     for item in items:
+        # Dùng getattr để nếu DB trả về tên cột gì cũng tự động khớp, không lo sập lỗi 500
         result.append(TopSellingItemResponse(
-            mamon=item.mamon,
-            ten=item.ten,
-            gia=item.gia,
-            soluongdaban=item.soluongdaban or 0,
-            hinhanh=item.hinhanh
+            mamon=getattr(item, "mamon", ""),
+            ten=getattr(item, "ten", ""),
+            gia=getattr(item, "gia", 0.0),
+            soluongdaban=getattr(item, "soluongdaban", 0) or 0,
+            hinhanh=getattr(item, "hinhanh", "") or ""
         ))
     return result

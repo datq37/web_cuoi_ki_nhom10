@@ -17,11 +17,16 @@ REVOKED_JTIS = set()
 
 # Trực tiếp dùng thư viện bcrypt thay cho passlib để tránh lỗi không tương thích phiên bản trên python 3.12+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """So sánh mật khẩu plain với hash trong DB."""
-    try:
-        return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
-    except Exception:
-        return False
+    """So sánh mật khẩu plain với hash trong DB (hỗ trợ plain text cũ)."""
+    # Nếu password trong DB có định dạng của Bcrypt (bắt đầu bằng $2b$, $2a$, $2y$)
+    if hashed_password.startswith(("$2b$", "$2a$", "$2y$")):
+        try:
+            return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
+        except Exception:
+            return False
+    else:
+        # Nếu chưa được mã hóa (dữ liệu cũ dạng plain text)
+        return plain_password == hashed_password
 
 
 def get_password_hash(password: str) -> str:

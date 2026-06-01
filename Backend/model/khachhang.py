@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, String
+from sqlalchemy import Integer, String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 
 from database import Base
@@ -17,4 +17,5 @@ class KhachHang(Base):
     lichsudathang: Mapped[str | None] = mapped_column(String, nullable=True)
     # Thêm trường vai trò để phục vụ phân quyền (Admin / Nhân viên / Khách hàng)
     vaitro: Mapped[str | None] = mapped_column(String, nullable=True, default="Khách hàng")
-
+    # Đồng bộ với cột is_active bool NULL DEFAULT true trong CSDL
+    is_active: Mapped[bool | None] = mapped_column(Boolean, nullable=True, default=True)

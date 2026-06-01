@@ -84,20 +84,18 @@
 
 .searchIcon { color: #9ca3af; }
 
-.btnFilter {
+.btnOutline {
   border-radius: 8px !important;
+  font-weight: 500;
   color: #374151 !important;
   border-color: #d1d5db !important;
-  font-weight: 500;
 }
 
-.btnCreate {
-  margin-left: auto;
+.addBtn {
   background: @primary !important;
   border-color: @primary !important;
   border-radius: 8px !important;
-  font-weight: 600;
-  padding: 0 20px !important;
+  font-weight: 500;
 
   &:hover {
     background: @primary-hover !important;
@@ -435,7 +433,7 @@
 }
 
 // Pill tabs — đồng bộ với Đơn Hàng, Kho, Quản Lý Món
-.kmTabsRow {
+.tabsRow {
   display: flex;
   gap: 3px;
   background: @surface;
@@ -445,7 +443,7 @@
   align-self: flex-start;
 }
 
-.kmTabBtn {
+.tabBtn {
   padding: 7px 20px;
   border-radius: 7px;
   border: none;
@@ -455,10 +453,10 @@
   color: @text-muted;
   cursor: pointer;
   transition: all 0.15s;
-  &:hover { background: #f9fafb; color: @text-dark; }
+  &:hover { background: @divider; color: @text-dark; }
 }
 
-.kmTabActive {
+.tabActive {
   background: @primary !important;
   color: #fff !important;
   &:hover { background: @primary-hover !important; }
@@ -471,19 +469,6 @@
   padding: 0 20px 16px;
 }
 
-.btnComboCreate {
-  margin-left: auto;
-  background: @primary !important;
-  border-color: @primary !important;
-  border-radius: 8px !important;
-  font-weight: 600;
-  padding: 0 20px !important;
-
-  &:hover {
-    background: @primary-hover !important;
-    border-color: @primary-hover !important;
-  }
-}
 
 .comboList {
   display: flex;
@@ -893,8 +878,8 @@
 }
 
 :global([data-theme="dark"]) {
-  .kmTabsRow { background: #1e293b; border-color: #334155; }
-  .kmTabBtn  { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
+  .tabsRow { background: #1e293b; border-color: #334155; }
+  .tabBtn  { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
 
   .statCard { background: #1e293b; border-color: #334155; }
   .statValue { color: #f1f5f9; }
@@ -1041,7 +1026,7 @@
     :global(.ant-input-prefix) { color: #475569; }
   }
 
-  .btnFilter {
+  .btnOutline {
     color: #94a3b8 !important;
     border-color: #334155 !important;
     background: #1e293b !important;

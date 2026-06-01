@@ -840,9 +840,10 @@ const KhuyenMai: React.FC = () => {
       localStorage.setItem('admin_combos', JSON.stringify(comboItems));
     }
   }, [comboItems]);
-  const [comboFormOpen, setComboFormOpen] = useState(false);
-  const [editingCombo,  setEditingCombo]  = useState<ICombo | null>(null);
-  const [comboTuKhoa,   setComboTuKhoa]   = useState('');
+  const [comboFormOpen,       setComboFormOpen]       = useState(false);
+  const [editingCombo,        setEditingCombo]        = useState<ICombo | null>(null);
+  const [comboTuKhoa,         setComboTuKhoa]         = useState('');
+  const [comboFilterTrangThai, setComboFilterTrangThai] = useState<ETrangThaiKhuyenMai | null>(null);
 
   const stats = useMemo(() => ({
     dangHoatDong: items.filter((k) => k.hoatDong && k.trangThai === ETrangThaiKhuyenMai.DANG_CHAY).length,
@@ -994,10 +995,14 @@ const KhuyenMai: React.FC = () => {
   };
 
   const danhSachComboLoc = useMemo(() => {
-    if (!comboTuKhoa.trim()) return comboItems;
-    const kw = comboTuKhoa.toLowerCase();
-    return comboItems.filter((c) => c.ten.toLowerCase().includes(kw));
-  }, [comboItems, comboTuKhoa]);
+    let list = comboItems;
+    if (comboFilterTrangThai) list = list.filter((c) => c.trangThai === comboFilterTrangThai);
+    if (comboTuKhoa.trim()) {
+      const kw = comboTuKhoa.toLowerCase();
+      list = list.filter((c) => c.ten.toLowerCase().includes(kw));
+    }
+    return list;
+  }, [comboItems, comboTuKhoa, comboFilterTrangThai]);
 
   const filterMenu = (
     <Menu
@@ -1046,23 +1051,21 @@ const KhuyenMai: React.FC = () => {
             ))}
           </div>
 
-          {/* Tab row — pill buttons đồng bộ với các trang khác */}
-          <div className={styles.kmTabsRow}>
+          <div className={styles.tabsRow}>
             <button
-              className={`${styles.kmTabBtn} ${activeTab === 'ma-giam-gia' ? styles.kmTabActive : ''}`}
+              className={`${styles.tabBtn} ${activeTab === 'ma-giam-gia' ? styles.tabActive : ''}`}
               onClick={() => setActiveTab('ma-giam-gia')}
             >
               Mã Giảm Giá
             </button>
             <button
-              className={`${styles.kmTabBtn} ${activeTab === 'combo' ? styles.kmTabActive : ''}`}
+              className={`${styles.tabBtn} ${activeTab === 'combo' ? styles.tabActive : ''}`}
               onClick={() => setActiveTab('combo')}
             >
               Combo
             </button>
           </div>
 
-          {/* Toolbar */}
           {activeTab === 'ma-giam-gia' ? (
             <PageToolbar
               searchPlaceholder="Tìm mã, tên chương trình..."
@@ -1071,14 +1074,14 @@ const KhuyenMai: React.FC = () => {
               filters={
                 <Badge count={filterTrangThai ? 1 : 0} size="small" offset={[-4, 4]}>
                   <Dropdown overlay={filterMenu} trigger={['click']}>
-                    <Button icon={<FilterOutlined />} className={styles.btnFilter}>
-                      Lọc trạng thái
+                    <Button icon={<FilterOutlined />} className={styles.btnOutline}>
+                      Trạng thái
                     </Button>
                   </Dropdown>
                 </Badge>
               }
               actions={
-                <Button type="primary" icon={<PlusOutlined />} className={styles.btnCreate} onClick={() => { setEditing(null); setFormOpen(true); }}>
+                <Button type="primary" icon={<PlusOutlined />} className={styles.addBtn} onClick={() => { setEditing(null); setFormOpen(true); }}>
                   Tạo khuyến mãi
                 </Button>
               }
@@ -1088,8 +1091,31 @@ const KhuyenMai: React.FC = () => {
               searchPlaceholder="Tìm tên combo..."
               searchValue={comboTuKhoa}
               onSearch={setComboTuKhoa}
+              filters={
+                <Badge count={comboFilterTrangThai ? 1 : 0} size="small" offset={[-4, 4]}>
+                  <Dropdown
+                    trigger={['click']}
+                    overlay={
+                      <Menu
+                        selectedKeys={[comboFilterTrangThai ?? 'tat_ca']}
+                        onClick={({ key }) => setComboFilterTrangThai(key === 'tat_ca' ? null : (key as ETrangThaiKhuyenMai))}
+                      >
+                        <Menu.Item key="tat_ca">Tất cả</Menu.Item>
+                        <Menu.Item key={ETrangThaiKhuyenMai.DANG_CHAY}>Đang chạy</Menu.Item>
+                        <Menu.Item key={ETrangThaiKhuyenMai.SAP_HET}>Sắp hết</Menu.Item>
+                        <Menu.Item key={ETrangThaiKhuyenMai.TAM_DUNG}>Tạm dừng</Menu.Item>
+                        <Menu.Item key={ETrangThaiKhuyenMai.HET_HAN}>Hết hạn</Menu.Item>
+                      </Menu>
+                    }
+                  >
+                    <Button icon={<FilterOutlined />} className={styles.btnOutline}>
+                      Trạng thái
+                    </Button>
+                  </Dropdown>
+                </Badge>
+              }
               actions={
-                <Button type="primary" icon={<PlusOutlined />} className={styles.btnComboCreate} onClick={() => { setEditingCombo(null); setComboFormOpen(true); }}>
+                <Button type="primary" icon={<PlusOutlined />} className={styles.addBtn} onClick={() => { setEditingCombo(null); setComboFormOpen(true); }}>
                   Tạo combo
                 </Button>
               }

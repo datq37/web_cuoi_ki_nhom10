@@ -2,6 +2,7 @@ import {
   CrownOutlined,
   DeleteOutlined,
   EditOutlined,
+  FilterOutlined,
   KeyOutlined,
   PhoneOutlined,
   PlusOutlined,
@@ -13,9 +14,11 @@ import {
   Avatar,
   Button,
   DatePicker,
+  Dropdown,
   Form,
   Input,
   InputNumber,
+  Menu,
   Modal,
   Select,
   message,
@@ -437,17 +440,6 @@ const NhanVienCard: React.FC<{
   );
 };
 
-// ── Card thêm thành viên ─────────────────────────────────────────
-const AddMemberCard: React.FC<{ onClick: () => void }> = ({ onClick }) => (
-  <div className={styles.addCard} onClick={onClick}>
-    <div className={styles.addIconWrap}>
-      <PlusOutlined className={styles.addIcon} />
-    </div>
-    <div className={styles.addTitle}>Thêm thành viên</div>
-    <div className={styles.addSub}>Mời quản trị viên / nhân viên căng tin</div>
-  </div>
-);
-
 // ── Trang chính ──────────────────────────────────────────────────
 const NhanVienCangTin: React.FC = () => {
   const [danhSach,   setDanhSach]   = useState<INhanVienEx[]>(DANH_SACH_NHAN_VIEN_EX);
@@ -551,23 +543,41 @@ const NhanVienCangTin: React.FC = () => {
           searchValue={tuKhoa}
           onSearch={setTuKhoa}
           filters={
-            <Select
-              placeholder="Tất cả vai trò"
-              value={locVaiTro || undefined}
-              onChange={(v) => setLocVaiTro(v ?? '')}
-              allowClear
-              style={{ width: 180 }}
-            >
-              {Object.entries(VAI_TRO_NV_CONFIG).map(([key, cfg]) => (
-                <Select.Option key={key} value={key}>{cfg.label}</Select.Option>
-              ))}
-            </Select>
+            <>
+              <Dropdown
+                trigger={['click']}
+                overlay={
+                  <Menu
+                    selectedKeys={[locVaiTro || 'tat_ca']}
+                    onClick={({ key }) => setLocVaiTro(key === 'tat_ca' ? '' : (key as EVaiTroNhanVien))}
+                  >
+                    <Menu.Item key="tat_ca">Tất cả vai trò</Menu.Item>
+                    <Menu.Divider />
+                    {Object.entries(VAI_TRO_NV_CONFIG).map(([key, cfg]) => (
+                      <Menu.Item key={key}>{cfg.label}</Menu.Item>
+                    ))}
+                  </Menu>
+                }
+              >
+                <Button icon={<FilterOutlined />} className={styles.btnOutline}>
+                  {locVaiTro ? VAI_TRO_NV_CONFIG[locVaiTro as EVaiTroNhanVien]?.label : 'Vai trò'}
+                </Button>
+              </Dropdown>
+              <span className={styles.countBadge}>
+                <TeamOutlined style={{ marginRight: 5 }} />
+                {danhSachLoc.length} nhân viên
+              </span>
+            </>
           }
           actions={
-            <span className={styles.countBadge}>
-              <TeamOutlined style={{ marginRight: 5 }} />
-              {danhSachLoc.length} nhân viên
-            </span>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              className={styles.addBtn}
+              onClick={() => { setSuaNV(null); setFormOpen(true); }}
+            >
+              Thêm thành viên
+            </Button>
           }
         />
 
@@ -586,7 +596,6 @@ const NhanVienCangTin: React.FC = () => {
                 onClick={setChiTietNV}
               />
             ))}
-            {!daBoBoc && <AddMemberCard onClick={() => { setSuaNV(null); setFormOpen(true); }} />}
           </div>
         )}
       </div>

@@ -213,6 +213,7 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
             <Button
               className={`${styles.iconBtn} ${unreadCount > 0 ? styles.bellActive : ''}`}
               icon={<BellOutlined />}
+              title={unreadCount > 0 ? `${unreadCount} thông báo chưa đọc` : 'Thông báo'}
             />
           </Badge>
         </Popover>

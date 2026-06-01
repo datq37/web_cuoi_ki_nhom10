@@ -129,10 +129,11 @@
 
 .btnOutline {
   border-radius: 8px !important;
-  border-color: #d1d5db !important;
-  color: #374151 !important;
   font-weight: 500;
+  color: #374151 !important;
+  border-color: #d1d5db !important;
   white-space: nowrap;
+  &:hover { border-color: @primary !important; color: @primary !important; }
 }
 
 .fieldGroup {
@@ -380,7 +381,7 @@
   .rightContent { background: #1e293b; border-color: #334155; }
   .contentTitle { color: #f1f5f9; }
   .contentSub   { color: #64748b; }
-  .btnOutline   { background: #0f172a !important; border-color: #334155 !important; color: #94a3b8 !important; }
+  .btnOutline { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; &:hover { background: #334155 !important; border-color: @primary !important; color: @primary !important; } }
 
   .logoSection { background: #0f172a; }
   .logoName { color: #f1f5f9; }

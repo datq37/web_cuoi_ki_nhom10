@@ -5,14 +5,23 @@
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+
+  :global(.ant-btn) {
+    font-size: @fs-md !important;
+    font-weight: 500 !important;
+    height: 36px !important;
+  }
 }
 
 .search {
   width: 320px;
   border-radius: 8px !important;
+  font-size: @fs-md !important;
 
   :global(.ant-input-prefix) { margin-right: 6px; }
+  :global(.ant-input) { font-size: @fs-md !important; }
 }
+
 
 .searchIcon { color: @text-light; }
 

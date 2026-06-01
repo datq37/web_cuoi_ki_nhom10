@@ -885,11 +885,13 @@ const KhoNguyenLieu: React.FC = () => {
                 {lichSuNhap.length > 0 && (
                   <Button
                     danger size="small"
-                    style={{ marginLeft: 'auto', borderRadius: 7 }}
+                    style={{ marginLeft: 'auto' }}
                     onClick={() => {
                       Modal.confirm({
                         title: 'Xoá toàn bộ lịch sử?',
                         okType: 'danger', okText: 'Xoá', cancelText: 'Huỷ', centered: true,
+                        okButtonProps: { style: { borderRadius: 8 } },
+                        cancelButtonProps: { style: { borderRadius: 8 } },
                         onOk: () => { setLichSuNhap([]); store.set(KEYS.importHistory, []); },
                       });
                     }}

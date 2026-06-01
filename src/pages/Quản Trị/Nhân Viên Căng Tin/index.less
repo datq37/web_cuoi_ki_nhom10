@@ -58,6 +58,7 @@
   font-weight: 500;
   color: #374151 !important;
   border-color: #d1d5db !important;
+  &:hover { border-color: @primary !important; color: @primary !important; }
 }
 
 .countBadge {
@@ -73,6 +74,7 @@
   background: @primary !important;
   border-color: @primary !important;
   border-radius: 8px !important;
+  height: 36px;
   font-weight: 600;
   &:hover { background: @primary-hover !important; border-color: @primary-hover !important; }
 }
@@ -426,7 +428,6 @@
 }
 
 :global([data-theme="dark"]) {
-  .statCard  { background: #1e293b; border-color: #334155; }
   .statValue { color: #f1f5f9; }
   .statLabel { color: #64748b; }
 
@@ -440,7 +441,7 @@
   .cardEmail  { color: #64748b; }
   .cardPhone  { color: #64748b; }
   .cardLuong  { color: #4ade80; }
-  .btnOutline { color: #94a3b8 !important; border-color: #334155 !important; background: #1e293b !important; }
+  .btnOutline { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; &:hover { background: #334155 !important; border-color: @primary !important; color: @primary !important; } }
   .countBadge { color: #64748b; }
   .lastActive { color: #64748b; }
   .iconActionBtn {

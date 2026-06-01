@@ -1,14 +1,11 @@
 import {
-  CrownOutlined,
   DeleteOutlined,
   EditOutlined,
   FilterOutlined,
   KeyOutlined,
   PhoneOutlined,
   PlusOutlined,
-  SearchOutlined,
   TeamOutlined,
-  UserOutlined,
 } from '@ant-design/icons';
 import {
   Avatar,

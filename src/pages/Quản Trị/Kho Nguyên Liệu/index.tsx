@@ -10,6 +10,7 @@
   PlusOutlined,
   SearchOutlined,
   ShoppingCartOutlined,
+  SortAscendingOutlined,
   WarningFilled,
 } from '@ant-design/icons';
 import {
@@ -587,6 +588,7 @@ const KhoNguyenLieu: React.FC = () => {
   const [tuKhoa,          setTuKhoa]          = useState('');
   const [filterTrangThai, setFilterTrangThai] = useState<TrangThaiFilter>('all');
   const [filterNCC,       setFilterNCC]       = useState<string>('');
+  const [sortBy,          setSortBy]          = useState<'mac_dinh' | 'ton_thap' | 'ton_cao' | 'gia_cao'>('mac_dinh');
   const [activeTab,       setActiveTab]       = useState<ViewTab>('danh_sach');
   const [lichSuNhap,      setLichSuNhap]      = useState<ILichSuNhap[]>(() =>
     store.get<ILichSuNhap[]>(KEYS.importHistory, []),
@@ -625,8 +627,11 @@ const KhoNguyenLieu: React.FC = () => {
       const kw = tuKhoa.toLowerCase();
       list = list.filter((n) => n.ten.toLowerCase().includes(kw) || n.nhaCungCap.toLowerCase().includes(kw));
     }
+    if (sortBy === 'ton_thap') list = [...list].sort((a, b) => a.tonKho - b.tonKho);
+    if (sortBy === 'ton_cao')  list = [...list].sort((a, b) => b.tonKho - a.tonKho);
+    if (sortBy === 'gia_cao')  list = [...list].sort((a, b) => b.giaNhap - a.giaNhap);
     return list;
-  }, [items, tuKhoa, filterTrangThai, filterNCC]);
+  }, [items, tuKhoa, filterTrangThai, filterNCC, sortBy]);
 
   const canNhapThemItems = useMemo(() => items.filter((n) => n.trangThai !== ETrangThaiNguyenLieu.DU_HANG), [items]);
   const nhaCungCapOptions = useMemo(() => Array.from(new Set(items.map((n) => n.nhaCungCap))), [items]);
@@ -941,17 +946,28 @@ const KhoNguyenLieu: React.FC = () => {
               onSearch={setTuKhoa}
               filters={
                 <>
-                  <Select
-                    placeholder="Tất cả NCC"
-                    value={filterNCC || undefined}
-                    onChange={(v) => setFilterNCC(v ?? '')}
-                    allowClear
-                    style={{ width: 160 }}
+                  {/* NCC — Button dropdown đồng bộ với các trang khác */}
+                  <Dropdown
+                    trigger={['click']}
+                    overlay={
+                      <Menu
+                        selectedKeys={filterNCC ? [filterNCC] : ['all']}
+                        onClick={({ key }) => setFilterNCC(key === 'all' ? '' : key)}
+                      >
+                        <Menu.Item key="all">Tất cả NCC</Menu.Item>
+                        <Menu.Divider />
+                        {nhaCungCapOptions.map((ncc) => (
+                          <Menu.Item key={ncc}>{ncc}</Menu.Item>
+                        ))}
+                      </Menu>
+                    }
                   >
-                    {nhaCungCapOptions.map((ncc) => (
-                      <Select.Option key={ncc} value={ncc}>{ncc}</Select.Option>
-                    ))}
-                  </Select>
+                    <Button icon={<FilterOutlined />} className={styles.btnOutline}>
+                      {filterNCC || 'Nhà cung cấp'}
+                    </Button>
+                  </Dropdown>
+
+                  {/* Trạng thái */}
                   <Badge count={filterTrangThai !== 'all' ? 1 : 0} size="small" offset={[-4, 4]}>
                     <Dropdown overlay={filterMenu} trigger={['click']}>
                       <Button icon={<FilterOutlined />} className={styles.btnOutline}>
@@ -959,6 +975,23 @@ const KhoNguyenLieu: React.FC = () => {
                       </Button>
                     </Dropdown>
                   </Badge>
+
+                  {/* Sort */}
+                  <Dropdown
+                    trigger={['click']}
+                    overlay={
+                      <Menu selectedKeys={[sortBy]} onClick={({ key }) => setSortBy(key as typeof sortBy)}>
+                        <Menu.Item key="mac_dinh">Mặc định</Menu.Item>
+                        <Menu.Item key="ton_thap">Tồn kho thấp nhất</Menu.Item>
+                        <Menu.Item key="ton_cao">Tồn kho cao nhất</Menu.Item>
+                        <Menu.Item key="gia_cao">Giá nhập cao nhất</Menu.Item>
+                      </Menu>
+                    }
+                  >
+                    <Button icon={<SortAscendingOutlined />} className={styles.btnOutline}>
+                      {sortBy === 'mac_dinh' ? 'Sắp xếp' : sortBy === 'ton_thap' ? 'Tồn thấp ↑' : sortBy === 'ton_cao' ? 'Tồn cao ↓' : 'Giá cao ↓'}
+                    </Button>
+                  </Dropdown>
                 </>
               }
               actions={
@@ -990,7 +1023,11 @@ const KhoNguyenLieu: React.FC = () => {
               searchFields={['ten', 'nhaCungCap']}
               pageSize={10}
               className={styles.table}
-              rowClassName={styles.tableRow}
+              rowClassName={(record: INguyenLieu) => {
+                if (record.trangThai === ETrangThaiNguyenLieu.HET_HANG) return `${styles.tableRow} ${styles.rowHetHang}`;
+                if (record.trangThai === ETrangThaiNguyenLieu.SAP_HET)  return `${styles.tableRow} ${styles.rowSapHet}`;
+                return styles.tableRow;
+              }}
               locale={{ emptyText: <EmptyState kind="search" desc="Không tìm thấy nguyên liệu nào" /> }}
               onRow={(record) => ({
                 onClick: () => setViewing(record),

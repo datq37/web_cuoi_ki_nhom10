@@ -7,7 +7,6 @@ import {
   FilterOutlined,
   LockOutlined,
   MoreOutlined,
-  PlusOutlined,
   TeamOutlined,
   TrophyOutlined,
   UnlockOutlined,
@@ -317,11 +316,7 @@ const KhachHang: React.FC = () => {
   const [tuKhoa,       setTuKhoa]       = useState('');
   const [locVaiTro,    setLocVaiTro]    = useState<EVaiTro | ''>('');
   const [locTrangThai, setLocTrangThai] = useState<ETrangThaiKhach | ''>('');
-  const [filterOpen,   setFilterOpen]   = useState(false);
-  const [themOpen,     setThemOpen]     = useState(false);
   const [chiTietKhach, setChiTietKhach] = useState<IKhachHang | null>(null);
-
-  const soBoLoc = (locVaiTro ? 1 : 0) + (locTrangThai ? 1 : 0);
 
   // ── Stat cards từ data thật ──────────────────────────────────
   const stats = useMemo(() => {
@@ -355,11 +350,6 @@ const KhachHang: React.FC = () => {
     });
   }, [danhSach, tuKhoa, locVaiTro, locTrangThai]);
 
-  const handleThemNguoiDung = (data: Omit<IKhachHang, 'id'>) => {
-    setDanhSach((prev) => [...prev, { ...data, id: `kh_${Date.now()}` }]);
-    message.success(`Đã thêm ${data.hoTen}`);
-    setThemOpen(false);
-  };
 
   const handleKhoa = (id: string) => {
     const khach = danhSach.find((k) => k.id === id);
@@ -508,21 +498,36 @@ const KhachHang: React.FC = () => {
             searchValue={tuKhoa}
             onSearch={setTuKhoa}
             filters={
-              <Button
-                icon={<FilterOutlined />}
-                className={styles.btnFilter}
-                onClick={() => setFilterOpen(true)}
-              >
-                Bộ lọc{soBoLoc > 0 && ` (${soBoLoc})`}
-              </Button>
+              <>
+                <Badge count={locVaiTro ? 1 : 0} size="small" offset={[-4, 4]}>
+                  <Dropdown
+                    trigger={['click']}
+                    overlay={
+                      <Menu
+                        selectedKeys={[locVaiTro || 'tat_ca']}
+                        onClick={({ key }) => setLocVaiTro(key === 'tat_ca' ? '' : (key as EVaiTro))}
+                      >
+                        <Menu.Item key="tat_ca">Tất cả vai trò</Menu.Item>
+                        <Menu.Divider />
+                        {Object.entries(VAI_TRO_CONFIG).map(([k, c]) => (
+                          <Menu.Item key={k}>{c.label}</Menu.Item>
+                        ))}
+                      </Menu>
+                    }
+                  >
+                    <Button icon={<FilterOutlined />} className={styles.btnOutline}>
+                      {locVaiTro ? VAI_TRO_CONFIG[locVaiTro]?.label : 'Vai trò'}
+                    </Button>
+                  </Dropdown>
+                </Badge>
+              </>
             }
-            actions={undefined}
           />
 
           {danhSachLoc.length === 0 ? (
             <EmptyState
               kind="customers"
-              desc={tuKhoa || soBoLoc > 0 ? 'Không tìm thấy khách hàng phù hợp.' : undefined}
+              desc={tuKhoa || locVaiTro ? 'Không tìm thấy khách hàng phù hợp.' : undefined}
             />
           ) : (
             <TableStaticData<IKhachHang>
@@ -540,19 +545,6 @@ const KhachHang: React.FC = () => {
         </div>
       </div>
 
-      <LocKhachDrawer
-        open={filterOpen}
-        locVaiTro={locVaiTro}
-        locTrangThai={locTrangThai}
-        onClose={() => setFilterOpen(false)}
-        onApply={(vt, tt) => { setLocVaiTro(vt); setLocTrangThai(tt); }}
-      />
-      <ThemNguoiDungModal
-        open={themOpen}
-        danhSach={danhSach}
-        onClose={() => setThemOpen(false)}
-        onConfirm={handleThemNguoiDung}
-      />
       <ChiTietKhachDrawer
         khach={chiTietKhach}
         onClose={() => setChiTietKhach(null)}

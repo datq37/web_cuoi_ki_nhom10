@@ -1,4 +1,4 @@
-﻿import { ArrowUpOutlined, RightOutlined } from '@ant-design/icons';
+﻿import { ArrowUpOutlined } from '@ant-design/icons';
 import React, { useMemo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import {
@@ -8,7 +8,8 @@ import {
   fmtShort,
 } from '@/models/Quản Trị/Tổng Quan';
 import { mockData } from '@/services/Quản Trị/Tổng Quan';
-import type { HoatDongItem } from '@/services/Quản Trị/Tổng Quan/typing';
+import { ETrangThaiTrucTiep } from '@/services/Quản Trị/Tổng Quan/typing';
+import { KEYS, store } from '@/utils/storage';
 import styles from './index.less';
 
 const BannerIcon: React.FC<{ type: string }> = ({ type }) => {
@@ -43,41 +44,6 @@ const BannerIcon: React.FC<{ type: string }> = ({ type }) => {
   return <div className={styles.bannerIconWrap}>{icons[type]}</div>;
 };
 
-const HoatDongIcon: React.FC<{ item: HoatDongItem }> = ({ item }) => {
-  const icons: Record<string, React.ReactNode> = {
-    order: (
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
-        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-        <rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" strokeWidth="2" />
-      </svg>
-    ),
-    menu: (
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
-        <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
-    warehouse: (
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
-        <path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
-    delivery: (
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
-        <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3m-4 12h6m-3-3v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
-    promo: (
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
-        <path d="M20 12V22H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-  };
-  return (
-    <div className={styles.hdIconWrap} style={{ background: item.bgIcon, color: item.mauIcon }}>
-      {icons[item.type]}
-    </div>
-  );
-};
 
 type Range = 'week' | 'month' | 'quarter';
 
@@ -177,21 +143,83 @@ const CssHeatmap: React.FC = () => {
 
 const PhanTichView: React.FC = () => {
   const [range, setRange] = useState<Range>('week');
-  const { banners, doanhThuTuan, danhMuc, tongDanhMuc, topMon, donTheoTrangThai, hoatDong } =
-    mockData.phanTich;
+  const { danhMuc, tongDanhMuc } = mockData.phanTich;
+
+  // ── Banner dùng data thật từ localStorage ─────────────────────────
+  const realBanners = useMemo(() => {
+    const orders = store.get<typeof mockData.trucTiep.donHang>(KEYS.orders, mockData.trucTiep.donHang);
+    const cancelledSet = new Set<string>();
+    orders.forEach((o) => { if ((o.trangThai as any) === 'da_huy') cancelledSet.add(o.maDon); });
+    const active  = orders.filter((o) => !cancelledSet.has(o.maDon));
+    const done    = active.filter((o) => o.trangThai === ETrangThaiTrucTiep.HOAN_THANH);
+    const revenue = done.reduce((s, o) => s + o.tongTien, 0);
+    const uniqueKH = new Set(active.map((o) => o.khachHang.ten)).size;
+    const avgPerOrder = done.length > 0 ? Math.round(revenue / done.length) : 0;
+
+    return [
+      { id: 'revenue',  label: 'DOANH THU HÔM NAY', value: fmt(revenue),       change: `${done.length} đơn hoàn thành`,  icon: 'revenue'  },
+      { id: 'order',    label: 'TỔNG ĐƠN HÔM NAY',  value: String(active.length), change: `${cancelledSet.size} đơn đã huỷ`, icon: 'order'    },
+      { id: 'customer', label: 'KHÁCH ĐÃ ĐẶT',       value: String(uniqueKH),      change: 'Khách duy nhất hôm nay',          icon: 'customer' },
+      { id: 'average',  label: 'TRUNG BÌNH / ĐƠN',   value: fmt(avgPerOrder),      change: 'Tính từ đơn hoàn thành',          icon: 'average'  },
+    ];
+  }, []);
+
+  // ── Data thật từ localStorage ─────────────────────────────────────
+  const realOrders = useMemo(() =>
+    store.get<typeof mockData.trucTiep.donHang>(KEYS.orders, mockData.trucTiep.donHang),
+  []);
+
+  const realCancelledIds = useMemo(() => {
+    const s = new Set<string>();
+    realOrders.forEach((o) => { if ((o.trangThai as any) === 'da_huy') s.add(o.maDon); });
+    return s;
+  }, [realOrders]);
+
+  const realActive   = realOrders.filter((o) => !realCancelledIds.has(o.maDon));
+  const realDone     = realActive.filter((o) => o.trangThai === ETrangThaiTrucTiep.HOAN_THANH);
+  const realWaiting  = realActive.filter((o) => o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN);
+  const realCooking  = realActive.filter((o) => o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN);
+  const realReady    = realActive.filter((o) => o.trangThai === ETrangThaiTrucTiep.SAN_SANG);
+  const total        = realOrders.length;
+
+  // Top món bán chạy từ data thật
+  const realTopMon = useMemo(() => {
+    const counter: Record<string, number> = {};
+    realDone.forEach((o) => {
+      o.monAn.forEach((m) => { counter[m.ten] = (counter[m.ten] ?? 0) + m.soLuong; });
+    });
+    return Object.entries(counter)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([ten, soLuong], idx) => ({ rank: idx + 1, ten, soLuong }));
+  }, [realDone]);
+
+  // Đơn theo trạng thái từ data thật
+  const realDonTheoTrangThai = useMemo(() => {
+    const items = [
+      { ten: 'Hoàn thành',    mau: '#16a34a', so: realDone.length },
+      { ten: 'Đang chế biến', mau: '#2563eb', so: realCooking.length },
+      { ten: 'Sẵn sàng',      mau: '#7c3aed', so: realReady.length },
+      { ten: 'Chờ xác nhận',  mau: '#ea580c', so: realWaiting.length },
+      { ten: 'Đã huỷ',        mau: '#9ca3af', so: realCancelledIds.size },
+    ];
+    return items.map((t) => ({
+      ...t,
+      tyLe: total > 0 ? Math.round((t.so / total) * 100) : 0,
+    }));
+  }, [realDone, realCooking, realReady, realWaiting, realCancelledIds, total]);
+
+  // 5 đơn hoàn thành gần nhất
+  const recentDone = useMemo(() =>
+    [...realDone].reverse().slice(0, 5),
+  [realDone]);
 
   const rd = RANGE_DATA[range];
-  const barOptions = useMemo(
-    () => buildBarLineOptions(rd.labels),
-    [rd],
-  );
-  const barSeries = useMemo(
-    () => [
-      { name: 'Doanh thu', type: 'bar',  data: rd.tuanNay },
-      { name: 'Trung bình', type: 'line', data: rd.trungBinh },
-    ],
-    [rd],
-  );
+  const barOptions = useMemo(() => buildBarLineOptions(rd.labels), [rd]);
+  const barSeries = useMemo(() => [
+    { name: 'Doanh thu', type: 'bar',  data: rd.tuanNay },
+    { name: 'Trung bình', type: 'line', data: rd.trungBinh },
+  ], [rd]);
   const donutOptions = useMemo(
     () => buildDonutOptions(danhMuc.map((d) => d.ten), danhMuc.map((d) => d.mau), tongDanhMuc),
     [danhMuc, tongDanhMuc],
@@ -200,9 +228,9 @@ const PhanTichView: React.FC = () => {
 
   return (
     <div className={styles.phanTichWrap}>
-      {/* ── Banner thống kê ── */}
+      {/* ── Banner thống kê — data thật từ localStorage ── */}
       <div className={styles.statBanner}>
-        {banners.map((b, i) => (
+        {realBanners.map((b, i) => (
           <React.Fragment key={b.id}>
             {i > 0 && <div className={styles.bannerDiv} />}
             <div className={styles.bannerItem}>
@@ -222,11 +250,14 @@ const PhanTichView: React.FC = () => {
         ))}
       </div>
 
-      {/* ── Biểu đồ ── */}
+      {/* ── Biểu đồ — dữ liệu mô phỏng ── */}
       <div className={styles.chartRow2}>
         <div className={styles.barChartCard}>
           <div className={styles.chartHeader2}>
-            <span className={styles.chartTitle2}>{RANGE_CFG[range].title}</span>
+            <div>
+              <span className={styles.chartTitle2}>{RANGE_CFG[range].title}</span>
+              <span className={styles.mockNote}>· Dữ liệu mô phỏng</span>
+            </div>
             <div className={styles.rangeToggle}>
               {(['week', 'month', 'quarter'] as Range[]).map((r) => (
                 <button
@@ -267,56 +298,58 @@ const PhanTichView: React.FC = () => {
 
       {/* ── Bottom 3 cột ── */}
       <div className={styles.bottomRow}>
-        {/* Top món */}
+
+        {/* Top món bán chạy — data thật */}
         <div className={styles.bottomCard}>
           <div className={styles.cardHead}>
-            <span className={styles.cardTitle}>Top món bán chạy</span>
-            <a href="#" className={styles.viewAll}>Xem tất cả</a>
+            <span className={styles.cardTitle}>Top món hôm nay</span>
+            <span className={styles.realDataBadge}>Data thật</span>
           </div>
-          <table className={styles.topMonTable}>
-            <thead>
-              <tr>
-                <th>MÓN ĂN</th>
-                <th>ĐÃ BÁN</th>
-                <th>DOANH THU</th>
-              </tr>
-            </thead>
-            <tbody>
-              {topMon.map((m) => (
-                <tr key={m.rank}>
-                  <td>
-                    <div className={styles.topMonCell}>
-                      <img
-                        src={m.hinhAnh}
-                        alt={m.ten}
-                        className={styles.topMonImg}
-                        onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/36'; }}
-                      />
-                      <span>{m.rank}. {m.ten}</span>
-                    </div>
-                  </td>
-                  <td className={styles.tdCenter}>{m.daBan} {m.donVi}</td>
-                  <td className={styles.tdRight}>{fmtShort(m.doanhThu)}đ</td>
+          {realTopMon.length === 0 ? (
+            <div style={{ fontSize: 13, color: '#9ca3af', padding: '12px 0' }}>
+              Chưa có đơn hoàn thành hôm nay
+            </div>
+          ) : (
+            <table className={styles.topMonTable}>
+              <thead>
+                <tr>
+                  <th>MÓN ĂN</th>
+                  <th>ĐÃ BÁN</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {realTopMon.map((m) => (
+                  <tr key={m.ten}>
+                    <td>
+                      <div className={styles.topMonCell}>
+                        <span className={styles.rankNum}>{m.rank}</span>
+                        <span>{m.ten}</span>
+                      </div>
+                    </td>
+                    <td className={styles.tdCenter} style={{ fontWeight: 700, color: '#16a34a' }}>
+                      ×{m.soLuong}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
 
-        {/* Đơn theo trạng thái */}
+        {/* Đơn theo trạng thái — data thật */}
         <div className={styles.bottomCard}>
           <div className={styles.cardHead}>
-            <span className={styles.cardTitle}>Đơn hàng theo trạng thái</span>
-            <a href="#" className={styles.viewAll}>Xem chi tiết</a>
+            <span className={styles.cardTitle}>Phân bổ đơn hàng</span>
+            <span className={styles.realDataBadge}>Data thật</span>
           </div>
           <div className={styles.trangThaiList}>
-            {donTheoTrangThai.map((t) => (
-              <div key={t.key} className={styles.trangThaiRow}>
+            {realDonTheoTrangThai.map((t) => (
+              <div key={t.ten} className={styles.trangThaiRow}>
                 <div className={styles.trangThaiLeft}>
                   <span className={styles.trangThaiDot} style={{ background: t.mau }} />
                   <span className={styles.trangThaiTen}>{t.ten}</span>
                 </div>
-                <span className={styles.trangThaiSo}>{t.soDon} đơn</span>
+                <span className={styles.trangThaiSo}>{t.so} đơn</span>
                 <div className={styles.progressWrap2}>
                   <div className={styles.progressBar} style={{ width: `${t.tyLe}%`, background: t.mau }} />
                 </div>
@@ -330,14 +363,13 @@ const PhanTichView: React.FC = () => {
         <div className={styles.bottomCard}>
           <div className={styles.cardHead}>
             <span className={styles.cardTitle}>Giờ cao điểm trong tuần</span>
+            <span className={styles.mockNote}>Mô phỏng</span>
           </div>
           <div className={styles.heatLegend}>
             <span className={styles.heatLegendLabel}>Ít đơn</span>
             <div className={styles.heatLegendBar}>
               {[10, 30, 50, 70, 90].map((p) => (
-                <div
-                  key={p}
-                  className={styles.heatLegendCell}
+                <div key={p} className={styles.heatLegendCell}
                   style={{ background: `color-mix(in oklab, var(--accent-primary, #16a34a) ${p}%, var(--surface-sunken, #f3f4f6))` } as React.CSSProperties}
                 />
               ))}
@@ -348,26 +380,44 @@ const PhanTichView: React.FC = () => {
         </div>
       </div>
 
-      {/* ── Hoạt động gần đây ── */}
-      <div className={styles.hoatDongCard}>
+      {/* ── Bảng chi tiết đơn hoàn thành hôm nay ── */}
+      <div className={styles.bottomCard} style={{ marginTop: 0 }}>
         <div className={styles.cardHead}>
-          <span className={styles.cardTitle}>Hoạt động gần đây</span>
-          <a href="#" className={styles.viewAll}>Xem tất cả</a>
+          <span className={styles.cardTitle}>Đơn hoàn thành gần nhất</span>
+          <span className={styles.realDataBadge}>Data thật</span>
         </div>
-        <div className={styles.hoatDongScroll}>
-          {hoatDong.map((h) => (
-            <div key={h.id} className={styles.hoatDongItem}>
-              <HoatDongIcon item={h} />
-              <div className={styles.hdInfo}>
-                <div className={styles.hdTitle}>{h.tieuDe}</div>
-                <div className={styles.hdMota}>{h.moTa}</div>
-                <div className={styles.hdTime}>{h.thoiGian}</div>
-              </div>
-              <RightOutlined className={styles.hdArrow} />
-            </div>
-          ))}
-        </div>
+        {recentDone.length === 0 ? (
+          <div style={{ fontSize: 13, color: '#9ca3af', padding: '12px 0' }}>
+            Chưa có đơn hoàn thành hôm nay
+          </div>
+        ) : (
+          <table className={styles.topMonTable}>
+            <thead>
+              <tr>
+                <th>MÃ ĐƠN</th>
+                <th>KHÁCH HÀNG</th>
+                <th>MÓN ĂN</th>
+                <th>GIỜ</th>
+                <th style={{ textAlign: 'right' }}>TỔNG TIỀN</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentDone.map((o) => (
+                <tr key={o.maDon}>
+                  <td style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: 12 }}>{o.maDon}</td>
+                  <td style={{ fontWeight: 500 }}>{o.khachHang.ten}</td>
+                  <td style={{ color: '#6b7280', fontSize: 12 }}>
+                    {o.monAn.map((m) => `${m.ten} ×${m.soLuong}`).join(', ')}
+                  </td>
+                  <td style={{ color: '#9ca3af', fontSize: 12 }}>{o.thoiGian}</td>
+                  <td className={styles.tdRight} style={{ color: '#16a34a' }}>{fmt(o.tongTien)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
+
     </div>
   );
 };

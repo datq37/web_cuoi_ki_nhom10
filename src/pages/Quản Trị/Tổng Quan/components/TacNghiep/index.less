@@ -90,6 +90,187 @@
   &:hover { color: @primary-hover !important; }
 }
 
+// ── Quick KPIs ────────────────────────────────────────────────────
+.kpiRow {
+  display: flex;
+  align-items: center;
+  background: @surface;
+  border: 1px solid @border;
+  border-radius: @radius;
+  padding: 16px 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+
+.kpiItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kpiLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: @text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.kpiValue {
+  font-size: 24px;
+  font-weight: 800;
+  color: @text-dark;
+  line-height: 1.2;
+}
+
+.kpiSub {
+  font-size: 11.5px;
+  color: @text-muted;
+}
+
+.kpiDivider {
+  width: 1px;
+  height: 40px;
+  background: @border;
+  flex-shrink: 0;
+  margin: 0 20px;
+}
+
+// ── 2 cột layout ─────────────────────────────────────────────────
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
+}
+
+// ── Top món bán chạy ─────────────────────────────────────────────
+.topMonList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.topMonRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topMonRank {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: @text-muted;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rankGold   { background: #fef9c3; color: #ca8a04; }
+.rankSilver { background: #f1f5f9; color: #64748b; }
+.rankBronze { background: #fff7ed; color: #c2410c; }
+
+.topMonTen {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: @text-dark;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topMonRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.topMonSo {
+  font-size: 13px;
+  font-weight: 700;
+  color: @primary;
+  min-width: 30px;
+  text-align: right;
+}
+
+.topMonBar {
+  width: 60px;
+  height: 5px;
+  background: @primary-100;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.topMonFill {
+  height: 100%;
+  background: @primary;
+  border-radius: 99px;
+  transition: width 0.3s;
+}
+
+// ── Activity feed ─────────────────────────────────────────────────
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.activityRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid @border;
+  &:last-child { border-bottom: none; }
+}
+
+.activityIcon {
+  font-size: 18px;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.activityBody { flex: 1; min-width: 0; }
+
+.activityTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: @text-dark;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.activityDesc {
+  font-size: 12px;
+  color: @text-muted;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.activityTime {
+  font-size: 11px;
+  color: @text-light;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
 // ── Order stat grid ───────────────────────────────────────────────
 .orderStatGrid {
   display: grid;
@@ -211,11 +392,77 @@
   white-space: nowrap;
 }
 
+// ── Mini-list đơn cần xử lý ──────────────────────────────────────
+.recentList {
+  margin-top: 12px;
+  border-top: 1px solid @border;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recentTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: @text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.recentRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s;
+  &:hover { background: @primary-50; }
+}
+
+.recentInfo { flex: 1; min-width: 0; }
+
+.recentName {
+  font-size: 13px;
+  font-weight: 600;
+  color: @text-dark;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recentMon {
+  font-size: 11.5px;
+  color: @text-muted;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.recentBadge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.recentGia {
+  font-size: 12px;
+  font-weight: 700;
+  color: @primary;
+}
+
 // ── Shortcut grid ─────────────────────────────────────────────────
 .shortcutGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+
+  @media (min-width: 1200px) { grid-template-columns: repeat(6, 1fr); }
 }
 
 .shortcutBtn {
@@ -223,33 +470,57 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding: 18px 10px;
+  padding: 14px 8px;
   border: 1.5px solid @border;
-  border-radius: 10px;
+  border-radius: 12px;
   background: @surface;
   cursor: pointer;
   transition: all 0.15s;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 12.5px;
+  font-weight: 600;
   color: @text-mid;
 
   &:hover {
     border-color: @primary;
-    background: @primary-50;
-    color: @primary;
-
-    .shortcutIcon { color: @primary; }
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    color: @text-dark;
   }
 }
 
-.shortcutIcon {
-  font-size: 22px;
-  color: @text-muted;
-  transition: color 0.15s;
+.shortcutIconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.shortcutLabel {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  color: @text-mid;
 }
 
 // ── Dark mode ─────────────────────────────────────────────────────
 :global([data-theme="dark"]) {
+  .kpiRow      { background: #1e293b; border-color: #334155; }
+  .kpiValue    { color: #f1f5f9; }
+  .kpiLabel    { color: #64748b; }
+  .kpiSub      { color: #64748b; }
+  .kpiDivider  { background: #334155; }
+
+  .topMonTen   { color: #f1f5f9; }
+  .topMonBar   { background: #334155; }
+  .activityIcon { background: #0f172a; }
+  .activityTitle { color: #f1f5f9; }
+  .activityDesc  { color: #64748b; }
+  .activityTime  { color: #475569; }
+  .activityRow   { border-bottom-color: #334155; }
+
   .sectionCard { background: #1e293b; border-color: #334155; }
   .sectionTitle { color: #f1f5f9; }
 
@@ -269,7 +540,12 @@
     background: #0f172a;
     border-color: #334155;
     color: #94a3b8;
-    &:hover { background: rgba(22,163,74,.1); border-color: @primary; color: #4ade80; .shortcutIcon { color: #4ade80; } }
+    &:hover { border-color: @primary; }
   }
-  .shortcutIcon { color: #64748b; }
+  .shortcutLabel { color: #94a3b8; }
+  .recentRow { &:hover { background: rgba(22,163,74,.08); } }
+  .recentName { color: #f1f5f9; }
+  .recentMon  { color: #64748b; }
+  .recentList { border-top-color: #334155; }
+  .recentTitle { color: #475569; }
 }

@@ -2,8 +2,10 @@
   AlertOutlined,
   AppstoreOutlined,
   ArrowRightOutlined,
+  BellOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
+  CloseCircleOutlined,
   ExclamationCircleOutlined,
   FireOutlined,
   InboxOutlined,
@@ -49,13 +51,13 @@ const SHORTCUTS = [
   { path: '/quan-tri/nhan-vien',       icon: TeamOutlined,         label: 'Nhân viên',   color: '#d97706', bg: '#fffbeb' },
 ];
 
-const NOTIF_ICON: Record<string, string> = {
-  order_pending:   '·',
-  order_cooking:   '⊙',
-  order_ready:     '◈',
-  order_done:      '✓',
-  order_cancelled: '–',
-  stock_refilled:  '◈',
+const NOTIF_ICON_MAP: Record<string, React.ReactNode> = {
+  order_pending:   <ClockCircleOutlined />,
+  order_cooking:   <FireOutlined />,
+  order_ready:     <CheckCircleOutlined />,
+  order_done:      <CheckCircleOutlined />,
+  order_cancelled: <CloseCircleOutlined />,
+  stock_refilled:  <InboxOutlined />,
 };
 
 const TacNghiepView: React.FC = () => {
@@ -252,6 +254,7 @@ const TacNghiepView: React.FC = () => {
         <div className={styles.sectionCard}>
           <div className={styles.sectionHeader}>
             <div className={styles.sectionTitle}>
+              <FireOutlined style={{ marginRight: 8, color: '#ea580c' }} />
               Top món hôm nay
             </div>
           </div>
@@ -283,7 +286,7 @@ const TacNghiepView: React.FC = () => {
         {/* Activity feed */}
         <div className={styles.sectionCard}>
           <div className={styles.sectionHeader}>
-            <div className={styles.sectionTitle}>Hoạt động gần nhất</div>
+            <div className={styles.sectionTitle}><ClockCircleOutlined style={{ marginRight: 8, color: '#6b7280' }} />Hoạt động gần nhất</div>
           </div>
           {recentActivity.length === 0 ? (
             <div className={styles.khoOk} style={{ fontSize: 13 }}>Chưa có hoạt động nào</div>
@@ -291,7 +294,7 @@ const TacNghiepView: React.FC = () => {
             <div className={styles.activityList}>
               {recentActivity.map((n) => (
                 <div key={n.id} className={styles.activityRow}>
-                  <div className={styles.activityIcon}>{n.icon || NOTIF_ICON[n.type] || '🔔'}</div>
+                  <div className={styles.activityIcon}>{NOTIF_ICON_MAP[n.type] || <BellOutlined />}</div>
                   <div className={styles.activityBody}>
                     <div className={styles.activityTitle}>{n.title}</div>
                     <div className={styles.activityDesc}>{n.desc}</div>
@@ -348,7 +351,7 @@ const TacNghiepView: React.FC = () => {
 
       {/* ── Shortcuts ─────────────────────────────────────────────── */}
       <div className={styles.sectionCard}>
-        <div className={styles.sectionTitle} style={{ marginBottom: 14 }}>Truy cập nhanh</div>
+        <div className={styles.sectionTitle} style={{ marginBottom: 14 }}><AppstoreOutlined style={{ marginRight: 8, color: '#6b7280' }} />Truy cập nhanh</div>
         <div className={styles.shortcutGrid}>
           {SHORTCUTS.map(({ path, icon: Icon, label, color, bg }) => (
             <button key={path} className={styles.shortcutBtn} onClick={() => history.push(path)}>

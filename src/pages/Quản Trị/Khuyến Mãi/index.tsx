@@ -3,8 +3,10 @@
   EditOutlined,
   ExclamationCircleOutlined,
   FilterOutlined,
+  GiftOutlined,
   PlusOutlined,
   SearchOutlined,
+  TagOutlined,
 } from '@ant-design/icons';
 import {
   Badge,
@@ -1048,13 +1050,13 @@ const KhuyenMai: React.FC = () => {
               className={`${styles.tabBtn} ${activeTab === 'ma-giam-gia' ? styles.tabActive : ''}`}
               onClick={() => setActiveTab('ma-giam-gia')}
             >
-              Mã Giảm Giá
+              <TagOutlined /> Mã Giảm Giá
             </button>
             <button
               className={`${styles.tabBtn} ${activeTab === 'combo' ? styles.tabActive : ''}`}
               onClick={() => setActiveTab('combo')}
             >
-              Combo
+              <GiftOutlined /> Combo
             </button>
           </div>
 

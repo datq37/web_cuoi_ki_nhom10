@@ -526,34 +526,36 @@
   transition: width 0.3s;
 }
 
-// Pill tabs — đồng bộ với Đơn Hàng, Kho, Quản Lý Món
+// Underline tabs — đồng bộ với Đơn Hàng, Kho, Tổng Quan
 .tabsRow {
   display: flex;
-  gap: 3px;
-  background: @surface;
-  border: 1px solid @border;
-  border-radius: 10px;
-  padding: 4px;
-  align-self: flex-start;
+  gap: 4px;
+  border-bottom: 2px solid @border;
+  margin-bottom: -1px;
 }
 
 .tabBtn {
-  padding: 7px 20px;
-  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
   border: none;
   background: transparent;
-  font-size: @fs-base;
-  font-weight: 500;
   color: @text-muted;
+  font-size: @fs-md;
+  font-weight: 500;
   cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
   transition: all 0.15s;
-  &:hover { background: @divider; color: @text-dark; }
+  border-radius: 8px 8px 0 0;
+  &:hover { color: @text-dark; background: @surface-hover; }
 }
 
 .tabActive {
-  background: @primary !important;
-  color: #fff !important;
-  &:hover { background: @primary-hover !important; }
+  color: @primary !important;
+  border-bottom-color: @primary !important;
+  font-weight: 700;
 }
 
 .comboToolbar {
@@ -972,8 +974,8 @@
 }
 
 :global([data-theme="dark"]) {
-  .tabsRow { background: #1e293b; border-color: #334155; }
-  .tabBtn  { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
+  .tabsRow { border-bottom-color: #334155; }
+  .tabBtn  { color: #64748b; &:hover { background: #0f172a; color: #cbd5e1; } }
 
   .statValue { color: #f1f5f9; }
   .statLabel { color: #64748b; }

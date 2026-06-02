@@ -19,6 +19,7 @@ from model import (  # noqa: F401 — đăng ký metadata theo schema.sql
     ThucDon,
     Payment,
 )
+from routes import admin_orders, auth, categories, khachhang, menus, notification, orders, payments, report
 from routes import api_router
 
 

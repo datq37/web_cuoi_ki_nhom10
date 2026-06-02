@@ -1,4 +1,7 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
+import axios from '@/utils/axios';
+import { ip3 } from '@/utils/ip';
+import { SyncAdapters } from '@/services/api/adapters';
 
 const KEY_HISTORY = 'lich_su_nhap';
 
@@ -19,6 +22,21 @@ function nowStr() {
 
 export default function useKhoNguyenLieuModel() {
   const [items, setItems] = useState<any[]>([]);
+
+  const fetchItems = useCallback(async () => {
+    try {
+      const res = await axios.get(`${ip3}/inventory`);
+      if (res.data && res.data.items) {
+        setItems(res.data.items.map(SyncAdapters.mapAdminInventoryToUI));
+      }
+    } catch (error) {
+      console.error("Failed to load inventory:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchItems();
+  }, [fetchItems]);
 
   const [lichSuNhap, setLichSuNhap] = useState<any[]>(() => {
     try {
@@ -55,47 +73,97 @@ export default function useKhoNguyenLieuModel() {
     try { localStorage.removeItem(KEY_HISTORY); } catch { /* */ }
   }, []);
 
-  const addNguyenLieu = useCallback((values: any) => {
-    const item = { ...values, id: `nl_${Date.now()}`, trangThai: calcTrangThai(values.tonKho, values.mucToiThieu) };
-    setItems((p) => [item, ...p]);
-    return item;
-  }, []);
+  const addNguyenLieu = useCallback(async (values: any) => {
+    try {
+      const payload = {
+        mahang: values.id || `NL${Math.floor(Math.random() * 10000)}`,
+        ten: values.ten,
+        donvi: values.donVi,
+        nhacungcap: values.nhaCungCap,
+        soluong: values.tonKho,
+        gianhap: values.giaNhap,
+        trangthai: calcTrangThai(values.tonKho, values.mucToiThieu)
+      };
+      await axios.post(`${ip3}/inventory`, payload);
+      await fetchItems();
+      return payload;
+    } catch (error) {
+      console.error("Failed to add inventory", error);
+      throw error;
+    }
+  }, [fetchItems]);
 
-  const updateNguyenLieu = useCallback((id: string, values: any) => {
-    setItems((p) => p.map((n: any) => n.id === id ? { ...n, ...values, trangThai: calcTrangThai(values.tonKho, values.mucToiThieu) } : n));
-  }, []);
+  const updateNguyenLieu = useCallback(async (id: string, values: any) => {
+    try {
+      const payload = {
+        ten: values.ten,
+        donvi: values.donVi,
+        nhacungcap: values.nhaCungCap,
+        soluong: values.tonKho,
+        gianhap: values.giaNhap,
+        trangthai: calcTrangThai(values.tonKho, values.mucToiThieu)
+      };
+      await axios.patch(`${ip3}/inventory/${id}`, payload);
+      await fetchItems();
+    } catch (error) {
+      console.error("Failed to update inventory", error);
+      throw error;
+    }
+  }, [fetchItems]);
 
-  const deleteNguyenLieu = useCallback((id: string) => {
-    setItems((p) => p.filter((n: any) => n.id !== id));
-  }, []);
+  const deleteNguyenLieu = useCallback(async (id: string) => {
+    try {
+      await axios.delete(`${ip3}/inventory/${id}`);
+      await fetchItems();
+    } catch (error) {
+      console.error("Failed to delete inventory", error);
+      throw error;
+    }
+  }, [fetchItems]);
 
-  const restock = useCallback((id: string, soLuongNhap: number, newGiaNhap: number) => {
-    let ten = '', donVi = '';
-    setItems((p) => p.map((n: any) => {
-      if (n.id !== id) return n;
-      ten = n.ten; donVi = n.donVi;
-      const tonKhoMoi = n.tonKho + soLuongNhap;
-      return { ...n, tonKho: tonKhoMoi, giaNhap: newGiaNhap, trangThai: calcTrangThai(tonKhoMoi, n.mucToiThieu) };
-    }));
-    addLichSu([{ id: `ls_${Date.now()}`, tenNL: ten, donVi, soLuong: soLuongNhap, giaNhap: newGiaNhap, ngay: nowStr() }]);
-    return { ten, donVi };
-  }, [addLichSu]);
+  const restock = useCallback(async (id: string, soLuongNhap: number, newGiaNhap: number) => {
+    const n = items.find((x) => x.id === id);
+    if (!n) throw new Error("Not found");
+    const tonKhoMoi = n.tonKho + soLuongNhap;
+    try {
+      await axios.patch(`${ip3}/inventory/${id}`, {
+        soluong: tonKhoMoi,
+        gianhap: newGiaNhap,
+        trangthai: calcTrangThai(tonKhoMoi, n.mucToiThieu)
+      });
+      await fetchItems();
+      addLichSu([{ id: `ls_${Date.now()}`, tenNL: n.ten, donVi: n.donVi, soLuong: soLuongNhap, giaNhap: newGiaNhap, ngay: nowStr() }]);
+      return { ten: n.ten, donVi: n.donVi };
+    } catch (error) {
+      console.error("Failed to restock", error);
+      throw error;
+    }
+  }, [items, fetchItems, addLichSu]);
 
-  const bulkRestock = useCallback((updates: any[]) => {
+  const bulkRestock = useCallback(async (updates: any[]) => {
     let totalAmount = 0;
     const entries: any[] = [];
     const now = nowStr();
-    setItems((p) => p.map((n: any) => {
-      const u = updates.find((x) => x.id === n.id);
-      if (!u) return n;
-      entries.push({ id: `ls_${Date.now()}_${n.id}`, tenNL: n.ten, donVi: n.donVi, soLuong: u.soLuongNhap, giaNhap: n.giaNhap, ngay: now });
-      totalAmount += u.soLuongNhap * n.giaNhap;
-      const tonKhoMoi = n.tonKho + u.soLuongNhap;
-      return { ...n, tonKho: tonKhoMoi, trangThai: calcTrangThai(tonKhoMoi, n.mucToiThieu) };
-    }));
-    addLichSu(entries);
-    return totalAmount;
-  }, [addLichSu]);
+    try {
+      await Promise.all(updates.map(async (u) => {
+        const n = items.find((x) => x.id === u.id);
+        if (!n) return;
+        const tonKhoMoi = n.tonKho + u.soLuongNhap;
+        await axios.patch(`${ip3}/inventory/${u.id}`, {
+          soluong: tonKhoMoi,
+          trangthai: calcTrangThai(tonKhoMoi, n.mucToiThieu)
+        });
+        entries.push({ id: `ls_${Date.now()}_${n.id}`, tenNL: n.ten, donVi: n.donVi, soLuong: u.soLuongNhap, giaNhap: n.giaNhap, ngay: now });
+        totalAmount += u.soLuongNhap * n.giaNhap;
+      }));
+      await fetchItems();
+      addLichSu(entries);
+      return totalAmount;
+    } catch (error) {
+      console.error("Failed to bulk restock", error);
+      throw error;
+    }
+  }, [items, fetchItems, addLichSu]);
 
   return { items, setItems, lichSuNhap, stats, nhaCungCapOptions, canNhapThemItems, clearLichSu, addNguyenLieu, updateNguyenLieu, deleteNguyenLieu, restock, bulkRestock };
 }

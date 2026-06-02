@@ -1,4 +1,4 @@
-﻿import {
+import {
   AppstoreOutlined,
   DeleteOutlined,
   EditOutlined,
@@ -38,10 +38,8 @@ import PageToolbar from '@/pages/QuanTri/components/PageToolbar';
 import { KEYS, store } from '@/utils/storage';
 import { useNotif } from '@/context/NotifContext';
 import Topbar from '@/pages/QuanTri/Topbar';
-import {
-  DANH_SACH_NGUYEN_LIEU,
-  TRANG_THAI_CONFIG,
-} from '@/services/QuanTri/Kho Nguyên Liệu';
+import { TRANG_THAI_CONFIG } from '@/services/QuanTri/Kho Nguyên Liệu';
+import useKhoNguyenLieuModel from '@/models/QuanTri/Kho Nguyên Liệu';
 import {
   ETrangThaiNguyenLieu,
   INguyenLieu,
@@ -584,16 +582,14 @@ const NguyenLieuDetail: React.FC<{
 
 const KhoNguyenLieu: React.FC = () => {
   const { addNotif } = useNotif();
-  const [items,           setItems]           = useState<INguyenLieu[]>(DANH_SACH_NGUYEN_LIEU);
+  const { items, stats, nhaCungCapOptions, canNhapThemItems, lichSuNhap, clearLichSu, addNguyenLieu, updateNguyenLieu, deleteNguyenLieu, restock, bulkRestock } = useKhoNguyenLieuModel();
+  
   const [tuKhoa,          setTuKhoa]          = useState('');
   const [filterTrangThai, setFilterTrangThai] = useState<TrangThaiFilter>('all');
   const [filterNCC,       setFilterNCC]       = useState<string>('');
   const [sortBy,          setSortBy]          = useState<'mac_dinh' | 'ton_thap' | 'ton_cao' | 'gia_cao'>('mac_dinh');
   const [isGrid,          setIsGrid]          = useState(false);
   const [activeTab,       setActiveTab]       = useState<ViewTab>('danh_sach');
-  const [lichSuNhap,      setLichSuNhap]      = useState<ILichSuNhap[]>(() =>
-    store.get<ILichSuNhap[]>(KEYS.importHistory, []),
-  );
   const [editing, setEditing] = useState<INguyenLieu | null>(null);
   const [viewing, setViewing] = useState<INguyenLieu | null>(null);
   const [formOpen, setFormOpen] = useState(false);
@@ -601,14 +597,6 @@ const KhoNguyenLieu: React.FC = () => {
   const [restockOpen, setRestockOpen] = useState(false);
   const [bulkRestockOpen, setBulkRestockOpen] = useState(false);
   const [bulkPreSelectIds, setBulkPreSelectIds] = useState<string[]>([]);
-
-  const stats = useMemo(() => {
-    const tongNguyenLieu = items.length;
-    const sapHetHet = items.filter((n) => n.trangThai === ETrangThaiNguyenLieu.SAP_HET || n.trangThai === ETrangThaiNguyenLieu.HET_HANG).length;
-    const giaTri = formatGia(items.reduce((s, n) => s + n.tonKho * n.giaNhap, 0));
-    const nhaCungCap = new Set(items.map((n) => n.nhaCungCap)).size;
-    return { tongNguyenLieu, sapHetHet, giaTri, nhaCungCap };
-  }, [items]);
 
 
   const danhSachLoc = useMemo(() => {
@@ -625,55 +613,40 @@ const KhoNguyenLieu: React.FC = () => {
     return list;
   }, [items, tuKhoa, filterTrangThai, filterNCC, sortBy]);
 
-  const canNhapThemItems = useMemo(() => items.filter((n) => n.trangThai !== ETrangThaiNguyenLieu.DU_HANG), [items]);
-  const nhaCungCapOptions = useMemo(() => Array.from(new Set(items.map((n) => n.nhaCungCap))), [items]);
-
-  const addLichSu = (entries: ILichSuNhap[]) => {
-    setLichSuNhap((prev) => { const next = [...entries, ...prev]; store.set(KEYS.importHistory, next); return next; });
-  };
-
-  const handleSubmit = (values: NguyenLieuFormValues) => {
-    const trangThai = tinhTrangThai(values.tonKho, values.mucToiThieu);
-    if (editing) {
-      setItems((prev) => prev.map((n) => n.id === editing.id ? { ...editing, ...values, trangThai } : n));
-      message.success(`Đã cập nhật "${values.ten}"`);
-    } else {
-      const newItem: INguyenLieu = { ...values, id: `nl_${Date.now()}`, trangThai };
-      setItems((prev) => [newItem, ...prev]);
-      message.success(`Đã thêm nguyên liệu "${values.ten}"`);
+  const handleSubmit = async (values: NguyenLieuFormValues) => {
+    try {
+      if (editing) {
+        await updateNguyenLieu(editing.id, values);
+        message.success(`Đã cập nhật "${values.ten}"`);
+      } else {
+        await addNguyenLieu(values);
+        message.success(`Đã thêm nguyên liệu "${values.ten}"`);
+      }
+      setFormOpen(false);
+      setEditing(null);
+    } catch (e) {
+      // error handled in model
     }
-    setFormOpen(false);
-    setEditing(null);
   };
 
-  const handleRestock = (id: string, soLuongNhap: number, newGiaNhap: number) => {
-    let ten = '', donVi = '';
-    setItems((prev) => prev.map((n) => {
-      if (n.id !== id) return n;
-      ten = n.ten; donVi = n.donVi;
-      const tonKhoMoi = n.tonKho + soLuongNhap;
-      return { ...n, tonKho: tonKhoMoi, giaNhap: newGiaNhap, trangThai: tinhTrangThai(tonKhoMoi, n.mucToiThieu) };
-    }));
-    addLichSu([{ id: `ls_${Date.now()}`, tenNL: ten, donVi, soLuong: soLuongNhap, giaNhap: newGiaNhap, ngay: dayjs().format('HH:mm DD/MM/YYYY') }]);
-    message.success(`Đã nhập ${soLuongNhap} ${donVi} ${ten}`);
-    addNotif({ icon: '📦', title: 'Đã nhập kho', desc: `${ten}: +${soLuongNhap} ${donVi}`, type: 'stock_refilled' });
-    setRestockOpen(false); setRestocking(null);
+  const handleRestock = async (id: string, soLuongNhap: number, newGiaNhap: number) => {
+    try {
+      const res = await restock(id, soLuongNhap, newGiaNhap);
+      message.success(`Đã nhập ${soLuongNhap} ${res.donVi} ${res.ten}`);
+      addNotif({ icon: '📦', title: 'Đã nhập kho', desc: `${res.ten}: +${soLuongNhap} ${res.donVi}`, type: 'stock_refilled' });
+      setRestockOpen(false); setRestocking(null);
+    } catch (e) {
+      // error handled
+    }
   };
 
-  const handleBulkRestock = (updates: { id: string; soLuongNhap: number }[]) => {
-    const totalAmount = updates.reduce((sum, u) => { const it = items.find((n) => n.id === u.id); return sum + (it ? u.soLuongNhap * it.giaNhap : 0); }, 0);
-    const now = dayjs().format('HH:mm DD/MM/YYYY');
-    const entries: ILichSuNhap[] = [];
-    setItems((prev) => prev.map((n) => {
-      const u = updates.find((x) => x.id === n.id); if (!u) return n;
-      entries.push({ id: `ls_${Date.now()}_${n.id}`, tenNL: n.ten, donVi: n.donVi, soLuong: u.soLuongNhap, giaNhap: n.giaNhap, ngay: now });
-      const tonKhoMoi = n.tonKho + u.soLuongNhap;
-      return { ...n, tonKho: tonKhoMoi, trangThai: tinhTrangThai(tonKhoMoi, n.mucToiThieu) };
-    }));
-    addLichSu(entries);
-    message.success(`Đã nhập kho ${updates.length} mặt hàng, tổng ${formatGia(totalAmount)}`);
-    addNotif({ icon: '📦', title: 'Nhập kho hàng loạt', desc: `${updates.length} mặt hàng · Tổng ${formatGia(totalAmount)}`, type: 'stock_refilled' });
-    setBulkRestockOpen(false);
+  const handleBulkRestock = async (updates: { id: string; soLuongNhap: number }[]) => {
+    try {
+      const totalAmount = await bulkRestock(updates);
+      message.success(`Đã nhập kho ${updates.length} mặt hàng, tổng ${formatGia(totalAmount)}`);
+      addNotif({ icon: '📦', title: 'Nhập kho hàng loạt', desc: `${updates.length} mặt hàng · Tổng ${formatGia(totalAmount)}`, type: 'stock_refilled' });
+      setBulkRestockOpen(false);
+    } catch (e) {}
   };
 
   const handleDelete = (item: INguyenLieu) => {
@@ -684,7 +657,10 @@ const KhoNguyenLieu: React.FC = () => {
       okText: 'Xoá', okType: 'danger', cancelText: 'Huỷ', centered: true,
       okButtonProps: { style: { borderRadius: 8 } },
       cancelButtonProps: { style: { borderRadius: 8 } },
-      onOk: () => { setItems((prev) => prev.filter((n) => n.id !== item.id)); message.success(`Đã xoá "${item.ten}"`); },
+      onOk: async () => { 
+        await deleteNguyenLieu(item.id); 
+        message.success(`Đã xoá "${item.ten}"`); 
+      },
     });
   };
 

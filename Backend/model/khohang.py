@@ -14,3 +14,6 @@ class KhoHang(Base):
     soluong: Mapped[float | None] = mapped_column(Float, nullable=True)
     gianhap: Mapped[float | None] = mapped_column(Numeric, nullable=True)
     trangthai: Mapped[str | None] = mapped_column(String, nullable=True)
+    donvi: Mapped[str | None] = mapped_column(String, nullable=True)
+    nhacungcap: Mapped[str | None] = mapped_column(String, nullable=True)
+

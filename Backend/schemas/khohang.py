@@ -11,6 +11,8 @@ class KhoHangBase(BaseModel):
     soluong: float | None = None
     gianhap: Decimal | None = None
     trangthai: str | None = None
+    donvi: str | None = None
+    nhacungcap: str | None = None
 
 
 class KhoHangCreate(KhoHangBase):
@@ -26,6 +28,8 @@ class KhoHangUpdate(BaseModel):
     soluong: float | None = None
     gianhap: Decimal | None = None
     trangthai: str | None = None
+    donvi: str | None = None
+    nhacungcap: str | None = None
 
 
 class KhoHangResponse(KhoHangBase):
@@ -33,3 +37,10 @@ class KhoHangResponse(KhoHangBase):
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
 
     mahang: str
+
+
+class KhoHangListResponse(BaseModel):
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
+    items: list[KhoHangResponse]
+    total: int

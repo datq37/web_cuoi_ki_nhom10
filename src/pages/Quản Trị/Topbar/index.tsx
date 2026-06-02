@@ -80,8 +80,9 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
   const dateStr = moment().format('D [tháng] M, YYYY');
   const { isDark, toggleDark } = useTheme();
   const { notifs, markRead, markAll } = useNotif();
-  const [notifOpen, setNotifOpen] = useState(false);
-  const [userOpen,  setUserOpen]  = useState(false);
+  const [notifOpen,   setNotifOpen]   = useState(false);
+  const [userOpen,    setUserOpen]    = useState(false);
+  const [logoutOpen,  setLogoutOpen]  = useState(false);
 
   const unreadCount = notifs.filter((n) => !n.read).length;
 
@@ -97,18 +98,7 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
 
   const handleLogout = () => {
     setUserOpen(false);
-    Modal.confirm({
-      title: 'Xác nhận đăng xuất',
-      content: 'Bạn có chắc muốn đăng xuất khỏi trang quản trị?',
-      okText: 'Đăng xuất',
-      cancelText: 'Huỷ',
-      okType: 'danger',
-      centered: true,
-      icon: <LogoutOutlined style={{ color: '#dc2626' }} />,
-      okButtonProps: { style: { background: '#dc2626', borderColor: '#dc2626', borderRadius: 8 } },
-      cancelButtonProps: { style: { borderRadius: 8 } },
-      onOk: () => { authLogout(); },
-    });
+    setLogoutOpen(true);
   };
 
   const handleHoTro = () => {
@@ -126,7 +116,7 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
         </div>
       ),
       okText: 'Đóng',
-      okButtonProps: { style: { background: '#16a34a', borderColor: '#16a34a', borderRadius: 8 } },
+      okButtonProps: { style: { background: '#16a34a', borderColor: '#16a34a', borderRadius: 8, height: 36, fontWeight: 500 } },
     });
   };
 
@@ -177,6 +167,7 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
   );
 
   return (
+    <>
     <header className={styles.topbar}>
       <div className={styles.left}>
         <h1 className={styles.pageTitle}>{title}</h1>
@@ -237,6 +228,39 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
         </Dropdown>
       </div>
     </header>
+
+    <Modal
+      visible={logoutOpen}
+      centered
+      width={420}
+      onCancel={() => setLogoutOpen(false)}
+      className={styles.logoutModal}
+      footer={
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+          <Button style={{ borderRadius: 8, height: 36, fontWeight: 500 }} onClick={() => setLogoutOpen(false)}>Huỷ</Button>
+          <Button
+            danger
+            type="primary"
+            icon={<LogoutOutlined />}
+            style={{ borderRadius: 8, height: 36, fontWeight: 500 }}
+            onClick={() => { setLogoutOpen(false); authLogout(); }}
+          >
+            Đăng xuất
+          </Button>
+        </div>
+      }
+    >
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, padding: '8px 0' }}>
+        <div style={{ width: 44, height: 44, borderRadius: 12, background: '#fef2f2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <LogoutOutlined style={{ fontSize: 20, color: '#dc2626' }} />
+        </div>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 16, color: 'inherit', marginBottom: 6 }}>Xác nhận đăng xuất</div>
+          <div style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.6 }}>Bạn có chắc muốn đăng xuất khỏi trang quản trị?</div>
+        </div>
+      </div>
+    </Modal>
+    </>
   );
 };
 

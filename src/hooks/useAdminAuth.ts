@@ -31,7 +31,7 @@ function useAdminAuth() {
   /** Đăng xuất: xoá session + redirect về login */
   const logout = useCallback(() => {
     clearAdminSession();
-    history.replace('/admin-login');
+    history.replace('/');
   }, []);
 
   /** Cập nhật thông tin user (dùng khi lưu từ Cài Đặt) */

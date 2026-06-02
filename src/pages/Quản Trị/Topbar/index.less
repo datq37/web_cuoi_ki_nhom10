@@ -403,6 +403,22 @@
   &:hover { background: @danger-soft; color: @danger; }
 }
 
+// ── Logout modal ─────────────────────────────────────────────────
+.logoutModal {
+  :global(.ant-modal-content) {
+    border-radius: 16px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.14);
+    overflow: hidden;
+  }
+  :global(.ant-modal-body) { padding: 24px 24px 16px; }
+  :global(.ant-modal-footer) { padding: 12px 24px 16px; border-top: 1px solid #f1f5f9; }
+  :global(.ant-modal-close) {
+    top: 14px; right: 16px; width: 32px; height: 32px;
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    &:hover { background: #f1f5f9; }
+  }
+}
+
 // ── Dark mode ────────────────────────────────────────────────────
 :global([data-theme="dark"]) {
   .topbar {
@@ -461,4 +477,11 @@
   .dropdownItem     { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
   .dropdownItemIcon { color: #64748b; }
   .dropdownLogout   { color: #f87171; .dropdownItemIcon { color: #f87171; } &:hover { background: rgba(239,68,68,.12); } }
+
+  .logoutModal {
+    :global(.ant-modal-content) { background: #1e293b; }
+    :global(.ant-modal-footer)  { border-top-color: #334155; background: #1e293b; }
+    :global(.ant-modal-close)   { color: #64748b; &:hover { background: #334155; } }
+    :global(.ant-btn-default)   { background: #0f172a !important; border-color: #334155 !important; color: #94a3b8 !important; }
+  }
 }

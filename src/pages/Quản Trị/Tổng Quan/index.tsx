@@ -1,4 +1,4 @@
-import { DownloadOutlined, FileExcelOutlined } from '@ant-design/icons';
+import { BarChartOutlined, DownloadOutlined, FileExcelOutlined, ThunderboltOutlined } from '@ant-design/icons';
 import { Button, message } from 'antd';
 import moment from 'moment';
 import React, { useState } from 'react';
@@ -31,9 +31,9 @@ const TongQuan: React.FC = () => {
   const [reportOpen, setReportOpen] = useState(false);
   const [exporting, setExporting] = useState(false);
 
-  const tabs: { key: ETabKey; label: string }[] = [
-    { key: ETabKey.TAC_NGHIEP, label: 'Tác nghiệp' },
-    { key: ETabKey.PHAN_TICH,  label: 'Phân tích' },
+  const tabs: { key: ETabKey; label: string; icon: React.ReactNode }[] = [
+    { key: ETabKey.TAC_NGHIEP, label: 'Tác nghiệp', icon: <ThunderboltOutlined /> },
+    { key: ETabKey.PHAN_TICH,  label: 'Phân tích',  icon: <BarChartOutlined /> },
   ];
 
   const handleExportExcel = () => {
@@ -108,20 +108,20 @@ const TongQuan: React.FC = () => {
       <Topbar title="Tổng quan" />
 
       <div className={styles.pageBody}>
-          {/* Hàng 1: Tabs */}
-          <div className={styles.tabsRow}>
-            {tabs.map((t) => (
-              <button
-                key={t.key}
-                className={`${styles.tabBtn} ${activeTab === t.key ? styles.tabActive : ''}`}
-                onClick={() => setActiveTab(t.key)}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-
-          <div className={styles.pageHeader}>
+          {/* Tabs + Export cùng hàng */}
+          <div className={styles.tabsRowWrap}>
+            <div className={styles.tabsRow}>
+              {tabs.map((t) => (
+                <button
+                  key={t.key}
+                  className={`${styles.tabBtn} ${activeTab === t.key ? styles.tabActive : ''}`}
+                  onClick={() => setActiveTab(t.key)}
+                >
+                  {t.icon}{' '}{t.label}
+                </button>
+              ))}
+            </div>
+            <div className={styles.pageHeader}>
             <div style={{ display: 'flex', gap: 8 }}>
               <Button
                 icon={<FileExcelOutlined />}
@@ -139,6 +139,7 @@ const TongQuan: React.FC = () => {
               >
                 Xuất báo cáo
               </Button>
+            </div>
             </div>
           </div>
 

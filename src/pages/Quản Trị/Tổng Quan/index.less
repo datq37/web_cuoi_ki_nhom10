@@ -4,41 +4,51 @@
 @shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
 
 .pageBody { padding: 16px 20px 24px; flex: 1; display: flex; flex-direction: column; gap: 14px; }
-// pageHeader giờ là hàng date + export
+
+// Wrapper: tabs trái + actions phải cùng hàng
+.tabsRowWrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
 .pageHeader {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
+  gap: 8px;
+  padding-bottom: 2px;
 }
 
 .tabsRow {
   display: flex;
-  gap: 3px;
-  background: @surface;
-  border: 1px solid @border;
-  border-radius: 10px;
-  padding: 4px;
-  align-self: flex-start;
+  gap: 4px;
+  border-bottom: 2px solid @border;
+  margin-bottom: -1px;
 }
 
 .tabBtn {
-  padding: 7px 18px;
-  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  padding: 10px 24px;
   border: none;
   background: transparent;
-  font-size: @fs-base;
-  font-weight: 500;
   color: @text-muted;
+  font-size: @fs-lg;
+  font-weight: 500;
   cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
   transition: all 0.15s;
-  &:hover { background: #f9fafb; color: @text-dark; }
+  border-radius: 8px 8px 0 0;
+  letter-spacing: -0.01em;
+
+  &:hover { color: @text-dark; background: @surface-hover; }
 }
 
 .tabActive {
-  background: @primary !important;
-  color: white !important;
-  &:hover { background: @primary-hover !important; }
+  color: @primary !important;
+  border-bottom-color: @primary !important;
+  font-weight: 700;
 }
 
 .headerRight { display: flex; align-items: center; gap: 10px; }
@@ -793,8 +803,8 @@
 }
 
 :global([data-theme="dark"]) {
-  .tabsRow { background: #1e293b; border-color: #334155; }
-  .tabBtn { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
+  .tabsRow { border-bottom-color: #334155; background: transparent; }
+  .tabBtn { color: #64748b; &:hover { color: #cbd5e1; background: #0f172a; } }
   .tabCount { background: rgba(255,255,255,0.08); color: #94a3b8; }
 
   .dateChip { background: #1e293b; border-color: #334155; color: #94a3b8; }

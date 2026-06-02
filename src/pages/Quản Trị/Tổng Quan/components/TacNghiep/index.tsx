@@ -1,4 +1,4 @@
-import {
+﻿import {
   AlertOutlined,
   AppstoreOutlined,
   ArrowRightOutlined,
@@ -50,12 +50,12 @@ const SHORTCUTS = [
 ];
 
 const NOTIF_ICON: Record<string, string> = {
-  order_pending:   '🛒',
-  order_cooking:   '🍳',
-  order_ready:     '📦',
-  order_done:      '✅',
-  order_cancelled: '❌',
-  stock_refilled:  '📦',
+  order_pending:   '·',
+  order_cooking:   '⊙',
+  order_ready:     '◈',
+  order_done:      '✓',
+  order_cancelled: '–',
+  stock_refilled:  '◈',
 };
 
 const TacNghiepView: React.FC = () => {
@@ -123,7 +123,7 @@ const TacNghiepView: React.FC = () => {
       {/* ── Welcome card ─────────────────────────────────────────── */}
       <div className={styles.welcomeCard}>
         <div className={styles.welcomeLeft}>
-          <div className={styles.welcomeGreet}>{getChaoTheoGio()}, {ten} 👋</div>
+          <div className={styles.welcomeGreet}>{getChaoTheoGio()}, {ten}</div>
           <div className={styles.welcomeDate}>
             {dayjs().format('dddd, D [tháng] M [năm] YYYY')} · {activeOrders.length} đơn đang hoạt động
           </div>
@@ -252,7 +252,7 @@ const TacNghiepView: React.FC = () => {
         <div className={styles.sectionCard}>
           <div className={styles.sectionHeader}>
             <div className={styles.sectionTitle}>
-              🍽 Top món hôm nay
+              Top món hôm nay
             </div>
           </div>
           {topMon.length === 0 ? (
@@ -283,7 +283,7 @@ const TacNghiepView: React.FC = () => {
         {/* Activity feed */}
         <div className={styles.sectionCard}>
           <div className={styles.sectionHeader}>
-            <div className={styles.sectionTitle}>⚡ Hoạt động gần nhất</div>
+            <div className={styles.sectionTitle}>Hoạt động gần nhất</div>
           </div>
           {recentActivity.length === 0 ? (
             <div className={styles.khoOk} style={{ fontSize: 13 }}>Chưa có hoạt động nào</div>
@@ -348,7 +348,7 @@ const TacNghiepView: React.FC = () => {
 
       {/* ── Shortcuts ─────────────────────────────────────────────── */}
       <div className={styles.sectionCard}>
-        <div className={styles.sectionTitle} style={{ marginBottom: 14 }}>⚡ Truy cập nhanh</div>
+        <div className={styles.sectionTitle} style={{ marginBottom: 14 }}>Truy cập nhanh</div>
         <div className={styles.shortcutGrid}>
           {SHORTCUTS.map(({ path, icon: Icon, label, color, bg }) => (
             <button key={path} className={styles.shortcutBtn} onClick={() => history.push(path)}>

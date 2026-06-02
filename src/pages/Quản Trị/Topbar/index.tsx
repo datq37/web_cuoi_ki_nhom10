@@ -5,6 +5,7 @@ import {
   CalendarOutlined,
   DownOutlined,
   LogoutOutlined,
+  MailOutlined,
   QuestionCircleOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
@@ -109,7 +110,7 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
       icon: <QuestionCircleOutlined style={{ color: '#16a34a' }} />,
       content: (
         <div style={{ paddingTop: 8, lineHeight: 1.8, color: '#374151' }}>
-          <div>📧 <a href="mailto:it@canteen.vn" style={{ color: '#16a34a' }}>it@canteen.vn</a></div>
+          <div><MailOutlined style={{ marginRight: 6 }} /><a href="mailto:it@canteen.vn" style={{ color: '#16a34a' }}>it@canteen.vn</a></div>
           <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 6 }}>
             Thời gian hỗ trợ: 7:00 – 18:00, thứ Hai đến thứ Sáu
           </div>

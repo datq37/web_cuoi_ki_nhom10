@@ -2,10 +2,12 @@
   CheckCircleOutlined,
   ClockCircleOutlined,
   CreditCardOutlined,
+  DollarOutlined,
   MessageOutlined,
   PhoneOutlined,
   PrinterOutlined,
   ShopOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
 import { Avatar, Button, Modal } from 'antd';
 import React, { useRef } from 'react';
@@ -138,7 +140,7 @@ const DrawerContent: React.FC<ContentProps> = ({
 
       <div className={styles.divider} />
       <div className={styles.section}>
-        <div className={styles.sectionTitle}>Khách hàng</div>
+        <div className={styles.sectionTitle}><UserOutlined style={{ marginRight: 7 }} />Khách hàng</div>
         <div className={styles.customerCard}>
           <Avatar
             size={44}
@@ -170,7 +172,7 @@ const DrawerContent: React.FC<ContentProps> = ({
       <div className={styles.divider} />
       <div className={styles.section}>
         <div className={styles.sectionTitle}>
-          Món ăn
+          <ShopOutlined style={{ marginRight: 7 }} />Món ăn
           <span className={styles.sectionCount}>{(order.monAn || []).length} món</span>
         </div>
         <div className={styles.itemList}>
@@ -192,7 +194,7 @@ const DrawerContent: React.FC<ContentProps> = ({
         <>
           <div className={styles.divider} />
           <div className={styles.section}>
-            <div className={styles.sectionTitle}>Ghi chú</div>
+            <div className={styles.sectionTitle}><MessageOutlined style={{ marginRight: 7 }} />Ghi chú</div>
             <div className={styles.noteBox}>
               <MessageOutlined className={styles.noteIcon} />
               <span className={styles.noteText}>{order.ghiChu}</span>
@@ -211,7 +213,7 @@ const DrawerContent: React.FC<ContentProps> = ({
 
       <div className={styles.divider} />
       <div className={styles.section}>
-        <div className={styles.sectionTitle}>Chi tiết thanh toán</div>
+        <div className={styles.sectionTitle}><DollarOutlined style={{ marginRight: 7 }} />Chi tiết thanh toán</div>
         <div className={styles.priceList}>
           <div className={styles.priceRow}>
             <span>Tạm tính</span>

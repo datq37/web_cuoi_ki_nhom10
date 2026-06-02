@@ -1,0 +1,350 @@
+// phần chân trang
+.home-footer-wrapper {
+  position: relative;
+  background-color: #f5f8f3;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+.home-footer-leaf {
+  position: absolute;
+  color: #bbf7d0; 
+  opacity: 0.5;
+  
+  &.left-leaf {
+    left: 0;
+    bottom: 24px;
+    font-size: 4rem; 
+  }
+
+  &.right-leaf {
+    right: 0;
+    bottom: 0;
+    font-size: 5rem; 
+    opacity: 0.6;
+  }
+}
+
+.home-footer-inner {
+  width: 100%;
+  margin: 0;
+  position: relative;
+  z-index: 10;
+  
+  .home-footer-card {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(24px);
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    overflow: hidden;
+  }
+}
+
+.home-footer-main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  padding: 32px 48px;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 1.4fr 1fr 1.1fr 1.2fr;
+  }
+}
+
+.home-footer-brand-section {
+  .brand-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .brand-logo-wrap {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: #fff;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      border: 1px solid #dcfce7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+      }
+    }
+
+    .brand-text-wrap {
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #15803d; 
+        margin: 0;
+      }
+      p {
+        color: #6b7280; 
+        letter-spacing: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 4px;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .brand-desc {
+    margin-top: 16px;
+    color: #4b5563; 
+    font-size: 0.875rem;
+    line-height: 1.5;
+    max-width: 24rem;
+  }
+
+  .brand-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+}
+
+.home-footer-title {
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: #15803d;
+    margin: 0;
+  }
+  .title-line {
+    width: 32px;
+    height: 3px;
+    background-color: #15803d;
+    border-radius: 9999px;
+    margin-top: 8px;
+  }
+}
+
+.home-footer-links-wrap {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.home-footer-link {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f3f4f6; 
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  cursor: pointer;
+  outline: none;
+  
+  .link-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    .link-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background-color: #f0fdf4; 
+      border: 1px solid #dcfce7; 
+      color: #15803d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .link-text {
+      color: #374151; 
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+  }
+
+  .link-right-icon {
+    color: #9ca3af;
+    transition: all 0.3s;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    .link-icon {
+      background-color: #15803d;
+      color: #fff;
+    }
+    .link-text, .link-right-icon {
+      color: #15803d;
+    }
+  }
+}
+
+.home-footer-info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .info-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background-color: #f0fdf4;
+    border: 1px solid #dcfce7;
+    color: #15803d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
+  .info-text {
+    color: #374151;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+.home-footer-badge {
+  min-width: 100px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #fff;
+  border: 1px solid #dcfce7;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .badge-icon {
+    color: #15803d;
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .badge-text {
+    color: #15803d;
+    font-weight: 700;
+    font-size: 0.75rem; /* text-sm */
+    line-height: 1.375;
+  }
+}
+
+.home-footer-newsletter-section {
+  .newsletter-desc {
+    color: #4b5563;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-top: 16px;
+  }
+
+  .social-buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  
+  .social-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 40px;
+    width: 40px;
+    padding: 0 10px;
+    border-radius: 50px;
+    text-decoration: none;
+    color: #6c6c6c;
+    background: #ffffff;
+    border: 1px solid #dcfce7;
+    overflow: hidden;
+    box-sizing: border-box;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+
+    .icon {
+      font-size: 16px;
+      min-width: 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .text {
+      margin-left: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+      width: 120px;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      border-color: transparent;
+
+      .text {
+        opacity: 1;
+        transition-delay: 0.1s;
+      }
+    }
+
+    &.facebook:hover { background: #1877f2; color: #fff; }
+    &.instagram:hover { 
+      background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+      color: #fff; 
+    }
+  }
+}
+
+// phần responsive
+@media (max-width: 768px) {
+  .home-footer-main {
+    padding: 24px 20px;
+    gap: 32px;
+  }
+  .brand-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .brand-desc {
+    max-width: 100%;
+  }
+  .home-footer-leaf {
+    &.left-leaf {
+      font-size: 2rem;
+    }
+    &.right-leaf {
+      font-size: 3rem;
+    }
+  }
+  .social-buttons {
+    flex-wrap: wrap;
+  }
+}

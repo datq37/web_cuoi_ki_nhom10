@@ -1,0 +1,51 @@
+﻿@import '~@/styles/admin-tokens.less';
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  gap: 10px;
+}
+
+.illus {
+  width: 120px;
+  height: 90px;
+  margin-bottom: 6px;
+
+  svg { width: 100%; height: 100%; }
+}
+
+.title {
+  font-size: @fs-md;
+  font-weight: 700;
+  color: @text-ink;
+  text-align: center;
+}
+
+.desc {
+  font-size: @fs-base;
+  color: @text-light;
+  text-align: center;
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+.action {
+  margin-top: 6px;
+  background: @primary !important;
+  border-color: @primary !important;
+  border-radius: 8px !important;
+  font-weight: 500;
+
+  &:hover {
+    background: @primary-hover !important;
+    border-color: @primary-hover !important;
+  }
+}
+
+:global([data-theme="dark"]) {
+  .title { color: #f1f5f9; }
+  .desc  { color: #475569; }
+}

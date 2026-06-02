@@ -45,3 +45,10 @@ build
 # Sentry Auth Token
 #.sentryclirc
 
+node_modules
+.umi
+.dist
+.vercel
+.env
+.env.local
+.env.*.local

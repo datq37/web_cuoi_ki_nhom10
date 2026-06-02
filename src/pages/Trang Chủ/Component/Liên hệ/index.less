@@ -1,0 +1,387 @@
+// phần trang liên hệ
+.contact-page-wrapper {
+  min-height: 100vh;
+  background-color: #f5f7f6;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: 'Inter', 'Roboto', sans-serif;
+
+  .cp-header {
+    height: 72px;
+    background-color: white;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    position: relative;
+    z-index: 20;
+  }
+
+  .cp-back-btn {
+    height: 40px;
+    padding: 0 20px;
+    border-radius: 12px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #166534;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: #f0fdf4;
+    }
+  }
+
+  .cp-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cp-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+
+  .cp-brand-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cp-brand-name {
+    font-size: 20px;
+    font-weight: 800;
+    color: #15803d;
+    line-height: 1;
+    margin: 0;
+  }
+
+  .cp-brand-slogan {
+    color: #6b7280;
+    letter-spacing: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    margin: 4px 0 0;
+  }
+
+  .cp-main {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px;
+  }
+
+  .cp-deco-leaf {
+    position: absolute;
+    color: #dcfce7;
+    opacity: 0.7;
+    line-height: 1;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .cp-deco-left {
+    left: 0;
+    top: 100px;
+    font-size: 120px;
+  }
+
+  .cp-deco-right {
+    right: 0;
+    bottom: 0;
+    font-size: 150px;
+    opacity: 0.8;
+  }
+
+  .cp-hero-card {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1000px;
+    border-radius: 24px;
+    background-color: white;
+    border: 1px solid #f3f4f6;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.04);
+    padding: 36px 48px;
+  }
+
+  .cp-hero-content {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .cp-illustration {
+    position: relative;
+    width: 180px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+
+    .cp-illustration-bg {
+      position: absolute;
+      inset: 0;
+      background-color: #f0fdf4;
+      border-radius: 50%;
+      filter: blur(16px);
+    }
+
+    .cp-illustration-circle {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(to bottom right, #dcfce7, white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .icon {
+        color: #15803d;
+      }
+    }
+
+    .cp-badge-1 {
+      position: absolute;
+      left: 16px;
+      bottom: 4px;
+      width: 40px;
+      height: 14px;
+      background-color: #dcfce7;
+      border-radius: 9999px;
+    }
+
+    .cp-badge-2 {
+      position: absolute;
+      right: 12px;
+      top: 20px;
+      width: 10px;
+      height: 10px;
+      background-color: #bbf7d0;
+      border-radius: 50%;
+    }
+
+    .cp-badge-3 {
+      position: absolute;
+      left: 12px;
+      top: 18px;
+      width: 6px;
+      height: 6px;
+      background-color: #bbf7d0;
+      border-radius: 50%;
+    }
+  }
+
+  .cp-hero-text {
+    .cp-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #14532d;
+      letter-spacing: -0.025em;
+      margin: 0;
+    }
+
+    .cp-desc {
+      margin-top: 16px;
+      color: #4b5563;
+      font-size: 16px;
+      line-height: 1.8;
+      max-width: 700px;
+    }
+  }
+
+  .cp-contact-grid {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  .cp-contact-card {
+    border-radius: 20px;
+    background-color: white;
+    border: 1px solid #f3f4f6;
+    padding: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+    transition: all 0.2s ease;
+    cursor: default;
+
+    &.active {
+      border-color: #86efac;
+    }
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.06);
+
+      .cp-card-icon {
+        background-color: #15803d;
+        color: white;
+      }
+    }
+
+    &.active .cp-card-icon {
+      background-color: #f0fdf4;
+      color: #15803d;
+    }
+
+    .cp-card-inner {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .cp-card-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+      background-color: #f0fdf4;
+      color: #15803d;
+    }
+
+    .cp-card-content {
+      .cp-card-title {
+        font-size: 18px;
+        font-weight: 800;
+        color: #14532d;
+        margin: 0;
+      }
+
+      .cp-card-value {
+        margin-top: 8px;
+        font-size: 16px;
+        font-weight: 800;
+        color: #15803d;
+      }
+
+      .cp-card-desc {
+        margin-top: 8px;
+        color: #6b7280;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+    }
+  }
+
+  .cp-footer {
+    position: relative;
+    z-index: 10;
+    height: 64px;
+    background-color: white;
+    border-top: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  // phần responsive
+  @media (max-width: 768px) {
+    .cp-hero-content {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 24px;
+    }
+
+    .cp-contact-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .cp-hero-card {
+      padding: 24px;
+    }
+
+    .cp-header {
+      padding: 0 20px;
+    }
+  }
+
+  &.theme-dark {
+    background-color: #141414;
+    color: #f0f0f0;
+
+    .cp-header {
+      background-color: #1f1f1f;
+      border-bottom-color: #303030;
+    }
+    .cp-back-btn {
+      background-color: #1f1f1f;
+      border-color: #303030;
+      color: #22c55e;
+      &:hover { background-color: #2a2a2a; }
+    }
+    .cp-brand-name { color: #22c55e; }
+    .cp-brand-slogan { color: #9ca3af; }
+    
+    .cp-deco-leaf { color: #166534; opacity: 0.3; }
+    
+    .cp-hero-card {
+      background-color: #1f1f1f;
+      border-color: #303030;
+      box-shadow: none;
+    }
+    
+    .cp-illustration-circle {
+      background: linear-gradient(to bottom right, #166534, #1f1f1f);
+      .icon { color: #22c55e; }
+    }
+    .cp-illustration-bg { background-color: #14532d; }
+    .cp-badge-1 { background-color: #166534; }
+    .cp-badge-2, .cp-badge-3 { background-color: #22c55e; }
+    
+    .cp-hero-text {
+      .cp-title { color: #f0f0f0; }
+      .cp-desc { color: #d1d5db; }
+    }
+    
+    .cp-contact-card {
+      background-color: #1f1f1f;
+      border-color: #303030;
+      box-shadow: none;
+      &.active { border-color: #22c55e; }
+      &:hover {
+        background-color: #2a2a2a;
+        .cp-card-icon { background-color: #22c55e; color: #1f1f1f; }
+      }
+      &.active .cp-card-icon { background-color: #166534; color: #22c55e; }
+      
+      .cp-card-icon { background-color: #2a2a2a; color: #22c55e; }
+      .cp-card-content {
+        .cp-card-title { color: #f0f0f0; }
+        .cp-card-value { color: #22c55e; }
+        .cp-card-desc { color: #9ca3af; }
+      }
+    }
+    
+    .cp-footer {
+      background-color: #1f1f1f;
+      border-top-color: #303030;
+      color: #9ca3af;
+    }
+  }
+}

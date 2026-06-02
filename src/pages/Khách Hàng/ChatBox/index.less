@@ -1,0 +1,329 @@
+.hopThoaiKhachHang {
+  position: fixed;
+  right: 26px;
+  bottom: 26px;
+  z-index: 80;
+  font-family: inherit;
+}
+
+.nutRobotThoai {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  filter: drop-shadow(0 18px 28px rgba(21, 128, 61, 0.28));
+  animation: chatRobotFloat 3.2s ease-in-out infinite;
+
+  img {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: contain;
+    transition: transform 0.22s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.06) rotate(-2deg);
+  }
+}
+
+.hieuUngToaSang {
+  position: absolute;
+  inset: 9px;
+  z-index: 1;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.22);
+  animation: chatPulse 1.9s ease-out infinite;
+}
+
+.huyHieuThoai {
+  position: absolute;
+  right: 6px;
+  bottom: 8px;
+  z-index: 3;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #16a34a;
+  color: #fff;
+  display: grid;
+  place-items: center;
+}
+
+.khungThoai {
+  position: absolute;
+  right: 0;
+  bottom: 108px;
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  overflow: hidden;
+  border: 1px solid rgba(34, 197, 94, 0.18);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 24px 58px rgba(15, 23, 42, 0.18);
+  backdrop-filter: blur(16px);
+  transform-origin: right bottom;
+  animation: chatPanelIn 0.24s ease both;
+}
+
+.tieuDeThoai {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, #15803d, #22c55e);
+
+  > button {
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+}
+
+.tenThoai {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+
+  img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  strong,
+  span {
+    display: block;
+  }
+
+  strong {
+    font-size: 15px;
+    font-weight: 900;
+  }
+
+  span {
+    margin-top: 2px;
+    font-size: 12px;
+    opacity: 0.86;
+  }
+}
+
+.danhSachTinNhan {
+  max-height: 310px;
+  overflow-y: auto;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tinNhan {
+  max-width: 86%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #f4f7f4;
+  color: #17201a;
+  align-self: flex-start;
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  span {
+    display: block;
+    margin-top: 5px;
+    color: #8a948c;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  &.user {
+    align-self: flex-end;
+    background: #15803d;
+    color: #fff;
+
+    span {
+      color: rgba(255, 255, 255, 0.76);
+    }
+  }
+
+  &.dangGo {
+    opacity: 0.78;
+    font-style: italic;
+  }
+}
+
+.goiYThoai {
+  display: flex;
+  gap: 8px;
+  padding: 0 12px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  button {
+    flex: 0 0 auto;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid rgba(21, 128, 61, 0.16);
+    border-radius: 999px;
+    background: #fff;
+    color: #15803d;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 800;
+  }
+}
+
+.dongNhapLieu {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid #eef2ee;
+  background: #fff;
+
+  input {
+    flex: 1;
+    min-width: 0;
+    height: 40px;
+    padding: 0 13px;
+    border: 1px solid #e5eee7;
+    border-radius: 12px;
+    color: #17201a;
+    font-size: 13px;
+    outline: none;
+
+    &:focus {
+      border-color: rgba(21, 128, 61, 0.42);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.68;
+    }
+  }
+
+  button[type="submit"] {
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 12px;
+    background: #15803d;
+    color: #fff;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+}
+
+.main-page-container.theme-dark {
+  .khungThoai {
+    border-color: rgba(50, 168, 82, 0.22);
+    background: rgba(21, 26, 23, 0.96);
+    box-shadow: 0 24px 58px rgba(0, 0, 0, 0.42);
+  }
+
+  .tinNhan {
+    background: #1d2420;
+    color: #f0f0f0;
+
+    &.user {
+      background: #21883f;
+    }
+  }
+
+  .dongNhapLieu {
+    border-top-color: #27302b;
+    background: #151a17;
+
+    input {
+      border-color: #27302b;
+      background: #0b0f0d;
+      color: #f0f0f0;
+    }
+  }
+
+  .goiYThoai button {
+    border-color: rgba(50, 168, 82, 0.2);
+    background: #151a17;
+    color: #32a852;
+  }
+}
+
+@keyframes chatRobotFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes chatPulse {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.9);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.45);
+  }
+}
+
+@keyframes chatPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 576px) {
+  .hopThoaiKhachHang {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .nutRobotThoai {
+    width: 78px;
+    height: 78px;
+  }
+
+  .khungThoai {
+    bottom: 92px;
+  }
+}

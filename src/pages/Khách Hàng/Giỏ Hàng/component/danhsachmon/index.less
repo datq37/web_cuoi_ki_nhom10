@@ -1,0 +1,239 @@
+.danhSachMonGioHang {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.monGioHang {
+    display: grid;
+    grid-template-columns: 68px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 9px;
+    min-height: 78px;
+    padding: 8px;
+    background: #fff;
+    border: 1px solid #e2e7e3;
+    border-radius: 18px;
+    box-shadow: 0 6px 16px rgba(31, 41, 55, 0.04);
+}
+
+.anhNhoMonGioHang {
+    width: 68px;
+    height: 62px;
+    object-fit: cover;
+    border-radius: 11px;
+    background: #f4f7f2;
+}
+
+.thongTinMonGioHang {
+    min-width: 0;
+
+    .tenThongTin {
+        margin: 0;
+        color: #141820;
+        font-size: 13px;
+        font-weight: 750;
+        line-height: 1.18;
+    }
+
+    .giaThongTin {
+        margin: 6px 0 0;
+        color: #21743b;
+        font-size: 16px;
+        font-weight: 800;
+        line-height: 1;
+    }
+
+    .sieuThongTin {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin: 6px 0 0;
+        color: #626b76;
+        font-size: 10px;
+        line-height: 1.2;
+
+        svg {
+            width: 12px;
+            height: 12px;
+            color: #f58a14;
+            flex-shrink: 0;
+        }
+    }
+}
+
+.soLuongMonGioHang {
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    overflow: hidden;
+    border: 1px solid #b9d5bd;
+    border-radius: 16px;
+    background: #fbfffa;
+
+    .nutSoLuong,
+    .soLuong {
+        width: 31px;
+        height: 100%;
+        display: grid;
+        place-items: center;
+    }
+
+    .nutSoLuong {
+        border: none;
+        background: transparent;
+        color: #1f2937;
+        cursor: pointer;
+        transition: background 0.18s;
+
+        &:hover {
+            background: #eef8ee;
+        }
+
+        svg {
+            width: 13px;
+            height: 13px;
+            stroke-width: 2;
+        }
+    }
+
+    .soLuong {
+        border-right: 1px solid #d6e6d7;
+        border-left: 1px solid #d6e6d7;
+        color: #111827;
+        font-size: 13px;
+        font-weight: 750;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+.gioHangTrong {
+    min-height: 200px;
+    display: grid;
+    place-items: center;
+    vanBan-align: center;
+    color: #6b7280;
+    font-size: 12px;
+
+    .bieuTuongGioHangTrong {
+        width: 62px;
+        height: 62px;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 12px;
+        color: #21743b;
+        background: #f2f8f2;
+        border-radius: 50%;
+    }
+
+    .tieuDeGioHangTrong {
+        margin-bottom: 5px;
+        color: #111827;
+        font-size: 15px;
+        font-weight: 900;
+    }
+
+    .phuDeGioHangTrong {
+        color: #6b7280;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .monGioHang {
+        grid-template-columns: 64px minmax(0, 1fr) auto;
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .anhNhoMonGioHang {
+        width: 64px;
+        height: 58px;
+    }
+
+    .thongTinMonGioHang .tenThongTin {
+        font-size: 13px;
+    }
+
+    .thongTinMonGioHang .giaThongTin {
+        font-size: 16px;
+    }
+
+    .thongTinMonGioHang .sieuThongTin {
+        font-size: 10px;
+    }
+
+    .soLuongMonGioHang {
+        grid-column: auto;
+        justify-self: start;
+        height: 32px;
+        margin-top: 0;
+
+        .nutSoLuong,
+        .soLuong {
+            width: 29px;
+        }
+
+        .soLuong {
+            font-size: 13px;
+        }
+    }
+}
+
+// ─── DARK MODE OVERRIDES ──────────────────────────────────────────────────────
+.main-page-container.theme-dark {
+    .monGioHang {
+        background: var(--bg-elev);
+        border-color: var(--line);
+        box-shadow: none;
+    }
+
+    .anhNhoMonGioHang {
+        background: var(--bg-soft);
+    }
+
+    .thongTinMonGioHang {
+        .tenThongTin {
+            color: var(--ink);
+        }
+        .giaThongTin {
+            color: var(--accent);
+        }
+        .sieuThongTin {
+            color: var(--ink-3);
+        }
+    }
+
+    .soLuongMonGioHang {
+        background: var(--bg-soft);
+        border-color: var(--line);
+
+        .nutSoLuong {
+            color: var(--ink-2);
+            &:hover {
+                background: var(--bg-elev);
+                color: var(--ink);
+            }
+        }
+        .soLuong {
+            color: var(--ink);
+            border-left-color: var(--line);
+            border-right-color: var(--line);
+        }
+    }
+
+    .gioHangTrong {
+        color: var(--ink-3);
+
+        .bieuTuongGioHangTrong {
+            background: var(--bg-soft);
+            color: var(--accent);
+        }
+        .tieuDeGioHangTrong {
+            color: var(--ink);
+        }
+        .phuDeGioHangTrong {
+            color: var(--ink-3);
+        }
+    }
+}

@@ -1,0 +1,473 @@
+.why-section {
+  position: relative;
+  background: linear-gradient(180deg, #fff 0%, #f4f6f3 100%);
+  padding: 60px 0 80px;
+  overflow: hidden;
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+// phần chấm trang trí
+.why-dots {
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  opacity: 0.3;
+  z-index: 1;
+
+  &.why-dots-left {
+    left: 40px;
+    top: 70px;
+  }
+
+  &.why-dots-right {
+    right: 60px;
+    top: 50px;
+  }
+}
+
+.why-dot {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+// phần lá trang trí
+.why-leaf-deco {
+  position: absolute;
+  right: 90px;
+  top: 50px;
+  font-size: 3.5rem;
+  color: #bbf7d0;
+  opacity: 0.7;
+  z-index: 1;
+  pointer-events: none;
+}
+
+// phần nền trang trí
+.why-blob {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.7;
+  pointer-events: none;
+  bottom: 0;
+  z-index: 0;
+
+  &.why-blob-left {
+    left: 0;
+    background: #f0fdf4;
+  }
+
+  &.why-blob-right {
+    right: 0;
+    background: #f7fee7;
+  }
+}
+
+// phần khung nội dung
+.why-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+// phần tiêu đề
+.why-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.why-title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: #111827;
+  margin: 0;
+
+  .why-title-green {
+    color: #15803d;
+  }
+
+  .why-title-leaf {
+    font-size: 1.6rem;
+    margin-left: 8px;
+  }
+}
+
+.why-subtitle {
+  color: #6b7280;
+  font-size: 1rem;
+  margin-top: 12px;
+}
+
+// phần tab lựa chọn
+.why-tabs {
+  max-width: 600px;
+  margin: 0 auto 32px;
+  height: 56px;
+  border-radius: 50px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  padding: 6px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.why-tab-btn {
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #6b7280;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+
+  &:hover {
+    color: #15803d;
+  }
+
+  &.why-tab-active {
+    background: #15803d;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(21, 128, 61, 0.25);
+  }
+}
+
+// phần thẻ chính
+.why-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 28px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.07);
+  padding: 36px;
+  margin-top: 8px;
+}
+
+.why-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: center;
+
+  @media (min-width: 900px) {
+    grid-template-columns: 1fr 1.15fr;
+  }
+}
+
+// phần ảnh
+.why-image-side {
+  position: relative;
+}
+
+.why-image-bg-blob {
+  position: absolute;
+  left: -28px;
+  bottom: -28px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: #f0fdf4;
+  z-index: 0;
+}
+
+.why-image-wrap {
+  position: relative;
+  height: 300px;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  z-index: 1;
+}
+
+.why-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.why-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.2) 0%, transparent 60%);
+}
+
+.why-badge {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  padding: 10px 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .why-badge-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #15803d;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .why-badge-title {
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: #111827;
+    margin: 0;
+  }
+
+  .why-badge-desc {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #15803d;
+    margin: 2px 0 0;
+  }
+}
+
+// phần nội dung chữ
+.why-text-side {
+  position: relative;
+  padding-left: 8px;
+
+  @media (min-width: 900px) {
+    padding-left: 20px;
+  }
+}
+
+.why-divider-line {
+  display: none;
+
+  @media (min-width: 900px) {
+    display: block;
+    position: absolute;
+    left: -16px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #e5e7eb;
+  }
+}
+
+.why-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: #f0fdf4;
+  color: #15803d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.why-card-title {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #15803d;
+  margin: 0;
+}
+
+.why-underline {
+  width: 48px;
+  height: 3px;
+  background: #15803d;
+  border-radius: 9999px;
+  margin-top: 10px;
+  margin-bottom: 16px;
+}
+
+.why-desc {
+  color: #4b5563;
+  font-size: 0.95rem;
+  line-height: 1.85;
+  max-width: 520px;
+  margin: 0 0 20px;
+}
+
+// phần lưới tính năng
+.why-features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+
+  @media (min-width: 1100px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.why-feature-box {
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid #dcfce7;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  padding: 16px 12px;
+  text-align: center;
+  transition: transform 0.25s, box-shadow 0.25s;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+  }
+}
+
+.why-feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f0fdf4;
+  color: #15803d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+}
+
+.why-feature-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 4px;
+}
+
+.why-feature-desc {
+  font-size: 0.75rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+}
+
+// phần điều hướng
+.why-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 28px;
+}
+
+.why-nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  color: #15803d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s;
+
+  &:hover {
+    background: #15803d;
+    color: #fff;
+    border-color: #15803d;
+  }
+}
+
+.why-nav-count {
+  font-size: 1.2rem;
+  font-weight: 800;
+
+  .why-nav-current {
+    color: #15803d;
+  }
+
+  .why-nav-sep {
+    color: #9ca3af;
+    margin: 0 6px;
+  }
+
+  .why-nav-total {
+    color: #9ca3af;
+  }
+}
+
+// phần responsive
+@media (max-width: 768px) {
+  .why-section {
+    padding: 40px 0;
+  }
+  .why-inner {
+    padding: 0 16px;
+  }
+  .why-title {
+    font-size: 1.8rem;
+  }
+  .why-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: auto;
+    padding: 4px;
+    border-radius: 24px;
+  }
+  .why-tab-btn {
+    padding: 8px 4px;
+    font-size: 0.8rem;
+    white-space: normal;
+    text-align: center;
+    border-radius: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    svg {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+  .why-card {
+    padding: 20px;
+  }
+  .why-card-grid {
+    gap: 20px;
+  }
+  .why-image-wrap {
+    height: 240px;
+  }
+  .why-card-title {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+  .why-text-side {
+    padding-left: 0;
+    text-align: center;
+  }
+  .why-icon-wrap {
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .why-underline {
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .why-desc {
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .why-features {
+    text-align: center;
+  }
+}

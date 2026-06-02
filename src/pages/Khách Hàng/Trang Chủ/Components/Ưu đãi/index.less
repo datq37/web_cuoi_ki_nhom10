@@ -1,0 +1,356 @@
+.home-main-right {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 394px;
+}
+
+.daily-offer-card {
+  position: relative;
+  min-height: 210px;
+  overflow: hidden;
+  padding: 22px;
+  background: #edf9e9;
+  border: 1px solid #dcefd7;
+  border-radius: 22px;
+  box-shadow: 0 10px 25px rgba(21, 50, 34, 0.05);
+
+  & > img {
+    position: absolute;
+    right: -20px;
+    bottom: -8px;
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 8px 24px rgba(21, 50, 34, 0.12);
+    opacity: 0.92;
+  }
+}
+
+.offer-content {
+  position: relative;
+  z-index: 1;
+}
+
+.offer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1.2;
+    color: #176f32;
+  }
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #2a7c3d;
+    font-size: 12px;
+    font-weight: 750;
+    white-space: nowrap;
+  }
+}
+
+.countdown {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+  margin-top: 6px;
+  color: #176f32;
+  font-size: 13px;
+  font-weight: 900;
+
+  b {
+    padding: 4px 7px;
+    background: #fff;
+    border-radius: 7px;
+  }
+}
+
+.offer-name,
+.offer-discount,
+.offer-note {
+  margin: 0;
+}
+
+.offer-code-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  padding: 4px 12px;
+  background: #176f32;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+}
+
+.offer-name {
+  margin-top: 8px;
+  color: #176f32;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.offer-discount {
+  margin-top: 4px;
+  color: #ff7a16;
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.offer-note {
+  margin-top: 6px;
+  color: #68747d;
+  font-size: 13px;
+}
+
+.daily-offer-card button {
+  height: 42px;
+  margin-top: 16px;
+  padding: 0 24px;
+  color: #fff;
+  background: #176f32;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 900;
+  border: none;
+  cursor: pointer;
+}
+
+.combo-card {
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #edf0ed;
+  border-radius: 22px;
+  box-shadow: 0 10px 25px rgba(21, 50, 34, 0.04);
+}
+
+.combo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+
+  h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1.2;
+    color: #ff7a16;
+  }
+
+  button {
+    color: #ff7a16;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.combo-box {
+  padding: 16px;
+  background: #fff;
+  border: 1px solid #edf0ed;
+  border-radius: 18px;
+}
+
+.combo-info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+
+  p {
+    margin: 0;
+    color: #18212c;
+    font-size: 15px;
+    font-weight: 900;
+  }
+
+  strong {
+    display: inline-block;
+    margin-top: 8px;
+    color: #ff7416;
+    font-size: 20px;
+    font-weight: 900;
+  }
+
+  span {
+    margin-left: 8px;
+    color: #9aa3aa;
+    font-size: 13px;
+    text-decoration: line-through;
+  }
+}
+
+.combo-sale {
+  width: 62px;
+  height: 62px;
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: #ff8218;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.05;
+
+  small {
+    font-size: 12px;
+    font-weight: 800;
+  }
+}
+
+.combo-items {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+
+  & > span {
+    color: #7d858c;
+    font-weight: 900;
+  }
+}
+
+.combo-item {
+  flex: 1;
+  min-width: 64px;
+  max-width: 130px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+  border: 1px solid #edf0ed;
+  border-radius: 13px;
+
+  img {
+    width: 54px;
+    height: 54px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+}
+
+.combo-btn {
+  width: 100%;
+  height: 46px;
+  margin-top: 16px;
+  color: #fff;
+  background: #ff7a16;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 900;
+  border: none;
+  cursor: pointer;
+}
+
+/* RESPONSIVE MEDIA QUERIES */
+
+@media (max-width: 1280px) {
+  .home-main-right {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  .home-main-right {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .daily-offer-card {
+    & > img {
+      width: 200px;
+      height: 140px;
+      right: -50px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .daily-offer-card {
+    & > img {
+      opacity: 0.18;
+      right: -20px;
+    }
+    
+    .offer-discount {
+      font-size: 25px;
+    }
+  }
+}
+
+/* DARK MODE OVERRIDES */
+.main-page-container.theme-dark {
+  .daily-offer-card {
+    background: var(--bg-elev);
+    border-color: var(--line);
+    box-shadow: none;
+    
+    .offer-head h3 { color: var(--accent); }
+    .offer-head span { color: var(--ink-2); }
+    
+    .offer-name { color: var(--ink); }
+    .offer-note { color: var(--ink-3); }
+    
+    .offer-code-badge {
+      background: var(--accent);
+      color: #fff;
+    }
+    
+    .countdown {
+      color: var(--ink-2);
+      b { background: var(--bg-soft); color: var(--ink); }
+    }
+  }
+
+  .combo-card {
+    background: var(--bg-elev);
+    border-color: var(--line);
+    box-shadow: none;
+  }
+
+  .combo-header h3 { color: #f59f00; }
+  .combo-header button { color: #f59f00; }
+
+  .combo-box {
+    background: var(--bg-soft);
+    border-color: var(--line);
+  }
+
+  .combo-info-row p { color: var(--ink); }
+  .combo-info-row strong { color: #f59f00; }
+
+  .combo-item {
+    background: var(--bg-elev);
+    border-color: var(--line);
+  }
+}

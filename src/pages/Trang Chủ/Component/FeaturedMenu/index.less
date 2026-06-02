@@ -1,0 +1,675 @@
+@green: #15803d;
+@green-dark: #166534;
+@font: 'Inter', 'Roboto', sans-serif;
+
+// phần khung chính
+.featured-section {
+  position: relative;
+  background: linear-gradient(180deg, #f7f9f8 0%, #fff 100%);
+  padding: 48px 0 56px;
+  overflow: hidden;
+  font-family: @font;
+}
+
+// phần tiêu đề
+.featured-title-wrap {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.featured-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.featured-title-line {
+  display: block;
+  width: 72px;
+  height: 1px;
+  background: @green;
+}
+
+.featured-title-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.featured-leaf-icon {
+  color: @green;
+  margin-bottom: 6px;
+}
+
+.featured-title {
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: 8px;
+  color: #14532d;
+  margin: 0;
+}
+
+// phần bọc banner
+.featured-banner-wrap {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+// phần banner
+.featured-banner {
+  position: relative;
+  height: 560px;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
+}
+
+.featured-main-card {
+  position: relative;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.featured-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-overlay-lr {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.32) 55%, rgba(0,0,0,0.18) 100%);
+}
+
+.featured-overlay-tb {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 50%);
+}
+
+// phần lá trang trí
+.featured-deco-leaf {
+  position: absolute;
+  z-index: 20;
+  font-size: 4rem;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+  pointer-events: none;
+
+  &.featured-deco-leaf-right {
+    right: -8px;
+    top: -24px;
+    transform: rotate(12deg);
+    font-size: 5rem;
+  }
+
+  &.featured-deco-leaf-left {
+    left: -4px;
+    bottom: 20px;
+    transform: rotate(-15deg);
+    font-size: 4rem;
+  }
+}
+
+// phần nội dung món chính
+.featured-content {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 64px;
+  max-width: 580px;
+}
+
+.featured-dish-title {
+  font-size: 3.6rem;
+  font-weight: 900;
+  line-height: 1;
+  color: #fff;
+  letter-spacing: 2px;
+  margin: 0;
+
+  .featured-dish-subtitle {
+    color: #4ade80;
+  }
+}
+
+.featured-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+
+  .featured-divider-line {
+    display: block;
+    width: 48px;
+    height: 1px;
+    background: rgba(255,255,255,0.7);
+  }
+
+  .featured-divider-leaf {
+    color: #86efac;
+  }
+}
+
+.featured-dish-desc {
+  color: rgba(255,255,255,0.88);
+  font-size: 1rem;
+  line-height: 1.75;
+  margin-top: 16px;
+  max-width: 480px;
+}
+
+.featured-cta-btn {
+  margin-top: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  height: 54px;
+  padding: 0 32px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #15803d, #22c55e);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(21,128,61,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: scale(1.04);
+    box-shadow: 0 12px 32px rgba(21,128,61,0.45);
+  }
+}
+
+.featured-mobile-cta-btn {
+  display: none;
+}
+
+// phần huy hiệu thông tin
+.featured-badges {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 24px;
+  max-width: 500px;
+}
+
+.feature-badge {
+  height: 72px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.93);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.5);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+
+  .feature-badge-icon {
+    color: @green;
+    display: flex;
+    align-items: center;
+  }
+
+  .feature-badge-value {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #14532d;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .feature-badge-label {
+    font-size: 0.75rem;
+    color: #4b5563;
+    font-weight: 500;
+    margin: 3px 0 0;
+  }
+}
+
+// phần thẻ món nhỏ
+.featured-food-cards {
+  position: absolute;
+  z-index: 20;
+  right: 90px;
+  bottom: 80px;
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+.food-mini-card {
+  width: 180px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.22);
+  transition: transform 0.25s;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-8px);
+  }
+}
+
+.food-mini-card-img-wrap {
+  height: 130px;
+  overflow: hidden;
+
+  .food-mini-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+
+  &:hover .food-mini-card-img {
+    transform: scale(1.1);
+  }
+}
+
+.food-mini-card-body {
+  padding: 12px 14px 14px;
+}
+
+.food-mini-card-name {
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #14532d;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.food-mini-card-line {
+  width: 36px;
+  height: 2px;
+  background: @green;
+  border-radius: 9999px;
+  margin-top: 8px;
+}
+
+.food-mini-card-price {
+  font-size: 1rem;
+  font-weight: 900;
+  color: @green;
+  margin: 10px 0 0;
+}
+
+// phần chấm chuyển món
+.featured-dots {
+  position: absolute;
+  z-index: 30;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.featured-dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+  transition: background 0.2s;
+  cursor: pointer;
+
+  &.featured-dot-active {
+    background: #4ade80;
+  }
+}
+
+// phần nút điều hướng
+.featured-bottom-arrows {
+  position: absolute;
+  z-index: 30;
+  right: 80px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.featured-nav-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.93);
+  color: @green;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  transition: background 0.2s, color 0.2s;
+
+  &:hover {
+    background: @green;
+    color: #fff;
+  }
+}
+
+.featured-mobile-other-head {
+  display: none;
+}
+
+// phần giao diện tablet
+@media (max-width: 1024px) {
+  .featured-banner {
+    height: auto;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+  }
+  .featured-main-card {
+    min-height: 600px;
+  }
+  .featured-content {
+    padding: 40px 32px;
+    margin-bottom: 320px;
+    max-width: 100%;
+  }
+  .featured-food-cards {
+    bottom: 120px;
+    right: 50%;
+    transform: translateX(50%);
+    width: 100%;
+    justify-content: center;
+    padding: 0 20px;
+  }
+  .featured-bottom-arrows {
+    right: 50%;
+    transform: translateX(50%);
+    bottom: 20px;
+    gap: 24px;
+  }
+  .featured-dots {
+    bottom: 86px;
+  }
+}
+
+@media (max-width: 768px) {
+  // phần giao diện điện thoại
+  .featured-section {
+    padding: 42px 0 54px;
+    background: linear-gradient(180deg, #fff 0%, #f7f9f8 100%);
+  }
+
+  .featured-title-wrap {
+    margin-bottom: 24px;
+  }
+
+  .featured-title-row {
+    gap: 16px;
+  }
+
+  .featured-title-line {
+    width: 48px;
+  }
+
+  .featured-leaf-icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 8px;
+  }
+
+  .featured-title {
+    font-size: 1.15rem;
+    letter-spacing: 1px;
+  }
+
+  .featured-banner-wrap {
+    padding: 0 16px;
+  }
+
+  .featured-banner {
+    height: auto;
+    min-height: 0;
+    display: block;
+    overflow: visible;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .featured-main-card {
+    min-height: 430px;
+    border-radius: 22px;
+    box-shadow: 0 18px 44px rgba(15, 23, 42, 0.22);
+  }
+
+  .featured-bg-img {
+    object-position: center;
+  }
+
+  .featured-overlay-lr {
+    background: linear-gradient(to right, rgba(0,0,0,0.86) 0%, rgba(0,0,0,0.54) 55%, rgba(0,0,0,0.34) 100%);
+  }
+
+  .featured-overlay-tb {
+    background: linear-gradient(to top, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.08) 55%, rgba(0,0,0,0.16) 100%);
+  }
+
+  .featured-deco-leaf {
+    &.featured-deco-leaf-right {
+      top: 18px;
+      right: 16px;
+      font-size: 3.2rem;
+    }
+
+    &.featured-deco-leaf-left {
+      left: -6px;
+      bottom: 24px;
+      font-size: 2.8rem;
+    }
+  }
+
+  .featured-content {
+    min-height: 430px;
+    padding: 34px 24px 24px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+    margin-bottom: 0;
+    max-width: 100%;
+  }
+
+  .featured-dish-title {
+    font-size: clamp(2rem, 10vw, 3rem);
+    line-height: 1.08;
+    letter-spacing: 1px;
+  }
+
+  .featured-divider {
+    justify-content: flex-start;
+    margin-top: 20px;
+  }
+
+  .featured-dish-desc {
+    max-width: 300px;
+    margin-top: 16px;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .featured-mobile-cta-btn {
+    width: fit-content;
+    min-width: 168px;
+    height: 48px;
+    margin-top: 20px;
+    padding: 0 22px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #fff;
+    box-shadow: 0 12px 28px rgba(22, 163, 74, 0.32);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  .featured-badges {
+    width: 100%;
+    max-width: none;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 22px;
+    align-self: stretch;
+  }
+
+  .feature-badge {
+    height: 70px;
+    padding: 0 10px;
+    border-radius: 14px;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.96);
+
+    .feature-badge-icon {
+      flex-shrink: 0;
+    }
+
+    .feature-badge-value {
+      font-size: 1rem;
+    }
+
+    .feature-badge-label {
+      font-size: 0.72rem;
+      line-height: 1.35;
+    }
+  }
+
+  .featured-mobile-other-head {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 30px 2px 16px;
+
+    h3 {
+      margin: 0;
+      color: #14532d;
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+    }
+  }
+
+  .featured-food-cards {
+    position: static;
+    transform: none;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .food-mini-card {
+    width: auto;
+    min-width: 0;
+    flex-shrink: 0;
+    border-radius: 14px;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+  }
+
+  .food-mini-card-img-wrap {
+    height: 96px;
+  }
+
+  .food-mini-card-body {
+    padding: 12px 12px 14px;
+  }
+
+  .food-mini-card-name {
+    font-size: 0.82rem;
+    min-height: 34px;
+  }
+
+  .food-mini-card-line {
+    width: 32px;
+  }
+
+  .food-mini-card-price {
+    font-size: 0.95rem;
+  }
+
+  .featured-dots {
+    position: static;
+    transform: none;
+    justify-content: center;
+    margin-top: 28px;
+
+    .featured-dot {
+      background: #d8d8d8;
+    }
+
+    .featured-dot-active {
+      background: #22c55e;
+    }
+  }
+
+  .featured-bottom-arrows {
+    position: static;
+    transform: none;
+    justify-content: flex-end;
+    margin-top: -46px;
+    padding-right: 6px;
+  }
+
+  .featured-nav-btn {
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+@media (max-width: 380px) {
+  // phần giao diện điện thoại nhỏ
+  .featured-banner-wrap {
+    padding: 0 12px;
+  }
+
+  .featured-content {
+    padding: 30px 18px 22px;
+  }
+
+  .featured-badges {
+    gap: 6px;
+  }
+
+  .feature-badge {
+    padding: 0 8px;
+  }
+
+  .food-mini-card-img-wrap {
+    height: 84px;
+  }
+
+  .food-mini-card-body {
+    padding: 10px 10px 12px;
+  }
+}

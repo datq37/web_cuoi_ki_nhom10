@@ -19,9 +19,6 @@ const LoadingPage = () => {
 
 			<span className='loading-description'>Nếu phải chờ đợi quá lâu, bạn có thể</span>
 			<div className='loading-actions'>
-				{/* <Button icon={<HomeOutlined />} type='primary' onClick={() => (window.location.href = '/')}>
-					Về trang chủ
-				</Button> */}
 				<Button type='link' danger icon={<DeleteOutlined />} onClick={onClearCache}>
 					Xóa bộ nhớ đệm
 				</Button>

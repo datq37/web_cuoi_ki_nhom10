@@ -1,0 +1,518 @@
+﻿@import '~@/styles/admin-tokens.less';
+
+@radius: 16px;
+
+.pageBody {
+  padding: 20px 24px 32px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// ── Stat cards ───────────────────────────────────────────────────
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  @media (max-width: 1100px) { grid-template-columns: repeat(2, 1fr); }
+}
+
+.statCard {
+  background: @surface;
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border: 1px solid @border;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  gap: 12px;
+}
+
+.statLeft { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.statLabel { font-size: @fs-xs; font-weight: 600; color: @text-light; letter-spacing: 0.5px; text-transform: uppercase; }
+.statValue { font-size: @fs-3xl; font-weight: 800; color: @text-dark; line-height: 1; }
+.statIconWrap { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+// ── Toolbar ───────────────────────────────────────────────────────
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.searchInput {
+  width: 260px;
+  border-radius: 8px !important;
+  :global(.ant-input-prefix) { margin-right: 6px; }
+}
+
+.roleSelect {
+  :global(.ant-select-selector) { border-radius: 8px !important; }
+}
+
+.btnOutline {
+  border-radius: 8px !important;
+  font-weight: 500;
+  color: #374151 !important;
+  border-color: #d1d5db !important;
+  &:hover { border-color: @primary !important; color: @primary !important; }
+}
+
+.countBadge {
+  display: flex;
+  align-items: center;
+  font-size: @fs-base;
+  color: @text-muted;
+  white-space: nowrap;
+  margin-left: 2px;
+}
+
+.addBtn {
+  background: @primary !important;
+  border-color: @primary !important;
+  border-radius: 8px !important;
+  height: 36px;
+  font-weight: 600;
+  &:hover { background: @primary-hover !important; border-color: @primary-hover !important; }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+
+  @media (max-width: 1200px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 700px)  { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: #fff;
+  border-radius: @radius;
+  padding: 22px 20px 18px;
+  border: 1px solid @border;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: box-shadow 0.2s, transform 0.2s;
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,.08);
+    transform: translateY(-2px);
+  }
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  font-weight: 700 !important;
+  font-size: @fs-lg !important;
+  flex-shrink: 0;
+}
+
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.cardName {
+  font-size: @fs-md;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardId {
+  font-size: @fs-xs;
+  font-family: monospace;
+  color: @text-light;
+  margin-bottom: 1px;
+}
+
+.cardEmail {
+  font-size: @fs-sm;
+  color: #9ca3af;
+}
+
+.cardPhone {
+  font-size: @fs-sm;
+  color: @text-muted;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.roleBadge {
+  display: inline-block;
+  font-size: @fs-sm;
+  font-weight: 600;
+  padding: 3px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+
+  &[data-vaitro="quan_tri_vien"],
+  &[data-vaitro="bep_truong"],
+  &[data-vaitro="thu_ngan"]        { background: @primary-100; }
+  &[data-vaitro="nhan_vien_bep"]   { background: #dbeafe; }
+  &[data-vaitro="nhan_vien_phuc_vu"] { background: #fef3c7; }
+}
+
+.lastActive {
+  font-size: @fs-sm;
+  color: #9ca3af;
+}
+
+.cardLuong {
+  font-size: @fs-md;
+  font-weight: 700;
+  color: @primary;
+  padding: 4px 0 2px;
+}
+
+.cardActions {
+  display: flex;
+  gap: 10px;
+  padding-top: 2px;
+}
+
+.actionBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 0;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  color: #374151;
+  font-size: @fs-base;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    background: @primary-50;
+    border-color: @primary;
+    color: @primary;
+  }
+}
+
+.actionIcon { font-size: @fs-base; }
+
+// 3 icon buttons nhỏ gọn
+.iconActionBtn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  color: @text-muted;
+  font-size: @fs-md;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+
+  &:hover {
+    background: @primary-50;
+    border-color: @primary;
+    color: @primary;
+  }
+}
+
+.iconActionBtnDanger {
+  &:hover {
+    background: #fff1f0 !important;
+    border-color: @danger !important;
+    color: @danger !important;
+  }
+}
+
+.addCard {
+  background: transparent;
+  border-radius: @radius;
+  border: 2px dashed #d1d5db;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 36px 20px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  min-height: 180px;
+
+  &:hover {
+    border-color: @primary;
+    background: @primary-50;
+
+    .addIconWrap {
+      background: @primary;
+
+      .addIcon { color: #fff; }
+    }
+
+    .addTitle { color: @primary; }
+  }
+}
+
+.addIconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: @primary-100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.addIcon {
+  font-size: @fs-xl;
+  color: @primary;
+  transition: color 0.2s;
+}
+
+.addTitle {
+  font-size: @fs-md;
+  font-weight: 700;
+  color: #374151;
+  transition: color 0.2s;
+}
+
+.addSub {
+  font-size: @fs-sm;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.card {
+  cursor: pointer;
+}
+
+.detailModal {
+  :global(.ant-modal-content) {
+    border-radius: 16px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.14);
+    overflow: hidden;
+  }
+  :global(.ant-modal-body) {
+    padding: 0;
+  }
+  :global(.ant-modal-footer) {
+    padding: 12px 24px 16px;
+    border-top: 1px solid @border;
+  }
+  :global(.ant-modal-footer .ant-btn) {
+    border-radius: 8px;
+    height: 36px;
+    font-weight: 500;
+    font-size: @fs-base;
+  }
+  :global(.ant-modal-footer .ant-btn-primary) {
+    background: @primary;
+    border-color: @primary;
+    &:hover { background: @primary-hover; border-color: @primary-hover; }
+  }
+  :global(.ant-modal-close) {
+    top: 12px;
+    right: 12px;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.detailHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 24px 20px;
+  background: linear-gradient(160deg, @primary-50 0%, @bg 100%);
+  gap: 10px;
+}
+
+.detailHeroName  { font-size: @fs-xl; font-weight: 700; color: #111827; text-align: center; }
+.detailHeroEmail { font-size: @fs-base; color: #9ca3af; text-align: center; margin-top: -4px; }
+
+.detailBody {
+  padding: 20px 24px 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.detailRow { display: flex; flex-direction: column; gap: 3px; }
+
+.detailLabel {
+  font-size: @fs-xs;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detailValue { font-size: @fs-md; font-weight: 500; color: #374151; }
+
+.adminModal {
+  :global(.ant-modal-content) {
+    border-radius: 16px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.14);
+    overflow: hidden;
+  }
+  :global(.ant-modal-header) {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid @border;
+  }
+  :global(.ant-modal-title) {
+    font-size: @fs-lg;
+    font-weight: 700;
+    color: #111827;
+  }
+  :global(.ant-modal-body) {
+    padding: 20px 24px;
+    max-height: 72vh;
+    overflow-y: auto;
+    &::-webkit-scrollbar { width: 4px; }
+    &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+  }
+  :global(.ant-modal-footer) {
+    padding: 12px 24px 16px;
+    border-top: 1px solid @border;
+  }
+  :global(.ant-modal-footer .ant-btn) {
+    border-radius: 8px;
+    height: 36px;
+    font-weight: 500;
+    font-size: @fs-base;
+  }
+  :global(.ant-modal-footer .ant-btn-primary) {
+    background: @primary;
+    border-color: @primary;
+    &:hover { background: @primary-hover; border-color: @primary-hover; }
+  }
+  :global(.ant-modal-close) {
+    top: 14px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+:global([data-theme="dark"]) {
+  .statValue { color: #f1f5f9; }
+  .statLabel { color: #64748b; }
+
+  .card {
+    background: #1e293b;
+    border-color: #334155;
+    &:hover { box-shadow: 0 6px 20px rgba(0,0,0,.35); }
+  }
+  .cardName   { color: #f1f5f9; }
+  .cardId     { color: #475569; }
+  .cardEmail  { color: #64748b; }
+  .cardPhone  { color: #64748b; }
+  .cardLuong  { color: #4ade80; }
+  .btnOutline { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; &:hover { background: #334155 !important; border-color: @primary !important; color: @primary !important; } }
+  .countBadge { color: #64748b; }
+  .lastActive { color: #64748b; }
+  .iconActionBtn {
+    background: #0f172a;
+    border-color: #334155;
+    color: #64748b;
+    &:hover { background: rgba(22,163,74,.12); border-color: @primary; color: #4ade80; }
+  }
+  .iconActionBtnDanger {
+    &:hover { background: rgba(220,38,38,.12) !important; border-color: @danger !important; color: #f87171 !important; }
+  }
+
+  .actionBtn {
+    background: #0f172a;
+    border-color: #334155;
+    color: #cbd5e1;
+    &:hover { background: rgba(22,163,74,.12); border-color: #16a34a; color: #4ade80; }
+  }
+
+  .addCard {
+    border-color: #334155;
+    &:hover { border-color: #16a34a; background: rgba(22,163,74,.08); .addTitle { color: #4ade80; } }
+  }
+  .addIconWrap { background: rgba(22,163,74,.15); }
+  .addTitle { color: #cbd5e1; }
+  .addSub   { color: #64748b; }
+
+  .roleBadge {
+    &[data-vaitro="quan_tri_vien"],
+    &[data-vaitro="bep_truong"],
+    &[data-vaitro="thu_ngan"]          { background: rgba(22,163,74,0.15); }
+    &[data-vaitro="nhan_vien_bep"]     { background: rgba(30,64,175,0.15); }
+    &[data-vaitro="nhan_vien_phuc_vu"] { background: rgba(146,64,14,0.15); }
+  }
+
+  .detailModal {
+    :global(.ant-modal-content) { background: #1e293b; }
+    :global(.ant-modal-footer)  { border-top-color: #334155; }
+    :global(.ant-modal-footer .ant-btn:not(.ant-btn-primary)) {
+      background: #0f172a; border-color: #334155; color: #94a3b8;
+      &:hover { background: #1e293b; color: #f1f5f9; border-color: #475569; }
+    }
+    :global(.ant-modal-close) { color: rgba(255,255,255,0.7); }
+  }
+
+  .detailHero {
+    background: linear-gradient(160deg, rgba(22,163,74,0.12) 0%, #1e293b 100%);
+  }
+  .detailHeroName  { color: #f1f5f9; }
+  .detailHeroEmail { color: #64748b; }
+  .detailLabel     { color: #64748b; }
+  .detailValue     { color: #cbd5e1; }
+
+  .adminModal {
+    :global(.ant-modal-content) { background: #1e293b; }
+    :global(.ant-modal-header)  { background: #1e293b; border-bottom-color: #334155; }
+    :global(.ant-modal-title)   { color: #f1f5f9; }
+    :global(.ant-modal-footer)  { border-top-color: #334155; }
+    :global(.ant-modal-footer .ant-btn:not(.ant-btn-primary)) {
+      background: #0f172a;
+      border-color: #334155;
+      color: #94a3b8;
+      &:hover { background: #1e293b; color: #f1f5f9; border-color: #475569; }
+    }
+    :global(.ant-modal-close)   { color: #64748b; &:hover { background: #0f172a; } }
+    :global(.ant-form-item-label > label) { color: #94a3b8; }
+    :global(.ant-input)         { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+    :global(.ant-input-affix-wrapper) { background: #0f172a; border-color: #334155; }
+    :global(.ant-select-selector) { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+    :global(.ant-select-selection-item) { color: #f1f5f9; }
+    :global(.ant-form-item-explain-error) { color: #f87171; }
+    :global(.ant-modal-body)::-webkit-scrollbar-thumb { background: #334155; }
+  }
+}

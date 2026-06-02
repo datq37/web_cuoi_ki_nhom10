@@ -1,0 +1,594 @@
+// phần trang chính sách
+.privacy-page-wrapper {
+  min-height: 100vh;
+  background-color: #f6f8f7;
+  font-family: 'Inter', 'Roboto', sans-serif;
+
+  .pp-header {
+    height: 72px;
+    background-color: white;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+  }
+
+  .pp-back-btn {
+    height: 40px;
+    padding: 0 20px;
+    border-radius: 12px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #166534;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: #f0fdf4;
+    }
+  }
+
+  .pp-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .pp-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+
+  .pp-brand-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pp-brand-name {
+    font-size: 20px;
+    font-weight: 800;
+    color: #15803d;
+    line-height: 1;
+    margin: 0;
+  }
+
+  .pp-brand-slogan {
+    color: #6b7280;
+    letter-spacing: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    margin: 4px 0 0;
+  }
+
+  .pp-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+  }
+
+  .pp-sidebar {
+    background-color: white;
+    border-radius: 20px;
+    border: 1px solid #f3f4f6;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+    padding: 20px;
+    height: fit-content;
+    position: sticky;
+    top: 24px;
+  }
+
+  .pp-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: default;
+  }
+
+  .pp-sidebar-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .pp-sidebar-toggle {
+    display: none;
+    color: #6b7280;
+    transition: transform 0.3s;
+    &.open { transform: rotate(180deg); }
+  }
+
+  .pp-sidebar-collapsible {
+    display: block;
+  }
+
+  .pp-sidebar-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    background-color: #f0fdf4;
+    color: #15803d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pp-sidebar-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #14532d;
+    margin: 0;
+  }
+
+  .pp-sidebar-divider {
+    width: 48px;
+    height: 3px;
+    background-color: #15803d;
+    border-radius: 9999px;
+    margin: 16px 0 20px;
+  }
+
+  .pp-nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pp-nav-item {
+    width: 100%;
+    height: 48px;
+    border-radius: 12px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #4b5563;
+    font-size: 14px;
+
+    &:hover {
+      background-color: #f9fafb;
+      color: #15803d;
+    }
+
+    &.active {
+      background-color: #f0fdf4;
+      color: #166534;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+      .pp-nav-icon {
+        background-color: #dcfce7;
+        color: #15803d;
+      }
+    }
+  }
+
+  .pp-nav-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background-color: #f9fafb;
+    color: #6b7280;
+  }
+
+  .pp-nav-text {
+    font-weight: 800;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pp-sidebar-banner {
+    margin-top: 32px;
+    border-radius: 20px;
+    background: linear-gradient(to bottom right, #f0fdf4, white);
+    border: 1px solid #dcfce7;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pp-banner-deco {
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    color: #dcfce7;
+    font-size: 72px;
+    line-height: 1;
+  }
+
+  .pp-banner-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .pp-banner-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: #15803d;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .pp-banner-text {
+    h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: #166534;
+      margin: 0;
+    }
+    p {
+      color: #4b5563;
+      line-height: 1.6;
+      font-size: 13px;
+      margin: 4px 0 0;
+    }
+  }
+
+  // phần nội dung bên phải
+  .pp-content-area {
+    background-color: white;
+    border-radius: 24px;
+    border: 1px solid #f3f4f6;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+    padding: 32px;
+  }
+
+  .pp-content-header {
+    margin-bottom: 24px;
+  }
+
+  .pp-main-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #14532d;
+    margin: 0;
+  }
+
+  .pp-last-updated {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6b7280;
+    margin-top: 12px;
+    font-style: italic;
+    font-size: 14px;
+
+    .icon {
+      color: #15803d;
+    }
+  }
+
+  .pp-intro-box {
+    margin-top: 24px;
+    border-radius: 20px;
+    background: linear-gradient(to right, #f0fdf4, white, #f0fdf4);
+    border: 1px solid #dcfce7;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .pp-intro-icon-wrapper {
+    width: 120px;
+    height: 90px;
+    border-radius: 16px;
+    background-color: #dcfce7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+
+    .pp-intro-icon-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom right, #dcfce7, white);
+    }
+
+    .icon {
+      position: relative;
+      z-index: 10;
+      color: #15803d;
+    }
+  }
+
+  .pp-intro-text {
+    color: #374151;
+    font-size: 15px;
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  .pp-divider {
+    height: 1px;
+    background-color: #f3f4f6;
+    margin: 28px 0;
+  }
+
+  .pp-section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .pp-section-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background-color: #15803d;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
+    box-shadow: 0 4px 10px -3px rgba(21, 128, 61, 0.2);
+  }
+
+  .pp-section-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #14532d;
+    margin: 0;
+  }
+
+  .pp-section-body {
+    margin-left: 52px;
+    color: #374151;
+    font-size: 15px;
+    line-height: 1.8;
+
+    p {
+      margin: 0 0 12px;
+    }
+  }
+
+  .pp-info-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 12px;
+
+    .pp-info-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background-color: #f0fdf4;
+      color: #15803d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    p {
+      margin: 0;
+    }
+    b {
+      color: #166534;
+    }
+  }
+
+  .pp-check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+
+    .icon {
+      color: #15803d;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .pp-security-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .pp-security-card {
+    border-radius: 12px;
+    background-color: #f0fdf4;
+    border: 1px solid #dcfce7;
+    padding: 16px;
+
+    .pp-security-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background-color: white;
+      color: #15803d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    h3 {
+      font-weight: 800;
+      color: #14532d;
+      font-size: 15px;
+      margin: 0;
+    }
+
+    p {
+      color: #4b5563;
+      line-height: 1.5;
+      font-size: 13px;
+      margin: 4px 0 0;
+    }
+  }
+
+  // phần responsive
+  @media (max-width: 1024px) {
+    .pp-main {
+      grid-template-columns: 1fr;
+    }
+    .pp-sidebar {
+      position: static;
+    }
+    .pp-sidebar-header {
+      cursor: pointer;
+    }
+    .pp-sidebar-toggle {
+      display: block;
+    }
+    .pp-sidebar-collapsible {
+      display: none;
+      &.open {
+        display: block;
+      }
+    }
+    .pp-security-grid {
+      grid-template-columns: 1fr;
+    }
+    .pp-intro-box {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .pp-intro-icon-wrapper {
+      width: 100%;
+      height: 140px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .pp-main {
+      padding: 16px;
+    }
+    .pp-content-area {
+      padding: 20px;
+    }
+    .pp-main-title {
+      font-size: 26px;
+    }
+    .pp-section-body {
+      margin-left: 0;
+    }
+    .pp-header {
+      padding: 0 16px;
+    }
+  }
+
+  &.theme-dark {
+    background-color: #141414;
+    color: #f0f0f0;
+
+    .pp-header {
+      background-color: #1f1f1f;
+      border-bottom-color: #303030;
+    }
+    .pp-back-btn {
+      background-color: #1f1f1f;
+      border-color: #303030;
+      color: #22c55e;
+      &:hover { background-color: #2a2a2a; }
+    }
+    .pp-brand-name { color: #22c55e; }
+    .pp-brand-slogan { color: #9ca3af; }
+    
+    .pp-sidebar {
+      background-color: #1f1f1f;
+      border-color: #303030;
+      box-shadow: none;
+    }
+    .pp-sidebar-icon { background-color: #2a2a2a; color: #22c55e; }
+    .pp-sidebar-title { color: #f0f0f0; }
+    .pp-sidebar-divider { background-color: #22c55e; }
+    
+    .pp-nav-item {
+      color: #d1d5db;
+      &:hover { background-color: #2a2a2a; color: #22c55e; }
+      &.active {
+        background-color: #166534;
+        color: #f0f0f0;
+        .pp-nav-icon { background-color: #14532d; color: #f0f0f0; }
+      }
+    }
+    .pp-nav-icon { background-color: #303030; color: #9ca3af; }
+    
+    .pp-sidebar-banner {
+      background: linear-gradient(to bottom right, #166534, #1f1f1f);
+      border-color: #14532d;
+    }
+    .pp-banner-icon { background-color: #1f1f1f; color: #22c55e; }
+    .pp-banner-text h3 { color: #22c55e; }
+    .pp-banner-text p { color: #d1d5db; }
+    
+    .pp-content-area {
+      background-color: #1f1f1f;
+      border-color: #303030;
+      box-shadow: none;
+    }
+    .pp-main-title { color: #f0f0f0; }
+    .pp-last-updated { color: #9ca3af; .icon { color: #22c55e; } }
+    
+    .pp-intro-box {
+      background: linear-gradient(to right, #166534, #1f1f1f, #166534);
+      border-color: #14532d;
+    }
+    .pp-intro-icon-wrapper {
+      background-color: #1f1f1f;
+      .pp-intro-icon-bg { background: linear-gradient(to bottom right, #14532d, #1f1f1f); }
+      .icon { color: #22c55e; }
+    }
+    .pp-intro-text { color: #d1d5db; }
+    
+    .pp-divider { background-color: #303030; }
+    
+    .pp-section-number { background-color: #22c55e; color: #1f1f1f; box-shadow: none; }
+    .pp-section-title { color: #f0f0f0; }
+    .pp-section-body { color: #d1d5db; }
+    
+    .pp-info-line {
+      .pp-info-icon { background-color: #2a2a2a; color: #22c55e; }
+      b { color: #22c55e; }
+    }
+    .pp-check-item .icon { color: #22c55e; }
+    
+    .pp-security-card {
+      background-color: #2a2a2a;
+      border-color: #303030;
+      .pp-security-icon { background-color: #1f1f1f; color: #22c55e; }
+      h3 { color: #f0f0f0; }
+      p { color: #9ca3af; }
+    }
+  }
+}

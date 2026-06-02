@@ -1,0 +1,154 @@
+.phanThanhToan {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.nhanPhan {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #111827;
+    font-size: 14px;
+    font-weight: 750;
+    line-height: 1.15;
+
+    svg {
+        width: 16px;
+        height: 16px;
+        stroke-width: 2;
+        color: #21743b;
+        flex-shrink: 0;
+    }
+}
+
+.tuyChonThanhToan {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.tuyChonTra {
+    position: relative;
+    height: 58px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: #1f2937;
+    background: #fff;
+    border: 1px solid #dfe4e6;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
+
+    .bieuTuongTra {
+        display: grid;
+        place-items: center;
+        color: #4b5563;
+        line-height: 1;
+
+        svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+        }
+    }
+
+    .nhanTra {
+        color: #1f2937;
+        font-size: 12px;
+        font-weight: 750;
+    }
+
+    &:hover:not(.hoatDong) {
+        border-color: #71ad77;
+        background: #fbfffb;
+    }
+
+    &.hoatDong {
+        color: #21743b;
+        background: #f3fbf2;
+        border: 2px solid #21743b;
+        box-shadow: 0 8px 20px rgba(33, 116, 59, 0.08);
+
+        .bieuTuongTra {
+            color: #21743b;
+        }
+    }
+}
+
+.dauTichTra {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    width: 18px;
+    height: 18px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: #21743b;
+    border-radius: 50%;
+
+    svg {
+        width: 12px;
+        height: 12px;
+        stroke-width: 2.2;
+    }
+}
+
+@media (max-width: 576px) {
+    .nhanPhan {
+        font-size: 14px;
+    }
+
+    .tuyChonThanhToan {
+        gap: 8px;
+    }
+
+    .tuyChonTra {
+        height: 58px;
+    }
+
+    .tuyChonTra .nhanTra {
+        font-size: 12px;
+    }
+}
+
+// ─── DARK MODE OVERRIDES ──────────────────────────────────────────────────────
+.main-page-container.theme-dark {
+    .nhanPhan {
+        color: var(--ink);
+    }
+
+    .tuyChonTra {
+        background: var(--bg-elev);
+        border-color: var(--line);
+        color: var(--ink);
+
+        .bieuTuongTra {
+            color: var(--ink-3);
+        }
+
+        .nhanTra {
+            color: var(--ink);
+        }
+
+        &:hover:not(.hoatDong) {
+            border-color: var(--accent);
+            background: var(--bg-soft);
+        }
+
+        &.hoatDong {
+            color: var(--accent);
+            background: var(--accent-soft);
+            border-color: var(--accent);
+            box-shadow: none;
+
+            .bieuTuongTra {
+                color: var(--accent);
+            }
+        }
+    }
+}

@@ -1,0 +1,734 @@
+// ─── Trang Đơn Hàng — Full Layout ────────────────────────────────────────────
+
+.khungTrangLichSu {
+  width: calc(100% + 64px);
+  min-height: calc(100vh - 60px);
+  margin: -32px;
+  padding: 32px 40px;
+  box-sizing: border-box;
+  background-color: #fbfdf5;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  // ── Header ──────────────────────────────────────────────────────────────────
+  .phanDauTrang {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    .tieuDeTrang {
+      font-size: 26px;
+      font-weight: 800;
+      color: #1a1a1a;
+      margin: 0 0 4px;
+      letter-spacing: -0.3px;
+    }
+
+    .tieuDePhuTrang {
+      color: #888;
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+
+  // ── Bộ lọc (seg-radio) ──────────────────────────────────────────────────────
+  .boLocPhanDoan {
+    display: inline-flex;
+    background: #edf0f2;
+    padding: 4px;
+    border-radius: 12px;
+    gap: 4px;
+
+    button {
+      border: none;
+      background: transparent;
+      padding: 9px 20px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        color: #222;
+      }
+
+      &.dangChon {
+        background: #fff;
+        color: #2f8f4e;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+    }
+  }
+
+  // ── Danh sách đơn ───────────────────────────────────────────────────────────
+  .luoiDonHang {
+    display: grid;
+    gap: 18px;
+    width: 100%;
+  }
+
+  // ── Card đơn hàng ───────────────────────────────────────────────────────────
+  .theDonHang {
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 18px;
+    overflow: hidden;
+    transition: box-shadow 0.25s, transform 0.25s;
+    width: 100%;
+
+    &:hover {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
+      transform: translateY(-2px);
+    }
+
+    // ── Phần chính ────────────────────────────────────────────────────────────
+    .phanChinhThe {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      padding: 22px 28px;
+      gap: 28px;
+      align-items: flex-start;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    // ── Hàng meta (mã đơn, trạng thái, giờ nhận) ─────────────────────────────
+    .thongTinDon {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+
+      .maDon {
+        font-family: 'JetBrains Mono', 'Courier New', monospace;
+        font-size: 13px;
+        font-weight: 700;
+        color: #999;
+        background: #f5f5f5;
+        padding: 2px 10px;
+        border-radius: 6px;
+      }
+
+      .thoiGianNhan {
+        font-size: 12px;
+        color: #999;
+
+        strong {
+          color: #333;
+          font-weight: 700;
+        }
+      }
+    }
+
+    // ── Danh sách món ─────────────────────────────────────────────────────────
+    .danhSachMonAn {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 18px;
+
+      .monAnThuGon {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        color: #444;
+        padding: 6px 10px;
+        background: #fafafa;
+        border-radius: 8px;
+        border: 1px solid #f0f0f0;
+
+        .bieuTuongMon {
+          font-size: 22px;
+        }
+
+        .tenMon {
+          flex: 1;
+          font-weight: 500;
+        }
+
+        .soLuong {
+          color: #bbb;
+          font-family: monospace;
+          font-weight: 700;
+        }
+      }
+    }
+
+    // ── Cột bên phải: tổng tiền + phương thức thanh toán ─────────────────────
+    .phanBenThe {
+      text-align: right;
+      min-width: 160px;
+
+      .nhanTongTien {
+        font-size: 10px;
+        font-weight: 700;
+        color: #bbb;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        margin-bottom: 6px;
+      }
+
+      .giaTriTongTien {
+        font-size: 26px;
+        font-weight: 800;
+        color: #1a1a1a;
+        line-height: 1;
+
+        .donVi {
+          font-size: 14px;
+          font-weight: 500;
+          color: #bbb;
+          margin-left: 2px;
+        }
+      }
+
+      .phuongThucThanhToan {
+        font-size: 12px;
+        color: #999;
+        margin-top: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: #f5f5f5;
+        padding: 4px 10px;
+        border-radius: 6px;
+      }
+    }
+
+    // ── Ghi chú đơn ──────────────────────────────────────────────────────────
+    .ghiChuDon {
+      padding: 12px 28px;
+      background: #fffbea;
+      border-top: 1px dashed #ffe58f;
+      font-size: 13px;
+      color: #7c6400;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    // ── Footer: nút hành động ─────────────────────────────────────────────────
+    .hanhDongThe {
+      padding: 14px 28px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      align-items: center;
+      background: #fafafa;
+      border-top: 1px solid #f0f0f0;
+
+      .nutDanhGiaDon {
+        border-color: #2f8f4e;
+        color: #2f8f4e;
+        font-weight: 600;
+        border-radius: 8px;
+        font-size: 13px;
+        height: 36px;
+        padding: 0 18px;
+
+        &:hover {
+          background: #dff2e4;
+          border-color: #2f8f4e;
+          color: #1f6b39;
+        }
+      }
+    }
+  }
+
+  // ── Chip trạng thái ──────────────────────────────────────────────────────────
+  .nhanTrangThai {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #f1f3f5;
+    color: #555;
+
+    &.green {
+      background: #dff2e4;
+      color: #1f6b39;
+    }
+
+    &.warn {
+      background: #fff9db;
+      color: #c47900;
+    }
+
+    &.err {
+      background: #fff0f0;
+      color: #c92a2a;
+    }
+
+    &.info {
+      background: #e8f4ff;
+      color: #1a6eb5;
+    }
+
+    .chamTrangThai {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #adb5bd;
+
+      &.green {
+        background: #2f8f4e;
+      }
+
+      &.warn {
+        background: #f59f00;
+      }
+
+      &.err {
+        background: #fa5252;
+      }
+
+      &.info {
+        background: #228be6;
+      }
+    }
+  }
+
+  // ── Empty state ──────────────────────────────────────────────────────────────
+  .trangThaiTrong {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    color: #aaa;
+    text-align: center;
+
+    .khungBieuTuong {
+      font-size: 56px;
+      color: #ddd;
+      margin-bottom: 20px;
+    }
+
+    h4 {
+      color: #555;
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    span {
+      font-size: 14px;
+      color: #aaa;
+    }
+  }
+}
+
+// ── Order Tracker ─────────────────────────────────────────────────────────────
+.thanhTheoDoi {
+  display: flex;
+  gap: 4px;
+  position: relative;
+  padding: 10px 0;
+}
+
+.buocTheoDoi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: #e9ecef;
+    z-index: 0;
+  }
+
+  &:last-child::before {
+    display: none;
+  }
+
+  &.hoanThanh::before {
+    background: #2f8f4e;
+  }
+
+  .cham {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    display: grid;
+    place-items: center;
+    z-index: 2;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #adb5bd;
+    transition: all 0.3s;
+  }
+
+  &.hoanThanh .cham {
+    background: #2f8f4e;
+    border-color: #2f8f4e;
+    color: white;
+  }
+
+  &.dangChon .cham {
+    background: white;
+    border-color: #2f8f4e;
+    color: #2f8f4e;
+    box-shadow: 0 0 0 4px #dff2e4;
+  }
+
+  .nhan {
+    font-size: 11px;
+    font-weight: 600;
+    color: #bbb;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  &.hoanThanh .nhan,
+  &.dangChon .nhan {
+    color: #333;
+  }
+}
+
+/* Responsive Đơn Hàng */
+@media (max-width: 768px) {
+  .khungTrangLichSu {
+    width: calc(100% + 48px);
+    margin: -24px;
+    padding: 24px;
+    
+    .phanDauTrang {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+      
+      .tieuDeTrang {
+        font-size: 22px;
+      }
+      
+      .boLocPhanDoan {
+        width: 100%;
+        display: flex;
+        
+        button {
+          flex: 1;
+          padding: 8px 0;
+          text-align: center;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .theDonHang {
+      .phanChinhThe {
+        grid-template-columns: 1fr; /* Một cột dọc duy nhất */
+        padding: 16px;
+        gap: 20px;
+      }
+
+      .thongTinDon {
+        gap: 8px;
+        margin-bottom: 12px;
+        
+        .thoiGianNhan {
+          width: 100%;
+          margin-top: 4px;
+        }
+      }
+
+      .phanBenThe {
+        text-align: left;
+        min-width: 100%;
+        border-top: 1px dashed var(--line, #ebebeb);
+        padding-top: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+
+        .nhanTongTien {
+          margin-bottom: 2px;
+          width: 100%; /* Đưa label lên dòng riêng biệt của cột thanh toán */
+        }
+
+        .giaTriTongTien {
+          font-size: 22px;
+        }
+
+        .phuongThucThanhToan {
+          margin-top: 0;
+        }
+      }
+
+      .ghiChuDon {
+        padding: 10px 16px;
+        font-size: 12px;
+      }
+
+      .hanhDongThe {
+        padding: 12px 16px;
+        
+        .ant-space {
+          width: 100%;
+          justify-content: flex-end;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .khungTrangLichSu {
+    width: calc(100% + 32px);
+    margin: -16px;
+    padding: 16px 12px;
+  }
+
+  .thanhTheoDoi {
+    padding: 6px 0;
+  }
+  
+  .buocTheoDoi {
+    .cham {
+      width: 22px;
+      height: 22px;
+      font-size: 10px;
+      margin-bottom: 6px;
+    }
+    
+    &::before {
+      top: 11px;
+    }
+    
+    .nhan {
+      font-size: 9px;
+      letter-spacing: -0.3px;
+    }
+  }
+}
+
+.main-page-container.theme-dark,
+[data-theme='dark'] {
+  .khungTrangLichSu {
+    background-color: var(--bg-main);
+
+    .phanDauTrang {
+      .tieuDeTrang {
+        color: var(--ink);
+      }
+
+      .tieuDePhuTrang {
+        color: var(--ink-3);
+      }
+    }
+
+    .boLocPhanDoan {
+      background: var(--bg-soft);
+
+      button {
+        color: var(--ink-3);
+
+        &:hover {
+          color: var(--ink);
+        }
+
+        &.dangChon {
+          background: var(--bg-elev);
+          color: var(--accent);
+          box-shadow: none;
+        }
+      }
+    }
+
+    .theDonHang {
+      background: var(--bg-elev);
+      border-color: var(--line);
+
+      &:hover {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      }
+
+      .phanChinhThe {
+        border-bottom-color: var(--line);
+      }
+
+      .thongTinDon {
+        .maDon {
+          background: var(--bg-soft);
+          color: var(--ink-3);
+        }
+
+        .thoiGianNhan {
+          color: var(--ink-3);
+
+          strong {
+            color: var(--ink);
+          }
+        }
+      }
+
+      .danhSachMonAn {
+        .monAnThuGon {
+          background: var(--bg-soft);
+          border-color: var(--line);
+          color: var(--ink-2);
+
+          .soLuong {
+            color: var(--ink-4);
+          }
+        }
+      }
+
+      .phanBenThe {
+        .nhanTongTien,
+        .donVi {
+          color: var(--ink-4);
+        }
+
+        .giaTriTongTien {
+          color: var(--ink);
+        }
+
+        .phuongThucThanhToan {
+          background: var(--bg-soft);
+          color: var(--ink-2);
+        }
+      }
+
+      .ghiChuDon {
+        background: rgba(245, 159, 0, 0.12);
+        border-top-color: rgba(245, 159, 0, 0.35);
+        color: #f6c15b;
+      }
+
+      .hanhDongThe {
+        background: var(--bg-soft);
+        border-top-color: var(--line);
+
+        .ant-btn-text {
+          color: var(--ink-2);
+
+          &:hover {
+            background: var(--bg-mute);
+            color: var(--ink);
+          }
+        }
+
+        .nutDanhGiaDon {
+          background: transparent;
+          border-color: var(--accent);
+          color: var(--accent);
+
+          &:hover {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+            color: var(--accent);
+          }
+        }
+      }
+    }
+
+    .nhanTrangThai {
+      background: var(--bg-soft);
+      color: var(--ink-2);
+
+      &.green {
+        background: rgba(50, 168, 82, 0.16);
+        color: #55d474;
+      }
+
+      &.warn {
+        background: rgba(245, 159, 0, 0.16);
+        color: #f6c15b;
+      }
+
+      &.err {
+        background: rgba(250, 82, 82, 0.16);
+        color: #ff8585;
+      }
+
+      &.info {
+        background: rgba(34, 139, 230, 0.16);
+        color: #74c0fc;
+      }
+    }
+
+    .trangThaiTrong {
+      color: var(--ink-4);
+
+      .khungBieuTuong {
+        color: var(--ink-4);
+      }
+
+      h4 {
+        color: var(--ink-2);
+      }
+
+      span {
+        color: var(--ink-4);
+      }
+    }
+  }
+
+  .buocTheoDoi {
+    &::before {
+      background: var(--line);
+    }
+
+    &.hoanThanh::before {
+      background: var(--accent);
+    }
+
+    .cham {
+      background: var(--bg-elev);
+      border-color: var(--line);
+      color: var(--ink-4);
+    }
+
+    &.hoanThanh .cham {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-ink);
+    }
+
+    &.dangChon .cham {
+      background: var(--bg-elev);
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    .nhan {
+      color: var(--ink-4);
+    }
+
+    &.hoanThanh .nhan,
+    &.dangChon .nhan {
+      color: var(--ink);
+    }
+  }
+}
+
+@media (max-width: 380px) {
+  .khungTrangLichSu {
+    width: calc(100% + 24px);
+    margin: -12px;
+    padding: 12px;
+  }
+}

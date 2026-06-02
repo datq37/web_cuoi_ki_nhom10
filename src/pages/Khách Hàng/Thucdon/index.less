@@ -1,0 +1,936 @@
+.khungThucDonNhanVien {
+  --bg: var(--bg-main);
+  --green-500: #2fa64d;
+  --err-500: #f01446;
+  --warn-500: #f59e0b;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+  --shadow-sm: 0 8px 24px rgb(17 24 39 / 8%);
+  --shadow-md: 0 14px 34px rgb(17 24 39 / 12%);
+
+  width: calc(100% + 64px);
+  min-height: calc(100vh - 60px);
+  margin: -32px;
+  padding: 32px;
+  box-sizing: border-box;
+  color: var(--ink);
+  background-color: var(--bg-main);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  .phanDauTrang {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 22px;
+  }
+
+  .tieuDeTrang {
+    margin: 0 0 8px;
+    color: var(--ink);
+    font-size: 30px;
+    font-weight: 850;
+    line-height: 1.1;
+    letter-spacing: 0;
+  }
+
+  .tieuDePhuTrang {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  .theDatTruoc {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 320px;
+    padding: 14px 16px;
+    background: var(--bg-elev);
+    border: none;
+    border-radius: 20px;
+    box-shadow: none;
+
+    .bieuTuongDatTruoc {
+      display: grid;
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: none;
+      border-radius: 50%;
+    }
+
+    div:nth-child(2) {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    strong {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    span {
+      color: var(--ink-3);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    > svg {
+      color: var(--ink-4);
+    }
+  }
+
+  .menu-hero {
+    position: relative;
+    min-height: 226px;
+    margin-bottom: 22px;
+    overflow: hidden;
+    color: #fff;
+    background-color: #0d7d39;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: var(--radius-xl);
+
+    &::before {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgb(4 87 37 / 70%) 0%, rgb(12 124 57 / 32%) 47%, rgb(12 124 57 / 0%) 72%);
+      content: '';
+    }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 520px;
+    padding: 30px 36px;
+
+    h2 {
+      margin: 0 0 12px;
+      color: #fff;
+      font-size: 26px;
+      font-weight: 850;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 8px;
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.45;
+      text-shadow: 0 1px 10px rgb(0 0 0 / 12%);
+
+      strong {
+        color: #fff;
+      }
+    }
+  }
+
+  .hero-stats {
+    display: inline-flex;
+    gap: 24px;
+    margin-top: 12px;
+    padding: 13px 18px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 14px;
+    backdrop-filter: blur(8px);
+  }
+
+  .hero-stat {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 132px;
+    color: #fff;
+
+    > svg {
+      flex-shrink: 0;
+      color: #fff;
+      stroke-width: 2.2;
+    }
+
+    strong {
+      display: block;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 850;
+      line-height: 1;
+    }
+
+    span {
+      display: block;
+      margin-top: 5px;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 750;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+  }
+
+  .hero-stat-best {
+    min-width: 180px;
+
+    strong {
+      max-width: 170px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .hangLichTrinh {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  .thanhChonNgay {
+    display: flex;
+    gap: 12px;
+    min-width: 0;
+    overflow-x: auto;
+    padding: 0 2px 4px;
+
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--line);
+      border-radius: 4px;
+    }
+  }
+
+  .theNgay {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 82px;
+    height: 72px;
+    color: var(--ink);
+    background: var(--bg-elev);
+    border: none;
+    border-radius: 16px;
+    box-shadow: none;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+
+    .tenNgay {
+      color: var(--ink-3);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.2;
+    }
+
+    .soNgay {
+      margin-top: 5px;
+      font-size: 20px;
+      font-weight: 850;
+      line-height: 1;
+    }
+
+    &.dangChon {
+      color: var(--accent-ink);
+      background: var(--accent);
+      box-shadow: none;
+
+      .tenNgay {
+        color: rgb(255 255 255 / 78%);
+      }
+    }
+
+    &.quaKhu,
+    &:disabled {
+      position: relative;
+      overflow: hidden;
+      color: var(--ink-4);
+      background: var(--bg-soft);
+      cursor: not-allowed;
+      opacity: 0.48;
+      transform: none;
+
+      .tenNgay,
+      .soNgay {
+        color: var(--ink-4);
+      }
+    }
+
+    &:hover:not(.active):not(:disabled) {
+      background: var(--bg-soft);
+      transform: translateY(-1px);
+    }
+  }
+
+  .phanBoLoc {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .hopTimKiem {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .bieuTuongTimKiem {
+      position: absolute;
+      left: 16px;
+      color: var(--ink-4);
+      pointer-events: none;
+      stroke-width: 2;
+    }
+
+    .oNhapTimKiem {
+      width: 100%;
+      min-height: 50px;
+      padding: 0 46px;
+      color: var(--ink);
+      font-size: 14px;
+      background: var(--bg-elev);
+      border: none;
+      border-radius: 16px;
+      outline: none;
+      box-shadow: none;
+      transition: background 0.2s;
+
+      &::placeholder {
+        color: var(--ink-4);
+      }
+
+      &:focus {
+        background: var(--bg-elev);
+        box-shadow: none;
+      }
+    }
+
+    .nutXoaTimKiem {
+      position: absolute;
+      right: 14px;
+      display: grid;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      color: var(--ink-3);
+      background: var(--bg-mute);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+
+      &:hover {
+        color: var(--ink);
+        background: var(--accent-soft);
+      }
+    }
+  }
+
+  .thanhDanhMuc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .theDanhMuc {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 14px;
+    color: var(--ink-2);
+    font-size: 13px;
+    font-weight: 750;
+    background: var(--bg-elev);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+
+    svg {
+      flex-shrink: 0;
+      stroke-width: 2.2;
+    }
+
+    .soLuong {
+      display: inline-grid;
+      min-width: 22px;
+      height: 20px;
+      place-items: center;
+      padding: 0 6px;
+      color: var(--ink-3);
+      font-size: 11px;
+      font-weight: 850;
+      background: var(--bg-mute);
+      border-radius: 999px;
+    }
+
+    &.dangChon {
+      color: var(--accent-ink);
+      background: var(--accent);
+
+      .soLuong {
+        color: var(--accent);
+        background: rgb(255 255 255 / 72%);
+      }
+    }
+
+    &:hover:not(.active) {
+      color: var(--accent);
+      background: var(--bg-soft);
+      transform: translateY(-1px);
+    }
+  }
+
+  .luoiThucDon {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .theMonAn {
+    display: flex;
+    min-width: 0;
+    overflow: hidden;
+    background: var(--bg-elev);
+    border: none;
+    border-radius: var(--radius-lg);
+    box-shadow: none;
+    flex-direction: column;
+    transition: transform 0.25s, background 0.25s;
+
+    &:hover {
+      background: var(--bg-elev);
+      transform: translateY(-4px);
+    }
+  }
+
+  .hinhAnhMon {
+    position: relative;
+    height: 166px;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--bg-mute), var(--bg-elev));
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.32s;
+    }
+  }
+
+  .theMonAn:hover .hinhAnhMon img {
+    transform: scale(1.035);
+  }
+
+  .danhSachNhan {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    gap: 6px;
+  }
+
+  .nhanMon {
+    padding: 5px 11px;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 850;
+    line-height: 1;
+    border-radius: 999px;
+    box-shadow: none;
+
+    &.hot {
+      background: var(--err-500);
+    }
+
+    &.veg {
+      background: var(--green-500);
+    }
+
+    &.new {
+      background: linear-gradient(135deg, #7c3aed, #c026d3);
+    }
+  }
+
+  .thanTheMon {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 9px;
+    padding: 14px 16px 16px;
+  }
+
+  .tenMon {
+    margin: 0;
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 850;
+    line-height: 1.22;
+  }
+
+  .moTaMon {
+    display: -webkit-box;
+    min-height: 39px;
+    margin: 0;
+    overflow: hidden;
+    color: var(--ink-3);
+    font-size: 13px;
+    line-height: 1.45;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .thongTinMon {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--ink-4);
+    font-size: 12px;
+    font-weight: 650;
+
+    span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    svg {
+      stroke-width: 2;
+    }
+
+    .danhGiaMon {
+      margin-left: auto;
+      color: var(--warn-500);
+      font-weight: 800;
+    }
+  }
+
+  .phanChanThe {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 13px;
+    border-top: none;
+  }
+
+  .giaMon {
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1;
+
+    .donViTien {
+      margin-left: 2px;
+      color: var(--ink-3);
+      font-size: 12px;
+      font-weight: 750;
+    }
+  }
+
+  .nutThemMon {
+    display: grid;
+    width: 38px;
+    height: 32px;
+    place-items: center;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border: none;
+    border-radius: 999px;
+    box-shadow: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+
+    &:hover {
+      background: #166f32;
+      transform: scale(1.06);
+    }
+  }
+
+  .soLuongMon {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 3px;
+    color: var(--accent-soft-ink);
+    font-weight: 850;
+    background: var(--accent-soft);
+    border-radius: 999px;
+
+    span {
+      min-width: 16px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    button {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      color: var(--accent);
+      background: var(--bg-elev);
+      border: none;
+      border-radius: 50%;
+      box-shadow: none;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+
+      &:hover {
+        color: var(--accent-ink);
+        background: var(--accent);
+      }
+    }
+  }
+
+  .nhanChuaBan {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 14px;
+    color: var(--ink-3);
+    font-size: 12px;
+    font-weight: 750;
+    background: var(--bg-soft);
+    border: none;
+    border-radius: 999px;
+    cursor: not-allowed;
+    user-select: none;
+  }
+}
+
+@media (max-width: 1200px) {
+  .khungThucDonNhanVien {
+    .luoiThucDon {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .khungThucDonNhanVien {
+    width: calc(100% + 48px);
+    margin: -24px;
+    padding: 24px;
+
+    .phanDauTrang {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .theDatTruoc {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .menu-hero {
+      min-height: 206px;
+      background-position: 60% center;
+
+      &::before {
+        background: linear-gradient(90deg, rgb(4 87 37 / 78%) 0%, rgb(12 124 57 / 48%) 56%, rgb(12 124 57 / 0%) 100%);
+      }
+    }
+
+    .hero-content {
+      max-width: 460px;
+      padding: 26px 24px;
+    }
+
+    .hangLichTrinh {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .thanhChonNgay,
+    .thanhDanhMuc {
+      flex-wrap: nowrap;
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    .theDanhMuc {
+      flex: 0 0 auto;
+      min-height: 42px;
+    }
+
+  }
+}
+
+@media (max-width: 768px) {
+  .khungThucDonNhanVien {
+    .phanDauTrang {
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .tieuDeTrang {
+      font-size: 27px;
+    }
+
+    .tieuDePhuTrang {
+      font-size: 14px;
+    }
+
+    .menu-hero {
+      min-height: 214px;
+      margin-bottom: 18px;
+      background-position: 66% center;
+      border-radius: 22px;
+
+      &::before {
+        background: linear-gradient(90deg, rgb(4 87 37 / 84%) 0%, rgb(12 124 57 / 62%) 62%, rgb(12 124 57 / 18%) 100%);
+      }
+    }
+
+    .hero-content {
+      max-width: 390px;
+      padding: 24px 20px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      width: 100%;
+      max-width: 520px;
+      padding: 10px;
+    }
+
+    .hero-stat {
+      min-width: 0;
+      gap: 8px;
+
+      strong {
+        font-size: 18px;
+      }
+
+      span {
+        font-size: 9px;
+      }
+    }
+
+    .hero-stat-best {
+      strong {
+        max-width: 120px;
+      }
+    }
+
+    .hangLichTrinh,
+    .phanBoLoc {
+      margin-bottom: 16px;
+    }
+
+    .luoiThucDon {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .hinhAnhMon {
+      height: 142px;
+    }
+
+    .thanTheMon {
+      padding: 12px 13px 14px;
+    }
+
+    .tenMon {
+      font-size: 15px;
+    }
+
+    .thongTinMon {
+      flex-wrap: wrap;
+      row-gap: 6px;
+
+      .danhGiaMon {
+        margin-left: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .khungThucDonNhanVien {
+    width: calc(100% + 32px);
+    margin: -16px;
+    padding: 16px;
+
+    .tieuDeTrang {
+      font-size: 25px;
+    }
+
+    .theDatTruoc {
+      display: none;
+    }
+
+    .menu-hero {
+      min-height: 214px;
+      background-position: 73% center;
+      border-radius: 20px;
+
+      &::before {
+        background: linear-gradient(90deg, rgb(4 87 37 / 92%) 0%, rgb(7 101 45 / 82%) 58%, rgb(7 101 45 / 44%) 100%);
+      }
+    }
+
+    .hero-content {
+      max-width: 100%;
+      padding: 20px 16px;
+
+      h2 {
+        margin-bottom: 10px;
+        font-size: 22px;
+      }
+
+      p {
+        max-width: 285px;
+        font-size: 13px;
+        line-height: 1.38;
+      }
+    }
+
+    .hero-stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      max-width: 310px;
+      margin-top: 10px;
+      padding: 9px;
+    }
+
+    .hero-stat {
+      > svg {
+        width: 21px;
+        height: 21px;
+      }
+
+      strong {
+        font-size: 17px;
+      }
+
+      span {
+        margin-top: 3px;
+        font-size: 8px;
+      }
+    }
+
+    .theNgay {
+      width: 76px;
+      height: 68px;
+    }
+
+    .luoiThucDon {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .oNhapTimKiem {
+      min-height: 46px;
+    }
+
+    .hinhAnhMon {
+      height: 176px;
+    }
+  }
+}
+
+@media (max-width: 380px) {
+  .khungThucDonNhanVien {
+    width: calc(100% + 24px);
+    margin: -12px;
+    padding: 12px;
+
+    .tieuDeTrang {
+      font-size: 23px;
+    }
+
+    .menu-hero {
+      min-height: 218px;
+      background-position: 77% center;
+    }
+
+    .hero-content {
+      padding: 18px 14px;
+
+      h2 {
+        font-size: 20px;
+      }
+
+      p {
+        max-width: 245px;
+        font-size: 12px;
+      }
+    }
+
+    .hero-stats {
+      max-width: 242px;
+      gap: 8px;
+      padding: 8px;
+    }
+
+    .theNgay {
+      width: 70px;
+      height: 64px;
+
+      .soNgay {
+        font-size: 18px;
+      }
+    }
+
+    .hinhAnhMon {
+      height: 158px;
+    }
+  }
+}
+
+@media (max-width: 340px) {
+  .khungThucDonNhanVien {
+    .menu-hero {
+      min-height: 232px;
+      background-position: 82% center;
+    }
+
+    .hero-content {
+      h2 {
+        font-size: 19px;
+      }
+
+      p {
+        max-width: 220px;
+      }
+    }
+
+    .hero-stats {
+      grid-template-columns: 1fr;
+      max-width: 190px;
+    }
+  }
+}

@@ -1,0 +1,168 @@
+import {
+  ArrowRightOutlined,
+  CheckOutlined,
+  ClockCircleOutlined,
+} from '@ant-design/icons';
+import { Avatar, Button, Table, Tooltip } from 'antd';
+import type { ColumnsType } from 'antd/lib/table';
+import React from 'react';
+import { COT_CONFIG, fmt } from '@/models/Quản Trị/Tổng Quan';
+import type { DonTrucTiep } from '@/services/Quản Trị/Tổng Quan/typing';
+import { ETrangThaiTrucTiep } from '@/services/Quản Trị/Tổng Quan/typing';
+import styles from './index.less';
+
+interface OrderTableProps {
+  orders: DonTrucTiep[];
+  onRowClick: (order: DonTrucTiep) => void;
+  cancelledIds: Set<string>;
+  searchValue?: string;
+  onQuickConfirm?: (maDon: string) => void;
+}
+
+const HUY_CFG = { tieuDe: 'Đã huỷ', mau: '#6b7280', bgLight: '#f3f4f6' };
+
+/** Tính số phút chờ từ thoiGian "HH:mm" đến hiện tại */
+function calcWaitMinutes(thoiGian: string): number {
+  try {
+    const [h, m] = thoiGian.split(':').map(Number);
+    const now = new Date();
+    const orderMin = h * 60 + m;
+    const nowMin   = now.getHours() * 60 + now.getMinutes();
+    return Math.max(0, nowMin - orderMin);
+  } catch { return 0; }
+}
+
+const getStatusCfg = (trangThai: ETrangThaiTrucTiep, cancelled: boolean) =>
+  cancelled ? HUY_CFG : COT_CONFIG[trangThai];
+
+const OrderTable: React.FC<OrderTableProps> = ({
+  orders,
+  onRowClick,
+  cancelledIds,
+  searchValue,
+  onQuickConfirm,
+}) => {
+  const columns: ColumnsType<DonTrucTiep> = [
+    {
+      title: 'Mã đơn',
+      dataIndex: 'maDon',
+      key: 'maDon',
+      width: 110,
+      render: (text: string) => <span className={styles.maDonCell}>{text}</span>,
+    },
+    {
+      title: 'Khách hàng',
+      key: 'khachHang',
+      render: (_: any, r: DonTrucTiep) => {
+        const isCho = r.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN && !cancelledIds.has(r.maDon);
+        const waitMin = isCho ? calcWaitMinutes(r.thoiGian) : 0;
+        const isLate = waitMin >= 10;
+        return (
+          <div className={styles.khachCell}>
+            <Avatar size={32} style={{ background: r.khachHang.mauNen, color: r.khachHang.mauChu, fontWeight: 700, fontSize: 12, flexShrink: 0 }}>
+              {r.khachHang.vietTat}
+            </Avatar>
+            <div>
+              <span className={styles.tenKH}>{r.khachHang.ten}</span>
+              {isLate && (
+                <div style={{ fontSize: 11, color: '#dc2626', fontWeight: 600, marginTop: 2 }}>
+                  ⏱ Chờ {waitMin} phút
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      title: 'Món ăn',
+      key: 'monAn',
+      render: (_: any, r: DonTrucTiep) => {
+        const str = r.monAn.map((m) => m.ten).join(', ');
+        return (
+          <span className={styles.monCell}>
+            {str.length > 42 ? str.slice(0, 42) + '…' : str}
+          </span>
+        );
+      },
+    },
+    {
+      title: 'Tổng tiền',
+      key: 'tongTien',
+      width: 110,
+      render: (_: any, r: DonTrucTiep) => (
+        <span className={styles.tongTienCell}>{fmt(r.tongTien)}</span>
+      ),
+    },
+    {
+      title: 'Giờ đặt',
+      dataIndex: 'thoiGian',
+      key: 'thoiGian',
+      width: 90,
+      render: (t: string) => (
+        <span className={styles.thoiGianCell}>
+          <ClockCircleOutlined style={{ marginRight: 4, fontSize: 11 }} />
+          {t}
+        </span>
+      ),
+    },
+    {
+      title: 'Trạng thái',
+      key: 'trangThai',
+      width: 145,
+      render: (_: any, r: DonTrucTiep) => {
+        const isCancelled = cancelledIds.has(r.maDon);
+        const cfg = getStatusCfg(r.trangThai, isCancelled);
+        const statusKey = isCancelled ? 'huy' : r.trangThai;
+        return (
+          <span
+            className={styles.statusTag}
+            data-status={statusKey}
+            style={{ color: cfg.mau }}
+          >
+            <span className={styles.statusDot} style={{ background: cfg.mau }} />
+            {cfg.tieuDe}
+          </span>
+        );
+      },
+    },
+    {
+      title: '',
+      key: 'actions',
+      width: 80,
+      render: (_: any, r: DonTrucTiep) => {
+        const isCho = r.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN && !cancelledIds.has(r.maDon);
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }} onClick={(e) => e.stopPropagation()}>
+            {isCho && onQuickConfirm && (
+              <Tooltip title="Xác nhận — chuyển sang Đang chế biến">
+                <Button
+                  size="small"
+                  type="primary"
+                  icon={<CheckOutlined />}
+                  style={{ borderRadius: 6, fontSize: 11, padding: '0 7px', height: 26 }}
+                  onClick={() => onQuickConfirm(r.maDon)}
+                />
+              </Tooltip>
+            )}
+            <ArrowRightOutlined className={styles.chevron} />
+          </div>
+        );
+      },
+    },
+  ];
+
+  return (
+    <Table
+      className={styles.orderTable}
+      rowKey="maDon"
+      columns={columns}
+      dataSource={orders}
+      pagination={{ pageSize: 10, showTotal: (t) => `Tổng ${t} đơn`, showSizeChanger: false, size: 'small' }}
+      onRow={(record) => ({ onClick: () => onRowClick(record), style: { cursor: 'pointer' } })}
+      locale={{ emptyText: 'Không có đơn hàng nào' }}
+    />
+  );
+};
+
+export default OrderTable;

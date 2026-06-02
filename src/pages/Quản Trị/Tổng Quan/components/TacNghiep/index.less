@@ -1,0 +1,551 @@
+﻿@import '~@/styles/admin-tokens.less';
+
+@radius: 12px;
+@shadow: 0 1px 4px rgba(0,0,0,.05);
+
+.tnWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// ── Welcome card ──────────────────────────────────────────────────
+.welcomeCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, @primary-darkest 0%, @primary-dark 60%, @primary-hover 100%);
+  border-radius: @radius;
+  padding: 20px 28px;
+  box-shadow: 0 4px 16px rgba(22,101,52,0.25);
+  gap: 16px;
+}
+
+.welcomeLeft { flex: 1; min-width: 0; }
+
+.welcomeGreet {
+  font-size: @fs-2xl;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.welcomeDate {
+  font-size: @fs-base;
+  color: rgba(255,255,255,0.7);
+}
+
+.welcomeRevenue {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.welcomeRevenueLabel {
+  font-size: @fs-xs;
+  color: rgba(255,255,255,0.65);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.welcomeRevenueValue {
+  font-size: @fs-4xl;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.1;
+}
+
+// ── Section card ─────────────────────────────────────────────────
+.sectionCard {
+  background: @surface;
+  border-radius: @radius;
+  border: 1px solid @border;
+  padding: 18px 20px;
+  box-shadow: @shadow;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  font-size: @fs-md;
+  font-weight: 700;
+  color: @text-dark;
+  display: flex;
+  align-items: center;
+}
+
+.sectionLink {
+  font-size: @fs-sm;
+  color: @primary !important;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  &:hover { color: @primary-hover !important; }
+}
+
+// ── Quick KPIs ────────────────────────────────────────────────────
+.kpiRow {
+  display: flex;
+  align-items: center;
+  background: @surface;
+  border: 1px solid @border;
+  border-radius: @radius;
+  padding: 16px 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+
+.kpiItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kpiLabel {
+  font-size: @fs-xs;
+  font-weight: 600;
+  color: @text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.kpiValue {
+  font-size: @fs-3xl;
+  font-weight: 800;
+  color: @text-dark;
+  line-height: 1.2;
+}
+
+.kpiSub {
+  font-size: @fs-xs;
+  color: @text-muted;
+}
+
+.kpiDivider {
+  width: 1px;
+  height: 40px;
+  background: @border;
+  flex-shrink: 0;
+  margin: 0 20px;
+}
+
+// ── 2 cột layout ─────────────────────────────────────────────────
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
+}
+
+// ── Top món bán chạy ─────────────────────────────────────────────
+.topMonList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.topMonRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topMonRank {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: @text-muted;
+  font-size: @fs-xs;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rankGold   { background: #fef9c3; color: #ca8a04; }
+.rankSilver { background: #f1f5f9; color: #64748b; }
+.rankBronze { background: #fff7ed; color: #c2410c; }
+
+.topMonTen {
+  flex: 1;
+  font-size: @fs-base;
+  font-weight: 500;
+  color: @text-dark;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topMonRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.topMonSo {
+  font-size: @fs-base;
+  font-weight: 700;
+  color: @primary;
+  min-width: 30px;
+  text-align: right;
+}
+
+.topMonBar {
+  width: 60px;
+  height: 5px;
+  background: @primary-100;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.topMonFill {
+  height: 100%;
+  background: @primary;
+  border-radius: 99px;
+  transition: width 0.3s;
+}
+
+// ── Activity feed ─────────────────────────────────────────────────
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.activityRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid @border;
+  &:last-child { border-bottom: none; }
+}
+
+.activityIcon {
+  font-size: @fs-xl;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.activityBody { flex: 1; min-width: 0; }
+
+.activityTitle {
+  font-size: @fs-base;
+  font-weight: 600;
+  color: @text-dark;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.activityDesc {
+  font-size: @fs-sm;
+  color: @text-muted;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.activityTime {
+  font-size: @fs-xs;
+  color: @text-light;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+// ── Order stat grid ───────────────────────────────────────────────
+.orderStatGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.orderStatItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 8px;
+  background: #f9fafb;
+  border-radius: 10px;
+  border: 1px solid @border;
+  text-align: center;
+  transition: all 0.15s;
+}
+
+.orderStatAlert {
+  background: #fff7ed !important;
+  border-color: #fed7aa !important;
+  .orderStatNum { color: #ea580c !important; }
+}
+
+.orderStatIcon {
+  font-size: @fs-xl;
+  color: @text-muted;
+  margin-bottom: 2px;
+}
+
+.orderStatNum {
+  font-size: @fs-4xl;
+  font-weight: 800;
+  color: @text-dark;
+  line-height: 1;
+}
+
+.orderStatLabel {
+  font-size: @fs-xs;
+  color: @text-muted;
+  font-weight: 500;
+}
+
+// ── Urgent banner ─────────────────────────────────────────────────
+.urgentBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: @fs-base;
+  color: #92400e;
+  flex-wrap: wrap;
+
+  strong { color: #c2410c; }
+}
+
+.urgentBtn {
+  margin-left: auto;
+  background: #ea580c !important;
+  border-color: #ea580c !important;
+  border-radius: 7px !important;
+  font-size: @fs-sm !important;
+  &:hover { background: #c2410c !important; border-color: #c2410c !important; }
+}
+
+// ── Kho warnings ─────────────────────────────────────────────────
+.khoOk {
+  display: flex;
+  align-items: center;
+  font-size: @fs-base;
+  color: @text-muted;
+  padding: 8px 0;
+}
+
+.khoWarnList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.khoWarnItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: @fs-base;
+}
+
+.khoWarnDanger {
+  background: #fff2f0;
+  border: 1px solid #fca5a5;
+}
+
+.khoWarnWarning {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+}
+
+.khoWarnTen {
+  flex: 1;
+  font-weight: 500;
+  color: @text-dark;
+}
+
+.khoWarnTag {
+  font-size: @fs-xs;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 20px;
+  background: #fff2f0;
+  color: #dc2626;
+  white-space: nowrap;
+}
+
+// ── Mini-list đơn cần xử lý ──────────────────────────────────────
+.recentList {
+  margin-top: 12px;
+  border-top: 1px solid @border;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recentTitle {
+  font-size: @fs-xs;
+  font-weight: 700;
+  color: @text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.recentRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s;
+  &:hover { background: @primary-50; }
+}
+
+.recentInfo { flex: 1; min-width: 0; }
+
+.recentName {
+  font-size: @fs-base;
+  font-weight: 600;
+  color: @text-dark;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recentMon {
+  font-size: @fs-xs;
+  color: @text-muted;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.recentBadge {
+  font-size: @fs-xs;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.recentGia {
+  font-size: @fs-sm;
+  font-weight: 700;
+  color: @primary;
+}
+
+// ── Shortcut grid ─────────────────────────────────────────────────
+.shortcutGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+
+  @media (min-width: 1200px) { grid-template-columns: repeat(6, 1fr); }
+}
+
+.shortcutBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 8px;
+  border: 1.5px solid @border;
+  border-radius: 12px;
+  background: @surface;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: @fs-sm;
+  font-weight: 600;
+  color: @text-mid;
+
+  &:hover {
+    border-color: @primary;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    color: @text-dark;
+  }
+}
+
+.shortcutIconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.shortcutLabel {
+  font-size: @fs-sm;
+  font-weight: 600;
+  text-align: center;
+  color: @text-mid;
+}
+
+// ── Dark mode ─────────────────────────────────────────────────────
+:global([data-theme="dark"]) {
+  .kpiRow      { background: #1e293b; border-color: #334155; }
+  .kpiValue    { color: #f1f5f9; }
+  .kpiLabel    { color: #64748b; }
+  .kpiSub      { color: #64748b; }
+  .kpiDivider  { background: #334155; }
+
+  .topMonTen   { color: #f1f5f9; }
+  .topMonBar   { background: #334155; }
+  .activityIcon { background: #0f172a; }
+  .activityTitle { color: #f1f5f9; }
+  .activityDesc  { color: #64748b; }
+  .activityTime  { color: #475569; }
+  .activityRow   { border-bottom-color: #334155; }
+
+  .sectionCard { background: #1e293b; border-color: #334155; }
+  .sectionTitle { color: #f1f5f9; }
+
+  .orderStatItem { background: #0f172a; border-color: #334155; }
+  .orderStatNum  { color: #f1f5f9; }
+  .orderStatLabel { color: #64748b; }
+  .orderStatAlert { background: rgba(234,88,12,.12) !important; border-color: rgba(234,88,12,.4) !important; }
+
+  .urgentBanner { background: rgba(234,88,12,.1); border-color: rgba(234,88,12,.3); color: #fcd34d; }
+
+  .khoOk { color: #64748b; }
+  .khoWarnDanger  { background: rgba(220,38,38,.1); border-color: rgba(220,38,38,.3); }
+  .khoWarnWarning { background: rgba(217,119,6,.1); border-color: rgba(217,119,6,.3); }
+  .khoWarnTen { color: #f1f5f9; }
+
+  .shortcutBtn {
+    background: #0f172a;
+    border-color: #334155;
+    color: #94a3b8;
+    &:hover { border-color: @primary; }
+  }
+  .shortcutLabel { color: #94a3b8; }
+  .recentRow { &:hover { background: rgba(22,163,74,.08); } }
+  .recentName { color: #f1f5f9; }
+  .recentMon  { color: #64748b; }
+  .recentList { border-top-color: #334155; }
+  .recentTitle { color: #475569; }
+}

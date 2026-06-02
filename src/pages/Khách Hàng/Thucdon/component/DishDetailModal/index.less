@@ -1,0 +1,528 @@
+// modal chi tiết món
+
+.nenMo {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    animation: ddm-fade-in 0.2s ease-out;
+
+    @keyframes ddm-fade-in {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+}
+
+.khungChiTiet {
+    width: 100%;
+    max-width: 560px;
+    max-height: 92vh;
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: ddm-slide-up 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.18);
+
+    @keyframes ddm-slide-up {
+        from {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+// ảnh món
+.phanAnhBia {
+    position: relative;
+    height: 220px;
+    background: linear-gradient(135deg, #dff2e4 0%, #b6e5c4 50%, #8fd5a8 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+            135deg,
+            rgba(47, 143, 78, 0.04) 0 10px,
+            rgba(47, 143, 78, 0.08) 10px 20px
+        );
+    }
+}
+
+.bieuTuongAnhBia {
+    font-size: 110px;
+    line-height: 1;
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.15));
+    animation: ddm-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+
+    @keyframes ddm-pop {
+        from {
+            opacity: 0;
+            transform: scale(0.6);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+}
+
+.theNhanAnhBia {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    display: flex;
+    gap: 6px;
+}
+
+.nhanChiTiet {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    &.hot { background: #ef4444; }
+    &.veg { background: #22c55e; }
+    &.new { background: #7c3aed; }
+}
+
+.nutDongChiTiet {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(6px);
+    border: none;
+    display: grid;
+    place-items: center;
+    font-size: 15px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+
+    &:hover {
+        background: #fff;
+        transform: scale(1.1);
+    }
+}
+
+// nội dung cuộn
+.phanThanChiTiet {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 20px 8px;
+
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #e5e7eb;
+        border-radius: 10px;
+    }
+}
+
+.hangTieuDe {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.tenMonChiTiet {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    color: #1f211c;
+    line-height: 1.3;
+    flex: 1;
+}
+
+.nhanDanhGia {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #fef3c7;
+    color: #d97706;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.thongTinChiTiet {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 12px;
+    color: #777a6f;
+    font-weight: 500;
+    margin-bottom: 14px;
+
+    span {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #f4f4ef;
+        padding: 4px 10px;
+        border-radius: 999px;
+    }
+}
+
+.moTaChiTiet {
+    font-size: 14px;
+    color: #4d5046;
+    line-height: 1.6;
+    margin: 0 0 18px;
+}
+
+.thanhPhan {
+    margin-bottom: 18px;
+}
+
+.nhanPhanChiTiet {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1f211c;
+    margin-bottom: 10px;
+
+    .soLuongDanhGia {
+        font-weight: 400;
+        color: #999b91;
+        margin-left: 4px;
+    }
+}
+
+.cacNhanThanhPhan {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.nhanThanhPhan {
+    padding: 4px 12px;
+    background: #dff2e4;
+    color: #1f6b39;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.duongChiaChiTiet {
+    height: 1px;
+    background: #f0f0ee;
+    margin: 4px 0 18px;
+}
+
+// đánh giá
+.phanDanhGia {
+    padding-bottom: 8px;
+}
+
+.khongCoDanhGia {
+    font-size: 13px;
+    color: #999b91;
+    text-align: center;
+    padding: 16px 0;
+}
+
+.mucDanhGia {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 18px;
+
+    &:last-child { margin-bottom: 0; }
+}
+
+.anhDaiDienDanhGia {
+    font-size: 28px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f4f4ef;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border: 2px solid #dff2e4;
+}
+
+.noiDungDanhGia {
+    flex: 1;
+}
+
+.phanDauDanhGia {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.tacGiaDanhGia {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1f211c;
+}
+
+.ngayDanhGia {
+    font-size: 11px;
+    color: #999b91;
+}
+
+.saoDanhGia {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 6px;
+}
+
+.binhLuanDanhGia {
+    font-size: 13px;
+    color: #4d5046;
+    line-height: 1.5;
+    margin: 0;
+    background: #fafaf7;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border-left: 3px solid #2f8f4e;
+}
+
+// chân modal
+.phanChanChiTiet {
+    padding: 16px 20px;
+    background: #fff;
+    border-top: 1px solid #f0f0ee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-shrink: 0;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+}
+
+.khoiGia {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+}
+
+.giaChiTiet {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1f211c;
+}
+
+.donViChiTiet {
+    font-size: 13px;
+    color: #777a6f;
+    margin-left: 2px;
+}
+
+.nutThemChiTiet {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    background: #2f8f4e;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(47, 143, 78, 0.35);
+
+    &:hover {
+        background: #1f6b39;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(47, 143, 78, 0.45);
+    }
+    &:active {
+        transform: translateY(0);
+    }
+
+    &.disabled,
+    &:disabled {
+        color: #999;
+        background: #f5f5f5;
+        border: 1px solid #e9ecef;
+        box-shadow: none;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    &.disabled:hover,
+    &:disabled:hover {
+        color: #999;
+        background: #f5f5f5;
+        box-shadow: none;
+        transform: none;
+    }
+}
+
+.dieuKhienSoLuong {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #dff2e4;
+    border-radius: 12px;
+    padding: 6px 10px;
+    font-weight: 700;
+    color: #1f6b39;
+
+    span {
+        min-width: 24px;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    button {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: #fff;
+        border: none;
+        color: #2f8f4e;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.15s;
+        font-size: 13px;
+
+        &:hover {
+            background: #2f8f4e;
+            color: #fff;
+        }
+    }
+}
+
+// chế độ tối
+[data-theme='dark'] {
+    .khungChiTiet {
+        background: var(--bg-elev);
+        box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .phanAnhBia {
+        background: linear-gradient(135deg, rgba(47, 143, 78, 0.3) 0%, rgba(47, 143, 78, 0.15) 100%);
+    }
+
+    .nutDongChiTiet {
+        background: rgba(0, 0, 0, 0.4);
+        color: var(--ink);
+        &:hover { background: rgba(0, 0, 0, 0.7); }
+    }
+
+    .tenMonChiTiet { color: var(--ink); }
+
+    .phanThanChiTiet {
+        &::-webkit-scrollbar-thumb {
+            background: var(--line);
+        }
+    }
+
+    .nhanDanhGia {
+        color: #f6c15b;
+        background: rgba(245, 158, 11, 0.16);
+    }
+
+    .thongTinChiTiet {
+        color: var(--ink-3);
+
+        span {
+            background: var(--bg-soft);
+        }
+    }
+
+    .moTaChiTiet { color: var(--ink-2); }
+
+    .nhanPhanChiTiet { color: var(--ink); }
+
+    .soLuongDanhGia,
+    .khongCoDanhGia,
+    .ngayDanhGia,
+    .donViChiTiet {
+        color: var(--ink-4);
+    }
+
+    .nhanThanhPhan {
+        color: var(--accent);
+        background: var(--accent-soft);
+    }
+
+    .duongChiaChiTiet { background: var(--line); }
+
+    .anhDaiDienDanhGia {
+        background: var(--bg-soft);
+        border-color: var(--line);
+    }
+
+    .tacGiaDanhGia { color: var(--ink); }
+
+    .binhLuanDanhGia {
+        background: var(--bg-soft);
+        color: var(--ink-2);
+        border-left-color: var(--accent);
+    }
+
+    .phanChanChiTiet {
+        background: var(--bg-elev);
+        border-top-color: var(--line);
+        box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .giaChiTiet { color: var(--ink); }
+
+    .nutThemChiTiet.disabled,
+    .nutThemChiTiet:disabled {
+        color: var(--ink-4);
+        background: var(--bg-soft);
+        border-color: var(--line);
+    }
+
+    .nutThemChiTiet.disabled:hover,
+    .nutThemChiTiet:disabled:hover {
+        color: var(--ink-4);
+        background: var(--bg-soft);
+    }
+
+    .dieuKhienSoLuong {
+        background: var(--bg-soft);
+        color: var(--accent);
+
+        button {
+            background: var(--bg-elev);
+            color: var(--ink);
+
+            &:hover {
+                color: #fff;
+                background: var(--accent);
+            }
+        }
+    }
+}

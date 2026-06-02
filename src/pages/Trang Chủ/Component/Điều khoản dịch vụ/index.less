@@ -1,0 +1,409 @@
+// phần màu sắc và phong cách
+.terms-of-service-page {
+  --primary-color: #2d6a4f;
+  --primary-light: rgba(45, 106, 79, 0.08);
+  --text-dark: #1b4332;
+  --body-bg: #f4f6f8;
+  --card-bg: #ffffff;
+  --border-color: #e9ecef;
+  --text-main: #333333;
+  --text-secondary: #555555;
+  --text-mute: #8c98a5;
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+
+  min-height: 100vh;
+  background-color: var(--body-bg);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+
+  // phần đầu trang
+  .terms-header {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 14px 24px;
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-back {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--primary-color);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+
+      &:hover {
+        background: var(--primary-light);
+        border-color: var(--primary-color);
+        transform: translateX(-2px);
+      }
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .logo {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+
+        .name {
+          font-weight: 800;
+          font-size: 15px;
+          color: var(--text-dark);
+          line-height: 1.1;
+        }
+
+        .sub {
+          font-size: 9px;
+          font-weight: 600;
+          color: var(--text-mute);
+          letter-spacing: 0.5px;
+        }
+      }
+    }
+  }
+
+  // phần nội dung chính
+  .terms-main {
+    flex: 1;
+    padding: 40px 24px;
+  }
+
+  .terms-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 30px;
+    align-items: start;
+  }
+
+  // phần mục lục
+  .terms-sidebar {
+    position: sticky;
+    top: 90px;
+    z-index: 10;
+
+    .sidebar-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sidebar-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin: 0;
+      padding-bottom: 12px;
+      border-bottom: 1.5px solid var(--border-color);
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.2s;
+
+      span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &:hover {
+        background: var(--primary-light);
+        color: var(--primary-color);
+        font-weight: 600;
+        transform: translateX(4px);
+      }
+    }
+
+    .sidebar-decor {
+      margin-top: 10px;
+      background: #f8fcf9;
+      border: 1px solid rgba(45, 106, 79, 0.15);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+
+      .icon-shield {
+        color: var(--primary-color);
+        font-size: 20px;
+        margin-top: 2px;
+      }
+
+      .decor-text {
+        h4 {
+          margin: 0 0 4px 0;
+          font-size: 13px;
+          font-weight: 700;
+          color: var(--text-dark);
+        }
+        p {
+          margin: 0;
+          font-size: 11.5px;
+          color: var(--text-secondary);
+          line-height: 1.4;
+        }
+      }
+    }
+  }
+
+  // phần bài viết
+  .terms-content {
+    .content-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
+      padding: 40px;
+    }
+
+    .content-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin: 0 0 10px 0;
+      line-height: 1.2;
+    }
+
+    .last-updated {
+      font-size: 13px;
+      color: var(--text-mute);
+      margin: 0 0 24px 0;
+      font-style: italic;
+    }
+
+    .content-intro {
+      font-size: 15.5px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .policy-divider {
+      height: 1px;
+      background: var(--border-color);
+      margin: 32px 0;
+    }
+
+    .policy-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .policy-section {
+      scroll-margin-top: 100px;
+      
+      .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin: 0 0 16px 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .icon-wrapper {
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
+          background: var(--primary-light);
+          color: var(--primary-color);
+          display: grid;
+          place-items: center;
+          font-size: 15px;
+          flex-shrink: 0;
+        }
+      }
+
+      .section-body {
+        font-size: 14.5px;
+        line-height: 1.7;
+        color: var(--text-secondary);
+        padding-left: 44px;
+
+        p {
+          margin: 0 0 12px 0;
+        }
+
+        ul {
+          margin: 0 0 16px 0;
+          padding-left: 20px;
+          
+          li {
+            margin-bottom: 8px;
+            
+            strong {
+              color: var(--text-dark);
+            }
+          }
+        }
+      }
+    }
+
+    .policy-footer {
+      margin-top: 40px;
+      padding: 24px;
+      border-radius: 12px;
+      background: #fafbfc;
+      border: 1px solid var(--border-color);
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+
+      a {
+        color: var(--primary-color);
+        font-weight: 600;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  // phần chân trang
+  .terms-footer-simple {
+    background: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    padding: 20px;
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--text-mute);
+  }
+
+  // phần responsive
+  @media (max-width: 992px) {
+    .terms-container {
+      grid-template-columns: 1fr;
+    }
+
+    .terms-sidebar {
+      position: static;
+      
+      .sidebar-card {
+        padding: 20px;
+      }
+
+      .sidebar-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        gap: 8px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      }
+
+      .nav-link {
+        flex-shrink: 0;
+        padding: 8px 16px;
+        background: #fafbfc;
+        border: 1px solid var(--border-color);
+
+        &:hover {
+          transform: none;
+        }
+      }
+
+      .sidebar-decor {
+        display: none;
+      }
+    }
+
+    .terms-content {
+      .content-card {
+        padding: 24px;
+      }
+
+      .content-title {
+        font-size: 26px;
+      }
+
+      .policy-section {
+        .section-body {
+          padding-left: 0;
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    .terms-header {
+      padding: 12px 16px;
+
+      .btn-back {
+        padding: 6px 12px;
+        font-size: 12.5px;
+      }
+
+      .header-brand {
+        .logo {
+          width: 32px;
+          height: 32px;
+        }
+        .brand-text .name {
+          font-size: 13px;
+        }
+      }
+    }
+
+    .terms-main {
+      padding: 20px 16px;
+    }
+  }
+}

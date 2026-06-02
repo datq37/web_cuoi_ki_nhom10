@@ -1,0 +1,246 @@
+﻿@import '~@/styles/admin-tokens.less';
+
+@ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+.kanbanWrap {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  align-items: start;
+  min-height: 0;
+}
+
+.kanbanCol {
+  background: #f8fafc;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  overflow: hidden;
+}
+
+.colHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.colDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.colTitle {
+  flex: 1;
+  font-size: @fs-base;
+  font-weight: 600;
+  color: #374151;
+}
+
+.colBadge {
+  font-size: @fs-xs;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 99px;
+
+  &[data-col="cho_xac_nhan"]  { background: #fff7ed; }
+  &[data-col="dang_che_bien"] { background: #eff6ff; }
+  &[data-col="san_sang"]      { background: #f5f3ff; }
+  &[data-col="hoan_thanh"]    { background: @primary-50; }
+}
+
+.colBody {
+  flex: 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  max-height: calc(100vh - 300px);
+  &::-webkit-scrollbar { width: 3px; }
+  &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
+}
+
+.donCard {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: box-shadow 200ms @ease, transform 200ms @ease, border-color 200ms @ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+    border-color: #e2e8f0;
+  }
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.maDon {
+  font-family: 'Courier New', monospace;
+  font-size: @fs-sm;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: 0.02em;
+}
+
+.thoiGian {
+  font-size: @fs-xs;
+  color: #9ca3af;
+}
+
+.khachRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: @fs-xs;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.tenKH {
+  font-size: @fs-base;
+  font-weight: 600;
+  color: #111827;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.monList {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.monRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: @fs-sm;
+  color: #374151;
+}
+
+.soLuong {
+  color: #6b7280;
+  font-weight: 500;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.conLai {
+  font-size: @fs-xs;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.ghiChuTag {
+  display: inline-flex;
+  align-items: center;
+  font-size: @fs-xs;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+  align-self: flex-start;
+
+  &[data-ghichu="it_cay"],
+  &[data-ghichu="khong_hanh"] { background: #fff7ed; }
+  &[data-ghichu="mang_di"]    { background: #f5f3ff; }
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
+  margin-top: 2px;
+}
+
+.tongTien {
+  font-size: @fs-md;
+  font-weight: 700;
+  color: @primary;
+}
+
+.actionBtn {
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: @fs-xs;
+  font-weight: 600;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: opacity 150ms @ease;
+  &:hover { opacity: 0.85; }
+}
+
+.emptyCol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0;
+}
+
+.emptyText {
+  font-size: @fs-sm;
+  color: #d1d5db;
+}
+
+:global([data-theme="dark"]) {
+  .kanbanCol  { background: #1e293b; }
+  .colHeader  { border-bottom-color: #334155; }
+  .colTitle   { color: #cbd5e1; }
+
+  .donCard {
+    background: #0f172a;
+    border-color: #334155;
+    &:hover { border-color: #475569; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3); }
+  }
+  .maDon    { color: #f1f5f9; }
+  .thoiGian { color: #64748b; }
+  .tenKH    { color: #e2e8f0; }
+  .monRow   { color: #94a3b8; }
+  .soLuong  { color: #64748b; }
+  .conLai   { color: #64748b; }
+  .tongTien { color: #4ade80; }
+  .cardFooter { border-top-color: #334155; }
+  .emptyText  { color: #475569; }
+  .colBody {
+    &::-webkit-scrollbar-thumb { background: #334155; }
+  }
+  .colBadge {
+    &[data-col="cho_xac_nhan"]  { background: rgba(249,115,22,0.15); }
+    &[data-col="dang_che_bien"] { background: rgba(59,130,246,0.15); }
+    &[data-col="san_sang"]      { background: rgba(139,92,246,0.15); }
+    &[data-col="hoan_thanh"]    { background: rgba(22,163,74,0.15); }
+  }
+  .ghiChuTag {
+    &[data-ghichu="it_cay"],
+    &[data-ghichu="khong_hanh"] { background: rgba(249,115,22,0.15); }
+    &[data-ghichu="mang_di"]    { background: rgba(139,92,246,0.15); }
+  }
+}

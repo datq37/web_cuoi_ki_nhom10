@@ -1,0 +1,337 @@
+.section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+
+  &.spaced {
+    margin-top: 24px;
+  }
+
+  h2 {
+    margin: 0;
+    color: #18212c;
+    font-size: 21px;
+    font-weight: 900;
+    line-height: 1.2;
+  }
+
+  button {
+    color: #17733a;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.category-card {
+  position: relative;
+  height: 110px; /* Use highly optimized default height */
+  display: block;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #eef0ee;
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(75, 48, 18, 0.04);
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
+  width: 100%;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 34px rgba(30, 66, 42, 0.09);
+
+    img {
+      transform: scale(1.08);
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+    transition: transform 0.35s ease;
+  }
+
+  &::after {
+    position: absolute;
+    inset: auto 0 0;
+    height: 58%;
+    background: linear-gradient(180deg, rgba(8, 24, 14, 0), rgba(8, 24, 14, 0.68));
+    content: '';
+  }
+
+  span {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    z-index: 1;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 800;
+    text-align: left;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+}
+
+.food-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.home-food-card {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #edf0ed;
+  border-radius: 17px;
+  box-shadow: 0 10px 25px rgba(21, 50, 34, 0.05);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 34px rgba(30, 66, 42, 0.09);
+  }
+}
+
+.food-image-wrap {
+  position: relative;
+  height: 148px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.hot-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  background: #f02d3a;
+  border-radius: 999px;
+}
+
+.heart-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: #60707c;
+  background: rgba(255, 255, 255, 0.86);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    color: #e52642;
+  }
+}
+
+.food-content {
+  padding: 14px;
+
+  h3 {
+    margin: 0;
+    color: #18212c;
+    font-size: 15px;
+    font-weight: 900;
+    line-height: 1.25;
+  }
+
+  p {
+    min-height: 38px;
+    margin: 5px 0 0;
+    overflow: hidden;
+    color: #66717d;
+    font-size: 13px;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}
+
+.food-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 11px;
+  color: #6b7680;
+  font-size: 12px;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .rating {
+    margin-left: auto;
+    color: #f59b16;
+    font-weight: 900;
+  }
+}
+
+.food-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+
+  strong {
+    color: #176f32;
+    font-size: 21px;
+    font-weight: 900;
+  }
+
+  & > button {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: #197236;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+.food-qty {
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px;
+  color: #176f32;
+  background: #e8f6e4;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 900;
+
+  span {
+    min-width: 16px;
+    text-align: center;
+  }
+
+  button {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    color: #176f32;
+    background: #fff;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(21, 50, 34, 0.1);
+  }
+}
+
+/* RESPONSIVE MEDIA QUERIES */
+
+@media (max-width: 1100px) {
+  .category-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .food-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 760px) {
+  .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .category-card {
+    height: auto;
+    aspect-ratio: 1.6; /* Prevents vertical stretching and cropping */
+    
+    span {
+      font-size: 13px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+    }
+  }
+
+  .food-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .food-image-wrap {
+    height: 200px; /* Taller dynamic food image space for premium single-column layout */
+  }
+}
+
+/* DARK MODE OVERRIDES */
+.main-page-container.theme-dark {
+  .section-title-row h2 { color: var(--ink); }
+  .section-title-row button { color: var(--accent); }
+  
+  .category-card {
+    background: var(--bg-elev);
+    border-color: var(--line);
+    box-shadow: none;
+  }
+  
+  .home-food-card {
+    background: var(--bg-elev);
+    border-color: var(--line);
+    box-shadow: none;
+    
+    .food-content h3 { color: var(--ink); }
+    .food-content p { color: var(--ink-3); }
+    .food-meta { color: var(--ink-4); }
+    
+    .food-bottom strong { color: var(--accent); }
+    .food-bottom > button { background: var(--accent); }
+    
+    &:hover { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); }
+  }
+  
+  .heart-btn {
+    background: rgba(31, 31, 31, 0.86);
+    color: var(--ink-3);
+    
+    &:hover { color: var(--danger); background: var(--bg-elev); }
+  }
+  
+  .food-qty {
+    background: var(--bg-soft);
+    color: var(--accent);
+    
+    button { background: var(--bg-elev); color: var(--ink); }
+  }
+}

@@ -1,8 +1,10 @@
 import {
   AppstoreOutlined,
+  BankOutlined,
   BellOutlined,
   ClockCircleOutlined,
   CreditCardOutlined,
+  MoneyCollectOutlined,
   SafetyOutlined,
   UploadOutlined,
 } from '@ant-design/icons';
@@ -63,9 +65,9 @@ const DEFAULT_SETTINGS: ISettings = {
   baoMat: { twoFA: true, autoLogout: true },
 };
 
-const PAYMENT_META: Record<string, { icon: string; ten: string; moTa: string }> = {
-  'tien-mat':     { icon: '💵', ten: 'Tiền mặt',    moTa: 'Trả trực tiếp tại quầy' },
-  'chuyen-khoan': { icon: '🏦', ten: 'Chuyển khoản', moTa: 'VietQR / Chuyển khoản · Vietcombank · 0123456789' },
+const PAYMENT_META: Record<string, { icon: React.ReactNode; ten: string; moTa: string }> = {
+  'tien-mat':     { icon: <MoneyCollectOutlined />, ten: 'Tiền mặt',    moTa: 'Trả trực tiếp tại quầy' },
+  'chuyen-khoan': { icon: <BankOutlined />,         ten: 'Chuyển khoản', moTa: 'VietQR / Chuyển khoản · Vietcombank · 0123456789' },
 };
 
 const NOTIF_META: Record<string, { ten: string; moTa: string }> = {

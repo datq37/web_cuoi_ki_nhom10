@@ -1,7 +1,9 @@
 ﻿import {
+  AppstoreOutlined,
   DeleteOutlined,
   FilterOutlined,
   PlusOutlined,
+  TableOutlined,
   TeamOutlined,
 } from '@ant-design/icons';
 import {
@@ -632,13 +634,13 @@ const CoSoVatChat: React.FC = () => {
             className={`${styles.tabBtn} ${activeTab === 'so_do_ban' ? styles.tabActive : ''}`}
             onClick={() => setActiveTab('so_do_ban')}
           >
-            Sơ đồ bàn
+            <TableOutlined /> Sơ đồ bàn
           </button>
           <button
             className={`${styles.tabBtn} ${activeTab === 'vat_dung' ? styles.tabActive : ''}`}
             onClick={() => setActiveTab('vat_dung')}
           >
-            Vật dụng & Thiết bị
+            <AppstoreOutlined /> Vật dụng & Thiết bị
           </button>
         </div>
 

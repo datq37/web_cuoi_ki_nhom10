@@ -14,35 +14,33 @@
 // Tab style đồng bộ với chuẩn toàn trang
 .khoTabs {
   display: flex;
-  gap: 2px;
-  background: @surface;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 4px;
-  align-self: flex-start;
+  gap: 4px;
+  border-bottom: 2px solid @border;
+  margin-bottom: -1px;
 }
 
 .khoTabBtn {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 14px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 7px;
   background: transparent;
   color: @text-muted;
-  font-size: @fs-base;
+  font-size: @fs-md;
   font-weight: 500;
   cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
   transition: all 0.15s;
-  white-space: nowrap;
-  &:hover { background: @divider; color: @text-dark; }
+  border-radius: 8px 8px 0 0;
+  &:hover { color: @text-dark; background: @surface-hover; }
 }
 
 .khoTabActive {
-  background: @primary !important;
-  color: #fff !important;
-  &:hover { background: @primary-hover !important; }
+  color: @primary !important;
+  border-bottom-color: @primary !important;
+  font-weight: 700;
 }
 
 .khoTabCount {
@@ -750,8 +748,8 @@
 }
 
 :global([data-theme="dark"]) {
-  .khoTabs   { background: #1e293b; border-color: #334155; }
-  .khoTabBtn { color: #94a3b8; &:hover { background: #0f172a; color: #f1f5f9; } }
+  .khoTabs   { border-bottom-color: #334155; }
+  .khoTabBtn { color: #64748b; &:hover { background: #0f172a; color: #cbd5e1; } }
 
   .viewToggle { border-color: #334155; }
   .toggleBtn  { background: #1e293b; color: #64748b; &:hover { background: #0f172a; color: #cbd5e1; } }

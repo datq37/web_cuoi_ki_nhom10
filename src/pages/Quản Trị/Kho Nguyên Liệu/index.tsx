@@ -4,6 +4,7 @@
   EditOutlined,
   ExclamationCircleOutlined,
   FilterOutlined,
+  HistoryOutlined,
   ImportOutlined,
   InboxOutlined,
   MoreOutlined,
@@ -804,13 +805,13 @@ const KhoNguyenLieu: React.FC = () => {
               className={`${styles.khoTabBtn} ${activeTab === 'danh_sach' ? styles.khoTabActive : ''}`}
               onClick={() => setActiveTab('danh_sach')}
             >
-              Danh sách nguyên liệu
+              <InboxOutlined /> Danh sách nguyên liệu
             </button>
             <button
               className={`${styles.khoTabBtn} ${activeTab === 'lich_su' ? styles.khoTabActive : ''}`}
               onClick={() => setActiveTab('lich_su')}
             >
-              Lịch sử nhập kho
+              <HistoryOutlined /> Lịch sử nhập kho
               {lichSuNhap.length > 0 && (
                 <span className={styles.khoTabCount}>{lichSuNhap.length}</span>
               )}

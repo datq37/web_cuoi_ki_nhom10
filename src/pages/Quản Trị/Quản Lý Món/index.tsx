@@ -708,7 +708,7 @@ const QuanLyMon: React.FC = () => {
         mon={viewing}
         onClose={() => setViewing(null)}
         onEdit={() => { setEditing(viewing); setViewing(null); setFormOpen(true); }}
-        onDelete={() => { if (viewing) handleDelete(viewing.id); setViewing(null); }}
+        onDelete={() => { if (viewing) { handleDelete(viewing); setViewing(null); } }}
         onToggle={() => { if (viewing) { const next = !(viewing.coSan !== false); setItems((prev) => prev.map((m) => m.id === viewing.id ? { ...m, coSan: next } : m)); setViewing(prev => prev ? { ...prev, coSan: next } : null); } }}
       />
     </>

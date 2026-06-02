@@ -167,6 +167,26 @@ export const SyncAdapters = {
       giaNhap: apiItem.gianhap || 0,
       trangThai: mappedTrangThai
     };
+  },
+
+  /**
+   * Chuyển đổi dữ liệu Khuyến Mãi (Backend) -> UI (Frontend)
+   */
+  mapAdminPromoToUI(apiItem: any): any {
+    return {
+      id: apiItem.id?.toString(),
+      ma: apiItem.ma || '',
+      ten: apiItem.ten || '',
+      moTa: apiItem.mota || '',
+      loai: apiItem.loai || 'phan_tram',
+      giaTriGiam: apiItem.giatrigiam || 0,
+      donToiThieu: apiItem.dontooithieu || 0,
+      daDung: apiItem.dadung || 0,
+      gioiHan: apiItem.gioihan || 0,
+      hetHan: apiItem.hansudung || '',
+      trangThai: apiItem.trangthai || 'dang_chay',
+      hoatDong: apiItem.hoatdong ?? true,
+    };
   }
 };
 

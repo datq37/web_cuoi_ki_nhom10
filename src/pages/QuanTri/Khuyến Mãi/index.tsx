@@ -27,12 +27,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import TinyEditor from '@/components/TinyEditor';
 import Topbar from '@/pages/QuanTri/Topbar';
 import PageToolbar from '@/pages/QuanTri/components/PageToolbar';
-import {
-  DANH_SACH_KHUYEN_MAI,
-  DANH_SACH_COMBO,
-
-  TRANG_THAI_KM_CONFIG,
-} from '@/services/QuanTri/Khuyến Mãi';
+import { TRANG_THAI_KM_CONFIG } from '@/services/QuanTri/Khuyến Mãi';
+import useKhuyenMaiModel from '@/models/QuanTri/Khuyến Mãi';
 import {
   ELoaiGiamGia,
   ELoaiGiaCombo,
@@ -859,21 +855,7 @@ const ComboDetail: React.FC<{
 };
 
 const KhuyenMai: React.FC = () => {
-  const [items, setItems] = useState<IKhuyenMai[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('admin_vouchers');
-      if (saved) {
-        try { return JSON.parse(saved); } catch { /* ignore */ }
-      }
-    }
-    return DANH_SACH_KHUYEN_MAI;
-  });
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('admin_vouchers', JSON.stringify(items));
-    }
-  }, [items]);
+  const { items, stats, addKhuyenMai, updateKhuyenMai, deleteKhuyenMai, toggleHoatDong } = useKhuyenMaiModel();
 
   const [tuKhoa,         setTuKhoa]         = useState('');
   const [filterTrangThai, setFilterTrangThai] = useState<ETrangThaiKhuyenMai | null>(null);
@@ -881,22 +863,9 @@ const KhuyenMai: React.FC = () => {
   const [viewing,        setViewing]        = useState<IKhuyenMai | null>(null);
   const [formOpen,       setFormOpen]       = useState(false);
 
+  // Hidden Combo Tab per requirement A
   const [activeTab,     setActiveTab]     = useState<'ma-giam-gia' | 'combo'>('ma-giam-gia');
-  const [comboItems, setComboItems] = useState<ICombo[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('admin_combos');
-      if (saved) {
-        try { return JSON.parse(saved); } catch { /* ignore */ }
-      }
-    }
-    return DANH_SACH_COMBO;
-  });
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('admin_combos', JSON.stringify(comboItems));
-    }
-  }, [comboItems]);
+  const [comboItems, setComboItems] = useState<ICombo[]>([]);
   const [comboFormOpen,       setComboFormOpen]       = useState(false);
   const [editingCombo,        setEditingCombo]        = useState<ICombo | null>(null);
   const [viewingCombo,        setViewingCombo]        = useState<ICombo | null>(null);
@@ -918,9 +887,11 @@ const KhuyenMai: React.FC = () => {
     return list;
   }, [items, tuKhoa, filterTrangThai]);
 
-  const handleToggleHoatDong = (id: string, v: boolean) => {
-    setItems((prev) => prev.map((k) => (k.id === id ? { ...k, hoatDong: v } : k)));
-    message.success(v ? 'Đã kích hoạt khuyến mãi' : 'Đã tạm dừng khuyến mãi');
+  const handleToggleHoatDong = async (id: string, v: boolean) => {
+    try {
+      await toggleHoatDong(id, v);
+      message.success(v ? 'Đã kích hoạt khuyến mãi' : 'Đã tạm dừng khuyến mãi');
+    } catch (e) {}
   };
 
   const handleDelete = (item: IKhuyenMai) => {
@@ -931,36 +902,39 @@ const KhuyenMai: React.FC = () => {
       okText: 'Xoá', okType: 'danger', cancelText: 'Huỷ', centered: true,
       okButtonProps: { style: { borderRadius: 8 } },
       cancelButtonProps: { style: { borderRadius: 8 } },
-      onOk: () => {
-        setItems((prev) => prev.filter((k) => k.id !== item.id));
-        message.success(`Đã xoá khuyến mãi ${item.ma}`);
+      onOk: async () => {
+        try {
+          await deleteKhuyenMai(item.id);
+          message.success(`Đã xoá khuyến mãi ${item.ma}`);
+        } catch (e) {}
       },
     });
   };
 
-  const handleSubmit = (data: FormPayload) => {
-    if (editing) {
-      setItems((prev) => prev.map((k) => (k.id === editing.id ? { ...k, ...data } : k)));
-      message.success(`Đã cập nhật khuyến mãi ${data.ma}`);
-    } else {
-      const newItem: IKhuyenMai = { ...data, id: `km_${Date.now()}`, daDung: 0 };
-      setItems((prev) => [newItem, ...prev]);
-      message.success(`Đã tạo khuyến mãi ${data.ma}`);
-      
-      // gửi thông báo
-      window.dispatchEvent(new CustomEvent('new_notification', {
-        detail: {
-            id: `notif_voucher_${Date.now()}`,
-            title: 'Mã khuyến mãi mới!',
-            message: `Admin vừa tung mã giảm giá mới: ${data.ma}. Nhanh tay đặt món ngay kẻo lỡ!`,
-            time: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }),
-            isRead: false,
-            image: 'https://cdn-icons-png.flaticon.com/512/879/879859.png'
-        }
-      }));
-    }
-    setFormOpen(false);
-    setEditing(null);
+  const handleSubmit = async (data: FormPayload) => {
+    try {
+      if (editing) {
+        await updateKhuyenMai(editing.id, data);
+        message.success(`Đã cập nhật khuyến mãi ${data.ma}`);
+      } else {
+        await addKhuyenMai(data);
+        message.success(`Đã tạo khuyến mãi ${data.ma}`);
+        
+        // gửi thông báo
+        window.dispatchEvent(new CustomEvent('new_notification', {
+          detail: {
+              id: `notif_voucher_${Date.now()}`,
+              title: 'Mã khuyến mãi mới!',
+              message: `Admin vừa tung mã giảm giá mới: ${data.ma}. Nhanh tay đặt món ngay kẻo lỡ!`,
+              time: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }),
+              isRead: false,
+              image: 'https://cdn-icons-png.flaticon.com/512/879/879859.png'
+          }
+        }));
+      }
+      setFormOpen(false);
+      setEditing(null);
+    } catch (e) {}
   };
 
   const handleComboToggle = (id: string, v: boolean) => {

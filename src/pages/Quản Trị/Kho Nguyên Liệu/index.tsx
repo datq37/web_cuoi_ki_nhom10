@@ -657,7 +657,7 @@ const KhoNguyenLieu: React.FC = () => {
     }));
     addLichSu([{ id: `ls_${Date.now()}`, tenNL: ten, donVi, soLuong: soLuongNhap, giaNhap: newGiaNhap, ngay: dayjs().format('HH:mm DD/MM/YYYY') }]);
     message.success(`Đã nhập ${soLuongNhap} ${donVi} ${ten}`);
-    addNotif({ icon: '📦', title: 'Đã nhập kho', desc: `${ten}: +${soLuongNhap} ${donVi}`, type: 'stock_refilled' });
+    addNotif({ icon: '◈', title: 'Đã nhập kho', desc: `${ten}: +${soLuongNhap} ${donVi}`, type: 'stock_refilled' });
     setRestockOpen(false); setRestocking(null);
   };
 
@@ -673,7 +673,7 @@ const KhoNguyenLieu: React.FC = () => {
     }));
     addLichSu(entries);
     message.success(`Đã nhập kho ${updates.length} mặt hàng, tổng ${formatGia(totalAmount)}`);
-    addNotif({ icon: '📦', title: 'Nhập kho hàng loạt', desc: `${updates.length} mặt hàng · Tổng ${formatGia(totalAmount)}`, type: 'stock_refilled' });
+    addNotif({ icon: '◈', title: 'Nhập kho hàng loạt', desc: `${updates.length} mặt hàng · Tổng ${formatGia(totalAmount)}`, type: 'stock_refilled' });
     setBulkRestockOpen(false);
   };
 

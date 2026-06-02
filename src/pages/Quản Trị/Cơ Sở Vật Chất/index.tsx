@@ -47,11 +47,11 @@ interface IVatDung {
   ghiChu?: string;
 }
 
-const DANH_MUC_CONFIG: Record<EDanhMucVD, { label: string; icon: string; color: string }> = {
-  ban_ghe:  { label: 'Bàn ghế',                 icon: '🪑', color: '#3b82f6' },
-  bat_dua:  { label: 'Bát đũa & Dụng cụ ăn',   icon: '🥢', color: '#f97316' },
-  noi_nieu: { label: 'Nồi niêu & Bếp',          icon: '🍳', color: '#dc2626' },
-  khac:     { label: 'Khác',                     icon: '📦', color: '#6b7280' },
+const DANH_MUC_CONFIG: Record<EDanhMucVD, { label: string; color: string }> = {
+  ban_ghe:  { label: 'Bàn ghế',               color: '#3b82f6' },
+  bat_dua:  { label: 'Bát đũa & Dụng cụ ăn', color: '#f97316' },
+  noi_nieu: { label: 'Nồi niêu & Bếp',        color: '#dc2626' },
+  khac:     { label: 'Khác',                   color: '#6b7280' },
 };
 
 const TINH_TRANG_CONFIG: Record<ETinhTrangVD, { label: string; color: string; bg: string }> = {
@@ -405,7 +405,7 @@ const VatDungModal: React.FC<{
           <Form.Item name="danhMuc" label="Danh mục" rules={[{ required: true }]}>
             <Select>
               {Object.entries(DANH_MUC_CONFIG).map(([k, c]) => (
-                <Select.Option key={k} value={k}>{c.icon} {c.label}</Select.Option>
+                <Select.Option key={k} value={k}>{c.label}</Select.Option>
               ))}
             </Select>
           </Form.Item>
@@ -514,7 +514,7 @@ const CoSoVatChat: React.FC = () => {
       width: 200,
       render: (v: EDanhMucVD) => {
         const cfg = DANH_MUC_CONFIG[v];
-        return <span style={{ fontSize: 13, color: cfg.color, fontWeight: 500 }}>{cfg.icon} {cfg.label}</span>;
+        return <span style={{ fontSize: 13, color: cfg.color, fontWeight: 500 }}>{cfg.label}</span>;
       },
     },
     {
@@ -697,7 +697,7 @@ const CoSoVatChat: React.FC = () => {
                         <Menu.Item key="tat_ca">Tất cả danh mục</Menu.Item>
                         <Menu.Divider />
                         {Object.entries(DANH_MUC_CONFIG).map(([k, c]) => (
-                          <Menu.Item key={k}>{c.icon} {c.label}</Menu.Item>
+                          <Menu.Item key={k}>{c.label}</Menu.Item>
                         ))}
                       </Menu>
                     }

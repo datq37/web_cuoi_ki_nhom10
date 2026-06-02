@@ -26,6 +26,22 @@ from routes import api_router
 async def lifespan(app: FastAPI):
     # Tự động tạo các bảng còn thiếu (ví dụ: chitietdonhang) nếu chưa tồn tại
     Base.metadata.create_all(bind=engine)
+    
+    # Tạo tài khoản admin mặc định nếu chưa có
+    from database import SessionLocal
+    from crud.khachhang import get_khachhang_by_taikhoan, create_khachhang
+    from service.auth import get_password_hash
+    with SessionLocal() as db:
+        admin_user = get_khachhang_by_taikhoan(db, "admin")
+        if not admin_user:
+            create_khachhang(
+                db, 
+                taikhoan="admin", 
+                matkhau=get_password_hash("123456"), 
+                ten="Quản trị viên", 
+                vaitro="Admin"
+            )
+            
     yield
 
 

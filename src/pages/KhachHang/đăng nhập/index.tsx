@@ -114,7 +114,7 @@ export default function LoginPage() {
                 </div>
                 <input
                   type="text"
-                  placeholder="Số điện thoại (Test: 0987654321 hoặc admin)"
+                  placeholder="Tài khoản (VD: admin hoặc dang.nh20)"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
@@ -126,7 +126,7 @@ export default function LoginPage() {
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Mật khẩu (Test: password123 hoặc admin)"
+                  placeholder="Mật khẩu (VD: 123456 hoặc pass123)"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />

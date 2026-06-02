@@ -4,6 +4,7 @@ import { MENU_CATEGORIES, SEED_REVIEWS } from '@/services/KhachHang/ThucDon';
 import { DANH_SACH_MON } from '@/services/QuanTri/Quản Lý Món';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
+import { SyncAdapters } from '@/services/api/adapters';
 import {
   formatMenuDate,
   formatMenuTime,
@@ -26,32 +27,7 @@ import type { CartItem } from './DishCard';
 import { createReview } from './DishDetailModal';
 import { showCustomerNotification } from '@/utils/notification';
 
-const mapAdminToCustomerDishes = (adminList: any[]): Dish[] => {
-  return adminList.map((item: any) => {
-    let cat = 'main';
-    if (item.danhMuc === 'do_uong') cat = 'drink';
-    else if (item.danhMuc === 'an_vat') cat = 'snack';
-    else if (item.danhMuc === 'mon_chay') cat = 'veg';
-    else if (item.danhMuc === 'rice') cat = 'rice';
-    else if (item.danhMuc === 'noodle') cat = 'noodle';
 
-    return {
-      id: item.mamon || item.id,
-      name: item.ten,
-      cat: cat,
-      price: item.gia,
-      desc: item.mieuta || item.moTa || '',
-      emoji: item.emoji || (item.danhMuc === 'do_uong' ? '☕' : '🍱'),
-      tags: item.tags || [],
-      rating: item.danhGia || 5,
-      sold: item.soluongdaban || item.sold || 0,
-      prep: item.thoiGian || 10,
-      kcal: item.calo || 0,
-      ingredients: item.nguyenLieu || [],
-      hinhAnh: item.hinhanh || item.hinhAnh,
-    };
-  });
-};
 
 export default function useCartModel() {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -90,9 +66,10 @@ export default function useCartModel() {
   useEffect(() => {
     const loadDishes = async () => {
       try {
-        const res = await axios.get(`${ip3}/menus`);
-        if (res.data) {
-           setDishes(mapAdminToCustomerDishes(res.data));
+        const res = await axios.get(`${ip3}/menus/items`);
+        if (res.data && res.data.items) {
+           // Dùng adapter để đồng bộ dữ liệu Backend với giao diện
+           setDishes(res.data.items.map(SyncAdapters.mapMenuToUI));
         }
       } catch (e) {
         console.error("Failed to load menus:", e);

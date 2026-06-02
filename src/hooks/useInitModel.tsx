@@ -95,9 +95,9 @@ const useInitModel = <T,>(
 		};
 
 		try {
-			const response = await getService(payload, path ?? 'page', isAbsolutePath ?? false);
-			const tempData: T[] = response?.data?.data?.result ?? [];
-			const tempTotal: number = response?.data?.data?.total ?? 0;
+			const response = await getService(payload, path ?? '', isAbsolutePath ?? false);
+			const tempData: T[] = response?.data?.items ?? [];
+			const tempTotal: number = response?.data?.total ?? 0;
 
 			if (tempData.length === 0 && tempTotal) {
 				const maxPage = Math.ceil(tempTotal / payload.limit) || 1;
@@ -136,7 +136,7 @@ const useInitModel = <T,>(
 				...(otherQuery ?? {}),
 			};
 			const response = await getAllService(payload, pathParam);
-			const data: T[] = response?.data?.data ?? [];
+			const data: T[] = response?.data?.items ?? response?.data?.data ?? response?.data ?? [];
 			// if (sortParam) data.sort(sortParam);
 			if (isSetDanhSach !== false) setDanhSach(data);
 			if (isSetRecord) setRecord(data?.[0]);
@@ -154,8 +154,9 @@ const useInitModel = <T,>(
 		setLoading(true);
 		try {
 			const response = await getByIdService(id);
-			if (isSetRecord !== false) setRecord(response?.data?.data ?? null);
-			return response?.data?.data;
+			const recordData = response?.data?.data ?? response?.data;
+			if (isSetRecord !== false) setRecord(recordData ?? null);
+			return recordData;
 		} catch (er) {
 			return Promise.reject(er);
 		} finally {
@@ -168,8 +169,9 @@ const useInitModel = <T,>(
 		setLoading(true);
 		try {
 			const response = await getService({ condition: conditionParam }, 'one');
-			setRecord(response?.data?.data ?? null);
-			return response?.data?.data;
+			const recordData = response?.data?.data ?? response?.data;
+			setRecord(recordData ?? null);
+			return recordData;
 		} catch (er) {
 			return Promise.reject(er);
 		} finally {
@@ -193,7 +195,7 @@ const useInitModel = <T,>(
 			else getModel();
 			if (closeModal !== false) setVisibleForm(false);
 
-			return res.data?.data;
+			return res.data?.data ?? res.data;
 		} catch (err) {
 			return Promise.reject(err);
 		} finally {
@@ -219,7 +221,7 @@ const useInitModel = <T,>(
 			else if (!notGet) getModel();
 			if (closeModal !== false) setVisibleForm(false);
 
-			return res.data?.data;
+			return res.data?.data ?? res.data;
 		} catch (err) {
 			return Promise.reject(err);
 		} finally {
@@ -245,7 +247,7 @@ const useInitModel = <T,>(
 			else if (!notGet) getModel();
 			if (closeModal !== false) setVisibleForm(false);
 
-			return res.data?.data;
+			return res.data?.data ?? res.data;
 		} catch (err) {
 			return Promise.reject(err);
 		} finally {

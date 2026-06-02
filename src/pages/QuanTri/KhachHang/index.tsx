@@ -20,7 +20,7 @@ import {
   message,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Highlight from '@/components/Highlight';
 import TableStaticData from '@/components/TableStaticData';
 import Topbar from '@/pages/QuanTri/Topbar';
@@ -39,6 +39,10 @@ import {
   IKhachHang,
 } from '@/services/QuanTri/KhachHang/typing';
 import { KEYS, store } from '@/utils/storage';
+import axios from '@/utils/axios';
+import { ip3 } from '@/utils/ip';
+import { SyncAdapters } from '@/services/api/adapters';
+import { KhachHangListResponse } from '@/services/api/types';
 import styles from './index.less';
 
 function formatChiTieu(val: number): string {
@@ -174,12 +178,28 @@ const ChiTietKhachDrawer: React.FC<{
 
 // ── Trang chính ──────────────────────────────────────────────────
 const KhachHang: React.FC = () => {
-  const [danhSach,     setDanhSach]     = useState<IKhachHang[]>(DANH_SACH_KHACH);
+  const [danhSach,     setDanhSach]     = useState<IKhachHang[]>([]);
   const [tuKhoa,       setTuKhoa]       = useState('');
   const [locVaiTro,    setLocVaiTro]    = useState<EVaiTro | ''>('');
   const [locTrangThai, setLocTrangThai] = useState<ETrangThaiKhach | ''>('');
   const [chiTietKhach, setChiTietKhach] = useState<IKhachHang | null>(null);
 
+  const fetchKhachHang = async () => {
+    try {
+      // Backend pagination can be fetched with a large pageSize to get all for the table
+      const res = await axios.get<KhachHangListResponse>(`${ip3}/khachhang?page=1&page_size=100`);
+      if (res.data && res.data.items) {
+        setDanhSach(res.data.items.map(SyncAdapters.mapCustomerToUI));
+      }
+    } catch (error) {
+      console.error("Failed to load customers:", error);
+      message.error("Lỗi khi tải dữ liệu khách hàng");
+    }
+  };
+
+  useEffect(() => {
+    fetchKhachHang();
+  }, []);
 
   const danhSachLoc = useMemo(() => {
     const kw = tuKhoa.toLowerCase();
@@ -223,9 +243,15 @@ const KhachHang: React.FC = () => {
       centered: true,
       okButtonProps: { style: { borderRadius: 8 } },
       cancelButtonProps: { style: { borderRadius: 8 } },
-      onOk: () => {
-        setDanhSach((prev) => prev.filter((k) => k.id !== id));
-        message.success(`Đã xoá "${khach.hoTen}"`);
+      onOk: async () => {
+        try {
+          await axios.delete(`${ip3}/khachhang/${id}`);
+          setDanhSach((prev) => prev.filter((k) => k.id !== id));
+          message.success(`Đã xoá "${khach.hoTen}"`);
+        } catch (error) {
+          console.error("Failed to delete customer:", error);
+          message.error(`Không thể xoá "${khach.hoTen}". Có thể dữ liệu đang được sử dụng.`);
+        }
       },
     });
   };

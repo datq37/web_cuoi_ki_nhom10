@@ -9,7 +9,7 @@ const useInitService = (url: string, ip?: string) => {
 		path?: string,
 		isAbsolutePath?: boolean,
 	) => {
-		const finalPath = isAbsolutePath ? `${finalIp}/${path}` : `${finalIp}/${url}/${path ?? ''}`;
+		const finalPath = isAbsolutePath ? `${finalIp}/${path}` : `${finalIp}/${url}${path ? `/${path}` : ''}`;
 		return axios.get(finalPath, { params: payload });
 	};
 
@@ -34,7 +34,7 @@ const useInitService = (url: string, ip?: string) => {
 	};
 
 	const getAllService = (payload?: { condition?: any; sort?: any }, path?: string) => {
-		return axios.get(`${finalIp}/${url}/${path || 'many'}`, { params: payload });
+		return axios.get(`${finalIp}/${url}${path ? `/${path}` : ''}`, { params: payload });
 	};
 
 	const getByIdService = (id: string | number) => {

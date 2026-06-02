@@ -10,6 +10,7 @@ declare module '*.gif';
 declare module '*.bmp';
 declare module '*.tiff';
 declare module 'react-split-pane/lib/Pane';
+declare module 'react-quill';
 
 // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design Dedicated environment variable, please do not use it in your project.

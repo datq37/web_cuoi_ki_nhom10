@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import React, { useRef } from 'react';
+import { Editor } from '@tinymce/tinymce-react';
 import styles from './index.less';
 
 export interface TinyEditorProps {
@@ -11,15 +10,6 @@ export interface TinyEditorProps {
   minHeight?: number;
 }
 
-const TOOLBAR = [
-  [{ header: [1, 2, 3, false] }],
-  ['bold', 'italic', 'underline', 'strike'],
-  [{ color: [] }, { background: [] }],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  ['link'],
-  ['clean'],
-];
-
 const TinyEditor: React.FC<TinyEditorProps> = ({
   value = '',
   onChange,
@@ -27,28 +17,30 @@ const TinyEditor: React.FC<TinyEditorProps> = ({
   readOnly = false,
   minHeight = 160,
 }) => {
-  const quillRef = useRef<any>(null);
-
-  // Đặt min-height cho editor area
-  useEffect(() => {
-    if (quillRef.current) {
-      const editor = quillRef.current.getEditor();
-      if (editor) {
-        editor.root.style.minHeight = `${minHeight}px`;
-      }
-    }
-  }, [minHeight]);
+  const editorRef = useRef<any>(null);
 
   return (
     <div className={`${styles.wrap} ${readOnly ? styles.readOnly : ''}`}>
-      <ReactQuill
-        ref={quillRef}
-        theme="snow"
+      <Editor
+        onInit={(evt, editor) => editorRef.current = editor}
         value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        readOnly={readOnly}
-        modules={{ toolbar: readOnly ? false : TOOLBAR }}
+        onEditorChange={onChange}
+        disabled={readOnly}
+        init={{
+          height: minHeight,
+          menubar: false,
+          plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount'
+          ],
+          toolbar: readOnly ? false : 'undo redo | formatselect | ' +
+            'bold italic underline strikethrough | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'removeformat | help',
+          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+          placeholder: placeholder
+        }}
       />
     </div>
   );

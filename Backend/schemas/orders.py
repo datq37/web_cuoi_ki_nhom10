@@ -56,7 +56,7 @@ class OrderStatusUpdate(BaseModel):
     """Schema Admin hoặc User chốt/cập nhật trạng thái đơn."""
 
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
-    trangthai: OrderStatus = Field(..., description="Trạng thái đơn mới")
+    trangthai: OrderStatus = Field(..., description="Trạng thái đơn mới", alias="trangThai")
 
 
 class OrderResponse(OrderBase):
@@ -64,9 +64,9 @@ class OrderResponse(OrderBase):
 
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
 
-    id: str
-    makh: str
-    tongtien: float
-    trangthai: OrderStatus
-    thoigiandat: str | None = None
+    id: str = Field(..., alias="maDon")
+    makh: str = Field(..., alias="maKh")
+    tongtien: float = Field(..., alias="tongTien")
+    trangthai: OrderStatus = Field(..., alias="trangThai")
+    thoigiandat: str | None = Field(None, alias="thoiGianDat")
     chitiet: list[OrderDetailResponse] = []

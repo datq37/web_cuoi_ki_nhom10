@@ -2,6 +2,14 @@ import { message, notification } from 'antd';
 import axios from 'axios';
 import data from './data';
 
+axios.interceptors.request.use((config) => {
+	const tokenStr = localStorage.getItem('loginToken');
+	if (tokenStr) {
+		config.headers['Authorization'] = `Bearer ${tokenStr}`;
+	}
+	return config;
+});
+
 axios.interceptors.response.use(
 	(response) => response,
 	(error) => {

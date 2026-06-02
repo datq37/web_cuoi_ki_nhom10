@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
-import { DANH_SACH_NGUYEN_LIEU } from '@/services/Quản Trị/Kho Nguyên Liệu';
-import { ETrangThaiNguyenLieu } from '@/services/Quản Trị/Kho Nguyên Liệu/typing';
-import { mockData } from '@/services/Quản Trị/Tổng Quan';
-import { ETrangThaiTrucTiep } from '@/services/Quản Trị/Tổng Quan/typing';
+import { DANH_SACH_NGUYEN_LIEU } from '@/services/QuanTri/Kho Nguyên Liệu';
+import { ETrangThaiNguyenLieu } from '@/services/QuanTri/Kho Nguyên Liệu/typing';
+import { mockData } from '@/services/QuanTri/Tổng Quan';
+import { ETrangThaiTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
 
 export type NotifType =
   | 'order_pending'

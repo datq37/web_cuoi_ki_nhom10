@@ -1,0 +1,84 @@
+import React from 'react';
+import {
+    Clock3,
+    Minus,
+    Plus,
+    Star,
+    Zap,
+} from 'lucide-react';
+import type { DishCardProps } from '@/services/KhachHang/ThucDon/DishCard/typing';
+import riceImg from '@/assets/KhachHang/Trang chủ/com_phan_no_text.png';
+import noodleImg from '@/assets/KhachHang/Trang chủ/bun_pho_no_text.png';
+import saladImg from '@/assets/KhachHang/Trang chủ/chay_salad_no_text.png';
+import snackImg from '@/assets/KhachHang/Trang chủ/an_nhe_no_text.png';
+import drinkImg from '@/assets/KhachHang/Trang chủ/do_uong_no_text.png';
+import phoImg from '@/assets/trangchu/pho.png';
+import bunChaImg from '@/assets/trangchu/buncha.png';
+import xoiImg from '@/assets/trangchu/xoi.png';
+import { formatNumberViVN } from '@/utils/format';
+
+const dishImages: Record<string, string> = {
+    m1: riceImg,
+    m2: phoImg,
+    m3: bunChaImg,
+    m4: riceImg,
+    m5: saladImg,
+    m6: xoiImg,
+    m7: riceImg,
+    m8: noodleImg,
+    m9: saladImg,
+    m10: snackImg,
+    m11: drinkImg,
+    m12: drinkImg,
+};
+
+const categoryFallbackImages: Record<string, string> = {
+    rice: riceImg,
+    noodle: noodleImg,
+    veg: saladImg,
+    snack: snackImg,
+    drink: drinkImg,
+    main: riceImg,
+};
+
+const DishCard: React.FC<DishCardProps> = ({ dish, qty, onAdd, onInc, onDec, onClick, isFuture }) => (
+    <div className="theMonAn" onClick={onClick} style={{ cursor: 'pointer' }}>
+        <div className="hinhAnhMon">
+            <img src={dish.hinhAnh || dishImages[dish.id] || categoryFallbackImages[dish.cat]} alt={dish.name} />
+            <div className="danhSachNhan">
+                {dish.tags.map(t => (
+                    <span key={t} className={`nhanMon ${t}`}>{t.toUpperCase()}</span>
+                ))}
+            </div>
+        </div>
+        <div className="thanTheMon">
+            <h3 className="tenMon">{dish.name}</h3>
+            <p className="moTaMon">{dish.desc}</p>
+            <div className="thongTinMon">
+                <span><Clock3 size={14} /> {dish.prep}m</span>
+                <span><Zap size={14} /> {dish.kcal} kcal</span>
+                <span className="danhGiaMon"><Star size={14} fill="currentColor" /> {dish.rating.toFixed(1)}</span>
+            </div>
+            <div className="phanChanThe">
+                <div className="giaMon">
+                    {formatNumberViVN(dish.price)} <span className="donViTien">đ</span>
+                </div>
+                {isFuture ? (
+                    <span className="nhanChuaBan" onClick={(e) => e.stopPropagation()}>Chưa mở bán</span>
+                ) : qty === 0 ? (
+                    <button className="nutThemMon" onClick={(e) => { e.stopPropagation(); onAdd(); }}>
+                        <Plus size={20} />
+                    </button>
+                ) : (
+                    <div className="soLuongMon" onClick={(e) => e.stopPropagation()}>
+                        <button onClick={onDec}><Minus size={15} /></button>
+                        <span>{qty}</span>
+                        <button onClick={onInc}><Plus size={15} /></button>
+                    </div>
+                )}
+            </div>
+        </div>
+    </div>
+);
+
+export default DishCard;

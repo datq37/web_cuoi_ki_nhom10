@@ -1,37 +1,37 @@
 export default [
 	{
 		path: '/',
-		component: './Trang Chủ',
+		component: './TrangChu',
 		layout: false,
 	},
 	{
 		path: '/chinh-sach-bao-mat',
-		component: './Trang Chủ/Component/Chính Sách Bảo Mật',
+		component: './TrangChu/Component/Chính Sách Bảo Mật',
 		layout: false,
 	},
 	{
 		path: '/dieu-khoan-dich-vu',
-		component: './Trang Chủ/Component/Điều khoản dịch vụ',
+		component: './TrangChu/Component/Điều khoản dịch vụ',
 		layout: false,
 	},
 	{
 		path: '/lien-he',
-		component: './Trang Chủ/Component/Liên hệ',
+		component: './TrangChu/Component/Liên hệ',
 		layout: false,
 	},
 	{
 		path: '/dang-nhap',
-		component: './Khách Hàng/đăng nhập',
+		component: './KhachHang/đăng nhập',
 		layout: false,
 	},
 	{
 		path: '/dang-ky',
-		component: './Khách Hàng/đăng nhập',
+		component: './KhachHang/đăng nhập',
 		layout: false,
 	},
 	{
 		path: '/trang-chinh',
-		component: './Khách Hàng/Trang chính',
+		component: './KhachHang/Trang chính',
 		layout: false,
 	},
 
@@ -40,47 +40,47 @@ export default [
 		redirect: '/quan-tri/tong-quan',
 	},
 
-	// ── Quản Trị ─────────────────────────────────
+	// ── QuanTri ─────────────────────────────────
 	{
 		path: '/quan-tri',
 		layout: false,
-		component: './Quản Trị/AdminLayout',
+		component: './QuanTri/AdminLayout',
 		routes: [
 			{
 				path: '/quan-tri/tong-quan',
-				component: './Quản Trị/Tổng Quan',
+				component: './QuanTri/Tổng Quan',
 			},
 			{
 				path: '/quan-tri/don-hang',
-				component: './Quản Trị/Đơn Hàng',
+				component: './QuanTri/Đơn Hàng',
 			},
 			{
 				path: '/quan-tri/quan-ly-mon',
-				component: './Quản Trị/Quản Lý Món',
+				component: './QuanTri/Quản Lý Món',
 			},
 			{
 				path: '/quan-tri/kho-nguyen-lieu',
-				component: './Quản Trị/Kho Nguyên Liệu',
+				component: './QuanTri/Kho Nguyên Liệu',
 			},
 			{
 				path: '/quan-tri/khuyen-mai',
-				component: './Quản Trị/Khuyến Mãi',
+				component: './QuanTri/Khuyến Mãi',
 			},
 			{
 				path: '/quan-tri/khach-hang',
-				component: './Quản Trị/Khách Hàng',
+				component: './QuanTri/KhachHang',
 			},
 			{
 				path: '/quan-tri/nhan-vien',
-				component: './Quản Trị/Nhân Viên Căng Tin',
+				component: './QuanTri/Nhân Viên Căng Tin',
 			},
 			{
 				path: '/quan-tri/co-so-vat-chat',
-				component: './Quản Trị/Cơ Sở Vật Chất',
+				component: './QuanTri/Cơ Sở Vật Chất',
 			},
 			{
 				path: '/quan-tri/cai-dat',
-				component: './Quản Trị/Cài Đặt',
+				component: './QuanTri/Cài Đặt',
 			},
 			{
 				path: '/quan-tri',

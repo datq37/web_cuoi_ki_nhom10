@@ -2,6 +2,13 @@ import nhanhChongImg from '@/assets/trangchu/nhanhchong.png';
 import thuanTienImg from '@/assets/trangchu/thuantien.png';
 import sachSeImg from '@/assets/trangchu/sachse.png';
 
+export interface ContentItem {
+  id: string;
+  title: string;
+  image: string;
+  description: string;
+}
+
 export const contentData: ContentItem[] = [
   {
     id: 'nhanhchong',

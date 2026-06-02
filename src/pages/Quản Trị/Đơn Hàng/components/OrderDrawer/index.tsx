@@ -1,9 +1,11 @@
 ﻿import {
   CheckCircleOutlined,
   ClockCircleOutlined,
+  CreditCardOutlined,
   MessageOutlined,
   PhoneOutlined,
   PrinterOutlined,
+  ShopOutlined,
 } from '@ant-design/icons';
 import { Avatar, Button, Modal } from 'antd';
 import React, { useRef } from 'react';
@@ -178,7 +180,7 @@ const DrawerContent: React.FC<ContentProps> = ({
                 className={styles.itemAvatar}
                 style={{ background: order.khachHang?.mauNen || '#e5e7eb' }}
               >
-                🍽️
+                <ShopOutlined />
               </div>
               <span className={styles.itemName}>{m.ten}</span>
               <span className={styles.itemQty}>×{m.soLuong}</span>
@@ -230,7 +232,7 @@ const DrawerContent: React.FC<ContentProps> = ({
           <span className={styles.totalValue}>{fmt(tongCong)}</span>
         </div>
         <div className={styles.paymentRow}>
-          <span className={styles.payIcon}>💳</span>
+          <span className={styles.payIcon}><CreditCardOutlined /></span>
           <span className={styles.payLabel}>Thanh toán khi nhận hàng</span>
         </div>
       </div>

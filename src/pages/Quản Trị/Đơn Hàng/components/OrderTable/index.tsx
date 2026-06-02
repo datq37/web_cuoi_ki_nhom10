@@ -66,7 +66,7 @@ const OrderTable: React.FC<OrderTableProps> = ({
               <span className={styles.tenKH}>{r.khachHang.ten}</span>
               {isLate && (
                 <div style={{ fontSize: 11, color: '#dc2626', fontWeight: 600, marginTop: 2 }}>
-                  ⏱ Chờ {waitMin} phút
+                  <ClockCircleOutlined style={{ marginRight: 3 }} /> Chờ {waitMin} phút
                 </div>
               )}
             </div>

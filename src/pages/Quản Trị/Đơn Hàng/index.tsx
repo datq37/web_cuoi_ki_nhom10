@@ -1,4 +1,4 @@
-import {
+﻿import {
   AppstoreOutlined,
   CalendarOutlined,
   CheckCircleOutlined,
@@ -241,14 +241,14 @@ const DonHang: React.FC = () => {
     if (!silent) {
       if (newStatus === 'da_huy') {
         message.success(`Đã huỷ đơn ${maDon}`);
-        addNotif({ icon: '❌', title: `Đơn ${maDon} đã bị huỷ`, desc: 'Huỷ bởi quản trị viên', type: 'order_cancelled' });
+        addNotif({ icon: '–', title: `Đơn ${maDon} đã bị huỷ`, desc: 'Huỷ bởi quản trị viên', type: 'order_cancelled' });
       } else {
         message.success(`Đã cập nhật đơn ${maDon}`);
         const notifMap: Record<ETrangThaiTrucTiep, { icon: string; title: string; desc: string; type: any }> = {
-          [ETrangThaiTrucTiep.DANG_CHE_BIEN]: { icon: '🍳', title: `Đơn ${maDon} đang chế biến`, desc: 'Bếp đã nhận đơn', type: 'order_cooking' },
-          [ETrangThaiTrucTiep.SAN_SANG]:      { icon: '📦', title: `Đơn ${maDon} sẵn sàng`,      desc: 'Chờ giao cho khách', type: 'order_ready' },
-          [ETrangThaiTrucTiep.HOAN_THANH]:    { icon: '✅', title: `Đơn ${maDon} hoàn thành`,    desc: 'Khách đã nhận đơn', type: 'order_done' },
-          [ETrangThaiTrucTiep.CHO_XAC_NHAN]: { icon: '🛒', title: `Đơn ${maDon} chờ xác nhận`, desc: 'Đang chờ', type: 'order_pending' },
+          [ETrangThaiTrucTiep.DANG_CHE_BIEN]: { icon: '⊙', title: `Đơn ${maDon} đang chế biến`, desc: 'Bếp đã nhận đơn', type: 'order_cooking' },
+          [ETrangThaiTrucTiep.SAN_SANG]:      { icon: '◈', title: `Đơn ${maDon} sẵn sàng`,      desc: 'Chờ giao cho khách', type: 'order_ready' },
+          [ETrangThaiTrucTiep.HOAN_THANH]:    { icon: '✓', title: `Đơn ${maDon} hoàn thành`,    desc: 'Khách đã nhận đơn', type: 'order_done' },
+          [ETrangThaiTrucTiep.CHO_XAC_NHAN]: { icon: '·', title: `Đơn ${maDon} chờ xác nhận`, desc: 'Đang chờ', type: 'order_pending' },
         };
         if (notifMap[newStatus as ETrangThaiTrucTiep]) addNotif(notifMap[newStatus as ETrangThaiTrucTiep]);
       }

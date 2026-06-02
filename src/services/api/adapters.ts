@@ -187,6 +187,37 @@ export const SyncAdapters = {
       trangThai: apiItem.trangthai || 'dang_chay',
       hoatDong: apiItem.hoatdong ?? true,
     };
+  },
+
+  /**
+   * Chuyển đổi dữ liệu Nhân viên (Backend) -> UI (Frontend)
+   */
+  mapAdminNhanVienToUI(apiItem: any): any {
+    let vaiTro = apiItem.chucvu || apiItem.vaiTro || '';
+    vaiTro = vaiTro.toLowerCase();
+    let mappedVaiTro = 'QUAN_TRI_VIEN';
+    if (vaiTro.includes('bếp') || vaiTro.includes('bep')) {
+      mappedVaiTro = vaiTro.includes('trưởng') || vaiTro.includes('chính') ? 'BEP_TRUONG' : 'NHAN_VIEN_BEP';
+    } else if (vaiTro.includes('thu ngân') || vaiTro.includes('thu ngan')) {
+      mappedVaiTro = 'THU_NGAN';
+    } else if (vaiTro.includes('phục vụ') || vaiTro.includes('phuc vu') || vaiTro.includes('bảo vệ') || vaiTro.includes('vệ sinh') || vaiTro.includes('pha chế') || vaiTro.includes('tiếp thực')) {
+      mappedVaiTro = 'NHAN_VIEN_PHUC_VU';
+    } else if (apiItem.vaiTro) {
+        mappedVaiTro = apiItem.vaiTro; // if it's already an enum
+    }
+
+    return {
+      id: apiItem.manv,
+      hoTen: apiItem.ten || '',
+      email: apiItem.email || '',
+      soDienThoai: apiItem.sodienthoai || '',
+      vaiTro: mappedVaiTro,
+      ngayBatDau: apiItem.ngaybatdau || '',
+      mucLuong: apiItem.luong || 0,
+      vietTat: apiItem.viettat || 'NV',
+      mauNen: apiItem.maunen || '#f9a8d4',
+      hoatDongGanNhat: apiItem.hoatdonggannhat || 'Vừa xong',
+    };
   }
 };
 

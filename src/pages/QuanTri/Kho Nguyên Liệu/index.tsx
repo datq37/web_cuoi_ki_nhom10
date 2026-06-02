@@ -291,7 +291,7 @@ const NguyenLieuRestock: React.FC<{
                   style={{ width: '100%' }}
                   addonAfter="đ"
                   formatter={(v) => `${v ?? ''}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  parser={(v) => Number((v ?? '').replace(/,/g, ''))}
+                  parser={(v) => Number((v ?? '').replace(/\./g, '')) as any}
                 />
               </Form.Item>
             </div>
@@ -377,9 +377,9 @@ const BulkRestockModal: React.FC<{
       dataIndex: 'tonKho',
       width: 105,
       render: (val, r) => {
-        const cfg = TRANG_THAI_CONFIG[r.trangThai];
+        const config = TTRANG_THAI_NL_CONFIG[r.trangThai as ETrangThaiNguyenLieu] || { color: '#000', label: r.trangThai };
         return (
-          <span style={{ fontWeight: 600, color: cfg.color }}>
+          <span style={{ fontWeight: 600, color: config.color }}>
             {val} {r.donVi}
           </span>
         );
@@ -951,7 +951,7 @@ const KhoNguyenLieu: React.FC = () => {
                     <EmptyState kind="search" desc="Không tìm thấy nguyên liệu nào" />
                   </div>
                 ) : danhSachLoc.map((record) => {
-                  const cfg = TRANG_THAI_CONFIG[record.trangThai];
+                  const config = TTRANG_THAI_NL_CONFIG[record.trangThai as ETrangThaiNguyenLieu];
                   const pct = record.mucToiThieu > 0
                     ? Math.min(100, Math.round((record.tonKho / (record.mucToiThieu * 2)) * 100))
                     : 100;

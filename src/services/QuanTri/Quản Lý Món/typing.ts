@@ -17,4 +17,5 @@ export interface IMonAn {
   danhGia: number;
   isHot: boolean;
   mauNen: string;
+  coSan: boolean;
 }

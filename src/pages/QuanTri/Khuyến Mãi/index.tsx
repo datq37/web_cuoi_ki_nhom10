@@ -199,7 +199,7 @@ const KhuyenMaiForm: React.FC<{
               style={{ width: '100%' }}
               addonAfter="đ"
               formatter={(v) => `${v ?? ''}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              parser={(v) => Number((v ?? '').replace(/,/g, ''))}
+              parser={(v) => Number((v ?? '').replace(/\./g, '')) as any}
             />
           </Form.Item>
         </div>

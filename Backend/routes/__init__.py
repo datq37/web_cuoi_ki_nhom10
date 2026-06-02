@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from . import report, admin_orders, auth, categories, menus, khachhang, orders, payments, notification, inventory, khuyenmai
+from . import report, admin_orders, auth, categories, menus, khachhang, orders, payments, notification, inventory, khuyenmai, nhanvien
 
 api_router = APIRouter()
 api_router.include_router(auth.router)
@@ -14,3 +14,4 @@ api_router.include_router(report.router)
 api_router.include_router(notification.router)
 api_router.include_router(inventory.router)
 api_router.include_router(khuyenmai.router)
+api_router.include_router(nhanvien.router)

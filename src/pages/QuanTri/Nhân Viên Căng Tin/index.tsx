@@ -26,10 +26,8 @@ import Topbar from '@/pages/QuanTri/Topbar';
 import ConfirmModal from '@/pages/QuanTri/components/ConfirmModal';
 import PageToolbar from '@/pages/QuanTri/components/PageToolbar';
 import EmptyState from '@/pages/QuanTri/components/EmptyState';
-import {
-  DANH_SACH_NHAN_VIEN,
-  VAI_TRO_NV_CONFIG,
-} from '@/services/QuanTri/Nhân Viên Căng Tin';
+import { VAI_TRO_NV_CONFIG } from '@/services/QuanTri/Nhân Viên Căng Tin';
+import useNhanVienModel from '@/models/QuanTri/Nhân Viên Căng Tin';
 import {
   EVaiTroNhanVien,
   INhanVien,
@@ -43,19 +41,7 @@ type INhanVienEx = INhanVien & {
   mucLuong?:    number;
 };
 
-// Dữ liệu bổ sung cho nhân viên có sẵn
-const NHAN_VIEN_EXTRA: Record<string, Partial<INhanVienEx>> = {
-  nv1: { soDienThoai: '0901 234 567', ngayBatDau: '01/03/2022', mucLuong: 15000000 },
-  nv2: { soDienThoai: '0912 345 678', ngayBatDau: '15/06/2021', mucLuong: 12000000 },
-  nv3: { soDienThoai: '0923 456 789', ngayBatDau: '20/09/2022', mucLuong:  9000000 },
-  nv4: { soDienThoai: '0934 567 890', ngayBatDau: '10/01/2023', mucLuong:  7500000 },
-  nv5: { soDienThoai: '0945 678 901', ngayBatDau: '05/04/2023', mucLuong:  7000000 },
-};
-
-const DANH_SACH_NHAN_VIEN_EX: INhanVienEx[] = DANH_SACH_NHAN_VIEN.map((nv) => ({
-  ...nv,
-  ...(NHAN_VIEN_EXTRA[nv.id] ?? {}),
-}));
+// Remove mock data references
 
 const MAU_NEN_PALETTE = [
   '#f9a8d4', '#93c5fd', '#86efac', '#c4b5fd', '#fca5a5',
@@ -226,7 +212,7 @@ const NhanVienFormModal: React.FC<{
             style={{ width: '100%' }}
             placeholder="VD: 8.000.000"
             formatter={(v) => `${v ?? ''}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
-            parser={(v) => Number((v ?? '').replace(/\./g, ''))}
+            parser={(v) => Number((v ?? '').replace(/\./g, '')) as any}
             addonAfter="₫"
           />
         </Form.Item>
@@ -343,7 +329,7 @@ const ChiTietNhanVienModal: React.FC<{
         </Button>,
       ]}
     >
-      {nv && cfg && (
+      {nv && (
         <>
           <div className={styles.detailHero}>
             <Avatar size={72} style={{ background: nv.mauNen, color: '#1e3a5f', fontWeight: 700, fontSize: 24 }}>
@@ -351,8 +337,8 @@ const ChiTietNhanVienModal: React.FC<{
             </Avatar>
             <div className={styles.detailHeroName}>{nv.hoTen}</div>
             <div className={styles.detailHeroEmail}>{nv.email}</div>
-            <span className={styles.roleBadge} data-vaitro={nv.vaiTro} style={{ color: cfg.color }}>
-              {cfg.label}
+            <span className={styles.roleBadge} data-vaitro={nv.vaiTro} style={{ color: cfg?.color || '#000' }}>
+              {cfg?.label || nv.vaiTro}
             </span>
           </div>
 
@@ -419,8 +405,8 @@ const NhanVienCard: React.FC<{
       </div>
 
       <div className={styles.cardMeta}>
-        <span className={styles.roleBadge} data-vaitro={nv.vaiTro} style={{ color: cfg.color }}>
-          {cfg.label}
+        <span className={styles.roleBadge} data-vaitro={nv.vaiTro} style={{ color: cfg?.color || '#000' }}>
+          {cfg?.label || nv.vaiTro}
         </span>
         {nv.ngayBatDau && (
           <span className={styles.lastActive}>Từ {nv.ngayBatDau}</span>
@@ -439,7 +425,7 @@ const NhanVienCard: React.FC<{
 
 // ── Trang chính ──────────────────────────────────────────────────
 const NhanVienCangTin: React.FC = () => {
-  const [danhSach,   setDanhSach]   = useState<INhanVienEx[]>(DANH_SACH_NHAN_VIEN_EX);
+  const { items: danhSach, addNhanVien, updateNhanVien, deleteNhanVien } = useNhanVienModel();
   const [chiTietNV,  setChiTietNV]  = useState<INhanVienEx | null>(null);
   const [doiQuyenNV, setDoiQuyenNV] = useState<INhanVienEx | null>(null);
   const [suaNV,      setSuaNV]      = useState<INhanVienEx | null>(null);
@@ -463,38 +449,42 @@ const NhanVienCangTin: React.FC = () => {
     return list;
   }, [danhSach, tuKhoa, locVaiTro]);
 
-  const handleConfirmDoiQuyen = (id: string, vaiTro: EVaiTroNhanVien) => {
-    setDanhSach((prev) =>
-      prev.map((nv) => nv.id === id ? { ...nv, vaiTro, hoatDongGanNhat: thoiGianHienTai() } : nv),
-    );
-    const ten = danhSach.find((nv) => nv.id === id)?.hoTen ?? '';
-    message.success(`Đã đổi quyền ${ten} → ${VAI_TRO_NV_CONFIG[vaiTro].label}`);
-    setDoiQuyenNV(null);
+  const handleConfirmDoiQuyen = async (id: string, vaiTro: EVaiTroNhanVien) => {
+    try {
+      await updateNhanVien(id, { vaiTro, hoatDongGanNhat: thoiGianHienTai() });
+      const ten = danhSach.find((nv) => nv.id === id)?.hoTen ?? '';
+      message.success(`Đã đổi quyền ${ten} → ${VAI_TRO_NV_CONFIG[vaiTro].label}`);
+      setDoiQuyenNV(null);
+    } catch (e) {}
   };
 
   // Xử lý thêm mới hoặc cập nhật
-  const handleFormConfirm = (data: Omit<INhanVienEx, 'id'>, id?: string) => {
-    if (id) {
-      // Sửa
-      setDanhSach((prev) => prev.map((nv) => nv.id === id ? { ...nv, ...data } : nv));
-      message.success(`Đã cập nhật thông tin ${data.hoTen}`);
-      setSuaNV(null);
-    } else {
-      // Thêm mới
-      const newNV: INhanVienEx = { ...data, id: `nv_${Date.now()}` };
-      setDanhSach((prev) => [...prev, newNV]);
-      message.success(`Đã thêm ${data.hoTen} (${VAI_TRO_NV_CONFIG[data.vaiTro].label})`);
-    }
-    setFormOpen(false);
+  const handleFormConfirm = async (data: Omit<INhanVienEx, 'id'>, id?: string) => {
+    try {
+      if (id) {
+        // Sửa
+        await updateNhanVien(id, data);
+        message.success(`Đã cập nhật thông tin ${data.hoTen}`);
+        setSuaNV(null);
+      } else {
+        // Thêm mới
+        const newNV = { ...data, id: `nv_${Date.now()}` };
+        await addNhanVien(newNV);
+        message.success(`Đã thêm ${data.hoTen} (${VAI_TRO_NV_CONFIG[data.vaiTro].label})`);
+      }
+      setFormOpen(false);
+    } catch (e) {}
   };
 
   const handleXoaNhanVien = (nv: INhanVienEx) => {
     ConfirmModal.delete({
       title: 'Xoá nhân viên?',
       content: `Xoá "${nv.hoTen}" khỏi danh sách?`,
-      onOk: () => {
-        setDanhSach((prev) => prev.filter((n) => n.id !== nv.id));
-        message.success(`Đã xoá nhân viên "${nv.hoTen}"`);
+      onOk: async () => {
+        try {
+          await deleteNhanVien(nv.id);
+          message.success(`Đã xoá nhân viên "${nv.hoTen}"`);
+        } catch (e) {}
       },
     });
   };

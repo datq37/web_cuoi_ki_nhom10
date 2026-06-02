@@ -42,11 +42,9 @@ import useQuanLyMonModel from '@/models/QuanTri/Quản Lý Món';
 import styles from './index.less';
 
 // IMonAnLocal — extended type, không sửa typing gốc
-interface IMonAnLocal extends IMonAn {
-  hinhAnh?: string;
-  nguyenLieu?: string[];
-  coSan?: boolean;
-}
+type IMonAnLocal = IMonAn & {
+  nguyenLieu?: Array<{ id: string; ten: string; soLuong: number }>;
+};
 
 function formatGia(gia: number): string {
   return new Intl.NumberFormat('vi-VN').format(gia) + 'đ';
@@ -722,7 +720,7 @@ const QuanLyMon: React.FC = () => {
         mon={viewing}
         onClose={() => setViewing(null)}
         onEdit={() => { setEditing(viewing); setViewing(null); setFormOpen(true); }}
-        onDelete={() => { if (viewing) handleDelete(viewing.id); setViewing(null); }}
+        onDelete={() => { if (viewing) handleDelete(viewing); setViewing(null); }}
         onToggle={() => { if (viewing) { handleToggleCoSan(viewing.id, viewing.coSan === false); setViewing(prev => prev ? { ...prev, coSan: prev.coSan === false } : null); } }}
       />
     </>

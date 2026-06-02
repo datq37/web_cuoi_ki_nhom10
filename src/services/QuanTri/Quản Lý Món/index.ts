@@ -12,6 +12,7 @@ export const DANH_SACH_MON: IMonAn[] = [
     danhGia: 4.5,
     isHot: false,
     mauNen: 'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)',
+    coSan: true,
   },
   {
     id: 'm2',
@@ -24,6 +25,7 @@ export const DANH_SACH_MON: IMonAn[] = [
     danhGia: 4.8,
     isHot: true,
     mauNen: 'linear-gradient(135deg, #f97316 0%, #dc2626 100%)',
+    coSan: true,
   },
   {
     id: 'm3',
@@ -36,6 +38,7 @@ export const DANH_SACH_MON: IMonAn[] = [
     danhGia: 4.7,
     isHot: true,
     mauNen: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
+    coSan: true,
   },
   {
     id: 'm4',
@@ -48,6 +51,7 @@ export const DANH_SACH_MON: IMonAn[] = [
     danhGia: 4.4,
     isHot: false,
     mauNen: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
+    coSan: true,
   },
   {
     id: 'm5',
@@ -60,6 +64,7 @@ export const DANH_SACH_MON: IMonAn[] = [
     danhGia: 4.6,
     isHot: false,
     mauNen: 'linear-gradient(135deg, #f59e0b 0%, #f97316 100%)',
+    coSan: true,
   },
   {
     id: 'm6',
@@ -72,6 +77,7 @@ export const DANH_SACH_MON: IMonAn[] = [
     danhGia: 4.9,
     isHot: false,
     mauNen: 'linear-gradient(135deg, #78350f 0%, #92400e 100%)',
+    coSan: true,
   },
   {
     id: 'm7',
@@ -84,6 +90,7 @@ export const DANH_SACH_MON: IMonAn[] = [
     danhGia: 4.8,
     isHot: true,
     mauNen: 'linear-gradient(135deg, #7c3aed 0%, #db2777 100%)',
+    coSan: true,
   },
   {
     id: 'm8',
@@ -96,6 +103,7 @@ export const DANH_SACH_MON: IMonAn[] = [
     danhGia: 4.5,
     isHot: false,
     mauNen: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
+    coSan: true,
   },
   {
     id: 'm9',
@@ -108,6 +116,7 @@ export const DANH_SACH_MON: IMonAn[] = [
     danhGia: 4.6,
     isHot: false,
     mauNen: 'linear-gradient(135deg, #16a34a 0%, #059669 100%)',
+    coSan: true,
   },
   {
     id: 'm10',
@@ -120,6 +129,7 @@ export const DANH_SACH_MON: IMonAn[] = [
     danhGia: 4.7,
     isHot: true,
     mauNen: 'linear-gradient(135deg, #ea580c 0%, #dc2626 100%)',
+    coSan: true,
   },
   {
     id: 'm11',
@@ -132,6 +142,7 @@ export const DANH_SACH_MON: IMonAn[] = [
     danhGia: 4.3,
     isHot: false,
     mauNen: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
+    coSan: true,
   },
   {
     id: 'm12',
@@ -144,6 +155,7 @@ export const DANH_SACH_MON: IMonAn[] = [
     danhGia: 4.5,
     isHot: true,
     mauNen: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+    coSan: true,
   },
 ];
 

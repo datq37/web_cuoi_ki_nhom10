@@ -10,7 +10,7 @@ export interface IMonAn {
   id: string;
   ten: string;
   moTa: string;
-  danhMuc: EDanhMuc;
+  danhMuc: EDanhMuc | number | string;
   giaBan: number;
   thoiGian: number;
   calo: number;

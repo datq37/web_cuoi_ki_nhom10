@@ -105,5 +105,42 @@ export const SyncAdapters = {
       tongTien: apiOrder.tongTien,
       trangThai: apiOrder.trangThai
     };
+  },
+
+  /**
+   * Chuyển đổi dữ liệu Thực Đơn (Backend) -> Thực Đơn Quản Trị (Frontend UI)
+   */
+  mapAdminMenuToUI(apiDish: ThucDonResponse): any {
+    const PRESET_GRADIENTS = [
+      'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)',
+      'linear-gradient(135deg, #f97316 0%, #dc2626 100%)',
+      'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
+      'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
+      'linear-gradient(135deg, #16a34a 0%, #059669 100%)',
+      'linear-gradient(135deg, #7c3aed 0%, #db2777 100%)',
+      'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
+      'linear-gradient(135deg, #78350f 0%, #92400e 100%)',
+    ];
+    
+    // Hash mã món để chọn màu nền ổn định
+    const charCode = (apiDish.mamon || '').charCodeAt(0) || 0;
+    const mauNen = PRESET_GRADIENTS[charCode % PRESET_GRADIENTS.length];
+
+    return {
+      id: apiDish.mamon,
+      ten: apiDish.ten || 'Món chưa tên',
+      moTa: apiDish.mieuta || '',
+      danhMuc: apiDish.danhmucid ?? 'tat_ca',
+      giaBan: apiDish.gia || 0,
+      thoiGian: 10, // Mock (Backend missing thoiGian)
+      calo: 0, // Mock (Backend missing calo)
+      danhGia: 5.0, // Mock
+      isHot: false,
+      mauNen,
+      hinhAnh: apiDish.hinhanh,
+      coSan: !apiDish.hethang,
+      nguyenLieu: []
+    };
   }
 };
+

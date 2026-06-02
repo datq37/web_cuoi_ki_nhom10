@@ -1,4 +1,4 @@
-﻿import {
+import {
   AppstoreOutlined,
   ClockCircleOutlined,
   CloseOutlined,
@@ -37,8 +37,8 @@ import Topbar from '@/pages/QuanTri/Topbar';
 import ConfirmModal from '@/pages/QuanTri/components/ConfirmModal';
 import PageToolbar from '@/pages/QuanTri/components/PageToolbar';
 import { DANH_SACH_NGUYEN_LIEU } from '@/services/QuanTri/Kho Nguyên Liệu';
-import { DANH_SACH_MON } from '@/services/QuanTri/Quản Lý Món';
 import { EDanhMuc, IMonAn } from '@/services/QuanTri/Quản Lý Món/typing';
+import useQuanLyMonModel from '@/models/QuanTri/Quản Lý Món';
 import styles from './index.less';
 
 // IMonAnLocal — extended type, không sửa typing gốc
@@ -71,7 +71,7 @@ const DANH_MUC_OPTIONS = [
 ];
 
 interface TabDanhMuc {
-  key: EDanhMuc | 'tat_ca';
+  key: number | string;
   label: string;
   soLuong: number;
 }
@@ -137,11 +137,12 @@ const MonCard: React.FC<MonCardProps> = ({ mon, onClick, onEdit, onDelete, onTog
 interface MonFormProps {
   open: boolean;
   initial: IMonAnLocal | null;
+  categories: { id: number, name: string }[];
   onCancel: () => void;
   onSubmit: (values: Partial<IMonAnLocal>) => void;
 }
 
-const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) => {
+const MonForm: React.FC<MonFormProps> = ({ open, initial, categories, onCancel, onSubmit }) => {
   const [form] = Form.useForm();
   const [imgPreview, setImgPreview] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -154,7 +155,7 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
     } else {
       form.resetFields();
       form.setFieldsValue({
-        danhMuc:    EDanhMuc.MON_CHINH,
+        danhMuc:    categories[0]?.id || EDanhMuc.MON_CHINH,
         isHot:      false,
         mauNen:     PRESET_GRADIENTS[0],
         danhGia:    5,
@@ -163,7 +164,7 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
         nguyenLieu: [],
       });
     }
-  }, [open, initial]);
+  }, [open, initial, categories]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -259,7 +260,10 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, onCancel, onSubmit }) 
               rules={[{ required: true, message: 'Chọn danh mục' }]}
             >
               <Select placeholder="Chọn danh mục">
-                {DANH_MUC_OPTIONS.map((o) => (
+                {categories.map((c) => (
+                  <Select.Option key={c.id} value={c.id}>{c.name}</Select.Option>
+                ))}
+                {categories.length === 0 && DANH_MUC_OPTIONS.map((o) => (
                   <Select.Option key={o.value} value={o.value}>{o.label}</Select.Option>
                 ))}
               </Select>
@@ -479,14 +483,9 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit, onDelete, o
 };
 
 const QuanLyMon: React.FC = () => {
-  const [items, setItems] = useState<IMonAnLocal[]>(() => {
-    try { const s = localStorage.getItem('admin_dishes'); if (s) return JSON.parse(s); } catch { /* */ }
-    return DANH_SACH_MON as IMonAnLocal[];
-  });
+  const { items, categories, addMon, updateMon, deleteMon, toggleCoSan, tabCounts: modelTabCounts } = useQuanLyMonModel();
 
-  useEffect(() => { localStorage.setItem('admin_dishes', JSON.stringify(items)); }, [items]);
-
-  const [activeTab,   setActiveTab]   = useState<EDanhMuc | 'tat_ca'>('tat_ca');
+  const [activeTab,   setActiveTab]   = useState<number | string>('tat_ca');
   const [tuKhoa,      setTuKhoa]      = useState('');
   const [isGrid,      setIsGrid]      = useState(false);
   const [formOpen,    setFormOpen]    = useState(false);
@@ -496,13 +495,30 @@ const QuanLyMon: React.FC = () => {
   const [sortBy,      setSortBy]      = useState<'mac_dinh' | 'gia_tang' | 'gia_giam' | 'danh_gia'>('mac_dinh');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
-  const tabs = useMemo<TabDanhMuc[]>(() => [
-    { key: 'tat_ca',           label: 'Tất cả',    soLuong: items.length },
-    { key: EDanhMuc.MON_CHINH, label: 'Món chính', soLuong: items.filter((m) => m.danhMuc === EDanhMuc.MON_CHINH).length },
-    { key: EDanhMuc.DO_UONG,   label: 'Đồ uống',   soLuong: items.filter((m) => m.danhMuc === EDanhMuc.DO_UONG).length },
-    { key: EDanhMuc.AN_VAT,    label: 'Ăn vặt',    soLuong: items.filter((m) => m.danhMuc === EDanhMuc.AN_VAT).length },
-    { key: EDanhMuc.MON_CHAY,  label: 'Món chay',  soLuong: items.filter((m) => m.danhMuc === EDanhMuc.MON_CHAY).length },
-  ], [items]);
+  const tabs = useMemo<TabDanhMuc[]>(() => {
+    const defaultTabs: TabDanhMuc[] = [
+      { key: 'tat_ca', label: 'Tất cả', soLuong: modelTabCounts['tat_ca'] || 0 },
+    ];
+    
+    if (categories.length > 0) {
+      categories.forEach(c => {
+        defaultTabs.push({
+          key: c.id,
+          label: c.name,
+          soLuong: modelTabCounts[c.id] || 0
+        });
+      });
+    } else {
+      // Fallback if API fails
+      defaultTabs.push(
+        { key: EDanhMuc.MON_CHINH, label: 'Món chính', soLuong: items.filter((m) => m.danhMuc === EDanhMuc.MON_CHINH).length },
+        { key: EDanhMuc.DO_UONG,   label: 'Đồ uống',   soLuong: items.filter((m) => m.danhMuc === EDanhMuc.DO_UONG).length },
+        { key: EDanhMuc.AN_VAT,    label: 'Ăn vặt',    soLuong: items.filter((m) => m.danhMuc === EDanhMuc.AN_VAT).length },
+        { key: EDanhMuc.MON_CHAY,  label: 'Món chay',  soLuong: items.filter((m) => m.danhMuc === EDanhMuc.MON_CHAY).length }
+      );
+    }
+    return defaultTabs;
+  }, [items, categories, modelTabCounts]);
 
   // ── Stat cards ────────────────────────────────────────────────────
   const monStats = useMemo(() => ({
@@ -528,60 +544,57 @@ const QuanLyMon: React.FC = () => {
     return ds;
   }, [activeTab, tuKhoa, filterCoSan, sortBy, items]);
 
-  const handleToggleCoSan = (id: string, coSan: boolean) => {
+  const handleToggleCoSan = async (id: string, coSan: boolean) => {
     const mon = items.find((m) => m.id === id);
     if (!mon) return;
-    setItems((prev) => prev.map((m) => m.id === id ? { ...m, coSan } : m));
-    const key = `notif_${id}`;
-    notification.open({
-      key,
-      message: coSan ? `Đã bật "${mon.ten}"` : `Đã tắt "${mon.ten}"`,
-      description: coSan ? 'Món đang được bán.' : 'Món tạm thời ẩn khỏi thực đơn.',
-      duration: 4,
-      btn: (
-        <Button size="small" onClick={() => { setItems((prev) => prev.map((m) => m.id === id ? { ...m, coSan: !coSan } : m)); notification.close(key); message.info('Đã hoàn tác'); }}>
-          Hoàn tác
-        </Button>
-      ),
-    });
+    try {
+      await toggleCoSan(id, coSan);
+      message.success(coSan ? `Đã bật "${mon.ten}"` : `Đã tắt "${mon.ten}"`);
+    } catch (error) {
+      // lỗi
+    }
   };
 
   const handleDelete = (mon: IMonAnLocal) => {
     ConfirmModal.delete({
       title: 'Xác nhận xoá món?',
       content: `Xoá "${mon.ten}" khỏi thực đơn?`,
-      onOk: () => { setItems((prev) => prev.filter((i) => i.id !== mon.id)); message.success(`Đã xoá "${mon.ten}"`); },
+      onOk: async () => { 
+        await deleteMon(mon.id); 
+        message.success(`Đã xoá "${mon.ten}"`); 
+      },
     });
   };
 
-  const handleSubmit = (values: Partial<IMonAnLocal>) => {
+  const handleSubmit = async (values: Partial<IMonAnLocal>) => {
     if (values.id) {
-      setItems((prev) => prev.map((i) => i.id === values.id ? { ...i, ...values } as IMonAnLocal : i));
+      await updateMon(values);
       message.success('Đã cập nhật món');
     } else {
-      const newItem: IMonAnLocal = { ...values, id: `mon_${Date.now()}` } as IMonAnLocal;
-      setItems((prev) => [newItem, ...prev]);
+      await addMon(values);
       message.success('Đã thêm món mới');
     }
     setFormOpen(false);
     setEditing(null);
   };
 
-  const handleDuplicate = (mon: IMonAnLocal) => {
-    const copy: IMonAnLocal = {
+  const handleDuplicate = async (mon: IMonAnLocal) => {
+    const copyValues = {
       ...mon,
-      id:  `mon_${Date.now()}`,
+      id: undefined,
       ten: `${mon.ten} (copy)`,
     };
-    setItems((prev) => [copy, ...prev]);
+    await addMon(copyValues);
     message.success(`Đã nhân bản "${mon.ten}"`);
   };
 
-  const handleBulkToggle = (coSan: boolean) => {
+  const handleBulkToggle = async (coSan: boolean) => {
     if (selectedIds.length === 0) return;
-    setItems((prev) => prev.map((m) => selectedIds.includes(m.id) ? { ...m, coSan } : m));
-    message.success(`Đã ${coSan ? 'bật' : 'tắt'} ${selectedIds.length} món`);
-    setSelectedIds([]);
+    try {
+      await Promise.all(selectedIds.map(id => toggleCoSan(id, coSan)));
+      message.success(`Đã ${coSan ? 'bật' : 'tắt'} ${selectedIds.length} món`);
+      setSelectedIds([]);
+    } catch (error) {}
   };
 
   const toggleSelect = (id: string) => {
@@ -701,6 +714,7 @@ const QuanLyMon: React.FC = () => {
       <MonForm
         open={formOpen}
         initial={editing}
+        categories={categories}
         onCancel={() => { setFormOpen(false); setEditing(null); }}
         onSubmit={handleSubmit}
       />
@@ -709,7 +723,7 @@ const QuanLyMon: React.FC = () => {
         onClose={() => setViewing(null)}
         onEdit={() => { setEditing(viewing); setViewing(null); setFormOpen(true); }}
         onDelete={() => { if (viewing) handleDelete(viewing.id); setViewing(null); }}
-        onToggle={() => { if (viewing) { const next = !(viewing.coSan !== false); setItems((prev) => prev.map((m) => m.id === viewing.id ? { ...m, coSan: next } : m)); setViewing(prev => prev ? { ...prev, coSan: next } : null); } }}
+        onToggle={() => { if (viewing) { handleToggleCoSan(viewing.id, viewing.coSan === false); setViewing(prev => prev ? { ...prev, coSan: prev.coSan === false } : null); } }}
       />
     </>
   );

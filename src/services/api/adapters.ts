@@ -81,5 +81,29 @@ export const SyncAdapters = {
       thamGia: apiCustomer.lichsudathang || 'Gần đây', 
       trangThai: ETrangThaiKhach.HOAT_DONG, // Mặc định do BE chưa có trạng thái
     };
+  },
+
+  /**
+   * Chuyển đổi dữ liệu Đơn Hàng (Backend) -> Đơn Hàng Quản Trị (Frontend UI)
+   */
+  mapAdminOrderToUI(apiOrder: OrderResponse): any {
+    return {
+      maDon: apiOrder.maDon,
+      thoiGian: apiOrder.thoiGianDat ? apiOrder.thoiGianDat.split('T')[0] : 'Vừa xong',
+      khachHang: {
+        ten: apiOrder.maKh, // BE chưa join tên KH trong OrderResponse nên hiển thị mã
+        vietTat: apiOrder.maKh.substring(0, 2).toUpperCase(),
+        mauNen: '#3b82f6',
+        mauChu: '#ffffff',
+        phong: 'N/A'
+      },
+      monAn: (apiOrder.chitiet || []).map(ct => ({
+        ten: ct.thucdon?.ten || ct.mamon || 'Món',
+        soLuong: ct.soluong
+      })),
+      ghiChu: apiOrder.hinhthucthanhtoan === 'banking' ? 'Chuyển khoản' : 'Tiền mặt',
+      tongTien: apiOrder.tongTien,
+      trangThai: apiOrder.trangThai
+    };
   }
 };

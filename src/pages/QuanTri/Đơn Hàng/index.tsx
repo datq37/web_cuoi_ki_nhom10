@@ -22,6 +22,7 @@ import { fmt } from '@/models/QuanTri/Tổng Quan';
 import { mockData } from '@/services/QuanTri/Tổng Quan';
 import type { DonTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
 import { ETrangThaiTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
+import { useModel } from 'umi';
 import OrderDrawer from './components/OrderDrawer';
 import OrderKanban from './components/OrderKanban';
 import OrderTable from './components/OrderTable';
@@ -123,55 +124,14 @@ const LichSuTable: React.FC<{
 const DonHang: React.FC = () => {
   const { addNotif } = useNotif();
 
-  const [orders, setOrders] = useState<DonTrucTiep[]>(() => {
-    try {
-      const saved = localStorage.getItem('admin_orders');
-      if (saved) { const list = JSON.parse(saved); if (Array.isArray(list) && list.length > 0) return list; }
-      else { localStorage.setItem('admin_orders', JSON.stringify(mockData.trucTiep.donHang)); }
-    } catch { /* */ }
-    return mockData.trucTiep.donHang;
-  });
-
-  useEffect(() => { localStorage.setItem('admin_orders', JSON.stringify(orders)); window.dispatchEvent(new Event('admin_orders_updated')); }, [orders]);
-
-  useEffect(() => {
-    const h = () => {
-      const saved = localStorage.getItem('admin_orders');
-      if (!saved) return;
-      try {
-        const list = JSON.parse(saved);
-        if (!Array.isArray(list)) return;
-        setOrders((p) => JSON.stringify(p) === saved ? p : list);
-        setCancelledIds(() => { const s = new Set<string>(); list.forEach((o: DonTrucTiep) => { if ((o.trangThai as any) === 'da_huy') s.add(o.maDon); }); return s; });
-      } catch { /* */ }
-    };
-    window.addEventListener('storage', h); window.addEventListener('focus', h);
-    return () => { window.removeEventListener('storage', h); window.removeEventListener('focus', h); };
-  }, []);
-
-  const [cancelledIds, setCancelledIds] = useState<Set<string>>(() => {
-    const s = new Set<string>(); mockData.trucTiep.donHang.forEach((o) => { if ((o.trangThai as any) === 'da_huy') s.add(o.maDon); }); return s;
-  });
-
-  const stats = useMemo(() => {
-    const active = orders.filter((o) => !cancelledIds.has(o.maDon));
-    const choXacNhan = active.filter((o) => o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN).length;
-    const dangCheBien = active.filter((o) => o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN).length;
-    const doanhThu = active.filter((o) => o.trangThai === ETrangThaiTrucTiep.HOAN_THANH).reduce((s, o) => s + o.tongTien, 0);
-    return { tong: active.length, choXacNhan, dangCheBien, doanhThu };
-  }, [orders, cancelledIds]);
-
-  const tabCounts = useMemo<Record<string, number>>(() => {
-    const active = orders.filter((o) => !cancelledIds.has(o.maDon));
-    return {
-      tat_ca: active.length,
-      [ETrangThaiTrucTiep.CHO_XAC_NHAN]: active.filter((o) => o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN).length,
-      [ETrangThaiTrucTiep.DANG_CHE_BIEN]: active.filter((o) => o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN).length,
-      [ETrangThaiTrucTiep.SAN_SANG]: active.filter((o) => o.trangThai === ETrangThaiTrucTiep.SAN_SANG).length,
-      [ETrangThaiTrucTiep.HOAN_THANH]: active.filter((o) => o.trangThai === ETrangThaiTrucTiep.HOAN_THANH).length,
-      da_huy: cancelledIds.size,
-    };
-  }, [orders, cancelledIds]);
+  const { 
+    orders = [], 
+    cancelledIds = new Set<string>(), 
+    stats = { tong: 0, choXacNhan: 0, dangCheBien: 0, doanhThu: 0 }, 
+    tabCounts = { tat_ca: 0, [ETrangThaiTrucTiep.CHO_XAC_NHAN]: 0, [ETrangThaiTrucTiep.DANG_CHE_BIEN]: 0, [ETrangThaiTrucTiep.SAN_SANG]: 0, [ETrangThaiTrucTiep.HOAN_THANH]: 0, da_huy: 0 }, 
+    moveStatus = () => {},
+    fetchOrders = () => {}
+  } = useModel('QuanTri.Đơn Hàng.index') || {};
 
   // ── UI state (cục bộ) ─────────────────────────────────────────────
   const [viewMode,      setViewMode]      = useState<'homnay' | 'lichsu'>('homnay');
@@ -231,13 +191,16 @@ const DonHang: React.FC = () => {
     newStatus: ETrangThaiTrucTiep | 'da_huy',
     silent = false,
   ) => {
-    if (newStatus === 'da_huy') setCancelledIds((prev) => new Set([...prev, maDon]));
-    setOrders((prev) => prev.map((o) => o.maDon === maDon ? { ...o, trangThai: newStatus as any } : o));
+    // Gọi hàm moveStatus để cập nhật DB
+    moveStatus(maDon, newStatus);
+    
+    // Cập nhật selectedOrder nếu cần
     if (newStatus === 'da_huy') {
       setSelectedOrder((prev) => prev?.maDon === maDon ? null : prev);
     } else {
       setSelectedOrder((prev) => prev?.maDon === maDon ? { ...prev, trangThai: newStatus as any } : prev);
     }
+    
     if (!silent) {
       if (newStatus === 'da_huy') {
         message.success(`Đã huỷ đơn ${maDon}`);

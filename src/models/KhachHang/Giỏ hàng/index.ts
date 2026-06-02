@@ -6,6 +6,8 @@ import { VoucherLoai } from '@/services/KhachHang/Giỏ hàng/cartoption/typing'
 import { Order, OrderStatus, PaymentMethod } from '@/services/KhachHang/Đơn Hàng';
 import { formatDateTimeViVN, formatTimeHHMM } from '@/utils/format';
 import { showCustomerNotification } from '@/utils/notification';
+import axios from '@/utils/axios';
+import { ip3 } from '@/utils/ip';
 export function useGioHangModel() {
     const { cart, cartOpen, setCartOpen, clearCart } = useModel('KhachHang.ThucDon.index');
     const { addOrder } = useModel('KhachHang.Đơn Hàng.Orders');
@@ -56,7 +58,7 @@ export function useGioHangModel() {
     };
 
     // Xác nhận đặt 
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
         const today = new Date();
         if (today.getDay() === 0) {
             showCustomerNotification('Căng tin nghỉ Chủ Nhật', 'Rất xin lỗi, căng tin không hoạt động vào ngày Chủ Nhật. Vui lòng đặt hàng vào các ngày trong tuần!', 'error');
@@ -74,78 +76,95 @@ export function useGioHangModel() {
         
         setIsLoading(true);
 
-    setTimeout(() => {
-        const SERVICE_FEE_RATE = 0.05;
-        const serviceFee = Math.round(subtotal * SERVICE_FEE_RATE);
-        const discount = (() => {
-            if (!selectedVoucher) return 0;
-            if (selectedVoucher.minOrder && subtotal < selectedVoucher.minOrder) return 0;
-            if (selectedVoucher.loai === VoucherLoai.PhanTram) {
-                return Math.round(subtotal * selectedVoucher.discount / 100);
+        try {
+            // 1. Tạo đơn hàng (Giỏ hàng) ở Backend
+            const payload = {
+                hinhthucthanhtoan: payment,
+                chitiet: cart.map((it: any) => ({
+                    mamon: it.id,
+                    soluong: it.qty
+                }))
+            };
+            
+            const createRes = await axios.post(`${ip3}/orders`, payload);
+            const createdOrder = createRes.data;
+            const orderId = createdOrder.maDon || createdOrder.id; // tuỳ alias trong OrderResponse
+            
+            // 2. Chốt đơn hàng (Chuyển sang chờ xác nhận)
+            await axios.post(`${ip3}/orders/${orderId}/confirm`);
+
+            // Tính toán tổng tiền ở frontend (để show UI nhanh)
+            const SERVICE_FEE_RATE = 0.05;
+            const serviceFee = Math.round(subtotal * SERVICE_FEE_RATE);
+            const discount = (() => {
+                if (!selectedVoucher) return 0;
+                if (selectedVoucher.minOrder && subtotal < selectedVoucher.minOrder) return 0;
+                if (selectedVoucher.loai === VoucherLoai.PhanTram) {
+                    return Math.round(subtotal * selectedVoucher.discount / 100);
+                }
+                return selectedVoucher.discount;
+            })();
+            const total = Math.max(0, subtotal + serviceFee - discount);
+
+            const newOrder: Order = {
+                id: orderId,
+                user: createdOrder.maKh || 'u1',
+                userName: 'KhachHang',
+                dept: 'Guest',
+                items: cart.map((it: any) => ({
+                    id: it.id,
+                    name: it.name,
+                    qty: it.qty,
+                    price: it.price
+                })),
+                total: total,
+                status: OrderStatus.Pending,
+                payment: payment,
+                created: formatTimeHHMM(),
+                pickup: '15 phút nữa',
+                note: note
+            };
+
+            addOrder(newOrder);
+
+            const isQRPayment = payment === PaymentMethod.QR;
+            if (isQRPayment) {
+                setPendingOrder(newOrder);
             }
-            return selectedVoucher.discount;
-        })();
-        const total = Math.max(0, subtotal + serviceFee - discount);
 
-        const newOrder: Order = {
-            id: `BU-${Math.floor(Math.random() * 9000) + 1000}`,
-            user: 'u1',
-            userName: 'KhachHang',
-            dept: 'Guest',
-            items: cart.map((it: any) => ({
-                id: it.id,
-                name: it.name,
-                qty: it.qty,
-                price: it.price
-            })),
-            total: total,
-            status: OrderStatus.Pending,
-            payment: payment,
-            created: formatTimeHHMM(),
-            pickup: '15 phút nữa',
-            note: note
-        };
+            // thêm thông báo
+            addNotification({
+                id: `n-${Date.now()}`,
+                title: isQRPayment ? 'Đơn hàng đang chờ thanh toán QR' : 'Đơn hàng đã được đặt thành công',
+                message: isQRPayment
+                    ? `Đơn hàng ${newOrder.id} đã được tạo. Vui lòng quét mã QR để hoàn tất thanh toán.`
+                    : `Đơn hàng ${newOrder.id} của bạn đã được xác nhận và bếp đang bắt đầu chuẩn bị.`,
+                time: formatDateTimeViVN(),
+                isRead: false,
+                image: 'https://cdn-icons-png.flaticon.com/512/1046/1046784.png'
+            });
 
-        addOrder(newOrder);
-        // lưu ý tăng đồng bộ
-        // không tăng lại
+            clearCart();
+            setNote('');
+            setSelectedVoucher(undefined);
+            setIsLoading(false);
+            setCartOpen(false);
+            
+            showCustomerNotification(
+                isQRPayment ? 'Vui lòng thanh toán' : 'Đặt đơn thành công!',
+                isQRPayment
+                    ? `Đơn hàng ${newOrder.id} đang chờ thanh toán qua mã QR.`
+                    : `Đơn hàng ${newOrder.id} của bạn đã được xác nhận.`,
+                isQRPayment ? 'info' : 'success'
+            );
 
-        const isQRPayment = payment === PaymentMethod.QR;
-
-        if (isQRPayment) {
-            setPendingOrder(newOrder);
+            setPage(isQRPayment ? 'qr-payment' : 'history');
+        } catch (error) {
+            console.error("Lỗi đặt hàng", error);
+            setIsLoading(false);
+            showCustomerNotification('Lỗi đặt hàng', 'Không thể kết nối đến máy chủ. Vui lòng thử lại sau.', 'error');
         }
-
-        // thêm thông báo
-        addNotification({
-            id: `n-${Date.now()}`,
-            title: isQRPayment ? 'Đơn hàng đang chờ thanh toán QR' : 'Đơn hàng đã được đặt thành công',
-            message: isQRPayment
-                ? `Đơn hàng ${newOrder.id} đã được tạo. Vui lòng quét mã QR để hoàn tất thanh toán.`
-                : `Đơn hàng ${newOrder.id} của bạn đã được xác nhận và bếp đang bắt đầu chuẩn bị.`,
-            time: formatDateTimeViVN(),
-            isRead: false,
-            image: 'https://cdn-icons-png.flaticon.com/512/1046/1046784.png'
-        });
-
-        clearCart();
-        setNote('');
-        setSelectedVoucher(undefined);
-
-        setIsLoading(false);
-        setCartOpen(false);
-        
-        showCustomerNotification(
-            isQRPayment ? 'Vui lòng thanh toán' : 'Đặt đơn thành công!',
-            isQRPayment
-                ? `Đơn hàng ${newOrder.id} đang chờ thanh toán qua mã QR.`
-                : `Đơn hàng ${newOrder.id} của bạn đã được xác nhận.`,
-            isQRPayment ? 'info' : 'success'
-        );
-
-        setPage(isQRPayment ? 'qr-payment' : 'history');
-    }, 1000);
-};
+    };
 
 return {
     cart,

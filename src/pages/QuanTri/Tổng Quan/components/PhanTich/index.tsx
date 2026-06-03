@@ -1,4 +1,4 @@
-﻿import { ArrowUpOutlined } from '@ant-design/icons';
+import { ArrowUpOutlined } from '@ant-design/icons';
 import React, { useMemo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import {
@@ -141,19 +141,22 @@ const CssHeatmap: React.FC = () => {
   );
 };
 
-const PhanTichView: React.FC = () => {
+interface PhanTichProps {
+  orders: any[];
+}
+
+const PhanTichView: React.FC<PhanTichProps> = ({ orders }) => {
   const [range, setRange] = useState<Range>('week');
   const { danhMuc, tongDanhMuc } = mockData.phanTich;
 
-  // ── Banner dùng data thật từ localStorage ─────────────────────────
+  // ── Banner dùng data thật ─────────────────────────
   const realBanners = useMemo(() => {
-    const orders = store.get<typeof mockData.trucTiep.donHang>(KEYS.orders, mockData.trucTiep.donHang);
     const cancelledSet = new Set<string>();
-    orders.forEach((o) => { if ((o.trangThai as any) === 'da_huy') cancelledSet.add(o.maDon); });
-    const active  = orders.filter((o) => !cancelledSet.has(o.maDon));
-    const done    = active.filter((o) => o.trangThai === ETrangThaiTrucTiep.HOAN_THANH);
-    const revenue = done.reduce((s, o) => s + o.tongTien, 0);
-    const uniqueKH = new Set(active.map((o) => o.khachHang.ten)).size;
+    orders.forEach((o) => { if (o.trangthai === 'da_huy' || o.trangThai === 'da_huy') cancelledSet.add(o.maDon || o._id); });
+    const active  = orders.filter((o) => !cancelledSet.has(o.maDon || o._id));
+    const done    = active.filter((o) => o.trangthai === ETrangThaiTrucTiep.HOAN_THANH || o.trangThai === ETrangThaiTrucTiep.HOAN_THANH);
+    const revenue = done.reduce((s, o) => s + (o.tongtien || o.tongTien), 0);
+    const uniqueKH = new Set(active.map((o) => o.khachhang?.tenkhachhang || o.khachHang?.ten || 'Vãng lai')).size;
     const avgPerOrder = done.length > 0 ? Math.round(revenue / done.length) : 0;
 
     return [
@@ -162,31 +165,33 @@ const PhanTichView: React.FC = () => {
       { id: 'customer', label: 'KHÁCH ĐÃ ĐẶT',       value: String(uniqueKH),      change: 'Khách duy nhất hôm nay',          icon: 'customer' },
       { id: 'average',  label: 'TRUNG BÌNH / ĐƠN',   value: fmt(avgPerOrder),      change: 'Tính từ đơn hoàn thành',          icon: 'average'  },
     ];
-  }, []);
+  }, [orders]);
 
-  // ── Data thật từ localStorage ─────────────────────────────────────
-  const realOrders = useMemo(() =>
-    store.get<typeof mockData.trucTiep.donHang>(KEYS.orders, mockData.trucTiep.donHang),
-  []);
+  // ── Data thật ─────────────────────────────────────
+  const realOrders = orders;
 
   const realCancelledIds = useMemo(() => {
     const s = new Set<string>();
-    realOrders.forEach((o) => { if ((o.trangThai as any) === 'da_huy') s.add(o.maDon); });
+    realOrders.forEach((o) => { if (o.trangthai === 'da_huy' || o.trangThai === 'da_huy') s.add(o.maDon || o._id); });
     return s;
   }, [realOrders]);
 
-  const realActive   = realOrders.filter((o) => !realCancelledIds.has(o.maDon));
-  const realDone     = realActive.filter((o) => o.trangThai === ETrangThaiTrucTiep.HOAN_THANH);
-  const realWaiting  = realActive.filter((o) => o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN);
-  const realCooking  = realActive.filter((o) => o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN);
-  const realReady    = realActive.filter((o) => o.trangThai === ETrangThaiTrucTiep.SAN_SANG);
+  const realActive   = realOrders.filter((o) => !realCancelledIds.has(o.maDon || o._id));
+  const realDone     = realActive.filter((o) => o.trangthai === ETrangThaiTrucTiep.HOAN_THANH || o.trangThai === ETrangThaiTrucTiep.HOAN_THANH);
+  const realWaiting  = realActive.filter((o) => o.trangthai === ETrangThaiTrucTiep.CHO_XAC_NHAN || o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN);
+  const realCooking  = realActive.filter((o) => o.trangthai === ETrangThaiTrucTiep.DANG_CHE_BIEN || o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN);
+  const realReady    = realActive.filter((o) => o.trangthai === ETrangThaiTrucTiep.SAN_SANG || o.trangThai === ETrangThaiTrucTiep.SAN_SANG);
   const total        = realOrders.length;
 
   // Top món bán chạy từ data thật
   const realTopMon = useMemo(() => {
     const counter: Record<string, number> = {};
     realDone.forEach((o) => {
-      o.monAn.forEach((m) => { counter[m.ten] = (counter[m.ten] ?? 0) + m.soLuong; });
+      const dsMon = o.monan || o.monAn || [];
+      dsMon.forEach((m: any) => { 
+        const tenMon = m.ten || m.tenmon;
+        counter[tenMon] = (counter[tenMon] ?? 0) + (m.soLuong || m.soluong); 
+      });
     });
     return Object.entries(counter)
       .sort((a, b) => b[1] - a[1])
@@ -402,17 +407,21 @@ const PhanTichView: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {recentDone.map((o) => (
-                <tr key={o.maDon}>
-                  <td style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: 12 }}>{o.maDon}</td>
-                  <td style={{ fontWeight: 500 }}>{o.khachHang.ten}</td>
-                  <td style={{ color: '#6b7280', fontSize: 12 }}>
-                    {o.monAn.map((m) => `${m.ten} ×${m.soLuong}`).join(', ')}
-                  </td>
-                  <td style={{ color: '#9ca3af', fontSize: 12 }}>{o.thoiGian}</td>
-                  <td className={styles.tdRight} style={{ color: '#16a34a' }}>{fmt(o.tongTien)}</td>
-                </tr>
-              ))}
+              {recentDone.map((o) => {
+                const dsMon = o.monan || o.monAn || [];
+                const khTen = o.khachhang?.tenkhachhang || o.khachHang?.ten || '';
+                return (
+                  <tr key={o.maDon || o._id}>
+                    <td style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: 12 }}>{o.maDon || o._id}</td>
+                    <td style={{ fontWeight: 500 }}>{khTen}</td>
+                    <td style={{ color: '#6b7280', fontSize: 12 }}>
+                      {dsMon.map((m: any) => `${m.ten || m.tenmon} ×${m.soLuong || m.soluong}`).join(', ')}
+                    </td>
+                    <td style={{ color: '#9ca3af', fontSize: 12 }}>{o.thoigiandat || o.thoiGian}</td>
+                    <td className={styles.tdRight} style={{ color: '#16a34a' }}>{fmt(o.tongtien || o.tongTien)}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}

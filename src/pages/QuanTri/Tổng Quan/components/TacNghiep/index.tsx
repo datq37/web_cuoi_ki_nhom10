@@ -58,28 +58,29 @@ const NOTIF_ICON: Record<string, string> = {
   stock_refilled:  '📦',
 };
 
-const TacNghiepView: React.FC = () => {
+interface TacNghiepProps {
+  orders: any[];
+  inventory: any[];
+}
+
+const TacNghiepView: React.FC<TacNghiepProps> = ({ orders, inventory }) => {
   const user = store.get<{ ten?: string }>(KEYS.user, { ten: 'Quản trị viên' });
   const ten  = user.ten ?? 'Quản trị viên';
   const { notifs } = useNotif();
 
-  // ── Đơn hàng live từ localStorage ───────────────────────────────
-  const orders = useMemo(() =>
-    store.get<typeof mockData.trucTiep.donHang>(KEYS.orders, mockData.trucTiep.donHang),
-  []);
-
+  // ── Đơn hàng live ───────────────────────────────────────────────
   const cancelledIds = useMemo(() => {
     const s = new Set<string>();
-    orders.forEach((o) => { if ((o.trangThai as any) === 'da_huy') s.add(o.maDon); });
+    orders.forEach((o) => { if (o.trangthai === 'da_huy' || o.trangThai === 'da_huy') s.add(o.maDon || o._id); });
     return s;
   }, [orders]);
 
-  const activeOrders = orders.filter((o) => !cancelledIds.has(o.maDon));
-  const choXacNhan   = activeOrders.filter((o) => o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN);
-  const dangCheBien  = activeOrders.filter((o) => o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN);
-  const sanSang      = activeOrders.filter((o) => o.trangThai === ETrangThaiTrucTiep.SAN_SANG);
-  const hoanThanh    = activeOrders.filter((o) => o.trangThai === ETrangThaiTrucTiep.HOAN_THANH);
-  const doanhThu     = hoanThanh.reduce((s, o) => s + o.tongTien, 0);
+  const activeOrders = orders.filter((o) => !cancelledIds.has(o.maDon || o._id));
+  const choXacNhan   = activeOrders.filter((o) => o.trangthai === ETrangThaiTrucTiep.CHO_XAC_NHAN || o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN);
+  const dangCheBien  = activeOrders.filter((o) => o.trangthai === ETrangThaiTrucTiep.DANG_CHE_BIEN || o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN);
+  const sanSang      = activeOrders.filter((o) => o.trangthai === ETrangThaiTrucTiep.SAN_SANG || o.trangThai === ETrangThaiTrucTiep.SAN_SANG);
+  const hoanThanh    = activeOrders.filter((o) => o.trangthai === ETrangThaiTrucTiep.HOAN_THANH || o.trangThai === ETrangThaiTrucTiep.HOAN_THANH);
+  const doanhThu     = hoanThanh.reduce((s, o) => s + (o.tongtien || o.tongTien), 0);
 
   // ── Quick KPIs ───────────────────────────────────────────────────
   const tyLeHoanThanh = activeOrders.length > 0
@@ -87,17 +88,19 @@ const TacNghiepView: React.FC = () => {
     : 0;
 
   const tongMonBan = useMemo(() =>
-    hoanThanh.reduce((sum, o) => sum + o.monAn.reduce((s, m) => s + m.soLuong, 0), 0),
+    hoanThanh.reduce((sum, o) => sum + (o.monan || o.monAn || []).reduce((s: any, m: any) => s + (m.soLuong || m.soluong), 0), 0),
   [hoanThanh]);
 
   // ── Top món bán chạy hôm nay ─────────────────────────────────────
   const topMon = useMemo(() => {
     const counter: Record<string, { ten: string; soLuong: number; tongTien: number }> = {};
     hoanThanh.forEach((o) => {
-      o.monAn.forEach((m) => {
-        if (!counter[m.ten]) counter[m.ten] = { ten: m.ten, soLuong: 0, tongTien: 0 };
-        counter[m.ten].soLuong  += m.soLuong;
-        counter[m.ten].tongTien += m.soLuong * (o.tongTien / o.monAn.reduce((s, x) => s + x.soLuong, 0));
+      const dsMon = o.monan || o.monAn || [];
+      dsMon.forEach((m: any) => {
+        const tenMon = m.ten || m.tenmon;
+        if (!counter[tenMon]) counter[tenMon] = { ten: tenMon, soLuong: 0, tongTien: 0 };
+        counter[tenMon].soLuong  += (m.soLuong || m.soluong);
+        counter[tenMon].tongTien += (m.soLuong || m.soluong) * ((o.tongtien || o.tongTien) / dsMon.reduce((s: any, x: any) => s + (x.soLuong || x.soluong), 0));
       });
     });
     return Object.values(counter)
@@ -111,8 +114,8 @@ const TacNghiepView: React.FC = () => {
   [choXacNhan, dangCheBien, sanSang]);
 
   // ── Cảnh báo kho ─────────────────────────────────────────────────
-  const sapHet  = DANH_SACH_NGUYEN_LIEU.filter((n) => n.trangThai === ETrangThaiNguyenLieu.SAP_HET);
-  const hetHang = DANH_SACH_NGUYEN_LIEU.filter((n) => n.trangThai === ETrangThaiNguyenLieu.HET_HANG);
+  const sapHet  = inventory.filter((n) => n.tonKho <= (n.mucToiThieu || 10) && n.tonKho > 0);
+  const hetHang = inventory.filter((n) => n.tonKho === 0);
 
   // ── Activity feed (5 notif gần nhất) ─────────────────────────────
   const recentActivity = notifs.slice(0, 5);
@@ -209,23 +212,27 @@ const TacNghiepView: React.FC = () => {
           <div className={styles.recentList}>
             <div className={styles.recentTitle}>Đơn cần xử lý</div>
             {recentOrders.map((o) => {
-              const cfg = TRANG_THAI_CFG[o.trangThai as string];
+              const cfg = TRANG_THAI_CFG[o.trangthai || o.trangThai];
+              const khTen = o.khachhang?.tenkhachhang || o.khachHang?.ten || 'Khách vãng lai';
+              const ma = o.maDon || o._id;
+              const dsMon = o.monan || o.monAn || [];
+              const tTien = o.tongtien || o.tongTien;
               return (
-                <div key={o.maDon} className={styles.recentRow}
+                <div key={ma} className={styles.recentRow}
                   onClick={() => history.push('/quan-tri/don-hang')}>
                   <Avatar size={32}
-                    style={{ background: o.khachHang.mauNen, color: o.khachHang.mauChu, fontWeight: 700, fontSize: 11, flexShrink: 0 }}>
-                    {o.khachHang.ten.split(' ').slice(-2).map((w: string) => w[0]).join('').toUpperCase()}
+                    style={{ background: o.khachHang?.mauNen || '#3b82f6', color: o.khachHang?.mauChu || '#fff', fontWeight: 700, fontSize: 11, flexShrink: 0 }}>
+                    {khTen.split(' ').slice(-2).map((w: string) => w[0]).join('').toUpperCase()}
                   </Avatar>
                   <div className={styles.recentInfo}>
-                    <div className={styles.recentName}>{o.khachHang.ten}</div>
-                    <div className={styles.recentMon}>{o.monAn.map((m) => m.ten).join(', ')}</div>
+                    <div className={styles.recentName}>{khTen}</div>
+                    <div className={styles.recentMon}>{dsMon.map((m: any) => m.ten || m.tenmon).join(', ')}</div>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 3, flexShrink: 0 }}>
                     <span className={styles.recentBadge} style={{ background: cfg?.bg, color: cfg?.color }}>
                       {cfg?.label}
                     </span>
-                    <span className={styles.recentGia}>{fmt(o.tongTien)}</span>
+                    <span className={styles.recentGia}>{fmt(tTien)}</span>
                   </div>
                 </div>
               );

@@ -9,6 +9,7 @@ import styles from './index.less';
 interface Props {
   open: boolean;
   onClose: () => void;
+  orders: any[];
 }
 
 const PRINT_STYLES = `
@@ -42,9 +43,60 @@ table.rpt-table tbody tr:nth-child(even) td { background: #f8fafc; }
 .rpt-sign-name { font-size: 11px; color: #374151; }
 `;
 
-const BaoCaoModal: React.FC<Props> = ({ open, onClose }) => {
-  const { banners, topMon, donTheoTrangThai, hieuSuat } = mockData.phanTich;
+const BaoCaoModal: React.FC<Props> = ({ open, onClose, orders }) => {
   const printRef = useRef<HTMLDivElement>(null);
+  
+  const banners = React.useMemo(() => {
+    const cancelledSet = new Set<string>();
+    orders.forEach((o: any) => { if (o.trangthai === 'da_huy' || o.trangThai === 'da_huy') cancelledSet.add(o.maDon || o._id); });
+    const active  = orders.filter((o: any) => !cancelledSet.has(o.maDon || o._id));
+    const done    = active.filter((o: any) => o.trangthai === 'hoan_thanh' || o.trangThai === 'hoan_thanh');
+    const revenue = done.reduce((s: any, o: any) => s + (o.tongtien || o.tongTien), 0);
+    const uniqueKH = new Set(active.map((o: any) => o.khachhang?.tenkhachhang || o.khachHang?.ten || 'Vãng lai')).size;
+    const avgPerOrder = done.length > 0 ? Math.round(revenue / done.length) : 0;
+
+    return [
+      { id: 'revenue',  label: 'DOANH THU', value: formatCurrency(revenue),       change: `${done.length} đơn hoàn thành` },
+      { id: 'order',    label: 'TỔNG ĐƠN',  value: String(active.length), change: `${cancelledSet.size} đơn đã huỷ` },
+      { id: 'customer', label: 'KHÁCH HÀNG',       value: String(uniqueKH),      change: 'Khách duy nhất' },
+      { id: 'average',  label: 'TRUNG BÌNH / ĐƠN',   value: formatCurrency(avgPerOrder),      change: 'Đơn hoàn thành' },
+    ];
+  }, [orders]);
+
+  const topMon = React.useMemo(() => {
+    const done = orders.filter((o: any) => o.trangthai === 'hoan_thanh' || o.trangThai === 'hoan_thanh');
+    const counter: Record<string, { ten: string; soLuong: number; tongTien: number }> = {};
+    done.forEach((o: any) => {
+      const dsMon = o.monan || o.monAn || [];
+      dsMon.forEach((m: any) => {
+        const tenMon = m.ten || m.tenmon;
+        if (!counter[tenMon]) counter[tenMon] = { ten: tenMon, soLuong: 0, tongTien: 0 };
+        counter[tenMon].soLuong  += (m.soLuong || m.soluong);
+        counter[tenMon].tongTien += (m.soLuong || m.soluong) * ((o.tongtien || o.tongTien) / dsMon.reduce((s: any, x: any) => s + (x.soLuong || x.soluong), 0));
+      });
+    });
+    return Object.values(counter)
+      .sort((a, b) => b.soLuong - a.soLuong)
+      .slice(0, 5)
+      .map((m, idx) => ({ rank: idx + 1, ten: m.ten, daBan: m.soLuong, donVi: 'suất', doanhThu: m.tongTien }));
+  }, [orders]);
+
+  const donTheoTrangThai = React.useMemo(() => {
+    const cancelledIds = new Set<string>();
+    orders.forEach((o: any) => { if (o.trangthai === 'da_huy' || o.trangThai === 'da_huy') cancelledIds.add(o.maDon || o._id); });
+    const active = orders.filter((o: any) => !cancelledIds.has(o.maDon || o._id));
+    const total = orders.length;
+    const items = [
+      { key: 'ht', ten: 'Hoàn thành',    soDon: active.filter((o: any) => o.trangthai === 'hoan_thanh' || o.trangThai === 'hoan_thanh').length },
+      { key: 'dcb', ten: 'Đang chế biến', soDon: active.filter((o: any) => o.trangthai === 'dang_che_bien' || o.trangThai === 'dang_che_bien').length },
+      { key: 'ss', ten: 'Sẵn sàng',      soDon: active.filter((o: any) => o.trangthai === 'san_sang' || o.trangThai === 'san_sang').length },
+      { key: 'cxn', ten: 'Chờ xác nhận',  soDon: active.filter((o: any) => o.trangthai === 'cho_xac_nhan' || o.trangThai === 'cho_xac_nhan').length },
+      { key: 'dh', ten: 'Đã huỷ',        soDon: cancelledIds.size },
+    ];
+    return items.map((t) => ({ ...t, tyLe: total > 0 ? Math.round((t.soDon / total) * 100) : 0 }));
+  }, [orders]);
+
+  const hieuSuat = mockData.phanTich.hieuSuat; // Keep mock for hieuSuat as it needs history data
 
   const handlePrint = () => {
     if (!printRef.current) return;

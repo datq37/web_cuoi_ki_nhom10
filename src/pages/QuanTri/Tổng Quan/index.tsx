@@ -6,8 +6,7 @@ import React, { useState } from 'react';
 require('moment/locale/vi');
 import * as XLSX from 'xlsx';
 import Topbar from '@/pages/QuanTri/Topbar';
-import { fmt } from '@/models/QuanTri/Tổng Quan';
-import { mockData } from '@/services/QuanTri/Tổng Quan';
+import { fmt, useTongQuanModel } from '@/models/QuanTri/Tổng Quan';
 import { ETrangThaiTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
 import { ETabKey } from '@/services/QuanTri/Tổng Quan/typing';
 import { KEYS, store } from '@/utils/storage';
@@ -30,6 +29,7 @@ const TongQuan: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ETabKey>(ETabKey.TAC_NGHIEP);
   const [reportOpen, setReportOpen] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const { orders, inventory } = useTongQuanModel();
 
   const tabs: { key: ETabKey; label: string }[] = [
     { key: ETabKey.TAC_NGHIEP, label: 'Tác nghiệp' },
@@ -39,18 +39,17 @@ const TongQuan: React.FC = () => {
   const handleExportExcel = () => {
     setExporting(true);
     try {
-      const orders = store.get<typeof mockData.trucTiep.donHang>(KEYS.orders, mockData.trucTiep.donHang);
       const cancelledIds = new Set<string>();
-      orders.forEach((o) => { if ((o.trangThai as any) === 'da_huy') cancelledIds.add(o.maDon); });
-      const active = orders.filter((o) => !cancelledIds.has(o.maDon));
+      orders.forEach((o: any) => { if (o.trangthai === 'da_huy' || o.trangThai === 'da_huy') cancelledIds.add(o.maDon || o._id); });
+      const active = orders.filter((o: any) => !cancelledIds.has(o.maDon || o._id));
       const today = moment().format('DD/MM/YYYY');
 
       // ── Sheet 1: Tổng quan ─────────────────────────────────────────
       const tongDon    = active.length;
-      const hoThanh    = active.filter((o) => o.trangThai === ETrangThaiTrucTiep.HOAN_THANH);
-      const doanhThu   = hoThanh.reduce((s, o) => s + o.tongTien, 0);
-      const choXacNhan = active.filter((o) => o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN).length;
-      const dangLam    = active.filter((o) => o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN).length;
+      const hoThanh    = active.filter((o: any) => o.trangthai === ETrangThaiTrucTiep.HOAN_THANH || o.trangThai === ETrangThaiTrucTiep.HOAN_THANH);
+      const doanhThu   = hoThanh.reduce((s: any, o: any) => s + (o.tongtien || o.tongTien), 0);
+      const choXacNhan = active.filter((o: any) => o.trangthai === ETrangThaiTrucTiep.CHO_XAC_NHAN || o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN).length;
+      const dangLam    = active.filter((o: any) => o.trangthai === ETrangThaiTrucTiep.DANG_CHE_BIEN || o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN).length;
       const daHuy      = cancelledIds.size;
 
       const sheetTongQuan = XLSX.utils.aoa_to_sheet([
@@ -71,16 +70,22 @@ const TongQuan: React.FC = () => {
       sheetTongQuan['!cols'] = [{ wch: 28 }, { wch: 20 }];
 
       // ── Sheet 2: Chi tiết đơn hàng ─────────────────────────────────
-      const rows = orders.map((o) => ({
-        'Mã đơn':      o.maDon,
-        'KhachHang':  o.khachHang.ten,
-        'Phòng ban':   o.khachHang.phong ?? '',
-        'Món ăn':      o.monAn.map((m) => `${m.ten} x${m.soLuong}`).join(', '),
-        'Tổng tiền':   o.tongTien,
-        'Giờ đặt':     o.thoiGian,
-        'Trạng thái':  TRANG_THAI_LABEL[o.trangThai as string] ?? o.trangThai,
-        'Ghi chú':     o.ghiChu ?? '',
-      }));
+      const rows = orders.map((o: any) => {
+        const dsMon = o.monan || o.monAn || [];
+        const khTen = o.khachhang?.tenkhachhang || o.khachHang?.ten || '';
+        const khPhong = o.khachhang?.phongban || o.khachHang?.phong || '';
+        const tThai = o.trangthai || o.trangThai;
+        return {
+          'Mã đơn':      o.maDon || o._id,
+          'KhachHang':  khTen,
+          'Phòng ban':   khPhong,
+          'Món ăn':      dsMon.map((m: any) => `${m.ten || m.tenmon} x${m.soLuong || m.soluong}`).join(', '),
+          'Tổng tiền':   o.tongtien || o.tongTien,
+          'Giờ đặt':     o.thoigiandat || o.thoiGian,
+          'Trạng thái':  TRANG_THAI_LABEL[tThai] ?? tThai,
+          'Ghi chú':     o.ghichu || o.ghiChu || '',
+        };
+      });
 
       const sheetDonHang = XLSX.utils.json_to_sheet(rows);
       sheetDonHang['!cols'] = [
@@ -142,11 +147,11 @@ const TongQuan: React.FC = () => {
             </div>
           </div>
 
-          {activeTab === ETabKey.PHAN_TICH  && <PhanTichView />}
-          {activeTab === ETabKey.TAC_NGHIEP && <TacNghiepView />}
+          {activeTab === ETabKey.PHAN_TICH  && <PhanTichView orders={orders} />}
+          {activeTab === ETabKey.TAC_NGHIEP && <TacNghiepView orders={orders} inventory={inventory} />}
       </div>
 
-      <BaoCaoModal open={reportOpen} onClose={() => setReportOpen(false)} />
+      <BaoCaoModal open={reportOpen} onClose={() => setReportOpen(false)} orders={orders} />
     </>
   );
 };

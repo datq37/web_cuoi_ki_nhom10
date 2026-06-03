@@ -2,6 +2,9 @@ import type { DoanhThuNgay } from '@/services/QuanTri/Tổng Quan/typing';
 import { ELoaiGhiChu, ETrangThaiDon, ETrangThaiTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
 import type { DonTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
 import { formatCurrency } from '@/utils/format';
+import { useState, useCallback, useEffect } from 'react';
+import axios from '@/utils/axios';
+import { ip3 } from '@/utils/ip';
 
 // formatter
 export const fmt = formatCurrency;
@@ -160,3 +163,31 @@ export const buildDonutOptions = (labels: string[], colors: string[], total: num
   stroke: { width: 2, colors: ['#fff'] },
   tooltip: { y: { formatter: (v: number) => `${v}%` } },
 });
+
+export function useTongQuanModel() {
+  const [orders, setOrders] = useState<any[]>([]);
+  const [inventory, setInventory] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [resOrders, resInventory] = await Promise.all([
+        axios.get(`${ip3}/admin/orders`),
+        axios.get(`${ip3}/inventory`),
+      ]);
+      setOrders(resOrders.data || []);
+      setInventory(resInventory.data?.data || []);
+    } catch (err) {
+      console.error('Error fetching tong quan data', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  return { orders, inventory, loading, refresh: fetchData };
+}

@@ -1,4 +1,4 @@
-﻿import {
+import {
   DeleteOutlined,
   FilterOutlined,
   PlusOutlined,
@@ -30,6 +30,7 @@ import {
   TRANG_THAI_BAN_CONFIG,
 } from '@/services/QuanTri/Cơ Sở Vật Chất';
 import { ELoaiBan, ETrangThaiBan, IBan, IKhuVuc } from '@/services/QuanTri/Cơ Sở Vật Chất/typing';
+import useCoSoVatChatModel from '@/models/QuanTri/Cơ Sở Vật Chất';
 import styles from './index.less';
 
 // ── Vật dụng & Thiết bị ──────────────────────────────────────────
@@ -443,16 +444,7 @@ const CoSoVatChat: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'so_do_ban' | 'vat_dung'>('so_do_ban');
 
   // ── Vật dụng state ──────────────────────────────────────────────
-  const [vatDungList, setVatDungList] = useState<IVatDung[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('admin_vat_dung');
-      if (saved) try { return JSON.parse(saved); } catch { /* ignore */ }
-    }
-    return DANH_SACH_VAT_DUNG_INITIAL;
-  });
-  useEffect(() => {
-    if (typeof window !== 'undefined') localStorage.setItem('admin_vat_dung', JSON.stringify(vatDungList));
-  }, [vatDungList]);
+  const { items: vatDungList, addVatDung, updateVatDung, deleteVatDung } = useCoSoVatChatModel();
 
   const [vdTuKhoa,         setVdTuKhoa]         = useState('');
   const [vdFilterDanhMuc,  setVdFilterDanhMuc]  = useState<EDanhMucVD | ''>('');
@@ -468,16 +460,21 @@ const CoSoVatChat: React.FC = () => {
   }, [vatDungList, vdFilterDanhMuc, vdFilterTinhTrang]);
 
 
-  const handleVdSubmit = (data: Omit<IVatDung, 'id'>) => {
-    if (vdEditing) {
-      setVatDungList((prev) => prev.map((v) => v.id === vdEditing.id ? { ...v, ...data } : v));
-      message.success('Đã cập nhật vật dụng');
-    } else {
-      setVatDungList((prev) => [...prev, { ...data, id: `vd_${Date.now()}` }]);
-      message.success(`Đã thêm "${data.ten}"`);
+  const handleVdSubmit = async (data: Omit<IVatDung, 'id'>) => {
+    try {
+      if (vdEditing) {
+        await updateVatDung(vdEditing.id, data);
+        message.success('Đã cập nhật vật dụng');
+      } else {
+        const newItem = { ...data, id: `vd_${Date.now()}` };
+        await addVatDung(newItem);
+        message.success(`Đã thêm "${data.ten}"`);
+      }
+      setVdFormOpen(false);
+      setVdEditing(null);
+    } catch (error) {
+      // error handled in model
     }
-    setVdFormOpen(false);
-    setVdEditing(null);
   };
 
   const handleVdDelete = (item: IVatDung) => {
@@ -487,9 +484,11 @@ const CoSoVatChat: React.FC = () => {
       okText: 'Xoá', okType: 'danger', cancelText: 'Huỷ', centered: true,
       okButtonProps: { style: { borderRadius: 8 } },
       cancelButtonProps: { style: { borderRadius: 8 } },
-      onOk: () => {
-        setVatDungList((prev) => prev.filter((v) => v.id !== item.id));
-        message.success(`Đã xoá "${item.ten}"`);
+      onOk: async () => {
+        try {
+          await deleteVatDung(item.id);
+          message.success(`Đã xoá "${item.ten}"`);
+        } catch (error) {}
       },
     });
   };

@@ -11,8 +11,11 @@ class CoSoVatChat(Base):
     """
 
     __tablename__ = "cosovatchat"
-    __mapper_args__ = {"primary_key": ["ten"]}
+    __mapper_args__ = {"primary_key": ["id"]}
 
+    id: Mapped[str] = mapped_column(String, primary_key=True)
     ten: Mapped[str | None] = mapped_column(String, nullable=True)
     soluong: Mapped[str | None] = mapped_column(String, nullable=True)
     chatluong: Mapped[str | None] = mapped_column(String, nullable=True)
+    danhmuc: Mapped[str | None] = mapped_column(String, nullable=True)
+    ghichu: Mapped[str | None] = mapped_column(String, nullable=True)

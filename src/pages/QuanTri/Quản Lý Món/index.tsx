@@ -43,6 +43,7 @@ import styles from './index.less';
 
 // IMonAnLocal — extended type, không sửa typing gốc
 type IMonAnLocal = IMonAn & {
+  hinhAnh?: string;
   nguyenLieu?: Array<{ id: string; ten: string; soLuong: number }>;
 };
 

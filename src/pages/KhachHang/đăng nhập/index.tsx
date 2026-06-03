@@ -21,6 +21,7 @@ import { ip3 } from '@/utils/ip';
 import './index.less';
 import bgImage from "@/assets/dangki/dangnhap.png";
 import { showCustomerNotification } from '@/utils/notification';
+import GlobalNotificationModal from '../Component/GlobalNotificationModal';
 
 export default function LoginPage() {
   const isRegisterRoute = history.location.pathname === '/dang-ky';
@@ -40,12 +41,23 @@ export default function LoginPage() {
         return;
       }
       try {
-        await axios.post(`${ip3}/auth/register`, { taikhoan: phone, matkhau: password, makh: phone });
-        showCustomerNotification('Tạo tài khoản thành công! Bạn có thể đăng nhập ngay.', undefined, 'success');
-        setIsSignUp(false);
-        setPassword("");
+        await axios.post(`${ip3}/auth/register`, { taikhoan: phone, matkhau: password });
+        showCustomerNotification(
+          'Đăng ký thành công!',
+          undefined,
+          'success'
+        );
+        setTimeout(() => {
+          setIsSignUp(false);
+          setPassword('');
+        }, 2000);
       } catch (err: any) {
-        message.error("Đăng ký thất bại");
+        const detail = err?.response?.data?.detail;
+        showCustomerNotification(
+          'Đăng ký thất bại',
+          detail || 'Vui lòng thử lại.',
+          'error'
+        );
       }
     } else {
       if (!phone || !password) {
@@ -67,7 +79,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={`trangDangNhapMoi ${isSignUp ? 'laDangKy' : ''} ${darkMode ? 'giaoDienToi' : ''}`}>
+    <>
+      <GlobalNotificationModal />
+      <div className={`trangDangNhapMoi ${isSignUp ? 'laDangKy' : ''} ${darkMode ? 'giaoDienToi' : ''}`}>
       <div className="theDangNhap">
 
         <div className="bangTrai">
@@ -257,6 +271,7 @@ export default function LoginPage() {
 
       </div>
     </div>
+    </>
   );
 }
 

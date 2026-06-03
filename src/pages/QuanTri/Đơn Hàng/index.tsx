@@ -31,22 +31,22 @@ import styles from './index.less';
 type TabKey = 'tat_ca' | ETrangThaiTrucTiep | 'da_huy';
 
 const TABS: { key: TabKey; label: string; dot?: string }[] = [
-  { key: 'tat_ca',                          label: 'Tất cả'         },
-  { key: ETrangThaiTrucTiep.CHO_XAC_NHAN,  label: 'Chờ xác nhận',  dot: '#ea580c' },
+  { key: 'tat_ca', label: 'Tất cả' },
+  { key: ETrangThaiTrucTiep.CHO_XAC_NHAN, label: 'Chờ xác nhận', dot: '#ea580c' },
   { key: ETrangThaiTrucTiep.DANG_CHE_BIEN, label: 'Đang chế biến', dot: '#2563eb' },
-  { key: ETrangThaiTrucTiep.SAN_SANG,      label: 'Sẵn sàng',      dot: '#7c3aed' },
-  { key: ETrangThaiTrucTiep.HOAN_THANH,    label: 'Hoàn thành',    dot: '#16a34a' },
-  { key: 'da_huy',                          label: 'Đã huỷ',        dot: '#9ca3af' },
+  { key: ETrangThaiTrucTiep.SAN_SANG, label: 'Sẵn sàng', dot: '#7c3aed' },
+  { key: ETrangThaiTrucTiep.HOAN_THANH, label: 'Hoàn thành', dot: '#16a34a' },
+  { key: 'da_huy', label: 'Đã huỷ', dot: '#9ca3af' },
 ];
 
 
 // ── Component bảng lịch sử ───────────────────────────────────────
 const LICH_SU_STATUS: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  [ETrangThaiTrucTiep.HOAN_THANH]:    { label: 'Hoàn thành',    color: '#16a34a', icon: <CheckCircleOutlined /> },
+  [ETrangThaiTrucTiep.HOAN_THANH]: { label: 'Hoàn thành', color: '#16a34a', icon: <CheckCircleOutlined /> },
   [ETrangThaiTrucTiep.DANG_CHE_BIEN]: { label: 'Đang chế biến', color: '#2563eb', icon: <ClockCircleOutlined /> },
-  [ETrangThaiTrucTiep.CHO_XAC_NHAN]: { label: 'Chờ xác nhận',  color: '#ea580c', icon: <ClockCircleOutlined /> },
-  [ETrangThaiTrucTiep.SAN_SANG]:      { label: 'Sẵn sàng',      color: '#7c3aed', icon: <CheckCircleOutlined /> },
-  da_huy:                              { label: 'Đã huỷ',        color: '#9ca3af', icon: <CloseCircleOutlined /> },
+  [ETrangThaiTrucTiep.CHO_XAC_NHAN]: { label: 'Chờ xác nhận', color: '#ea580c', icon: <ClockCircleOutlined /> },
+  [ETrangThaiTrucTiep.SAN_SANG]: { label: 'Sẵn sàng', color: '#7c3aed', icon: <CheckCircleOutlined /> },
+  da_huy: { label: 'Đã huỷ', color: '#9ca3af', icon: <CloseCircleOutlined /> },
 };
 
 const LichSuTable: React.FC<{
@@ -124,25 +124,25 @@ const LichSuTable: React.FC<{
 const DonHang: React.FC = () => {
   const { addNotif } = useNotif();
 
-  const { 
-    orders = [], 
-    cancelledIds = new Set<string>(), 
-    stats = { tong: 0, choXacNhan: 0, dangCheBien: 0, doanhThu: 0 }, 
-    tabCounts = { tat_ca: 0, [ETrangThaiTrucTiep.CHO_XAC_NHAN]: 0, [ETrangThaiTrucTiep.DANG_CHE_BIEN]: 0, [ETrangThaiTrucTiep.SAN_SANG]: 0, [ETrangThaiTrucTiep.HOAN_THANH]: 0, da_huy: 0 }, 
-    moveStatus = () => {},
-    fetchOrders = () => {}
+  const {
+    orders = [],
+    cancelledIds = new Set<string>(),
+    stats = { tong: 0, choXacNhan: 0, dangCheBien: 0, doanhThu: 0 },
+    tabCounts = { tat_ca: 0, [ETrangThaiTrucTiep.CHO_XAC_NHAN]: 0, [ETrangThaiTrucTiep.DANG_CHE_BIEN]: 0, [ETrangThaiTrucTiep.SAN_SANG]: 0, [ETrangThaiTrucTiep.HOAN_THANH]: 0, da_huy: 0 },
+    moveStatus = () => { },
+    fetchOrders = () => { }
   } = useModel('QuanTri.Đơn Hàng.index') || {};
 
   // ── UI state (cục bộ) ─────────────────────────────────────────────
-  const [viewMode,      setViewMode]      = useState<'homnay' | 'lichsu'>('homnay');
-  const [activeTab,     setActiveTab]     = useState<TabKey>('tat_ca');
-  const [view,          setView]          = useState<'table' | 'kanban'>('table');
-  const [searchKw,      setSearchKw]      = useState('');
+  const [viewMode, setViewMode] = useState<'homnay' | 'lichsu'>('homnay');
+  const [activeTab, setActiveTab] = useState<TabKey>('tat_ca');
+  const [view, setView] = useState<'table' | 'kanban'>('table');
+  const [searchKw, setSearchKw] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<DonTrucTiep | null>(null);
 
   // ── Lịch sử state ────────────────────────────────────────────────
-  const [lichSuDate,    setLichSuDate]    = useState<any>(moment());
-  const [lichSuSearch,  setLichSuSearch]  = useState('');
+  const [lichSuDate, setLichSuDate] = useState<any>(moment());
+  const [lichSuSearch, setLichSuSearch] = useState('');
 
   // Đơn lịch sử: hoàn thành + đã huỷ (dùng tất cả orders làm demo)
   const lichSuOrders = useMemo(() => {
@@ -193,14 +193,14 @@ const DonHang: React.FC = () => {
   ) => {
     // Gọi hàm moveStatus để cập nhật DB
     moveStatus(maDon, newStatus);
-    
+
     // Cập nhật selectedOrder nếu cần
     if (newStatus === 'da_huy') {
       setSelectedOrder((prev) => prev?.maDon === maDon ? null : prev);
     } else {
       setSelectedOrder((prev) => prev?.maDon === maDon ? { ...prev, trangThai: newStatus as any } : prev);
     }
-    
+
     if (!silent) {
       if (newStatus === 'da_huy') {
         message.success(`Đã huỷ đơn ${maDon}`);
@@ -209,8 +209,8 @@ const DonHang: React.FC = () => {
         message.success(`Đã cập nhật đơn ${maDon}`);
         const notifMap: Record<ETrangThaiTrucTiep, { icon: string; title: string; desc: string; type: any }> = {
           [ETrangThaiTrucTiep.DANG_CHE_BIEN]: { icon: '🍳', title: `Đơn ${maDon} đang chế biến`, desc: 'Bếp đã nhận đơn', type: 'order_cooking' },
-          [ETrangThaiTrucTiep.SAN_SANG]:      { icon: '📦', title: `Đơn ${maDon} sẵn sàng`,      desc: 'Chờ giao cho khách', type: 'order_ready' },
-          [ETrangThaiTrucTiep.HOAN_THANH]:    { icon: '✅', title: `Đơn ${maDon} hoàn thành`,    desc: 'Khách đã nhận đơn', type: 'order_done' },
+          [ETrangThaiTrucTiep.SAN_SANG]: { icon: '📦', title: `Đơn ${maDon} sẵn sàng`, desc: 'Chờ giao cho khách', type: 'order_ready' },
+          [ETrangThaiTrucTiep.HOAN_THANH]: { icon: '✅', title: `Đơn ${maDon} hoàn thành`, desc: 'Khách đã nhận đơn', type: 'order_done' },
           [ETrangThaiTrucTiep.CHO_XAC_NHAN]: { icon: '🛒', title: `Đơn ${maDon} chờ xác nhận`, desc: 'Đang chờ', type: 'order_pending' },
         };
         if (notifMap[newStatus as ETrangThaiTrucTiep]) addNotif(notifMap[newStatus as ETrangThaiTrucTiep]);
@@ -292,61 +292,61 @@ const DonHang: React.FC = () => {
         {/* ════════ TAB HÔM NAY ════════ */}
         {viewMode === 'homnay' && (
           <>
-        {/* ── Tabs ─────────────────────────────────────────────── */}
-        <div className={styles.tabsRow}>
-          {TABS.map((tab) => (
-            <button
-              key={tab.key}
-              className={`${styles.tabBtn} ${activeTab === tab.key ? styles.tabActive : ''}`}
-              onClick={() => setActiveTab(tab.key)}
-            >
-              {tab.dot && (
-                <span className={styles.tabDot} style={{ background: tab.dot }} />
-              )}
-              {tab.label}
-              {tabCounts[tab.key] > 0 && (
-                <span className={styles.tabCount}>{tabCounts[tab.key]}</span>
-              )}
-            </button>
-          ))}
-        </div>
-
-        {/* ── Toolbar ──────────────────────────────────────────── */}
-        <PageToolbar
-          searchPlaceholder="Tìm mã đơn, tên khách, tên món..."
-          searchValue={searchKw}
-          onSearch={setSearchKw}
-          filters={
-            <div className={styles.viewToggle}>
-              <button className={`${styles.toggleBtn} ${view === 'table' ? styles.toggleActive : ''}`} onClick={() => setView('table')} title="Dạng bảng"><UnorderedListOutlined /></button>
-              <button className={`${styles.toggleBtn} ${view === 'kanban' ? styles.toggleActive : ''}`} onClick={() => setView('kanban')} title="Dạng kanban"><AppstoreOutlined /></button>
+            {/* ── Tabs ─────────────────────────────────────────────── */}
+            <div className={styles.tabsRow}>
+              {TABS.map((tab) => (
+                <button
+                  key={tab.key}
+                  className={`${styles.tabBtn} ${activeTab === tab.key ? styles.tabActive : ''}`}
+                  onClick={() => setActiveTab(tab.key)}
+                >
+                  {tab.dot && (
+                    <span className={styles.tabDot} style={{ background: tab.dot }} />
+                  )}
+                  {tab.label}
+                  {tabCounts[tab.key] > 0 && (
+                    <span className={styles.tabCount}>{tabCounts[tab.key]}</span>
+                  )}
+                </button>
+              ))}
             </div>
-          }
-          actions={undefined}
-        />
 
-        {/* ── Content ──────────────────────────────────────────── */}
-        {filteredOrders.length === 0 ? (
-          <EmptyState
-            kind="orders"
-            desc="Chưa có đơn hàng nào."
-          />
-        ) : view === 'table' ? (
-          <OrderTable
-            orders={filteredOrders}
-            onRowClick={setSelectedOrder}
-            cancelledIds={cancelledIds}
-            searchValue={searchKw}
-            onQuickConfirm={(maDon) => handleMoveStatus(maDon, ETrangThaiTrucTiep.DANG_CHE_BIEN)}
-          />
-        ) : (
-          <OrderKanban
-            orders={filteredOrders}
-            cancelledIds={cancelledIds}
-            onCardClick={setSelectedOrder}
-            onMoveStatus={handleMoveStatus}
-          />
-        )}
+            {/* ── Toolbar ──────────────────────────────────────────── */}
+            <PageToolbar
+              searchPlaceholder="Tìm mã đơn, tên khách, tên món..."
+              searchValue={searchKw}
+              onSearch={setSearchKw}
+              filters={
+                <div className={styles.viewToggle}>
+                  <button className={`${styles.toggleBtn} ${view === 'table' ? styles.toggleActive : ''}`} onClick={() => setView('table')} title="Dạng bảng"><UnorderedListOutlined /></button>
+                  <button className={`${styles.toggleBtn} ${view === 'kanban' ? styles.toggleActive : ''}`} onClick={() => setView('kanban')} title="Dạng kanban"><AppstoreOutlined /></button>
+                </div>
+              }
+              actions={undefined}
+            />
+
+            {/* ── Content ──────────────────────────────────────────── */}
+            {filteredOrders.length === 0 ? (
+              <EmptyState
+                kind="orders"
+                desc="Chưa có đơn hàng nào."
+              />
+            ) : view === 'table' ? (
+              <OrderTable
+                orders={filteredOrders}
+                onRowClick={setSelectedOrder}
+                cancelledIds={cancelledIds}
+                searchValue={searchKw}
+                onQuickConfirm={(maDon) => handleMoveStatus(maDon, ETrangThaiTrucTiep.DANG_CHE_BIEN)}
+              />
+            ) : (
+              <OrderKanban
+                orders={filteredOrders}
+                cancelledIds={cancelledIds}
+                onCardClick={setSelectedOrder}
+                onMoveStatus={handleMoveStatus}
+              />
+            )}
           </>
         )}
 

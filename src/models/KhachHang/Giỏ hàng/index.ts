@@ -73,7 +73,7 @@ export function useGioHangModel() {
                 return;
             }
         }
-        
+
         setIsLoading(true);
 
         try {
@@ -85,11 +85,11 @@ export function useGioHangModel() {
                     soluong: it.qty
                 }))
             };
-            
+
             const createRes = await axios.post(`${ip3}/orders`, payload);
             const createdOrder = createRes.data;
             const orderId = createdOrder.maDon || createdOrder.id; // tuỳ alias trong OrderResponse
-            
+
             // 2. Chốt đơn hàng (Chuyển sang chờ xác nhận)
             await axios.post(`${ip3}/orders/${orderId}/confirm`);
 
@@ -149,7 +149,7 @@ export function useGioHangModel() {
             setSelectedVoucher(undefined);
             setIsLoading(false);
             setCartOpen(false);
-            
+
             showCustomerNotification(
                 isQRPayment ? 'Vui lòng thanh toán' : 'Đặt đơn thành công!',
                 isQRPayment
@@ -166,24 +166,24 @@ export function useGioHangModel() {
         }
     };
 
-return {
-    cart,
-    cartOpen,
-    setCartOpen,
-    clearCart,
-    note,
-    setNote,
-    selectedVoucher,
-    setSelectedVoucher,
-    payment,
-    setPayment,
-    isLoading,
-    setIsLoading,
-    cartQty,
-    subtotal,
-    handleConfirm,
-    setPage,
-};
+    return {
+        cart,
+        cartOpen,
+        setCartOpen,
+        clearCart,
+        note,
+        setNote,
+        selectedVoucher,
+        setSelectedVoucher,
+        payment,
+        setPayment,
+        isLoading,
+        setIsLoading,
+        cartQty,
+        subtotal,
+        handleConfirm,
+        setPage,
+    };
 }
 
 export default useGioHangModel;

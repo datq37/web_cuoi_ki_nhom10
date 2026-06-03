@@ -12,12 +12,12 @@ export const SyncAdapters = {
       id: apiOrder.maDon,
       user: apiOrder.maKh,
       userName: 'Khách hàng', // BE chưa trả về tên người đặt trong OrderResponse
-      dept: 'Căng tin', 
+      dept: 'Căng tin',
       total: apiOrder.tongTien,
       status: apiOrder.trangThai as unknown as any,
       payment: apiOrder.hinhthucthanhtoan as any,
       created: apiOrder.thoiGianDat || '',
-      pickup: '', 
+      pickup: '',
       items: (apiOrder.chitiet || []).map((ct): OrderItem => ({
         id: ct.mamon,
         name: ct.thucdon?.ten || 'Món ăn',
@@ -54,15 +54,15 @@ export const SyncAdapters = {
   mapCustomerToUI(apiCustomer: KhachHangResponse): IKhachHang {
     let mappedVaiTro = EVaiTro.NHAN_VIEN;
     const backendRoleStr = (apiCustomer.vaitro || '').toLowerCase();
-    
+
     if (backendRoleStr.includes('admin') || backendRoleStr.includes('giám đốc') || backendRoleStr.includes('giam doc')) {
-        mappedVaiTro = EVaiTro.GIAM_DOC;
+      mappedVaiTro = EVaiTro.GIAM_DOC;
     } else if (backendRoleStr.includes('trưởng phòng') || backendRoleStr.includes('truong phong')) {
-        mappedVaiTro = EVaiTro.TRUONG_PHONG;
+      mappedVaiTro = EVaiTro.TRUONG_PHONG;
     }
 
     const ten = apiCustomer.ten || apiCustomer.taikhoan || 'Chưa cập nhật';
-    
+
     // Tạo màu ngẫu nhiên nhưng ổn định dựa trên mã khách
     const colors = ['#f59e0b', '#3b82f6', '#10b981', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6'];
     const charCode = ten.charCodeAt(0) || 0;
@@ -78,7 +78,7 @@ export const SyncAdapters = {
       vaiTro: mappedVaiTro,
       soDon: 0, // Backend chưa trả về
       chiTieu: 0, // Backend chưa trả về
-      thamGia: apiCustomer.lichsudathang || 'Gần đây', 
+      thamGia: apiCustomer.lichsudathang || 'Gần đây',
       trangThai: ETrangThaiKhach.HOAT_DONG, // Mặc định do BE chưa có trạng thái
     };
   },
@@ -121,7 +121,7 @@ export const SyncAdapters = {
       'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
       'linear-gradient(135deg, #78350f 0%, #92400e 100%)',
     ];
-    
+
     // Hash mã món để chọn màu nền ổn định
     const charCode = (apiDish.mamon || '').charCodeAt(0) || 0;
     const mauNen = PRESET_GRADIENTS[charCode % PRESET_GRADIENTS.length];
@@ -186,37 +186,6 @@ export const SyncAdapters = {
       hetHan: apiItem.hansudung || '',
       trangThai: apiItem.trangthai || 'dang_chay',
       hoatDong: apiItem.hoatdong ?? true,
-    };
-  },
-
-  /**
-   * Chuyển đổi dữ liệu Nhân viên (Backend) -> UI (Frontend)
-   */
-  mapAdminNhanVienToUI(apiItem: any): any {
-    let vaiTro = apiItem.chucvu || apiItem.vaiTro || '';
-    vaiTro = vaiTro.toLowerCase();
-    let mappedVaiTro = 'QUAN_TRI_VIEN';
-    if (vaiTro.includes('bếp') || vaiTro.includes('bep')) {
-      mappedVaiTro = vaiTro.includes('trưởng') || vaiTro.includes('chính') ? 'BEP_TRUONG' : 'NHAN_VIEN_BEP';
-    } else if (vaiTro.includes('thu ngân') || vaiTro.includes('thu ngan')) {
-      mappedVaiTro = 'THU_NGAN';
-    } else if (vaiTro.includes('phục vụ') || vaiTro.includes('phuc vu') || vaiTro.includes('bảo vệ') || vaiTro.includes('vệ sinh') || vaiTro.includes('pha chế') || vaiTro.includes('tiếp thực')) {
-      mappedVaiTro = 'NHAN_VIEN_PHUC_VU';
-    } else if (apiItem.vaiTro) {
-        mappedVaiTro = apiItem.vaiTro; // if it's already an enum
-    }
-
-    return {
-      id: apiItem.manv,
-      hoTen: apiItem.ten || '',
-      email: apiItem.email || '',
-      soDienThoai: apiItem.sodienthoai || '',
-      vaiTro: mappedVaiTro,
-      ngayBatDau: apiItem.ngaybatdau || '',
-      mucLuong: apiItem.luong || 0,
-      vietTat: apiItem.viettat || 'NV',
-      mauNen: apiItem.maunen || '#f9a8d4',
-      hoatDongGanNhat: apiItem.hoatdonggannhat || 'Vừa xong',
     };
   }
 };

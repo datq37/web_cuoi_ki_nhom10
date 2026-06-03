@@ -59,11 +59,11 @@ const OrderTable: React.FC<OrderTableProps> = ({
         const isLate = waitMin >= 10;
         return (
           <div className={styles.khachCell}>
-            <Avatar size={32} style={{ background: r.khachHang.mauNen, color: r.khachHang.mauChu, fontWeight: 700, fontSize: 12, flexShrink: 0 }}>
-              {r.khachHang.vietTat}
+            <Avatar size={32} style={{ background: r.khachHang?.mauNen || '#3b82f6', color: r.khachHang?.mauChu || '#fff', fontWeight: 700, fontSize: 12, flexShrink: 0 }}>
+              {r.khachHang?.vietTat || r.khachHang?.ten?.charAt(0)}
             </Avatar>
             <div>
-              <span className={styles.tenKH}>{r.khachHang.ten}</span>
+              <span className={styles.tenKH}>{r.khachHang?.ten}</span>
               {isLate && (
                 <div style={{ fontSize: 11, color: '#dc2626', fontWeight: 600, marginTop: 2 }}>
                   ⏱ Chờ {waitMin} phút
@@ -118,10 +118,10 @@ const OrderTable: React.FC<OrderTableProps> = ({
           <span
             className={styles.statusTag}
             data-status={statusKey}
-            style={{ color: cfg.mau }}
+            style={{ color: cfg?.mau || '#000' }}
           >
-            <span className={styles.statusDot} style={{ background: cfg.mau }} />
-            {cfg.tieuDe}
+            <span className={styles.statusDot} style={{ background: cfg?.mau || '#000' }} />
+            {cfg?.tieuDe || 'Không xác định'}
           </span>
         );
       },

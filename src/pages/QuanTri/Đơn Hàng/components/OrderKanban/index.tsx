@@ -42,12 +42,12 @@ const OrderKanban: React.FC<OrderKanbanProps> = ({
         return (
           <div key={col} className={styles.kanbanCol}>
             <div className={styles.colHeader}>
-              <span className={styles.colDot} style={{ background: cfg.mau }} />
-              <span className={styles.colTitle}>{cfg.tieuDe}</span>
+              <span className={styles.colDot} style={{ background: cfg?.mau || '#000' }} />
+              <span className={styles.colTitle}>{cfg?.tieuDe || 'Không rõ'}</span>
               <span
                 className={styles.colBadge}
                 data-col={col}
-                style={{ color: cfg.mau }}
+                style={{ color: cfg?.mau || '#000' }}
               >
                 {colOrders.length}
               </span>
@@ -71,13 +71,13 @@ const OrderKanban: React.FC<OrderKanbanProps> = ({
                       <div
                         className={styles.avatar}
                         style={{
-                          background: don.khachHang.mauNen,
-                          color: don.khachHang.mauChu,
+                          background: don.khachHang?.mauNen || '#3b82f6',
+                          color: don.khachHang?.mauChu || '#ffffff',
                         }}
                       >
-                        {don.khachHang.vietTat}
+                        {don.khachHang?.vietTat || don.khachHang?.ten?.charAt(0)}
                       </div>
-                      <span className={styles.tenKH}>{don.khachHang.ten}</span>
+                      <span className={styles.tenKH}>{don.khachHang?.ten}</span>
                     </div>
 
                     <div className={styles.monList}>
@@ -100,9 +100,9 @@ const OrderKanban: React.FC<OrderKanbanProps> = ({
                         <div
                           className={styles.ghiChuTag}
                           data-ghichu={don.loaiGhiChu!}
-                          style={{ color: gc.mau }}
+                          style={{ color: gc?.mau || '#000' }}
                         >
-                          {gc.label}
+                          {gc?.label || don.loaiGhiChu}
                         </div>
                       );
                     })()}
@@ -116,13 +116,13 @@ const OrderKanban: React.FC<OrderKanbanProps> = ({
                       ) : nextStatus ? (
                         <button
                           className={styles.actionBtn}
-                          style={{ background: cfg.actionColor }}
+                          style={{ background: cfg?.actionColor || '#16a34a' }}
                           onClick={(e) => {
                             e.stopPropagation();
                             onMoveStatus(don.maDon, nextStatus);
                           }}
                         >
-                          {cfg.actionLabel}
+                          {cfg?.actionLabel || 'Xử lý'}
                         </button>
                       ) : null}
                     </div>

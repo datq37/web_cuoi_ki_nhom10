@@ -1,4 +1,4 @@
-﻿import {
+import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   MessageOutlined,
@@ -78,10 +78,10 @@ const DrawerContent: React.FC<ContentProps> = ({
         <span
           className={styles.statusBadge}
           data-status={isCancelled ? 'huy' : order.trangThai}
-          style={{ color: cfg.mau }}
+          style={{ color: cfg?.mau || '#000' }}
         >
-          <span className={styles.statusDot} style={{ background: cfg.mau }} />
-          {cfg.tieuDe}
+          <span className={styles.statusDot} style={{ background: cfg?.mau || '#000' }} />
+          {cfg?.tieuDe || 'Không xác định'}
         </span>
         <span className={styles.thoiGianDon}>
           <ClockCircleOutlined style={{ marginRight: 4, fontSize: 12 }} />
@@ -197,8 +197,8 @@ const DrawerContent: React.FC<ContentProps> = ({
               {order.loaiGhiChu && (() => {
                 const gc = GHI_CHU_CONFIG[order.loaiGhiChu!];
                 return (
-                  <span className={styles.gcTag} data-ghichu={order.loaiGhiChu!} style={{ color: gc.mau }}>
-                    {gc.label}
+                  <span className={styles.gcTag} data-ghichu={order.loaiGhiChu!} style={{ color: gc?.mau || '#000' }}>
+                    {gc?.label || order.loaiGhiChu}
                   </span>
                 );
               })()}

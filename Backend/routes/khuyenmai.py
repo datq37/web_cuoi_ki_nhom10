@@ -10,6 +10,16 @@ from schemas.khuyenmai import KhuyenMaiCreate, KhuyenMaiResponse, KhuyenMaiUpdat
 
 router = APIRouter(prefix="/promotions", tags=["Khuyến mãi"])
 
+@router.get("/active", response_model=KhuyenMaiListResponse)
+def list_active_promotions(
+    db: Annotated[Session, Depends(get_db)],
+    _: Annotated[KhachHang, Depends(get_current_user)],
+):
+    """Khách hàng: Xem danh sách khuyến mãi đang hoạt động."""
+    from model.khuyenmai import KhuyenMai
+    items = db.query(KhuyenMai).filter(KhuyenMai.hoatdong == True, KhuyenMai.trangthai == "dang_chay").all()
+    return {"items": items, "total": len(items)}
+
 @router.get("", response_model=KhuyenMaiListResponse)
 def list_promotions(
     db: Annotated[Session, Depends(get_db)],

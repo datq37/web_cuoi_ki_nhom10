@@ -8,7 +8,7 @@ import {
     ReloadOutlined
 } from '@ant-design/icons';
 import { ORDER_STATUSES, PAYMENT_METHODS, OrderStatus, Order } from '@/services/KhachHang/Đơn Hàng';
-import { SEED_MENU } from '@/services/KhachHang/ThucDon';
+
 import { formatNumberViVN } from '@/utils/format';
 import OrderTracker from './component/OrderTracker';
 import RatingPage from '../Đánh Giá';
@@ -16,7 +16,7 @@ import orderBackground from '@/assets/KhachHang/Đơn hàng/Backgroud.png';
 import { getPageBackground } from '../Chế độ sáng tôi/themeBackground';
 import './index.less';
 
-const getDish = (id: string) => SEED_MENU.find(d => d.id === id);
+
 
 const HistoryPage: React.FC = () => {
     const {
@@ -85,7 +85,7 @@ const HistoryPage: React.FC = () => {
                                         <div className="danhSachMonAn">
                                             {o.items.map((it: any) => (
                                                 <div key={it.id} className="monAnThuGon">
-                                                    <span className="bieuTuongMon">{getDish(it.id)?.emoji || '🍽️'}</span>
+                                                    <span className="bieuTuongMon">{'🍽️'}</span>
                                                     <span className="tenMon">{it.name}</span>
                                                     <span className="soLuong">×{it.qty}</span>
                                                 </div>

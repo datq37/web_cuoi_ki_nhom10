@@ -1,8 +1,17 @@
-import { useState, useCallback, useEffect } from 'react';
+import re
+
+with open('src/models/KhachHang/Đơn Hàng/Orders.ts', 'r') as f:
+    content = f.read()
+
+# I need to completely rewrite the Orders.ts to use API instead of localStorage and SEED_ORDERS.
+# But looking at Orders.ts, it also handles adding orders, advancing orders via localStorage which was syncing with Admin.
+# All this localStorage logic should be removed.
+
+new_content = """import { useState, useCallback, useEffect } from 'react';
 import { message } from 'antd';
 import { Order, OrderStatus } from '@/services/KhachHang/Đơn Hàng';
 import axios from '@/utils/axios';
-import { ip3 } from '@/utils/ip';
+import { ip3 } from '@/services/api/base';
 import { SyncAdapters } from '@/services/api/adapters';
 
 export default function useOrderModel() {
@@ -70,3 +79,7 @@ export default function useOrderModel() {
         loading
     };
 }
+"""
+
+with open('src/models/KhachHang/Đơn Hàng/Orders.ts', 'w') as f:
+    f.write(new_content)

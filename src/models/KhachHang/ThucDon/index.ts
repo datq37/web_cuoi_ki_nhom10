@@ -40,6 +40,27 @@ export default function useCartModel() {
 
   const [dishes, setDishes] = useState<Dish[]>([]);
 
+  const [categories, setCategories] = useState<{id: string, label: string}[]>([{ id: 'all', label: 'Tất cả' }]);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const res = await axios.get(`${ip3}/categories`);
+        if (res.data && Array.isArray(res.data)) {
+          const fetchedCats = res.data.map((c: any) => ({
+            id: String(c.id),
+            label: c.name || 'Danh mục'
+          }));
+          setCategories([{ id: 'all', label: 'Tất cả' }, ...fetchedCats]);
+        }
+      } catch (e) {
+        console.error("Failed to load categories:", e);
+      }
+    };
+    loadCategories();
+  }, []);
+
+
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date();
@@ -112,7 +133,7 @@ export default function useCartModel() {
   }, [dishes]);
 
   const categoryCounts = useMemo(
-    () => buildCategoryCounts(dishes, MENU_CATEGORIES),
+    () => buildCategoryCounts(dishes, categories as any),
     [dishes]
   );
 
@@ -145,5 +166,6 @@ export default function useCartModel() {
     reviews,
     addReview,
     dishes,
+categories,
   };
 }

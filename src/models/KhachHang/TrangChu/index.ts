@@ -1,7 +1,5 @@
 import { useMemo, useState } from 'react';
 import { useModel } from 'umi';
-import { SEED_MENU } from '@/services/KhachHang/ThucDon';
-import { SEED_VOUCHERS } from '@/services/KhachHang/Giỏ hàng/cartoption';
 import type { Dish } from '@/services/KhachHang/ThucDon/typing';
 import comPhan from '@/assets/KhachHang/Trang chủ/com_phan_no_text.png';
 import bunPho from '@/assets/KhachHang/Trang chủ/bun_pho_no_text.png';
@@ -11,13 +9,13 @@ import chaySalad from '@/assets/KhachHang/Trang chủ/chay_salad_no_text.png';
 
 export default function useTrangChuModel() {
     const { setPage } = useModel('KhachHang.GlobalState.index') as any;
-    const { cart, addToCart, incCart, decCart } = useModel('KhachHang.ThucDon.index') as any;
+    const { cart, addToCart, incCart, decCart, dishes, categories } = useModel('KhachHang.ThucDon.index') as any;
     const { orders } = useModel('KhachHang.Đơn Hàng.Orders') as any;
     const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
 
     const bestSellingDishes = useMemo(
-        () => [...SEED_MENU].sort((a, b) => b.sold - a.sold).slice(0, 3),
-        [],
+        () => [...(dishes || [])].sort((a, b) => b.sold - a.sold).slice(0, 3),
+        [dishes],
     );
 
     const cartQty = (id: string) => {
@@ -42,10 +40,11 @@ export default function useTrangChuModel() {
         selectedDish,
         setSelectedDish,
         bestSellingDishes,
-        todayDishCount: SEED_MENU.length,
-        activeOfferCount: SEED_VOUCHERS.length,
+        todayDishCount: dishes?.length || 0,
+        activeOfferCount: 0,
         placedOrderCount: orders.length,
         cartQty,
         getDishImage,
+categories,
     };
 }

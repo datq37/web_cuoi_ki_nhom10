@@ -68,7 +68,7 @@ const FoodCard: React.FC<FoodCardProps> = ({ dish, img, qty, onAdd, onInc, onDec
   </div>
 );
 
-const MenuAndBestSellers: React.FC<MenuAndBestSellersProps> = ({
+const MenuAndBestSellers: React.FC<MenuAndBestSellersProps & { categories?: {id: string, label: string}[] }> = ({
   setPage,
   bestSellingDishes,
   cartQty,
@@ -77,16 +77,15 @@ const MenuAndBestSellers: React.FC<MenuAndBestSellersProps> = ({
   decCart,
   setSelectedDish,
   getDishImage,
+  categories,
 }) => {
   return (
     <>
       <SectionTitle title="Danh mục nổi bật" onViewAll={() => setPage('menu')} />
       <div className="category-grid">
-        <CategoryCard img={comPhan} title="Cơm phần" />
-        <CategoryCard img={bunPho} title="Bún / Phở" />
-        <CategoryCard img={doUong} title="Đồ uống" />
-        <CategoryCard img={anNhe} title="Ăn nhẹ" />
-        <CategoryCard img={chaySalad} title="Chay / Salad" />
+        {(categories || []).filter(c => c.id !== 'all').map((c, idx) => (
+          <CategoryCard key={c.id} img={[comPhan, bunPho, doUong, anNhe, chaySalad][idx % 5]} title={c.label} />
+        ))}
       </div>
 
       <SectionTitle title="Món bán chạy hôm nay" className="spaced" />

@@ -4,7 +4,6 @@ import DishDetailModal from '@/pages/KhachHang/Thucdon/component/DishDetailModal
 import Banner from './Components/Banner';
 import MenuAndBestSellers from './Components/Danh mục và Bán chạy';
 import OrderSteps from './Components/Quy trình';
-import OffersAndCombos from './Components/Ưu đãi';
 import homeBackground from '@/assets/KhachHang/Trang chủ/Backgroud.png';
 import { getPageBackground } from '../Chế độ sáng tôi/themeBackground';
 import './index.less';
@@ -24,6 +23,7 @@ const CustomerHome: React.FC = () => {
     placedOrderCount,
     cartQty,
     getDishImage,
+    categories,
   } = useModel('KhachHang.TrangChu.index');
 
   return (
@@ -49,12 +49,12 @@ const CustomerHome: React.FC = () => {
             decCart={decCart}
             setSelectedDish={setSelectedDish}
             getDishImage={getDishImage}
+            categories={categories}
           />
           <OrderSteps />
         </div>
 
-        <OffersAndCombos setPage={setPage} />
-      </div>
+              </div>
 
       {selectedDish && (
         <DishDetailModal

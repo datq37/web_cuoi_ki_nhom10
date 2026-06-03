@@ -1,15 +1,10 @@
-import {
-  EBannerIcon,
-  EHoatDongType,
-  ELoaiGhiChu,
-  EStatIcon,
-  ETrangThaiDon,
-  ETrangThaiTrucTiep,
-  ETrend,
-} from './typing';
-import type { TongQuanData } from './typing';
+import re
 
-export const mockData: TongQuanData = {
+with open('src/services/QuanTri/Tổng Quan/index.ts', 'r') as f:
+    content = f.read()
+
+# Replace the export const mockData = { ... } with empty stubs
+empty_mockdata = """export const mockData: TongQuanData = {
   tacNghiep: {
     statCards: [],
     infoCard: {
@@ -40,3 +35,9 @@ export const mockData: TongQuanData = {
     hoatDong: [],
   },
 };
+"""
+
+content = re.sub(r'export const mockData: TongQuanData = \{.*?\n\};\n', empty_mockdata, content, flags=re.DOTALL)
+
+with open('src/services/QuanTri/Tổng Quan/index.ts', 'w') as f:
+    f.write(content)

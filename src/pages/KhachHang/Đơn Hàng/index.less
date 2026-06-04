@@ -144,8 +144,28 @@
         border-radius: 8px;
         border: 1px solid #f0f0f0;
 
-        .bieuTuongMon {
-          font-size: 22px;
+        .anhMonLichSu,
+        .anhMonMacDinh {
+          width: 36px;
+          height: 36px;
+          flex: 0 0 36px;
+          border-radius: 8px;
+        }
+
+        .anhMonLichSu {
+          object-fit: cover;
+          background: #f3f4f6;
+          border: 1px solid #edf0f3;
+        }
+
+        .anhMonMacDinh {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: #fff7ed;
+          color: #f97316;
+          font-weight: 800;
+          font-size: 14px;
         }
 
         .tenMon {
@@ -591,6 +611,16 @@
 
           .soLuong {
             color: var(--ink-4);
+          }
+
+          .anhMonLichSu {
+            background: var(--bg-elev);
+            border-color: var(--line);
+          }
+
+          .anhMonMacDinh {
+            background: rgba(249, 115, 22, 0.14);
+            color: #fdba74;
           }
         }
       }

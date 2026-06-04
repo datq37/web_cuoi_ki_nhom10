@@ -85,7 +85,11 @@ const HistoryPage: React.FC = () => {
                                         <div className="danhSachMonAn">
                                             {o.items.map((it: any) => (
                                                 <div key={it.id} className="monAnThuGon">
-                                                    <span className="bieuTuongMon">{'🍽️'}</span>
+                                                    {it.image ? (
+                                                        <img className="anhMonLichSu" src={it.image} alt={it.name} />
+                                                    ) : (
+                                                        <span className="anhMonMacDinh">{String(it.name || 'M').charAt(0).toUpperCase()}</span>
+                                                    )}
                                                     <span className="tenMon">{it.name}</span>
                                                     <span className="soLuong">×{it.qty}</span>
                                                 </div>

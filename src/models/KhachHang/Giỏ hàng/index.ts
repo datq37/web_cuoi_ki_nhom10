@@ -126,7 +126,8 @@ export function useGioHangModel() {
                     id: it.id,
                     name: it.name,
                     qty: it.qty,
-                    price: it.price
+                    price: it.price,
+                    image: it.hinhAnh
                 })),
                 total: total,
                 status: OrderStatus.Pending,

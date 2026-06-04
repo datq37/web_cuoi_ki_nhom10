@@ -65,6 +65,7 @@ export const SyncAdapters = {
         name: ct.thucdon?.ten || 'Món ăn',
         qty: ct.soluong,
         price: ct.gia || 0,
+        image: ct.thucdon?.hinhanh,
       })),
     };
   },

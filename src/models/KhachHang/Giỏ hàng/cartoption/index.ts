@@ -5,7 +5,6 @@ import type { Voucher } from '@/services/KhachHang/Giỏ hàng/cartoption/typing
 import { VoucherLoai, VoucherTheme } from '@/services/KhachHang/Giỏ hàng/cartoption/typing';
 import { formatCurrency, formatTimeHHMM } from '@/utils/format';
 
-// chuyển đổi voucher
 function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -16,13 +15,20 @@ function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
             if (k.trangThai === 'het_han' || k.trangThai === 'tam_dung') return false;
             // lọc hết lượt
             if (k.gioiHan && (k.daDung || 0) >= k.gioiHan) return false;
-            // lọc hết hạn
+            // lọc hết hạn (hỗ trợ cả YYYY-MM-DD và DD/MM/YYYY)
             if (k.hetHan) {
-                const parts = k.hetHan.split('/');
-                if (parts.length === 3) {
-                    const expiry = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
-                    if (expiry < today) return false;
+                let expiry: Date;
+                if (k.hetHan.includes('-')) {
+                    expiry = new Date(k.hetHan);
+                } else {
+                    const parts = k.hetHan.split('/');
+                    if (parts.length === 3) {
+                        expiry = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+                    } else {
+                        expiry = new Date(k.hetHan);
+                    }
                 }
+                if (expiry < today) return false;
             }
             return true;
         })
@@ -32,18 +38,18 @@ function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
             let typeLabel = 'GIẢM GIÁ';
             let theme: VoucherTheme = VoucherTheme.Green;
 
-            if (k.loai === VoucherLoai.PhanTram) {
+            if (k.loai === VoucherLoai.PhanTram || k.loai === 'phan_tram') {
                 // tính phần trăm
-                discount = k.giaTriGiam;
-                valueLabel = `${k.giaTriGiam}%`;
+                discount = k.giaTriGiam || 0;
+                valueLabel = `${discount}%`;
                 typeLabel = 'GIẢM %';
                 theme = VoucherTheme.Lime;
-            } else if (k.loai === VoucherLoai.SoTien) {
-                discount = k.giaTriGiam;
-                valueLabel = formatCurrency(Number(k.giaTriGiam));
+            } else if (k.loai === VoucherLoai.SoTien || k.loai === 'so_tien') {
+                discount = k.giaTriGiam || 0;
+                valueLabel = formatCurrency(Number(discount));
                 typeLabel = 'GIẢM GIÁ';
                 theme = VoucherTheme.Green;
-            } else if (k.loai === VoucherLoai.MienShip) {
+            } else if (k.loai === VoucherLoai.MienShip || k.loai === 'mien_ship') {
                 discount = 2000;
                 valueLabel = 'MIỄN PHÍ';
                 typeLabel = 'PHỤC VỤ';
@@ -51,12 +57,12 @@ function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
             }
 
             return {
-                id: k.id,
-                code: k.ma,
+                id: k.id?.toString() || '',
+                code: k.ma || '',
                 discount,
                 loai: k.loai as VoucherLoai,
                 desc: k.ten || k.moTa || k.ma,
-                minOrder: k.donToiThieu || 0,
+                minOrder: k.donToiThieu || k.dontooithieu || 0,
                 badge: k.trangThai === 'sap_het' ? 'Sắp hết' : 'Ưu đãi có hạn',
                 expire: k.hetHan || '31.12.2026',
                 valueLabel,
@@ -64,19 +70,6 @@ function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
                 theme,
             };
         });
-}
-
-function loadVouchersFromStorage(): Voucher[] {
-    if (typeof window === 'undefined') return SEED_VOUCHERS;
-    const saved = localStorage.getItem('admin_vouchers');
-    if (saved) {
-        try {
-            const adminList = JSON.parse(saved);
-            const converted = mapAdminVouchersToCustomer(adminList);
-            return converted.length > 0 ? converted : SEED_VOUCHERS;
-        } catch { /* ignore */ }
-    }
-    return SEED_VOUCHERS;
 }
 
 // tính giờ nhận tự động
@@ -106,7 +99,7 @@ export function useCartOptionModel(
     setIsVoucherModalOpen: (open: boolean) => void
 ) {
     const [pickup, setPickup] = useState(() => calcPickupTime(cart));
-    const [allVouchers, setAllVouchers] = useState<Voucher[]>(() => loadVouchersFromStorage());
+    const [allVouchers, setAllVouchers] = useState<Voucher[]>(SEED_VOUCHERS);
 
     useEffect(() => {
         setPickup(calcPickupTime(cart));
@@ -115,14 +108,25 @@ export function useCartOptionModel(
     }, [cart]);
 
     useEffect(() => {
-        const reload = () => setAllVouchers(loadVouchersFromStorage());
-        reload();
-        window.addEventListener('storage', reload);
-        window.addEventListener('focus', reload);
-        return () => {
-            window.removeEventListener('storage', reload);
-            window.removeEventListener('focus', reload);
+        const fetchVouchers = async () => {
+            try {
+                // Sử dụng axios để fetch trực tiếp từ API promotions của Khách hàng
+                const axios = (await import('@/utils/axios')).default;
+                const ip3 = (await import('@/utils/ip')).ip3;
+                const SyncAdapters = (await import('@/services/api/adapters')).SyncAdapters;
+
+                const res = await axios.get(`${ip3}/promotions/active`);
+                if (res.data && res.data.items) {
+                    const uiItems = res.data.items.map(SyncAdapters.mapAdminPromoToUI);
+                    const converted = mapAdminVouchersToCustomer(uiItems);
+                    setAllVouchers(converted.length > 0 ? converted : SEED_VOUCHERS);
+                }
+            } catch (error) {
+                console.error("Lỗi khi tải voucher:", error);
+            }
         };
+
+        fetchVouchers();
     }, []);
 
     const availableVouchers = allVouchers.filter(v => !v.minOrder || subtotal >= v.minOrder);

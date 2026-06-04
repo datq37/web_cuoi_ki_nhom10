@@ -24,7 +24,7 @@ import {
 import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import React, { useEffect, useMemo, useState } from 'react';
-import TinyEditor from '@/components/TinyEditor';
+// Removed TinyEditor import
 import Topbar from '@/pages/QuanTri/Topbar';
 import PageToolbar from '@/pages/QuanTri/components/PageToolbar';
 import { TRANG_THAI_KM_CONFIG } from '@/services/QuanTri/Khuyến Mãi';
@@ -151,7 +151,7 @@ const KhuyenMaiForm: React.FC<{
           name="moTa"
           rules={[{ max: 120, message: 'Tối đa 120 ký tự' }]}
         >
-          <TinyEditor placeholder="Mô tả ngắn..." minHeight={100} />
+          <Input.TextArea placeholder="Mô tả ngắn..." autoSize={{ minRows: 3, maxRows: 5 }} />
         </Form.Item>
 
         <Form.Item label="Loại giảm giá" name="loai" rules={[{ required: true }]}>
@@ -186,7 +186,7 @@ const KhuyenMaiForm: React.FC<{
               }
               parser={
                 loaiWatch === ELoaiGiamGia.SO_TIEN
-                  ? (v) => Number((v ?? '').replace(/,/g, ''))
+                  ? ((v) => Number((v ?? '').replace(/,/g, '')) as any)
                   : undefined
               }
             />
@@ -199,7 +199,7 @@ const KhuyenMaiForm: React.FC<{
               style={{ width: '100%' }}
               addonAfter="đ"
               formatter={(v) => `${v ?? ''}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              parser={(v) => Number((v ?? '').replace(/\./g, '')) as any}
+              parser={(v) => Number((v ?? '').replace(/,/g, '')) as any}
             />
           </Form.Item>
         </div>
@@ -472,7 +472,7 @@ const ComboForm: React.FC<{
           name="moTa"
           rules={[{ max: 120, message: 'Tối đa 120 ký tự' }]}
         >
-          <TinyEditor placeholder="Mô tả ngắn..." minHeight={100} />
+          <Input.TextArea placeholder="Mô tả ngắn..." autoSize={{ minRows: 3, maxRows: 5 }} />
         </Form.Item>
 
         <div className={styles.dishPicker}>
@@ -855,7 +855,7 @@ const ComboDetail: React.FC<{
 };
 
 const KhuyenMai: React.FC = () => {
-  const { items, stats, addKhuyenMai, updateKhuyenMai, deleteKhuyenMai, toggleHoatDong } = useKhuyenMaiModel();
+  const { items, addKhuyenMai, updateKhuyenMai, deleteKhuyenMai, toggleHoatDong } = useKhuyenMaiModel();
 
   const [tuKhoa,         setTuKhoa]         = useState('');
   const [filterTrangThai, setFilterTrangThai] = useState<ETrangThaiKhuyenMai | null>(null);

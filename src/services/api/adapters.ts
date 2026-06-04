@@ -1,8 +1,18 @@
-import { OrderResponse, KhachHangResponse, ThucDonResponse, OrderStatus as ApiOrderStatus } from './types';
+import { OrderResponse, KhachHangResponse, ThucDonResponse } from './types';
 import { Order, OrderItem } from '@/services/KhachHang/Đơn Hàng/typing';
 import { OrderStatus as UIOrderStatus, PaymentMethod as UIPaymentMethod } from '@/services/KhachHang/Đơn Hàng/index';
 import { Dish } from '@/services/KhachHang/ThucDon/typing';
 import { EVaiTro, ETrangThaiKhach, IKhachHang } from '@/services/QuanTri/KhachHang/typing';
+
+const formatApiDateToDisplay = (value?: string) => {
+  if (!value) return '';
+  const datePart = String(value).split('T')[0];
+  const parts = datePart.split('-');
+  if (parts.length !== 3) return String(value);
+
+  const [year, month, day] = parts;
+  return `${Number(day)}/${Number(month)}/${year}`;
+};
 
 export const SyncAdapters = {
   /**
@@ -215,11 +225,9 @@ export const SyncAdapters = {
       donToiThieu: apiItem.dontooithieu || 0,
       daDung: apiItem.dadung || 0,
       gioiHan: apiItem.gioihan || 0,
-      hetHan: apiItem.hansudung || '',
+      hetHan: formatApiDateToDisplay(apiItem.hansudung),
       trangThai: apiItem.trangthai || 'dang_chay',
-      hoatDong: apiItem.hoatdong ?? true,
+      hoatDong: Boolean(apiItem.hoatdong ?? true),
     };
   }
 };
-
-

@@ -4,6 +4,15 @@ import { ip3 } from '@/utils/ip';
 import { SyncAdapters } from '@/services/api/adapters';
 import { IKhuyenMai, IStatKhuyenMai } from '@/services/QuanTri/Khuyến Mãi/typing';
 
+const formatDateForApi = (value?: string) => {
+  if (!value) return undefined;
+  const parts = value.split('/');
+  if (parts.length !== 3) return value;
+
+  const [day, month, year] = parts;
+  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+};
+
 export default function useKhuyenMaiModel() {
   const [items, setItems] = useState<IKhuyenMai[]>([]);
 
@@ -32,7 +41,7 @@ export default function useKhuyenMaiModel() {
         giatrigiam: data.giaTriGiam,
         dontooithieu: data.donToiThieu,
         gioihan: data.gioiHan,
-        hansudung: data.hetHan.split('/').reverse().join('-'), // "D/M/YYYY" -> "YYYY-MM-DD"
+        hansudung: formatDateForApi(data.hetHan),
         trangthai: data.trangThai,
         hoatdong: data.hoatDong,
       });
@@ -54,7 +63,7 @@ export default function useKhuyenMaiModel() {
         giatrigiam: data.giaTriGiam,
         dontooithieu: data.donToiThieu,
         gioihan: data.gioiHan,
-        hansudung: data.hetHan.split('/').reverse().join('-'), // "D/M/YYYY" -> "YYYY-MM-DD"
+        hansudung: formatDateForApi(data.hetHan),
         trangthai: data.trangThai,
         hoatdong: data.hoatDong,
       });

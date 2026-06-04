@@ -42,66 +42,7 @@ function getFoodImgForVoucher(id: string): string {
   return FOOD_IMGS[Math.abs(hash) % FOOD_IMGS.length];
 }
 
-function getBestVoucher(): BestVoucher | null {
-  if (typeof window === 'undefined') return null;
-  const saved = localStorage.getItem('admin_vouchers');
-  if (!saved) return null;
-  try {
-    const list: any[] = JSON.parse(saved);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const active = list.filter((k: any) => {
-      if (!k.hoatDong) return false;
-      if (k.trangThai === 'het_han' || k.trangThai === 'tam_dung') return false;
-      if (k.gioiHan && (k.daDung || 0) >= k.gioiHan) return false;
-      if (k.hetHan) {
-        const parts = k.hetHan.split('/');
-        if (parts.length === 3) {
-          const exp = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
-          if (exp < today) return false;
-        }
-      }
-      return true;
-    });
-
-    if (active.length === 0) return null;
-
-    // tính giá trị thực
-    const scored = active.map((k: any) => ({
-      ...k,
-      score: k.loai === 'phan_tram' ? k.giaTriGiam * 1000 : k.giaTriGiam,
-    }));
-    scored.sort((a: any, b: any) => b.score - a.score);
-    const best = scored[0];
-
-    const discountLabel =
-      best.loai === 'phan_tram'
-        ? `Giảm ngay ${best.giaTriGiam}%`
-        : best.loai === 'mien_ship'
-        ? 'Miễn phí phục vụ'
-        : `Giảm ngay ${formatCurrency(Number(best.giaTriGiam))}`;
-
-    const conditionLabel =
-      best.donToiThieu > 0
-        ? `Áp dụng cho đơn hàng từ ${formatCurrency(Number(best.donToiThieu))}`
-        : 'Áp dụng cho mọi đơn hàng';
-
-    return {
-      ma: best.ma,
-      ten: best.ten,
-      loai: best.loai,
-      giaTriGiam: best.giaTriGiam,
-      donToiThieu: best.donToiThieu || 0,
-      foodImg: getFoodImgForVoucher(best.id),
-      discountLabel,
-      conditionLabel,
-    };
-  } catch {
-    return null;
-  }
-}
-
+// đã xoá getBestVoucher đồng bộ, thay bằng useEffect ở component
 function getBestCombo(): BestCombo | null {
   if (typeof window === 'undefined') return null;
   const comboSaved = localStorage.getItem('admin_combos');
@@ -193,14 +134,82 @@ const ComboItem: React.FC<{ img: string }> = ({ img }) => (
 );
 
 const OffersAndCombos: React.FC<OffersAndCombosProps> = ({ setPage }) => {
-  const [best, setBest] = useState<BestVoucher | null>(() => getBestVoucher());
+  const [best, setBest] = useState<BestVoucher | null>(null);
   const [bestCombo, setBestCombo] = useState<BestCombo | null>(() => getBestCombo());
   const { h, m, s } = useCountdown();
   const { addToCart } = useModel('KhachHang.ThucDon.index');
 
   useEffect(() => {
-    const reload = () => {
-      setBest(getBestVoucher());
+    const reload = async () => {
+      try {
+        const axios = (await import('@/utils/axios')).default;
+        const ip3 = (await import('@/utils/ip')).ip3;
+        const SyncAdapters = (await import('@/services/api/adapters')).SyncAdapters;
+
+        const res = await axios.get(`${ip3}/promotions/active`);
+        if (res.data && res.data.items) {
+          const list = res.data.items.map(SyncAdapters.mapAdminPromoToUI);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          const active = list.filter((k: any) => {
+            if (!k.hoatDong) return false;
+            if (k.trangThai === 'het_han' || k.trangThai === 'tam_dung') return false;
+            if (k.gioiHan && (k.daDung || 0) >= k.gioiHan) return false;
+            if (k.hetHan) {
+                let exp: Date;
+                if (k.hetHan.includes('-')) {
+                    exp = new Date(k.hetHan);
+                } else {
+                    const parts = k.hetHan.split('/');
+                    if (parts.length === 3) {
+                        exp = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+                    } else {
+                        exp = new Date(k.hetHan);
+                    }
+                }
+                if (exp < today) return false;
+            }
+            return true;
+          });
+
+          if (active.length > 0) {
+            const scored = active.map((k: any) => ({
+              ...k,
+              score: (k.loai === 'phan_tram' || k.loai === 'phan_tram') ? k.giaTriGiam * 1000 : k.giaTriGiam,
+            }));
+            scored.sort((a: any, b: any) => b.score - a.score);
+            const top = scored[0];
+
+            const discountLabel =
+              (top.loai === 'phan_tram' || top.loai === 'phan_tram')
+                ? `Giảm ngay ${top.giaTriGiam}%`
+                : (top.loai === 'mien_ship' || top.loai === 'mien_ship')
+                ? 'Miễn phí phục vụ'
+                : `Giảm ngay ${formatCurrency(Number(top.giaTriGiam))}`;
+
+            const conditionLabel =
+              top.donToiThieu > 0
+                ? `Áp dụng cho đơn từ ${formatCurrency(Number(top.donToiThieu))}`
+                : 'Áp dụng cho mọi đơn hàng';
+
+            setBest({
+              ma: top.ma,
+              ten: top.ten,
+              loai: top.loai,
+              giaTriGiam: top.giaTriGiam,
+              donToiThieu: top.donToiThieu || 0,
+              foodImg: getFoodImgForVoucher(top.id.toString()),
+              discountLabel,
+              conditionLabel,
+            });
+          } else {
+            setBest(null);
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
       setBestCombo(getBestCombo());
     };
     reload();

@@ -22,5 +22,5 @@ class KhuyenMai(Base):
     dadung: Mapped[int | None] = mapped_column(Integer, nullable=True, default=0)
     gioihan: Mapped[int | None] = mapped_column(Integer, nullable=True)
     trangthai: Mapped[str | None] = mapped_column(String, nullable=True)
-    hoatdong: Mapped[bool | None] = mapped_column(Integer, nullable=True, default=1)
+    hoatdong: Mapped[int | None] = mapped_column(Integer, nullable=True, default=1)
 

@@ -1,5 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useModel } from 'umi';
+import axios from '@/utils/axios';
+import { ip3 } from '@/utils/ip';
 import type { Dish } from '@/services/KhachHang/ThucDon/typing';
 import comPhan from '@/assets/KhachHang/Trang chủ/com_phan_no_text.png';
 import bunPho from '@/assets/KhachHang/Trang chủ/bun_pho_no_text.png';
@@ -31,6 +33,25 @@ export default function useTrangChuModel() {
         return comPhan;
     };
 
+    const [activeOfferCount, setActiveOfferCount] = useState(0);
+
+    // Lấy số lượng ưu đãi từ backend
+    useEffect(() => {
+        const fetchPromotions = async () => {
+            try {
+                const res = await axios.get(`${ip3}/promotions`);
+                if (res.data && Array.isArray(res.data)) {
+                    // Lọc các khuyến mãi đang hoạt động
+                    const active = res.data.filter((p: any) => p.hoatdong === true || p.hoatdong === 1);
+                    setActiveOfferCount(active.length);
+                }
+            } catch (e) {
+                console.error("Failed to load promotions for stats", e);
+            }
+        };
+        fetchPromotions();
+    }, []);
+
     return {
         setPage,
         cart,
@@ -41,10 +62,10 @@ export default function useTrangChuModel() {
         setSelectedDish,
         bestSellingDishes,
         todayDishCount: dishes?.length || 0,
-        activeOfferCount: 0,
-        placedOrderCount: orders.length,
+        activeOfferCount,
+        placedOrderCount: orders?.length || 0,
         cartQty,
         getDishImage,
-categories,
+        categories,
     };
 }

@@ -53,7 +53,9 @@ const Banner: React.FC<BannerProps> = ({
       </section>
 
       <section className="home-stats">
-                        <StatCard icon={<ClipboardCheck size={28} strokeWidth={2.3} />} tone={StatCardTone.Blue} title="Đơn đã đặt" value={String(placedOrderCount)} desc="Đơn hàng của bạn" />
+        <StatCard icon={<Soup size={28} strokeWidth={2.3} />} tone={StatCardTone.Green} title="Món hôm nay" value={String(todayDishCount || 0)} desc="Món hấp dẫn" />
+        <StatCard icon={<TicketPercent size={28} strokeWidth={2.3} />} tone={StatCardTone.Orange} title="Ưu đãi đang có" value={String(activeOfferCount || 0)} desc="Khuyến mãi hot" />
+        <StatCard icon={<ClipboardCheck size={28} strokeWidth={2.3} />} tone={StatCardTone.Blue} title="Đơn đã đặt" value={String(placedOrderCount || 0)} desc="Đơn hàng của bạn" />
         <StatCard image={shipperScooter} icon={null} tone={StatCardTone.Lime} title="Giao nhanh" value="15 - 20 phút" desc="Nội bộ công ty" />
       </section>
     </>

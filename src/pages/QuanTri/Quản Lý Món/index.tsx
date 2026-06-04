@@ -45,6 +45,7 @@ import styles from './index.less';
 type IMonAnLocal = IMonAn & {
   hinhAnh?: string;
   nguyenLieu?: Array<{ id: string; ten: string; soLuong: number }>;
+  file?: File | null;
 };
 
 function formatGia(gia: number): string {
@@ -144,11 +145,13 @@ interface MonFormProps {
 const MonForm: React.FC<MonFormProps> = ({ open, initial, categories, onCancel, onSubmit }) => {
   const [form] = Form.useForm();
   const [imgPreview, setImgPreview] = useState('');
+  const [fileToUpload, setFileToUpload] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!open) return;
     setImgPreview(initial?.hinhAnh ?? '');
+    setFileToUpload(null);
     if (initial) {
       form.setFieldsValue({ ...initial, nguyenLieu: initial.nguyenLieu ?? [] });
     } else {
@@ -168,6 +171,7 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, categories, onCancel, 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setFileToUpload(file);
     const reader = new FileReader();
     reader.onload = (ev) => setImgPreview(ev.target!.result as string);
     reader.readAsDataURL(file);
@@ -177,7 +181,7 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, categories, onCancel, 
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-      onSubmit({ ...values, hinhAnh: imgPreview || undefined });
+      onSubmit({ ...values, hinhAnh: imgPreview || undefined, file: fileToUpload });
     } catch {
       // hiển thị lỗi tự động
     }
@@ -314,7 +318,7 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, categories, onCancel, 
           label="Mô tả"
           rules={[{ required: true, message: 'Nhập mô tả ngắn về món' }]}
         >
-          <TinyEditor placeholder="Mô tả ngắn về món ăn..." minHeight={120} />
+          <Input.TextArea placeholder="Mô tả ngắn về món ăn..." autoSize={{ minRows: 3, maxRows: 5 }} />
         </Form.Item>
 
         <Form.Item name="nguyenLieu" label="Nguyên liệu sử dụng">

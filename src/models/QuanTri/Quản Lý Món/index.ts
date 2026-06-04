@@ -53,7 +53,17 @@ export default function useQuanLyMonModel() {
         danhmucid: typeof values.danhMuc === 'number' ? values.danhMuc : undefined,
         hethang: values.coSan === false
       };
-      await axios.post(`${ip3}/menus/items`, payload);
+      const res = await axios.post(`${ip3}/menus/items`, payload);
+      const mamon = res.data?.mamon || payload.mamon;
+      
+      if (values.file) {
+        const formData = new FormData();
+        formData.append("file", values.file);
+        await axios.post(`${ip3}/menus/items/${mamon}/upload-image`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      }
+      
       // Wait for completion and refresh
       fetchItems();
       return payload;
@@ -72,6 +82,15 @@ export default function useQuanLyMonModel() {
         danhmucid: typeof values.danhMuc === 'number' ? values.danhMuc : undefined,
       };
       await axios.patch(`${ip3}/menus/items/${values.id}`, payload);
+      
+      if (values.file) {
+        const formData = new FormData();
+        formData.append("file", values.file);
+        await axios.post(`${ip3}/menus/items/${values.id}/upload-image`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      }
+      
       fetchItems();
     } catch (error) {
       console.error("Failed to update menu item", error);

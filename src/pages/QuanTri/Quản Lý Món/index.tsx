@@ -321,24 +321,58 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, categories, onCancel, 
           <Input.TextArea placeholder="Mô tả ngắn về món ăn..." autoSize={{ minRows: 3, maxRows: 5 }} />
         </Form.Item>
 
-        <Form.Item name="nguyenLieu" label="Nguyên liệu sử dụng">
-          <Select
-            mode="multiple"
-            placeholder="Chọn nguyên liệu từ kho..."
-            optionFilterProp="label"
-            showArrow
-            allowClear
-          >
-            {DANH_SACH_NGUYEN_LIEU.map((nl) => (
-              <Select.Option key={nl.id} value={nl.id} label={nl.ten}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>{nl.ten}</span>
-                  <span style={{ fontSize: 11, color: '#9ca3af' }}>{nl.donVi}</span>
-                </div>
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+        <Form.List name="nguyenLieu">
+          {(fields, { add, remove }) => (
+            <div style={{ marginBottom: 24 }}>
+              <div style={{ fontSize: 14, color: '#374151', fontWeight: 600, marginBottom: 8 }}>
+                Nguyên liệu sử dụng & Định lượng (cho 1 suất)
+              </div>
+              {fields.map(({ key, name, ...restField }) => (
+                <Row key={key} gutter={12} align="middle" style={{ marginBottom: 12 }}>
+                  <Col span={14}>
+                    <Form.Item
+                      {...restField}
+                      name={[name, 'id']}
+                      rules={[{ required: true, message: 'Chọn nguyên liệu' }]}
+                      style={{ marginBottom: 0 }}
+                    >
+                      <Select placeholder="Chọn nguyên liệu..." showSearch optionFilterProp="label" style={{ width: '100%' }}>
+                        {DANH_SACH_NGUYEN_LIEU.map((nl) => (
+                          <Select.Option key={nl.id} value={nl.id} label={nl.ten}>
+                            {nl.ten} ({nl.donVi})
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                  <Col span={7}>
+                    <Form.Item
+                      {...restField}
+                      name={[name, 'soLuong']}
+                      rules={[
+                        { required: true, message: 'Định lượng' },
+                        { type: 'number', min: 0.001, message: 'Tối thiểu > 0' }
+                      ]}
+                      style={{ marginBottom: 0 }}
+                    >
+                      <InputNumber
+                        placeholder="Số lượng"
+                        min={0.001}
+                        style={{ width: '100%' }}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={3} style={{ textAlign: 'right' }}>
+                    <Button type="text" danger onClick={() => remove(name)} icon={<DeleteOutlined />} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
+                  </Col>
+                </Row>
+              ))}
+              <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />} style={{ borderRadius: 8 }}>
+                Thêm nguyên liệu định lượng
+              </Button>
+            </div>
+          )}
+        </Form.List>
 
         {/* hidden — giữ giá trị khi edit, dùng default khi tạo mới */}
         <Form.Item name="mauNen" hidden><Input /></Form.Item>
@@ -364,8 +398,13 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit, onDelete, o
   if (!mon) return null;
 
   const ingredientList = (mon.nguyenLieu ?? [])
-    .map((id) => DANH_SACH_NGUYEN_LIEU.find((n) => n.id === id))
-    .filter(Boolean) as (typeof DANH_SACH_NGUYEN_LIEU[number])[];
+    .map((item: any) => {
+      const id = typeof item === 'string' ? item : item?.id;
+      const qty = typeof item === 'string' ? null : item?.soLuong;
+      const nl = DANH_SACH_NGUYEN_LIEU.find((n) => n.id === id);
+      return nl ? { ...nl, soLuong: qty } : null;
+    })
+    .filter(Boolean);
 
   return (
     <Modal
@@ -469,12 +508,16 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit, onDelete, o
               Nguyên liệu
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-              {ingredientList.map((nl) => (
+              {ingredientList.map((nl: any) => (
                 <Tag
                   key={nl.id}
                   style={{ borderRadius: 20, fontSize: 12, padding: '2px 10px', margin: 0 }}
                 >
-                  {nl.ten} <span style={{ color: '#9ca3af' }}>({nl.donVi})</span>
+                  {nl.ten} {nl.soLuong !== undefined && nl.soLuong !== null ? (
+                    <span style={{ color: '#6b7280' }}>({nl.soLuong} {nl.donVi}/suất)</span>
+                  ) : (
+                    <span style={{ color: '#9ca3af' }}>({nl.donVi})</span>
+                  )}
                 </Tag>
               ))}
             </div>

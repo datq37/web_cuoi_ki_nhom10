@@ -51,7 +51,8 @@ export default function useQuanLyMonModel() {
         gia: values.giaBan,
         mieuta: values.moTa,
         danhmucid: typeof values.danhMuc === 'number' ? values.danhMuc : undefined,
-        hethang: values.coSan === false
+        hethang: values.coSan === false,
+        nguyenLieu: values.nguyenLieu || [],
       };
       const res = await axios.post(`${ip3}/menus/items`, payload);
       const mamon = res.data?.mamon || payload.mamon;
@@ -80,6 +81,7 @@ export default function useQuanLyMonModel() {
         gia: values.giaBan,
         mieuta: values.moTa,
         danhmucid: typeof values.danhMuc === 'number' ? values.danhMuc : undefined,
+        nguyenLieu: values.nguyenLieu || [],
       };
       await axios.patch(`${ip3}/menus/items/${values.id}`, payload);
       

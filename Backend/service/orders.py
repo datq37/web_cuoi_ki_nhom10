@@ -152,14 +152,45 @@ def get_order_detail_admin(db: Session, order_id: str) -> Order:
     return order
 
 
+def deduct_order_ingredients_stock(db: Session, order: Order) -> None:
+    """Trừ tồn kho nguyên liệu tương ứng với đơn hàng."""
+    from model.congthuc import CongThuc
+    from model.khohang import KhoHang
+    from sqlalchemy import select
+
+    for item in order.chitiet:
+        if not item.mamon:
+            continue
+        stmt = select(CongThuc).where(CongThuc.mamon == item.mamon)
+        recipes = db.execute(stmt).scalars().all()
+        for ct in recipes:
+            if not ct.mahang or not ct.dinhluong:
+                continue
+            stock_stmt = select(KhoHang).where(KhoHang.mahang == ct.mahang)
+            kho = db.execute(stock_stmt).scalar_one_or_none()
+            if kho:
+                order_qty = item.soluong or 0
+                deduction = ct.dinhluong * order_qty
+                current_qty = kho.soluong or 0.0
+                kho.soluong = max(0.0, current_qty - deduction)
+                db.add(kho)
+    db.commit()
+
+
 def update_order_status_admin(db: Session, order_id: str, new_status: str) -> Order:
     """Cập nhật trạng thái đơn hàng (Admin)."""
     order = orders_crud.get_order_by_id(db, order_id)
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Đơn hàng không tồn tại")
     
-    # Không tạo trạng thái lạ, đã được validate ở mức Schema Enum
-    return orders_crud.update_order_status(db, order, new_status)
+    old_status = order.trangthai
+    updated_order = orders_crud.update_order_status(db, order, new_status)
+    
+    # Nếu chuyển sang đã giao hàng (delivered) và trước đó chưa giao
+    if old_status != OrderStatus.DELIVERED and new_status == OrderStatus.DELIVERED:
+        deduct_order_ingredients_stock(db, updated_order)
+        
+    return updated_order
 
 
 def get_orders_by_date_admin(db: Session, date_str: str) -> list[Order]:

@@ -23,3 +23,10 @@ class ThucDon(Base):
 
     # Quan hệ N-1: Món ăn thuộc về một danh mục
     danhmuc: Mapped["DanhMucMonAn"] = relationship("DanhMucMonAn", back_populates="thucdons")
+
+    # Quan hệ 1-N: Món ăn có nhiều định lượng nguyên liệu
+    congthucs: Mapped[list["CongThuc"]] = relationship("CongThuc", back_populates="thucdon", cascade="all, delete-orphan")
+
+    @property
+    def nguyen_lieu(self):
+        return [{"id": ct.mahang, "so_luong": ct.dinhluong} for ct in self.congthucs]

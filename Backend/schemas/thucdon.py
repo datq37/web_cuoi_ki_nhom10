@@ -3,6 +3,14 @@ from pydantic import BaseModel, ConfigDict, Field
 from schemas.danhmucmonan import DanhMucMonAnResponse
 
 
+class NguyenLieuDetail(BaseModel):
+    """Schema định lượng nguyên liệu cho món ăn."""
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
+    id: str
+    so_luong: float
+
+
 class ThucDonBase(BaseModel):
     """Schema cơ sở cho Món ăn."""
 
@@ -16,6 +24,7 @@ class ThucDonBase(BaseModel):
     hethang: bool | None = False
     tags: list[str] | None = None
     danhmucid: int | None = None
+    nguyen_lieu: list[NguyenLieuDetail] | None = None
 
 
 class ThucDonCreate(ThucDonBase):
@@ -40,6 +49,7 @@ class ThucDonUpdate(BaseModel):
     hethang: bool | None = None
     tags: list[str] | None = None
     danhmucid: int | None = None
+    nguyen_lieu: list[NguyenLieuDetail] | None = None
 
 
 class ThucDonResponse(ThucDonBase):

@@ -183,7 +183,7 @@ export const SyncAdapters = {
       mauNen,
       hinhAnh: apiDish.hinhanh,
       coSan: !apiDish.hethang,
-      nguyenLieu: []
+      nguyenLieu: apiDish.nguyenLieu || []
     };
   },
 

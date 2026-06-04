@@ -10,6 +10,7 @@ from .orders import Order, OrderDetail
 from .reviews import Review
 from .thucdon import ThucDon
 from .payment import Payment
+from .congthuc import CongThuc
 
 __all__ = [
     "CoSoVatChat",
@@ -26,4 +27,5 @@ __all__ = [
     "KhuyenMai",
     "Review",
     "Payment",
+    "CongThuc",
 ]

@@ -8,9 +8,14 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
     const { addReview } = useModel('KhachHang.ThucDon.index');
     const { markAsReviewed } = useModel('KhachHang.Đơn Hàng.Orders');
 
+    const [currentItemIndex, setCurrentItemIndex] = useState(0);
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
     const [images, setImages] = useState<string[]>([]);
+    
+    const items = order?.items || [];
+    const currentItem = items[currentItemIndex];
+
     // tải ảnh đánh giá
     const handleImageFiles = (files: File[]) => {
         files.forEach((file) => {
@@ -27,32 +32,47 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
     const handleRemoveImage = (idx: number) => {
         setImages((prev) => prev.filter((_, i) => i !== idx));
     };
+
     // lấy thông tin món
-    const firstItem = order?.items?.[0];
-    const dishDetails = SEED_MENU.find(d => d.id === firstItem?.id);
-    const dishImage = firstItem?.image || dishDetails?.hinhAnh;
-    const dishNames = order?.items?.map((it: any) => it.name).join(' + ');
+    const dishDetails = SEED_MENU.find(d => d.id === currentItem?.id);
+    const dishImage = currentItem?.image || dishDetails?.hinhAnh;
+    const dishNames = currentItem?.name || 'Món ăn';
+
     // gửi đấnh giá 
     const handleSubmit = () => {
         if (rating === 0) return;
-        if (order?.items) {
-            order.items.forEach((item: any) => {
-                addReview({
-                    dishId: item.id,
-                    author: currentUser?.name || 'KhachHang',
-                    avatar: '😋',
-                    rating: rating,
-                    comment: comment.trim() || 'Món ăn ngon, đóng gói rất cẩn thận và sạch sẽ!',
-                    images: images,
-                });
+        if (currentItem) {
+            addReview({
+                dishId: currentItem.id,
+                author: currentUser?.name || 'KhachHang',
+                avatar: '😋',
+                rating: rating,
+                comment: comment.trim() || 'Món ăn ngon, đóng gói rất cẩn thận và sạch sẽ!',
+                images: images,
             });
         }
-        if (order?.id) {
-            markAsReviewed(order.id);
+
+        if (currentItemIndex < items.length - 1) {
+            // Chuyển sang món tiếp theo trong đơn
+            setCurrentItemIndex(prev => prev + 1);
+            // Reset form cho món tiếp theo
+            setRating(0);
+            setComment('');
+            setImages([]);
+        } else {
+            // Đã đánh giá hết tất cả món trong đơn
+            if (order?.id) {
+                markAsReviewed(order.id);
+            }
+            showCustomerNotification(
+                'Cảm ơn bạn đã gửi đánh giá!', 
+                'Phản hồi của bạn đã được ghi nhận cho toàn bộ món ăn trong đơn.', 
+                'success'
+            );
+            onClose();
         }
-        showCustomerNotification('Cảm ơn bạn đã gửi đánh giá món ăn!', 'Phản hồi của bạn đã được ghi nhận và sẽ giúp chúng tôi cải thiện chất lượng phục vụ.', 'success');
-        onClose();
     };
+
     // đóng from khi click ngoài 
     const handleBackdropClick = (e: React.MouseEvent) => {
         if (e.target === e.currentTarget) {
@@ -70,6 +90,8 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
         handleBackdropClick,
         dishDetails,
         dishImage,
-        dishNames
+        dishNames,
+        currentItemIndex,
+        totalItems: items.length
     };
 }

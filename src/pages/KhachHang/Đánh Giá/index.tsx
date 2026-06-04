@@ -14,7 +14,8 @@ const RatingPage: React.FC<RatingPageProps> = ({ order, onClose }) => {
         images,
         handleImageFiles, handleRemoveImage,
         handleSubmit, handleBackdropClick,
-        dishDetails, dishImage, dishNames
+        dishDetails, dishImage, dishNames,
+        currentItemIndex, totalItems
     } = useDanhGiaModel(order, onClose);
     return (
         <div className="baoBocDanhGia" onClick={handleBackdropClick}>
@@ -27,7 +28,9 @@ const RatingPage: React.FC<RatingPageProps> = ({ order, onClose }) => {
                         icon={<CloseOutlined />}
                         onClick={onClose}
                     />
-                    <span className="chuTieuDe">Đánh giá món ăn</span>
+                    <span className="chuTieuDe">
+                        Đánh giá món ăn {totalItems > 1 ? `(${currentItemIndex + 1}/${totalItems})` : ''}
+                    </span>
                     <div style={{ width: 24 }}></div>
                 </div>
 

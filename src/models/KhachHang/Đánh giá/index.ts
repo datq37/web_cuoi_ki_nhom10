@@ -43,6 +43,7 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
                     avatar: '😋',
                     rating: rating,
                     comment: comment.trim() || 'Món ăn ngon, đóng gói rất cẩn thận và sạch sẽ!',
+                    images: images,
                 });
             });
         }

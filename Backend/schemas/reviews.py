@@ -12,6 +12,7 @@ class ReviewBase(BaseModel):
     rating: int | None = Field(default=None, ge=1, le=5)
     comment: str | None = None
     created_at: datetime | None = None
+    images: list[str] | None = None
 
 
 class ReviewCreate(ReviewBase):

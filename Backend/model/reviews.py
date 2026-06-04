@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, Integer, String, Text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import DateTime, Integer, String, Text, ARRAY
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
 
@@ -17,3 +17,12 @@ class Review(Base):
     rating: Mapped[int | None] = mapped_column(Integer, nullable=True)
     comment: Mapped[str | None] = mapped_column("comment", Text, nullable=True)
     created_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    images: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
+
+    # Quan hệ động sang bảng khách hàng
+    khachhang: Mapped["KhachHang"] = relationship(
+        "KhachHang",
+        primaryjoin="Review.user_id == KhachHang.makh",
+        foreign_keys=[user_id],
+        lazy="joined"
+    )

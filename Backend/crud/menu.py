@@ -47,25 +47,45 @@ def get_menu_items(
 def get_top_selling_today(db: Session, *, limit: int = 3, date_str: str | None = None) -> list[MenuItem]:
     """Lấy top món bán chạy theo số lượng đã đặt trong ngày."""
     target_date = date_str or datetime.now().strftime("%Y-%m-%d")
+    
+    # 1. Truy vấn lấy danh sách mã món ăn bán chạy nhất trước để tránh lỗi GROUP BY trên PostgreSQL
     sold_qty = func.coalesce(func.sum(OrderDetail.soluong), 0).label("today_sold")
-
-    stmt = (
-        select(MenuItem, sold_qty)
+    id_stmt = (
+        select(MenuItem.mamon, sold_qty)
         .join(OrderDetail, OrderDetail.mamon == MenuItem.mamon)
         .join(Order, Order.id == OrderDetail.order_id)
-        .options(joinedload(MenuItem.danhmuc))
         .where(Order.thoigiandat.startswith(target_date))
         .where(Order.trangthai.notin_([OrderStatus.CART, OrderStatus.CANCELLED]))
         .group_by(MenuItem.mamon)
         .order_by(sold_qty.desc(), MenuItem.mamon.asc())
         .limit(limit)
     )
-
-    items: list[MenuItem] = []
-    for item, today_sold in db.execute(stmt).unique().all():
-        item.soluongdaban = int(today_sold or 0)
-        items.append(item)
-    return items
+    
+    id_results = db.execute(id_stmt).all()
+    if not id_results:
+        return []
+        
+    sold_map = {mamon: int(today_sold) for mamon, today_sold in id_results}
+    mamon_ids = list(sold_map.keys())
+    
+    # 2. Truy vấn đầy đủ thông tin món ăn kèm danh mục liên quan của các món này
+    fetch_stmt = (
+        select(MenuItem)
+        .options(joinedload(MenuItem.danhmuc))
+        .where(MenuItem.mamon.in_(mamon_ids))
+    )
+    items_fetched = db.execute(fetch_stmt).scalars().all()
+    
+    # Cập nhật số lượng đã bán và sắp xếp lại theo đúng thứ tự bán chạy
+    items_dict = {item.mamon: item for item in items_fetched}
+    result_items = []
+    for mamon_id in mamon_ids:
+        if mamon_id in items_dict:
+            item = items_dict[mamon_id]
+            item.soluongdaban = sold_map[mamon_id]
+            result_items.append(item)
+            
+    return result_items
 
 
 def create_menu_item(db: Session, data: MenuItemCreate) -> MenuItem:

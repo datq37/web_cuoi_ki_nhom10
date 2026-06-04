@@ -24,6 +24,12 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
     const { reviews: globalReviews } = useModel('KhachHang.ThucDon.index');
     const reviews = getReviewsByDish(globalReviews, dish.id);
 
+    const calculatedRating = React.useMemo(() => {
+        if (reviews.length === 0) return 5;
+        const total = reviews.reduce((sum, r) => sum + r.rating, 0);
+        return total / reviews.length;
+    }, [reviews]);
+
     const handleBackdrop = (e: React.MouseEvent) => {
         if (e.target === e.currentTarget) onClose();
     };
@@ -50,7 +56,7 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
                     <div className="hangTieuDe">
                         <h2 className="tenMonChiTiet">{dish.name}</h2>
                         <span className="nhanDanhGia">
-                            <StarFilled /> {dish.rating.toFixed(1)}
+                            <StarFilled /> {calculatedRating.toFixed(1)}
                         </span>
                     </div>
 
@@ -88,6 +94,24 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
                                         </div>
                                         <div className="saoDanhGia">{renderStars(r.rating)}</div>
                                         <p className="binhLuanDanhGia">{r.comment}</p>
+                                        {r.images && r.images.length > 0 && (
+                                            <div className="danhSachAnhDanhGia" style={{ display: 'flex', gap: '8px', marginTop: '8px', flexWrap: 'wrap' }}>
+                                                {r.images.map((img, idx) => (
+                                                    <img
+                                                        key={idx}
+                                                        src={img}
+                                                        alt={`ảnh đánh giá ${idx}`}
+                                                        style={{
+                                                            width: '60px',
+                                                            height: '60px',
+                                                            borderRadius: '6px',
+                                                            objectFit: 'cover',
+                                                            border: '1px solid #e2e8f0'
+                                                        }}
+                                                    />
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))

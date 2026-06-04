@@ -15,7 +15,12 @@ export default function useOrderModel() {
             const res = await axios.get(`${ip3}/orders/history`);
             if (res.data && Array.isArray(res.data)) {
                 const uiOrders = res.data.map(SyncAdapters.mapOrderResponseToUI);
-                setOrders(uiOrders);
+                const reviewedOrderIds = JSON.parse(localStorage.getItem('reviewed_orders') || '[]');
+                const updatedOrders = uiOrders.map(o => ({
+                    ...o,
+                    isReviewed: reviewedOrderIds.includes(o.id)
+                }));
+                setOrders(updatedOrders);
             }
         } catch (error: any) {
             console.error("Lỗi khi tải lịch sử đơn hàng:", error);
@@ -65,7 +70,15 @@ export default function useOrderModel() {
     }, [fetchOrders]);
 
     const markAsReviewed = useCallback(async (orderId: string) => {
-        // Đã đánh giá -> API thực tế gọi review xong thì tải lại
+        try {
+            const reviewedOrderIds = JSON.parse(localStorage.getItem('reviewed_orders') || '[]');
+            if (!reviewedOrderIds.includes(orderId)) {
+                reviewedOrderIds.push(orderId);
+                localStorage.setItem('reviewed_orders', JSON.stringify(reviewedOrderIds));
+            }
+        } catch (e) {
+            console.error("Lỗi lưu trạng thái đánh giá vào localStorage:", e);
+        }
         await fetchOrders();
     }, [fetchOrders]);
 

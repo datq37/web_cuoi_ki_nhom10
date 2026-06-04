@@ -120,28 +120,77 @@ export default function useCartModel() {
     setCart([]);
   }, []);
 
+  const [reviews, setReviews] = useState<Review[]>(SEED_REVIEWS);
+
+  const fetchReviews = useCallback(async () => {
+    try {
+      const res = await axios.get(`${ip3}/reviews`);
+      if (res.data && Array.isArray(res.data)) {
+        const backendReviews = res.data;
+        const allReviews = [...backendReviews];
+        const backendIds = new Set(backendReviews.map((r: any) => r.id));
+        SEED_REVIEWS.forEach(r => {
+          if (!backendIds.has(r.id)) {
+            allReviews.push(r);
+          }
+        });
+        setReviews(allReviews);
+      }
+    } catch (e) {
+      console.error("Lỗi khi tải đánh giá từ API:", e);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchReviews();
+  }, [fetchReviews]);
+
+  const addReview = useCallback(async (newReview: Omit<Review, 'id' | 'date'>) => {
+    try {
+      await axios.post(`${ip3}/reviews`, {
+        dishId: newReview.dishId,
+        rating: newReview.rating,
+        comment: newReview.comment,
+        images: newReview.images || [],
+      });
+      await fetchReviews();
+    } catch (e) {
+      console.error("Lỗi khi gửi đánh giá lên API:", e);
+      setReviews(prev => [createReview(newReview), ...prev]);
+    }
+  }, [fetchReviews]);
+
+  const dishesWithRating = useMemo(() => {
+    return dishes.map(dish => {
+      const dishReviews = reviews.filter(r => r.dishId === dish.id);
+      let avgRating = 5;
+      if (dishReviews.length > 0) {
+        const total = dishReviews.reduce((sum, r) => sum + r.rating, 0);
+        avgRating = total / dishReviews.length;
+      }
+      return {
+        ...dish,
+        rating: avgRating
+      };
+    });
+  }, [dishes, reviews]);
+
   const filteredMenu = useMemo(
-    () => filterMenuByCategoryAndSearch(dishes, activeCategory, searchQuery),
-    [dishes, activeCategory, searchQuery]
+    () => filterMenuByCategoryAndSearch(dishesWithRating, activeCategory, searchQuery),
+    [dishesWithRating, activeCategory, searchQuery]
   );
 
   const bestSeller = useMemo(() => {
-    return dishes.reduce<Dish | undefined>((topDish, dish) => {
+    return dishesWithRating.reduce<Dish | undefined>((topDish, dish) => {
       if (!topDish || dish.sold > topDish.sold) return dish;
       return topDish;
     }, undefined);
-  }, [dishes]);
+  }, [dishesWithRating]);
 
   const categoryCounts = useMemo(
-    () => buildCategoryCounts(dishes, categories as any),
-    [dishes]
+    () => buildCategoryCounts(dishesWithRating, categories as any),
+    [dishesWithRating]
   );
-
-  const [reviews, setReviews] = useState<Review[]>(SEED_REVIEWS);
-
-  const addReview = useCallback((newReview: Omit<Review, 'id' | 'date'>) => {
-    setReviews(prev => [createReview(newReview), ...prev]);
-  }, []);
 
   return {
     greeting,
@@ -165,7 +214,7 @@ export default function useCartModel() {
     setCartOpen,
     reviews,
     addReview,
-    dishes,
-categories,
+    dishes: dishesWithRating,
+    categories,
   };
 }

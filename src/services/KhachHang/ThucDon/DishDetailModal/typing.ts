@@ -8,6 +8,7 @@ export interface Review {
   rating: number;
   comment: string;
   date: string;
+  images?: string[];
 }
 
 export interface DishDetailModalProps {

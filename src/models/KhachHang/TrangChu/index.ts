@@ -12,7 +12,7 @@ import chaySalad from '@/assets/KhachHang/Trang chủ/chay_salad_no_text.png';
 
 export default function useTrangChuModel() {
     const { setPage } = useModel('KhachHang.GlobalState.index') as any;
-    const { cart, addToCart, incCart, decCart, dishes, categories } = useModel('KhachHang.ThucDon.index') as any;
+    const { cart, addToCart, incCart, decCart, dishes, categories, reviews } = useModel('KhachHang.ThucDon.index') as any;
     const { orders } = useModel('KhachHang.Đơn Hàng.Orders') as any;
     const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
     const [todayBestSellingDishes, setTodayBestSellingDishes] = useState<Dish[]>([]);
@@ -21,7 +21,21 @@ export default function useTrangChuModel() {
         () => [...(dishes || [])].sort((a, b) => b.sold - a.sold).slice(0, 3),
         [dishes],
     );
-    const bestSellingDishes = todayBestSellingDishes.length > 0 ? todayBestSellingDishes : fallbackBestSellingDishes;
+    const bestSellingDishes = useMemo(() => {
+        const baseList = todayBestSellingDishes.length > 0 ? todayBestSellingDishes : fallbackBestSellingDishes;
+        return baseList.map(dish => {
+            const dishReviews = (reviews || []).filter((r: any) => r.dishId === dish.id);
+            let avgRating = 5;
+            if (dishReviews.length > 0) {
+                const total = dishReviews.reduce((sum: number, r: any) => sum + r.rating, 0);
+                avgRating = total / dishReviews.length;
+            }
+            return {
+                ...dish,
+                rating: avgRating
+            };
+        });
+    }, [todayBestSellingDishes, fallbackBestSellingDishes, reviews]);
 
     useEffect(() => {
         const fetchTodayBestSelling = async () => {

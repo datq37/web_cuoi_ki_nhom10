@@ -34,7 +34,7 @@ export const SyncAdapters = {
     return {
       id: apiDish.mamon,
       name: apiDish.ten || '',
-      cat: 'main', // Map từ danh mục thực tế nếu cần
+      cat: String(apiDish.danhmucid) || 'all',
       price: apiDish.gia || 0,
       desc: apiDish.mieuta || '',
       emoji: '🍱',

@@ -152,15 +152,34 @@ const DrawerContent: React.FC<ContentProps> = ({
           </Avatar>
           <div className={styles.customerInfo}>
             <div className={styles.customerName}>{order.khachHang?.ten || 'KhachHang'}</div>
-            <div className={styles.customerSub}>KhachHang căng tin</div>
+            <div className={styles.customerSub}>
+              {order.khachHang?.phone ? `📞 ${order.khachHang.phone}` : 'Chưa có SĐT'}
+              {order.khachHang?.phong && order.khachHang.phong !== 'N/A' && (
+                <div style={{ marginTop: 4, color: '#4b5563', fontSize: 12 }}>
+                  📍 {order.khachHang.phong}
+                </div>
+              )}
+            </div>
           </div>
           <div className={styles.customerBtns}>
-            <button className={styles.contactBtn} title="Nhắn tin">
-              <MessageOutlined />
-            </button>
-            <button className={styles.contactBtn} title="Gọi điện">
-              <PhoneOutlined />
-            </button>
+            {order.khachHang?.phone ? (
+              <a
+                href={`tel:${order.khachHang.phone}`}
+                className={styles.contactBtn}
+                title="Gọi điện"
+              >
+                <PhoneOutlined />
+              </a>
+            ) : (
+              <button
+                className={styles.contactBtn}
+                title="Không có SĐT"
+                disabled
+                style={{ opacity: 0.5, cursor: 'not-allowed' }}
+              >
+                <PhoneOutlined />
+              </button>
+            )}
           </div>
         </div>
       </div>

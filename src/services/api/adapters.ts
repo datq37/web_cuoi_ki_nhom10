@@ -134,12 +134,25 @@ export const SyncAdapters = {
     return {
       maDon: apiOrder.maDon,
       thoiGian: apiOrder.thoiGianDat ? apiOrder.thoiGianDat.split('T')[0] : 'Vừa xong',
-      khachHang: {
-        ten: apiOrder.maKh, // BE chưa join tên KH trong OrderResponse nên hiển thị mã
+      khachHang: apiOrder.khachhang ? {
+        ten: apiOrder.khachhang.ten || apiOrder.maKh,
+        phone: apiOrder.khachhang.phone || '',
+        phong: [
+          apiOrder.khachhang.desk ? `Bàn ${apiOrder.khachhang.desk}` : '',
+          apiOrder.khachhang.floor ? `Tầng ${apiOrder.khachhang.floor}` : '',
+          apiOrder.khachhang.building ? `Tòa ${apiOrder.khachhang.building}` : '',
+          apiOrder.khachhang.dept || ''
+        ].filter(Boolean).join(', ') || 'N/A',
+        vietTat: (apiOrder.khachhang.ten || apiOrder.maKh).substring(0, 2).toUpperCase(),
+        mauNen: '#3b82f6',
+        mauChu: '#ffffff',
+      } : {
+        ten: apiOrder.maKh,
+        phone: '',
+        phong: 'N/A',
         vietTat: apiOrder.maKh.substring(0, 2).toUpperCase(),
         mauNen: '#3b82f6',
         mauChu: '#ffffff',
-        phong: 'N/A'
       },
       monAn: (apiOrder.chitiet || []).map(ct => ({
         ten: ct.thucdon?.ten || ct.mamon || 'Món',

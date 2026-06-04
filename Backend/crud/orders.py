@@ -12,7 +12,10 @@ def get_order_by_id(db: Session, order_id: str) -> Order | None:
     """Lấy đơn hàng theo ID kèm theo chi tiết món ăn."""
     stmt = (
         select(Order)
-        .options(joinedload(Order.chitiet).joinedload(OrderDetail.thucdon))
+        .options(
+            joinedload(Order.khachhang),
+            joinedload(Order.chitiet).joinedload(OrderDetail.thucdon)
+        )
         .where(Order.id == order_id)
     )
     return db.execute(stmt).unique().scalar_one_or_none()

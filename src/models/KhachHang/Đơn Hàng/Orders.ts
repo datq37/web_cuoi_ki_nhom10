@@ -17,8 +17,11 @@ export default function useOrderModel() {
                 const uiOrders = res.data.map(SyncAdapters.mapOrderResponseToUI);
                 setOrders(uiOrders);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Lỗi khi tải lịch sử đơn hàng:", error);
+            if (error?.response?.status === 401) {
+                throw error; // Ném lỗi để báo cho polling biết mà dừng lại
+            }
         } finally {
             if (!silent) setLoading(false);
         }
@@ -26,10 +29,20 @@ export default function useOrderModel() {
 
     useEffect(() => {
         fetchOrders();
+        
+        let intervalId: any;
+        const doPoll = async () => {
+            try {
+                await fetchOrders(true);
+            } catch (err: any) {
+                if (err?.response?.status === 401) {
+                    clearInterval(intervalId); // Dừng polling nếu token hết hạn
+                }
+            }
+        };
+
         // Polling để cập nhật trạng thái đơn hàng thời gian thực
-        const intervalId = setInterval(() => {
-            fetchOrders(true);
-        }, 5000); // 5 giây cập nhật 1 lần
+        intervalId = setInterval(doPoll, 5000); // 5 giây cập nhật 1 lần
         
         return () => clearInterval(intervalId);
     }, [fetchOrders]);

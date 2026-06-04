@@ -48,6 +48,15 @@ def create_khachhang(
     ten: str | None = None,
     tuoi: int | None = None,
     vaitro: str = "Khách hàng",
+    avatar: str | None = None,
+    phone: str | None = None,
+    email: str | None = None,
+    dept: str | None = None,
+    building: str | None = None,
+    floor: str | None = None,
+    desk: str | None = None,
+    points: int = 0,
+    total_spent: int = 0,
 ) -> KhachHang:
     """Tạo khách hàng mới trong database."""
     # Tự động sinh mã khách hàng nếu chưa có
@@ -60,6 +69,15 @@ def create_khachhang(
         ten=ten,
         tuoi=tuoi,
         vaitro=vaitro,
+        avatar=avatar,
+        phone=phone,
+        email=email,
+        dept=dept,
+        building=building,
+        floor=floor,
+        desk=desk,
+        points=points,
+        total_spent=total_spent,
     )
     db.add(khachhang)
     db.commit()
@@ -76,6 +94,13 @@ def create_khachhang_from_register(db: Session, data: KhachHangRegister, matkhau
         ten=data.ten,
         tuoi=data.tuoi,
         vaitro="Khách hàng",
+        avatar=data.avatar,
+        phone=data.phone,
+        email=data.email,
+        dept=data.dept,
+        building=data.building,
+        floor=data.floor,
+        desk=data.desk,
     )
 
 
@@ -88,6 +113,15 @@ def create_khachhang_from_schema(db: Session, data: KhachHangCreate, matkhau_has
         ten=data.ten,
         tuoi=data.tuoi,
         vaitro=data.vaitro,
+        avatar=data.avatar,
+        phone=data.phone,
+        email=data.email,
+        dept=data.dept,
+        building=data.building,
+        floor=data.floor,
+        desk=data.desk,
+        points=data.points,
+        total_spent=data.total_spent,
     )
 
 
@@ -111,8 +145,37 @@ def update_profile(db: Session, khachhang: KhachHang, data: ProfileUpdate, matkh
     """Cập nhật hồ sơ cá nhân của khách hàng."""
     if matkhau_hash:
         khachhang.matkhau = matkhau_hash
-    if data.ten is not None:
-        khachhang.ten = data.ten
+
+    update_data = data.model_dump(
+        exclude_unset=True,
+        exclude={"current_password", "new_password"},
+    )
+    for field, value in update_data.items():
+        setattr(khachhang, field, value)
+
+    db.add(khachhang)
+    db.commit()
+    db.refresh(khachhang)
+    return khachhang
+
+
+def add_purchase_points(db: Session, khachhang: KhachHang, amount: int) -> KhachHang:
+    """Cộng tổng chi tiêu và điểm thưởng cho khách hàng sau khi đặt đơn."""
+    safe_amount = max(0, int(amount or 0))
+    new_total_spent = int(khachhang.total_spent or 0) + safe_amount
+
+    if new_total_spent >= 10_000_000:
+        multiplier = 2.0
+    elif new_total_spent >= 3_000_000:
+        multiplier = 1.5
+    elif new_total_spent >= 1_000_000:
+        multiplier = 1.2
+    else:
+        multiplier = 1.0
+
+    earned_points = int((safe_amount // 10_000) * multiplier)
+    khachhang.total_spent = new_total_spent
+    khachhang.points = int(khachhang.points or 0) + earned_points
 
     db.add(khachhang)
     db.commit()

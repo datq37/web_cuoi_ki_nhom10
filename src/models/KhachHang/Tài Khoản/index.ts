@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { message } from 'antd';
 import type { UserProfile } from '@/services/KhachHang/Tài khoản/typing';
 import { showCustomerNotification } from '@/utils/notification';
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -34,12 +33,16 @@ export default function useTaiKhoanModel() {
   };
 
   // xử lý submit
-  const khiHoanThanh = (
+  const khiHoanThanh = async (
     values: Partial<UserProfile>,
-    capNhatHoSo: (data: Partial<UserProfile>) => void,
+    capNhatHoSo: (data: Partial<UserProfile>) => void | Promise<void>,
   ) => {
-    capNhatHoSo({ ...values, avatar: duongDanAnhDaiDien });
-    showCustomerNotification('Cập nhật thông tin thành công!', undefined, 'success');
+    try {
+      await capNhatHoSo({ ...values, avatar: duongDanAnhDaiDien });
+      showCustomerNotification('Cập nhật thông tin thành công!', undefined, 'success');
+    } catch (error) {
+      showCustomerNotification('Lỗi cập nhật thông tin', 'Không thể lưu thông tin vào máy chủ. Vui lòng thử lại.', 'error');
+    }
   };
 
   // trả về true nếu là ảnh đại diện

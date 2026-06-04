@@ -2,6 +2,7 @@ from model.enums import OrderStatus, PaymentMethod
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
+from crud import khachhang as khachhang_crud
 from crud import menu as menu_crud
 from crud import orders as orders_crud
 from model.orders import Order
@@ -102,8 +103,12 @@ def confirm_user_order(db: Session, order_id: str, makh: str) -> Order:
             detail="Giỏ hàng trống, vui lòng thêm món trước khi đặt"
         )
 
-    # Chuyển sang trạng thái chờ admin xác nhận để nấu
-    return orders_crud.update_order_status(db, order, OrderStatus.PENDING_CONFIRMATION)
+    # Chuyển sang trạng thái chờ admin xác nhận để nấu, rồi cộng điểm một lần.
+    confirmed_order = orders_crud.update_order_status(db, order, OrderStatus.PENDING_CONFIRMATION)
+    khachhang = khachhang_crud.get_khachhang_by_makh(db, makh)
+    if khachhang:
+        khachhang_crud.add_purchase_points(db, khachhang, int(confirmed_order.tongtien or 0))
+    return confirmed_order
 
 
 def cancel_user_order(db: Session, order_id: str, makh: str) -> Order:

@@ -26,7 +26,7 @@ export interface BieuMauProps {
   bieuMau: FormInstance;
   khiHoanThanh: (
     values: Partial<UserProfile>,
-    capNhatHoSo: (data: Partial<UserProfile>) => void,
-  ) => void;
-  capNhatHoSo: (data: Partial<UserProfile>) => void;
+    capNhatHoSo: (data: Partial<UserProfile>) => void | Promise<void>,
+  ) => void | Promise<void>;
+  capNhatHoSo: (data: Partial<UserProfile>) => void | Promise<void>;
 }

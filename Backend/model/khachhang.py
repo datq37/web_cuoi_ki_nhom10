@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, String, Boolean
+from sqlalchemy import Integer, String, Boolean, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from database import Base
@@ -19,3 +19,12 @@ class KhachHang(Base):
     vaitro: Mapped[str | None] = mapped_column(String, nullable=True, default="Khách hàng")
     # Đồng bộ với cột is_active bool NULL DEFAULT true trong CSDL
     is_active: Mapped[bool | None] = mapped_column(Boolean, nullable=True, default=True)
+    avatar: Mapped[str | None] = mapped_column(Text, nullable=True)
+    phone: Mapped[str | None] = mapped_column(String, nullable=True)
+    email: Mapped[str | None] = mapped_column(String, nullable=True)
+    dept: Mapped[str | None] = mapped_column(String, nullable=True)
+    building: Mapped[str | None] = mapped_column(String, nullable=True)
+    floor: Mapped[str | None] = mapped_column(String, nullable=True)
+    desk: Mapped[str | None] = mapped_column(String, nullable=True)
+    points: Mapped[int | None] = mapped_column(Integer, nullable=False, default=0)
+    total_spent: Mapped[int | None] = mapped_column(Integer, nullable=False, default=0)

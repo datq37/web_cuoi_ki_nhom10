@@ -143,6 +143,10 @@ export function useGioHangModel() {
                 setPendingOrder(newOrder);
             }
 
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('order_completed'));
+            }
+
             // thêm thông báo
             addNotification({
                 id: `n-${Date.now()}`,

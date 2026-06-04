@@ -11,6 +11,15 @@ class KhachHangBase(BaseModel):
     taikhoan: str | None = None
     lichsudathang: str | None = None
     vaitro: str | None = "Khách hàng"
+    avatar: str | None = None
+    phone: str | None = None
+    email: str | None = None
+    dept: str | None = None
+    building: str | None = None
+    floor: str | None = None
+    desk: str | None = None
+    points: int = 0
+    total_spent: int = 0
 
 
 class KhachHangCreate(BaseModel):
@@ -22,6 +31,15 @@ class KhachHangCreate(BaseModel):
     ten: str | None = Field(default=None, min_length=1, max_length=255)
     tuoi: int | None = None
     vaitro: str = Field(default="Khách hàng")
+    avatar: str | None = None
+    phone: str | None = None
+    email: str | None = None
+    dept: str | None = None
+    building: str | None = None
+    floor: str | None = None
+    desk: str | None = None
+    points: int = Field(default=0, ge=0)
+    total_spent: int = Field(default=0, ge=0)
 
 
 class KhachHangRegister(BaseModel):
@@ -32,6 +50,13 @@ class KhachHangRegister(BaseModel):
     matkhau: str = Field(..., min_length=6, max_length=128)
     ten: str | None = Field(default=None, min_length=1, max_length=255)
     tuoi: int | None = None
+    avatar: str | None = None
+    phone: str | None = None
+    email: str | None = None
+    dept: str | None = None
+    building: str | None = None
+    floor: str | None = None
+    desk: str | None = None
 
 
 class KhachHangUpdate(BaseModel):
@@ -44,6 +69,15 @@ class KhachHangUpdate(BaseModel):
     matkhau: str | None = Field(default=None, min_length=6, max_length=128)
     lichsudathang: str | None = None
     vaitro: str | None = None
+    avatar: str | None = None
+    phone: str | None = None
+    email: str | None = None
+    dept: str | None = None
+    building: str | None = None
+    floor: str | None = None
+    desk: str | None = None
+    points: int | None = Field(default=None, ge=0)
+    total_spent: int | None = Field(default=None, ge=0)
 
 
 class ProfileUpdate(BaseModel):
@@ -51,6 +85,13 @@ class ProfileUpdate(BaseModel):
 
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
     ten: str | None = Field(default=None, min_length=1, max_length=255)
+    avatar: str | None = None
+    phone: str | None = None
+    email: str | None = None
+    dept: str | None = None
+    building: str | None = None
+    floor: str | None = None
+    desk: str | None = None
     current_password: str | None = Field(default=None, min_length=1)
     new_password: str | None = Field(default=None, min_length=6, max_length=128)
 

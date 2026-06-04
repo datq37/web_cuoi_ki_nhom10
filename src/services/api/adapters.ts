@@ -113,13 +113,14 @@ export const SyncAdapters = {
     return {
       id: apiCustomer.makh,
       hoTen: ten,
-      email: apiCustomer.taikhoan || '',
+      email: apiCustomer.email || apiCustomer.taikhoan || '',
+      avatar: apiCustomer.avatar,
       vietTat: ten.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'NA',
       mauNen: color,
-      phongBan: 'Chung', // Backend chưa có phòng ban
+      phongBan: apiCustomer.dept || 'Chưa cập nhật',
       vaiTro: mappedVaiTro,
-      soDon: 0, // Backend chưa trả về
-      chiTieu: 0, // Backend chưa trả về
+      soDon: Number(apiCustomer.soDon ?? apiCustomer.so_don ?? 0),
+      chiTieu: Number(apiCustomer.totalSpent ?? apiCustomer.total_spent ?? 0),
       thamGia: apiCustomer.lichsudathang || 'Gần đây',
       trangThai: ETrangThaiKhach.HOAT_DONG, // Mặc định do BE chưa có trạng thái
     };

@@ -20,6 +20,7 @@ class KhachHangBase(BaseModel):
     desk: str | None = None
     points: int = 0
     total_spent: int = 0
+    so_don: int = 0
 
 
 class KhachHangCreate(BaseModel):

@@ -13,6 +13,7 @@ export interface IKhachHang {
   id: string;
   hoTen: string;
   email: string;
+  avatar?: string;
   vietTat: string;
   mauNen: string;
   phongBan: string;

@@ -2,7 +2,9 @@ import uuid
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from model.enums import OrderStatus
 from model.khachhang import KhachHang
+from model.orders import Order
 from schemas.khachhang import KhachHangCreate, KhachHangRegister, KhachHangUpdate, ProfileUpdate
 
 
@@ -25,7 +27,17 @@ def get_khachhangs(
     vaitro: str | None = None,
 ) -> tuple[list[KhachHang], int]:
     """Danh sách khách hàng có phân trang và lọc theo vai trò."""
-    stmt = select(KhachHang)
+    order_count_subq = (
+        select(Order.makh, func.count(Order.id).label("so_don"))
+        .where(Order.trangthai != OrderStatus.CART)
+        .group_by(Order.makh)
+        .subquery()
+    )
+
+    stmt = (
+        select(KhachHang, func.coalesce(order_count_subq.c.so_don, 0).label("so_don"))
+        .outerjoin(order_count_subq, KhachHang.makh == order_count_subq.c.makh)
+    )
     count_stmt = select(func.count()).select_from(KhachHang)
 
     if vaitro is not None:
@@ -34,9 +46,11 @@ def get_khachhangs(
 
     total = db.execute(count_stmt).scalar_one()
     # Sắp xếp mặc định theo mã khách hàng
-    khachhangs = (
-        db.execute(stmt.order_by(KhachHang.makh.asc()).offset(skip).limit(limit)).scalars().all()
-    )
+    rows = db.execute(stmt.order_by(KhachHang.makh.asc()).offset(skip).limit(limit)).all()
+    khachhangs = []
+    for khachhang, so_don in rows:
+        khachhang.so_don = int(so_don or 0)
+        khachhangs.append(khachhang)
     return list(khachhangs), total
 
 

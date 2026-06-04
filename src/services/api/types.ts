@@ -21,6 +21,26 @@ export interface KhachHangResponse {
   tuoi?: number;
   lichsudathang?: string;
   vaitro?: string;
+  avatar?: string;
+  phone?: string;
+  email?: string;
+  dept?: string;
+  building?: string;
+  floor?: string;
+  desk?: string;
+  points?: number;
+  totalSpent?: number;
+  total_spent?: number;
+  soDon?: number;
+  so_don?: number;
+}
+
+export interface KhachHangListResponse {
+  items: KhachHangResponse[];
+  total: number;
+  page: number;
+  pageSize?: number;
+  page_size?: number;
 }
 
 export interface TokenResponse {

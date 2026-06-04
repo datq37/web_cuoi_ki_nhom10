@@ -10,11 +10,8 @@ import {
   Badge,
   Button,
   Dropdown,
-  Form,
-  Input,
   Menu,
   Modal,
-  Select,
   Table,
   Tag,
   message,
@@ -29,7 +26,6 @@ import EmptyState from '@/pages/QuanTri/components/EmptyState';
 import { fmt } from '@/models/QuanTri/Tổng Quan';
 import { mockData } from '@/services/QuanTri/Tổng Quan';
 import {
-  DANH_SACH_KHACH,
   TRANG_THAI_KHACH_CONFIG,
   VAI_TRO_CONFIG,
 } from '@/services/QuanTri/KhachHang';
@@ -42,14 +38,16 @@ import { KEYS, store } from '@/utils/storage';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { SyncAdapters } from '@/services/api/adapters';
-import { KhachHangListResponse } from '@/services/api/types';
+import type { KhachHangListResponse } from '@/services/api/types';
 import styles from './index.less';
 
 function formatChiTieu(val: number): string {
   return new Intl.NumberFormat('vi-VN').format(val) + 'đ';
 }
 
-
+function laAnhDaiDien(value?: string): boolean {
+  return !!value && (/^(data:image\/|https?:\/\/|\/uploads\/)/.test(value));
+}
 
 // ── Drawer chi tiết khách hàng ───────────────────────────────────
 const ChiTietKhachDrawer: React.FC<{
@@ -112,7 +110,13 @@ const ChiTietKhachDrawer: React.FC<{
         <>
           {/* Hero */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px 24px 20px', background: 'linear-gradient(160deg, #f0fdf4 0%, #f8fafc 100%)', borderBottom: '1px solid #f1f5f9', gap: 10 }}>
-            <Avatar size={72} style={{ background: khach.mauNen, color: '#fff', fontWeight: 700, fontSize: 24 }}>{khach.vietTat}</Avatar>
+            <Avatar
+              size={72}
+              src={laAnhDaiDien(khach.avatar) ? khach.avatar : undefined}
+              style={{ background: khach.mauNen, color: '#fff', fontWeight: 700, fontSize: 24 }}
+            >
+              {khach.vietTat}
+            </Avatar>
             <div style={{ fontWeight: 700, fontSize: 17, color: '#111827', textAlign: 'center' }}>{khach.hoTen}</div>
             <div style={{ fontSize: 12.5, color: '#9ca3af' }}>{khach.email}</div>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -261,7 +265,14 @@ const KhachHang: React.FC = () => {
       title: 'HỌ TÊN', key: 'hoTen', width: 240,
       render: (_, r) => (
         <div className={styles.colHoTen} onClick={() => setChiTietKhach(r)} style={{ cursor: 'pointer' }}>
-          <Avatar size={36} className={styles.khachAvatar} style={{ background: r.mauNen }}>{r.vietTat}</Avatar>
+          <Avatar
+            size={36}
+            src={laAnhDaiDien(r.avatar) ? r.avatar : undefined}
+            className={styles.khachAvatar}
+            style={{ background: r.mauNen }}
+          >
+            {r.vietTat}
+          </Avatar>
           <div>
             <div className={styles.khachTen}><Highlight text={r.hoTen} search={tuKhoa} /></div>
             <div className={styles.khachEmail}><Highlight text={r.email} search={tuKhoa} /></div>

@@ -1,5 +1,6 @@
-import { OrderResponse, KhachHangResponse, ThucDonResponse, OrderStatus } from './types';
+import { OrderResponse, KhachHangResponse, ThucDonResponse, OrderStatus as ApiOrderStatus } from './types';
 import { Order, OrderItem } from '@/services/KhachHang/Đơn Hàng/typing';
+import { OrderStatus as UIOrderStatus, PaymentMethod as UIPaymentMethod } from '@/services/KhachHang/Đơn Hàng/index';
 import { Dish } from '@/services/KhachHang/ThucDon/typing';
 import { EVaiTro, ETrangThaiKhach, IKhachHang } from '@/services/QuanTri/KhachHang/typing';
 
@@ -8,14 +9,45 @@ export const SyncAdapters = {
    * Chuyển đổi dữ liệu Đơn Hàng (Backend) -> Đơn Hàng (Frontend UI)
    */
   mapOrderResponseToUI(apiOrder: OrderResponse): Order {
+    // Chuyển đổi trạng thái từ Backend sang Frontend
+    let mappedStatus = UIOrderStatus.Pending;
+    switch (apiOrder.trangThai as string) {
+      case 'pending_confirmation':
+      case 'cart':
+        mappedStatus = UIOrderStatus.Pending;
+        break;
+      case 'confirmed':
+      case 'processing':
+        mappedStatus = UIOrderStatus.Preparing;
+        break;
+      case 'delivered':
+        mappedStatus = UIOrderStatus.Done;
+        break;
+      case 'cancelled':
+        mappedStatus = UIOrderStatus.Cancelled;
+        break;
+      default:
+        // Fallback an toàn nếu lỡ có trạng thái khớp sẵn
+        mappedStatus = (apiOrder.trangThai as unknown as UIOrderStatus) || UIOrderStatus.Pending;
+    }
+
+    // Chuyển đổi phương thức thanh toán
+    let mappedPayment = UIPaymentMethod.Cash;
+    const paymentStr = apiOrder.hinhthucthanhtoan as string;
+    if (paymentStr === 'banking' || paymentStr === 'qr') {
+      mappedPayment = UIPaymentMethod.QR;
+    } else if (paymentStr === 'cash') {
+      mappedPayment = UIPaymentMethod.Cash;
+    }
+
     return {
       id: apiOrder.maDon,
       user: apiOrder.maKh,
       userName: 'Khách hàng', // BE chưa trả về tên người đặt trong OrderResponse
       dept: 'Căng tin',
       total: apiOrder.tongTien,
-      status: apiOrder.trangThai as unknown as any,
-      payment: apiOrder.hinhthucthanhtoan as any,
+      status: mappedStatus,
+      payment: mappedPayment,
       created: apiOrder.thoiGianDat || '',
       pickup: '',
       items: (apiOrder.chitiet || []).map((ct): OrderItem => ({

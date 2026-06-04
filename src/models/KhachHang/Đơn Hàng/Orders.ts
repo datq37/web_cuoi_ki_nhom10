@@ -9,9 +9,9 @@ export default function useOrderModel() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(false);
 
-    const fetchOrders = useCallback(async () => {
+    const fetchOrders = useCallback(async (silent = false) => {
         try {
-            setLoading(true);
+            if (!silent) setLoading(true);
             const res = await axios.get(`${ip3}/orders/history`);
             if (res.data && Array.isArray(res.data)) {
                 const uiOrders = res.data.map(SyncAdapters.mapOrderResponseToUI);
@@ -20,19 +20,25 @@ export default function useOrderModel() {
         } catch (error) {
             console.error("Lỗi khi tải lịch sử đơn hàng:", error);
         } finally {
-            setLoading(false);
+            if (!silent) setLoading(false);
         }
     }, []);
 
     useEffect(() => {
         fetchOrders();
+        // Polling để cập nhật trạng thái đơn hàng thời gian thực
+        const intervalId = setInterval(() => {
+            fetchOrders(true);
+        }, 5000); // 5 giây cập nhật 1 lần
+        
+        return () => clearInterval(intervalId);
     }, [fetchOrders]);
 
     const addOrder = useCallback(async (newOrder: Order) => {
-        // Mặc dù trong model đang dùng addOrder để mutate state,
-        // Nhưng logic tạo đơn thực sự đã nằm trong `models/KhachHang/Giỏ hàng/index.ts`.
-        // Ở đây ta chỉ cần gọi lại fetchOrders.
-        await fetchOrders();
+        // Cập nhật state ngay lập tức để UI phản hồi nhanh
+        setOrders(prev => [newOrder, ...prev]);
+        // Đồng thời gọi API lấy danh sách mới nhất ngầm bên dưới
+        fetchOrders();
     }, [fetchOrders]);
 
     const advanceOrder = useCallback(async (orderId: string) => {

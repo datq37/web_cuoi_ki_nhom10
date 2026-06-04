@@ -91,6 +91,7 @@ export function useGioHangModel() {
             // 1. Tạo đơn hàng (Giỏ hàng) ở Backend
             const payload = {
                 hinhthucthanhtoan: payment === PaymentMethod.QR ? 'banking' : payment,
+                ghiChu: note || undefined,
                 chitiet: cart.map((it: any) => ({
                     mamon: it.id,
                     soluong: it.qty

@@ -29,7 +29,12 @@ def get_orders_by_makh(db: Session, makh: str) -> list[Order]:
     return list(db.execute(stmt).unique().scalars().all())
 
 
-def create_order(db: Session, makh: str, hinhthucthanhtoan: str = PaymentMethod.CASH) -> Order:
+def create_order(
+    db: Session,
+    makh: str,
+    hinhthucthanhtoan: str = PaymentMethod.CASH,
+    ghichu: str | None = None,
+) -> Order:
     """Khởi tạo một đơn hàng mới (ở trạng thái Giỏ hàng)."""
     order_id = f"OD-{uuid.uuid4().hex[:8].upper()}"
     thoigian = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -41,6 +46,7 @@ def create_order(db: Session, makh: str, hinhthucthanhtoan: str = PaymentMethod.
         trangthai=OrderStatus.CART,
         thoigiandat=thoigian,
         hinhthucthanhtoan=hinhthucthanhtoan,
+        ghichu=ghichu,
     )
     db.add(order)
     db.commit()

@@ -17,6 +17,7 @@ class Order(Base):
     trangthai: Mapped[str | None] = mapped_column(String, nullable=True, default="cart")
     thoigiandat: Mapped[str | None] = mapped_column(String, nullable=True)
     hinhthucthanhtoan: Mapped[str | None] = mapped_column(String, nullable=True)
+    ghichu: Mapped[str | None] = mapped_column(String, nullable=True)
 
     # Thiết lập quan hệ
     khachhang: Mapped["KhachHang"] = relationship("KhachHang")

@@ -174,12 +174,20 @@ const DrawerContent: React.FC<ContentProps> = ({
         <div className={styles.itemList}>
           {(order.monAn || []).map((m, i) => (
             <div key={i} className={styles.itemRow}>
-              <div
-                className={styles.itemAvatar}
-                style={{ background: order.khachHang?.mauNen || '#e5e7eb' }}
-              >
-                🍽️
-              </div>
+              {m.hinhAnh ? (
+                <img
+                  src={m.hinhAnh}
+                  alt={m.ten}
+                  className={styles.itemImage}
+                />
+              ) : (
+                <div
+                  className={styles.itemAvatar}
+                  style={{ background: order.khachHang?.mauNen || '#e5e7eb' }}
+                >
+                  🍽️
+                </div>
+              )}
               <span className={styles.itemName}>{m.ten}</span>
               <span className={styles.itemQty}>×{m.soLuong}</span>
             </div>

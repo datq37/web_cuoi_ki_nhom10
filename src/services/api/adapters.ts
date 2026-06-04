@@ -143,9 +143,10 @@ export const SyncAdapters = {
       },
       monAn: (apiOrder.chitiet || []).map(ct => ({
         ten: ct.thucdon?.ten || ct.mamon || 'Món',
-        soLuong: ct.soluong
+        soLuong: ct.soluong,
+        hinhAnh: ct.thucdon?.hinhanh
       })),
-      ghiChu: apiOrder.hinhthucthanhtoan === 'banking' ? 'Chuyển khoản' : 'Tiền mặt',
+      ghiChu: apiOrder.ghiChu || '',
       tongTien: apiOrder.tongTien,
       trangThai: apiOrder.trangThai
     };

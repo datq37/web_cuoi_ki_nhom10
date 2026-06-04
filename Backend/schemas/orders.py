@@ -35,6 +35,7 @@ class OrderBase(BaseModel):
 
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
     hinhthucthanhtoan: PaymentMethod | None = Field(default=PaymentMethod.CASH, description="Hình thức thanh toán")
+    ghichu: str | None = Field(default=None, description="Ghi chú đơn hàng", alias="ghiChu")
 
 
 class OrderCreate(OrderBase):

@@ -38,7 +38,10 @@ def create_user_order(db: Session, makh: str, data: OrderCreate) -> Order:
 
     # Nếu chưa có giỏ hàng, khởi tạo mới
     if not cart:
-        cart = orders_crud.create_order(db, makh, data.hinhthucthanhtoan or PaymentMethod.CASH)
+        cart = orders_crud.create_order(db, makh, data.hinhthucthanhtoan or PaymentMethod.CASH, ghichu=data.ghichu)
+    else:
+        if data.ghichu is not None:
+            cart.ghichu = data.ghichu
 
     # Thêm các món ăn vào giỏ hàng
     for item in data.chitiet:

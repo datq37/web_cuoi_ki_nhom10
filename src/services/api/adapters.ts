@@ -229,5 +229,22 @@ export const SyncAdapters = {
       trangThai: apiItem.trangthai || 'dang_chay',
       hoatDong: Boolean(apiItem.hoatdong ?? true),
     };
+  },
+
+  /**
+   * Chuyển đổi dữ liệu Combo (Backend) -> UI (Frontend)
+   */
+  mapAdminComboToUI(apiItem: any): any {
+    return {
+      id: apiItem.id?.toString(),
+      ten: apiItem.ten || '',
+      moTa: apiItem.mota || '',
+      monAnIds: apiItem.monAnIds || apiItem.mon_an_ids || [],
+      loaiGia: apiItem.loaiGia || apiItem.loai_gia || 'phan_tram',
+      giaTriGiam: apiItem.giaTriGiam ?? apiItem.gia_tri_giam ?? 0,
+      hetHan: formatApiDateToDisplay(apiItem.hansudung),
+      trangThai: apiItem.trangthai || 'dang_chay',
+      hoatDong: Boolean(apiItem.hoatdong ?? true),
+    };
   }
 };

@@ -1,4 +1,5 @@
 from .cosovatchat import CoSoVatChat
+from .combo import Combo, ComboMonAn
 from .daily_menu import DailyMenu
 from .danhmucmonan import DanhMucMonAn
 from .khachhang import KhachHang
@@ -12,6 +13,8 @@ from .payment import Payment
 
 __all__ = [
     "CoSoVatChat",
+    "Combo",
+    "ComboMonAn",
     "KhachHang",
     "KhoHang",
     "NhanVien",

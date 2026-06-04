@@ -1,5 +1,6 @@
 from .auth import LoginRequest, LogoutRequest, RefreshRequest, Token, TokenData
 from .cosovatchat import CoSoVatChatCreate, CoSoVatChatResponse, CoSoVatChatUpdate
+from .combo import ComboCreate, ComboResponse, ComboUpdate
 from .daily_menu import DailyMenuCreate, DailyMenuResponse, DailyMenuUpdate
 from .danhmucmonan import DanhMucMonAnCreate, DanhMucMonAnResponse, DanhMucMonAnUpdate
 from .khachhang import KhachHangCreate, KhachHangResponse, KhachHangUpdate, KhachHangRegister, KhachHangListResponse, ProfileUpdate
@@ -19,6 +20,9 @@ __all__ = [
     "CoSoVatChatCreate",
     "CoSoVatChatResponse",
     "CoSoVatChatUpdate",
+    "ComboCreate",
+    "ComboResponse",
+    "ComboUpdate",
     "DailyMenuCreate",
     "DailyMenuResponse",
     "DailyMenuUpdate",

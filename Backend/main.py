@@ -9,6 +9,8 @@ import config
 from database import Base, engine
 from model import (  # noqa: F401 — đăng ký metadata theo schema.sql
     CoSoVatChat,
+    Combo,
+    ComboMonAn,
     DailyMenu,
     DanhMucMonAn,
     KhachHang,

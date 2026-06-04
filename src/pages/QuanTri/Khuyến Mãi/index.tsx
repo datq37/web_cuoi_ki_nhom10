@@ -29,6 +29,9 @@ import Topbar from '@/pages/QuanTri/Topbar';
 import PageToolbar from '@/pages/QuanTri/components/PageToolbar';
 import { TRANG_THAI_KM_CONFIG } from '@/services/QuanTri/Khuyến Mãi';
 import useKhuyenMaiModel from '@/models/QuanTri/Khuyến Mãi';
+import axios from '@/utils/axios';
+import { ip3 } from '@/utils/ip';
+import { SyncAdapters } from '@/services/api/adapters';
 import {
   ELoaiGiamGia,
   ELoaiGiaCombo,
@@ -36,7 +39,7 @@ import {
   ICombo,
   IKhuyenMai,
 } from '@/services/QuanTri/Khuyến Mãi/typing';
-import { DANH_SACH_MON } from '@/services/QuanTri/Quản Lý Món';
+import type { IMonAn } from '@/services/QuanTri/Quản Lý Món/typing';
 import styles from './index.less';
 
 dayjs.extend(customParseFormat);
@@ -59,9 +62,9 @@ type FormPayload = Omit<IKhuyenMai, 'id' | 'daDung'>;
 
 type ComboFormPayload = Omit<ICombo, 'id'>;
 
-function tinhGiaCombo(combo: ICombo): { tongLe: number; giaCombo: number; tietKiem: number } {
+function tinhGiaCombo(combo: ICombo, dishes: IMonAn[]): { tongLe: number; giaCombo: number; tietKiem: number } {
   const tongLe = combo.monAnIds.reduce((sum, id) => {
-    const mon = DANH_SACH_MON.find((m) => m.id === id);
+    const mon = dishes.find((m) => m.id === id);
     return sum + (mon?.giaBan ?? 0);
   }, 0);
   const giaCombo =
@@ -359,9 +362,10 @@ const KhuyenMaiDetail: React.FC<{
 const ComboForm: React.FC<{
   open: boolean;
   initial: ICombo | null;
+  dishes: IMonAn[];
   onCancel: () => void;
   onSubmit: (data: ComboFormPayload) => void;
-}> = ({ open, initial, onCancel, onSubmit }) => {
+}> = ({ open, initial, dishes, onCancel, onSubmit }) => {
   const [form]        = Form.useForm();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [dishSearch,  setDishSearch]  = useState('');
@@ -371,7 +375,7 @@ const ComboForm: React.FC<{
 
   // tổng giá lẻ
   const tongLe = selectedIds.reduce((sum, id) => {
-    const mon = DANH_SACH_MON.find((m) => m.id === id);
+    const mon = dishes.find((m) => m.id === id);
     return sum + (mon?.giaBan ?? 0);
   }, 0);
 
@@ -390,15 +394,15 @@ const ComboForm: React.FC<{
 
   // danh sách món picker
   const filteredDishes = useMemo(() => {
-    if (!dishSearch.trim()) return DANH_SACH_MON;
+    if (!dishSearch.trim()) return dishes;
     const kw = dishSearch.toLowerCase();
-    return DANH_SACH_MON.filter((m) => m.ten.toLowerCase().includes(kw));
-  }, [dishSearch]);
+    return dishes.filter((m) => m.ten.toLowerCase().includes(kw));
+  }, [dishSearch, dishes]);
 
   // món đã chọn
   const selectedDishes = selectedIds
-    .map((id) => DANH_SACH_MON.find((m) => m.id === id))
-    .filter(Boolean) as (typeof DANH_SACH_MON[number])[];
+    .map((id) => dishes.find((m) => m.id === id))
+    .filter(Boolean) as IMonAn[];
 
   useEffect(() => {
     if (!open) return;
@@ -691,14 +695,15 @@ const KhuyenMaiRow: React.FC<{
 
 const ComboRow: React.FC<{
   item: ICombo;
+  dishes: IMonAn[];
   onClick: () => void;
-}> = ({ item, onClick }) => {
+}> = ({ item, dishes, onClick }) => {
   const cfg = TRANG_THAI_KM_CONFIG[item.trangThai];
-  const { tongLe, giaCombo, tietKiem } = tinhGiaCombo(item);
+  const { tongLe, giaCombo, tietKiem } = tinhGiaCombo(item, dishes);
 
   const monList = item.monAnIds
-    .map((id) => DANH_SACH_MON.find((m) => m.id === id))
-    .filter(Boolean) as (typeof DANH_SACH_MON[number])[];
+    .map((id) => dishes.find((m) => m.id === id))
+    .filter(Boolean) as IMonAn[];
 
   return (
     <div className={styles.comboCard} onClick={onClick}>
@@ -742,21 +747,22 @@ const ComboRow: React.FC<{
 
 const ComboDetail: React.FC<{
   item: ICombo | null;
+  dishes: IMonAn[];
   onClose: () => void;
   onEdit: () => void;
   onDelete: () => void;
   onToggle: (v: boolean) => void;
-}> = ({ item, onClose, onEdit, onDelete, onToggle }) => {
+}> = ({ item, dishes, onClose, onEdit, onDelete, onToggle }) => {
   const lastRef = React.useRef<ICombo | null>(null);
   if (item) lastRef.current = item;
   const d = lastRef.current;
   const cfg = d ? TRANG_THAI_KM_CONFIG[d.trangThai] : null;
 
   const monList = d
-    ? d.monAnIds.map((id) => DANH_SACH_MON.find((m) => m.id === id)).filter(Boolean) as (typeof DANH_SACH_MON[number])[]
+    ? d.monAnIds.map((id) => dishes.find((m) => m.id === id)).filter(Boolean) as IMonAn[]
     : [];
 
-  const { tongLe, giaCombo, tietKiem } = d ? tinhGiaCombo(d) : { tongLe: 0, giaCombo: 0, tietKiem: 0 };
+  const { tongLe, giaCombo, tietKiem } = d ? tinhGiaCombo(d, dishes) : { tongLe: 0, giaCombo: 0, tietKiem: 0 };
 
   return (
     <Modal
@@ -855,7 +861,18 @@ const ComboDetail: React.FC<{
 };
 
 const KhuyenMai: React.FC = () => {
-  const { items, addKhuyenMai, updateKhuyenMai, deleteKhuyenMai, toggleHoatDong } = useKhuyenMaiModel();
+  const {
+    items,
+    comboItems,
+    addKhuyenMai,
+    updateKhuyenMai,
+    deleteKhuyenMai,
+    toggleHoatDong,
+    addCombo,
+    updateCombo,
+    deleteCombo,
+    toggleComboHoatDong,
+  } = useKhuyenMaiModel();
 
   const [tuKhoa,         setTuKhoa]         = useState('');
   const [filterTrangThai, setFilterTrangThai] = useState<ETrangThaiKhuyenMai | null>(null);
@@ -865,12 +882,28 @@ const KhuyenMai: React.FC = () => {
 
   // Hidden Combo Tab per requirement A
   const [activeTab,     setActiveTab]     = useState<'ma-giam-gia' | 'combo'>('ma-giam-gia');
-  const [comboItems, setComboItems] = useState<ICombo[]>([]);
   const [comboFormOpen,       setComboFormOpen]       = useState(false);
   const [editingCombo,        setEditingCombo]        = useState<ICombo | null>(null);
   const [viewingCombo,        setViewingCombo]        = useState<ICombo | null>(null);
   const [comboTuKhoa,         setComboTuKhoa]         = useState('');
   const [comboFilterTrangThai, setComboFilterTrangThai] = useState<ETrangThaiKhuyenMai | null>(null);
+  const [comboDishes, setComboDishes] = useState<IMonAn[]>([]);
+
+  useEffect(() => {
+    const fetchComboDishes = async () => {
+      try {
+        const res = await axios.get(`${ip3}/menus/items?limit=200`);
+        if (res.data?.items) {
+          setComboDishes(res.data.items.map(SyncAdapters.mapAdminMenuToUI));
+        }
+      } catch (error) {
+        console.error('Failed to load combo dishes:', error);
+        setComboDishes([]);
+      }
+    };
+
+    fetchComboDishes();
+  }, []);
 
 
   const danhSachLoc = useMemo(() => {
@@ -937,9 +970,11 @@ const KhuyenMai: React.FC = () => {
     } catch (e) {}
   };
 
-  const handleComboToggle = (id: string, v: boolean) => {
-    setComboItems((prev) => prev.map((c) => (c.id === id ? { ...c, hoatDong: v } : c)));
-    message.success(v ? 'Đã kích hoạt combo' : 'Đã tạm dừng combo');
+  const handleComboToggle = async (id: string, v: boolean) => {
+    try {
+      await toggleComboHoatDong(id, v);
+      message.success(v ? 'Đã kích hoạt combo' : 'Đã tạm dừng combo');
+    } catch (e) {}
   };
 
   const handleComboDelete = (item: ICombo) => {
@@ -953,38 +988,39 @@ const KhuyenMai: React.FC = () => {
       centered: true,
       okButtonProps: { style: { borderRadius: 8 } },
       cancelButtonProps: { style: { borderRadius: 8 } },
-      onOk: () => {
-        setComboItems((prev) => prev.filter((c) => c.id !== item.id));
-        message.success(`Đã xoá combo "${item.ten}"`);
+      onOk: async () => {
+        try {
+          await deleteCombo(item.id);
+          message.success(`Đã xoá combo "${item.ten}"`);
+        } catch (e) {}
       },
     });
   };
 
-  const handleComboSubmit = (data: ComboFormPayload) => {
-    if (editingCombo) {
-      setComboItems((prev) =>
-        prev.map((c) => (c.id === editingCombo.id ? { ...c, ...data } : c)),
-      );
-      message.success('Đã cập nhật combo');
-    } else {
-      const newCombo: ICombo = { ...data, id: `cb_${Date.now()}` };
-      setComboItems((prev) => [newCombo, ...prev]);
-      message.success(`Đã tạo combo "${data.ten}"`);
-      
-      // gửi thông báo
-      window.dispatchEvent(new CustomEvent('new_notification', {
-        detail: {
-            id: `notif_combo_${Date.now()}`,
-            title: 'Combo Mới Cực Hời!',
-            message: `Vừa ra mắt combo mới: ${data.ten}. Tiết kiệm hơn khi đặt chung nha bạn ơi!`,
-            time: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }),
-            isRead: false,
-            image: 'https://cdn-icons-png.flaticon.com/512/3480/3480823.png'
-        }
-      }));
-    }
-    setComboFormOpen(false);
-    setEditingCombo(null);
+  const handleComboSubmit = async (data: ComboFormPayload) => {
+    try {
+      if (editingCombo) {
+        await updateCombo(editingCombo.id, data);
+        message.success('Đã cập nhật combo');
+      } else {
+        await addCombo(data);
+        message.success(`Đã tạo combo "${data.ten}"`);
+
+        // gửi thông báo
+        window.dispatchEvent(new CustomEvent('new_notification', {
+          detail: {
+              id: `notif_combo_${Date.now()}`,
+              title: 'Combo Mới Cực Hời!',
+              message: `Vừa ra mắt combo mới: ${data.ten}. Tiết kiệm hơn khi đặt chung nha bạn ơi!`,
+              time: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }),
+              isRead: false,
+              image: 'https://cdn-icons-png.flaticon.com/512/3480/3480823.png'
+          }
+        }));
+      }
+      setComboFormOpen(false);
+      setEditingCombo(null);
+    } catch (e) {}
   };
 
   const danhSachComboLoc = useMemo(() => {
@@ -1112,6 +1148,7 @@ const KhuyenMai: React.FC = () => {
                 <ComboRow
                   key={item.id}
                   item={item}
+                  dishes={comboDishes}
                   onClick={() => setViewingCombo(item)}
                 />
               ))}
@@ -1138,11 +1175,13 @@ const KhuyenMai: React.FC = () => {
       <ComboForm
         open={comboFormOpen}
         initial={editingCombo}
+        dishes={comboDishes}
         onCancel={() => { setComboFormOpen(false); setEditingCombo(null); }}
         onSubmit={handleComboSubmit}
       />
       <ComboDetail
         item={viewingCombo}
+        dishes={comboDishes}
         onClose={() => setViewingCombo(null)}
         onEdit={() => { setEditingCombo(viewingCombo); setViewingCombo(null); setComboFormOpen(true); }}
         onDelete={() => { if (viewingCombo) handleComboDelete(viewingCombo); setViewingCombo(null); }}

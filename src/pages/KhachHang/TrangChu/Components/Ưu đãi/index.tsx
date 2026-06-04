@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Timer, Tag } from 'lucide-react';
-import { message } from 'antd';
 import { useModel } from 'umi';
 import comPhan from '@/assets/KhachHang/Trang chủ/com_phan_no_text.png';
 import bunPho from '@/assets/KhachHang/Trang chủ/bun_pho_no_text.png';
@@ -11,6 +10,9 @@ import { OffersAndCombosProps } from '@/services/KhachHang/TrangChu/typing';
 import { formatCurrency, formatNumberViVN } from '@/utils/format';
 import './index.less';
 import { showCustomerNotification } from '@/utils/notification';
+import axios from '@/utils/axios';
+import { ip3 } from '@/utils/ip';
+import { SyncAdapters } from '@/services/api/adapters';
 
 interface BestVoucher {
   ma: string;
@@ -32,6 +34,7 @@ interface BestCombo {
   discountedPrice: number;
   dishImages: string[];
   dishIds: string[];
+  dishes: any[];
 }
 
 // chọn ảnh ngẫu nhiên
@@ -42,70 +45,49 @@ function getFoodImgForVoucher(id: string): string {
   return FOOD_IMGS[Math.abs(hash) % FOOD_IMGS.length];
 }
 
-// đã xoá getBestVoucher đồng bộ, thay bằng useEffect ở component
-function getBestCombo(): BestCombo | null {
-  if (typeof window === 'undefined') return null;
-  const comboSaved = localStorage.getItem('admin_combos');
-  const dishSaved = localStorage.getItem('admin_dishes');
-  if (!comboSaved || !dishSaved) return null;
+function isActiveCombo(combo: any) {
+  if (!combo.hoatDong) return false;
+  if (combo.trangThai === 'het_han' || combo.trangThai === 'tam_dung') return false;
+  if (!combo.hetHan) return true;
 
-  try {
-    const comboList: any[] = JSON.parse(comboSaved);
-    const dishList: any[] = JSON.parse(dishSaved);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const parts = combo.hetHan.split('/');
+  if (parts.length !== 3) return true;
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+  const exp = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+  return exp >= today;
+}
 
-    const activeCombos = comboList.filter((c: any) => {
-      if (!c.hoatDong) return false;
-      if (c.trangThai === 'het_han' || c.trangThai === 'tam_dung') return false;
-      if (c.hetHan) {
-        const parts = c.hetHan.split('/');
-        if (parts.length === 3) {
-          const exp = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
-          if (exp < today) return false;
-        }
-      }
-      return true;
-    });
+function buildBestCombo(comboList: any[], dishList: any[]): BestCombo | null {
+  const activeCombos = comboList.filter(isActiveCombo);
+  if (activeCombos.length === 0) return null;
 
-    if (activeCombos.length === 0) return null;
+  const best = activeCombos[0];
+  const dishIds: string[] = best.monAnIds || [];
+  const dishes = dishIds
+    .map((id) => dishList.find((dish: any) => dish.id === id))
+    .filter(Boolean);
 
-    // lấy combo đầu
-    const best = activeCombos[0];
-    
-    let originalPrice = 0;
-    const dishImages: string[] = [];
-    const dishIds: string[] = best.monAnIds || [];
+  if (dishes.length === 0) return null;
 
-    dishIds.forEach(id => {
-       const dish = dishList.find((d: any) => d.id === id);
-       if (dish) {
-           originalPrice += dish.giaBan || 0;
-           dishImages.push(dish.hinhAnh || getFoodImgForVoucher(dish.id));
-       }
-    });
-    
-    let discountedPrice = originalPrice;
-    if (best.loaiGia === 'phan_tram') {
-        discountedPrice = originalPrice - (originalPrice * best.giaTriGiam / 100);
-    } else {
-        discountedPrice = originalPrice - best.giaTriGiam;
-    }
+  const originalPrice = dishes.reduce((sum, dish) => sum + (dish.giaBan || dish.price || 0), 0);
+  const discountedPrice =
+    best.loaiGia === 'phan_tram'
+      ? Math.round(originalPrice * (1 - best.giaTriGiam / 100))
+      : best.giaTriGiam;
 
-    return {
-      id: best.id,
-      ten: best.ten,
-      giaTriGiam: best.giaTriGiam,
-      loaiGia: best.loaiGia,
-      originalPrice,
-      discountedPrice,
-      dishImages,
-      dishIds
-    };
-  } catch {
-    return null;
-  }
+  return {
+    id: best.id,
+    ten: best.ten,
+    giaTriGiam: best.giaTriGiam,
+    loaiGia: best.loaiGia,
+    originalPrice,
+    discountedPrice,
+    dishImages: dishes.map((dish) => dish.hinhAnh || getFoodImgForVoucher(dish.id)),
+    dishIds,
+    dishes,
+  };
 }
 
 // đếm ngược hết ngày
@@ -135,17 +117,13 @@ const ComboItem: React.FC<{ img: string }> = ({ img }) => (
 
 const OffersAndCombos: React.FC<OffersAndCombosProps> = ({ setPage }) => {
   const [best, setBest] = useState<BestVoucher | null>(null);
-  const [bestCombo, setBestCombo] = useState<BestCombo | null>(() => getBestCombo());
+  const [bestCombo, setBestCombo] = useState<BestCombo | null>(null);
   const { h, m, s } = useCountdown();
   const { addToCart } = useModel('KhachHang.ThucDon.index');
 
   useEffect(() => {
     const reload = async () => {
       try {
-        const axios = (await import('@/utils/axios')).default;
-        const ip3 = (await import('@/utils/ip')).ip3;
-        const SyncAdapters = (await import('@/services/api/adapters')).SyncAdapters;
-
         const res = await axios.get(`${ip3}/promotions/active`);
         if (res.data && res.data.items) {
           const list = res.data.items.map(SyncAdapters.mapAdminPromoToUI);
@@ -210,7 +188,19 @@ const OffersAndCombos: React.FC<OffersAndCombosProps> = ({ setPage }) => {
       } catch (err) {
         console.error(err);
       }
-      setBestCombo(getBestCombo());
+
+      try {
+        const [comboRes, dishRes] = await Promise.all([
+          axios.get(`${ip3}/combos`),
+          axios.get(`${ip3}/menus/items?limit=200`),
+        ]);
+        const combos = (comboRes.data?.items || []).map(SyncAdapters.mapAdminComboToUI);
+        const dishes = (dishRes.data?.items || []).map(SyncAdapters.mapAdminMenuToUI);
+        setBestCombo(buildBestCombo(combos, dishes));
+      } catch (err) {
+        console.error(err);
+        setBestCombo(null);
+      }
     };
     reload();
     window.addEventListener('storage', reload);
@@ -223,43 +213,26 @@ const OffersAndCombos: React.FC<OffersAndCombosProps> = ({ setPage }) => {
 
   const handleAddComboToCart = () => {
     if (!bestCombo) return;
-    
-    try {
-      const dishSaved = localStorage.getItem('admin_dishes');
-      if (!dishSaved) return;
-      const dishList: any[] = JSON.parse(dishSaved);
-      
-      let added = 0;
-      bestCombo.dishIds.forEach(id => {
-        const dishData = dishList.find((d: any) => d.id === id);
-        if (dishData) {
-          // format món ăn
-          let cat = 'main';
-          if (dishData.danhMuc === 'do_uong') cat = 'drink';
-          else if (dishData.danhMuc === 'an_vat') cat = 'snack';
-          else if (dishData.danhMuc === 'mon_chay') cat = 'veg';
-          else if (dishData.danhMuc === 'rice') cat = 'rice';
-          else if (dishData.danhMuc === 'noodle') cat = 'noodle';
 
-          const dish = {
-            id: dishData.id,
-            name: dishData.ten,
-            cat: cat,
-            price: dishData.giaBan,
-            desc: dishData.moTa || '',
-            emoji: dishData.emoji || (dishData.danhMuc === 'do_uong' ? '☕' : '🍱'),
-            tags: dishData.isHot ? ['hot'] : [],
-            rating: dishData.danhGia || 5,
-            sold: dishData.sold || 0,
-            prep: dishData.thoiGian || 10,
-            kcal: dishData.calo || 0,
-            ingredients: dishData.nguyenLieu || [],
-            hinhAnh: dishData.hinhAnh,
-          };
-          
-          addToCart(dish);
-          added++;
-        }
+    try {
+      let added = 0;
+      bestCombo.dishes.forEach((dishData) => {
+        addToCart({
+          id: dishData.id,
+          name: dishData.ten,
+          cat: String(dishData.danhMuc || 'main'),
+          price: dishData.giaBan,
+          desc: dishData.moTa || '',
+          emoji: dishData.emoji || '🍱',
+          tags: dishData.isHot ? ['hot'] : [],
+          rating: dishData.danhGia || 5,
+          sold: dishData.sold || 0,
+          prep: dishData.thoiGian || 10,
+          kcal: dishData.calo || 0,
+          ingredients: dishData.nguyenLieu || [],
+          hinhAnh: dishData.hinhAnh,
+        });
+        added++;
       });
 
       if (added > 0) {
@@ -330,7 +303,7 @@ const OffersAndCombos: React.FC<OffersAndCombosProps> = ({ setPage }) => {
                 </div>
               </div>
               <div className="combo-sale" style={bestCombo.loaiGia !== 'phan_tram' ? { fontSize: '12px' } : undefined}>
-                <small>Giảm</small>
+                <small>{bestCombo.loaiGia === 'phan_tram' ? 'Giảm' : 'Giá'}</small>
                 {bestCombo.loaiGia === 'phan_tram' ? `${bestCombo.giaTriGiam}%` : `${formatNumberViVN(Number(bestCombo.giaTriGiam / 1000))}k`}
               </div>
             </div>

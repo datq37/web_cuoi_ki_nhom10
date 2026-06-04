@@ -6,7 +6,7 @@ import {
 } from '@ant-design/icons';
 
 export const NAV_EMPLOYEE = [
-  { id: 'menu', label: 'ThucDon', icon: CoffeeOutlined },
+  { id: 'menu', label: 'Thực Đơn', icon: CoffeeOutlined },
   { id: 'cart', label: 'Giỏ của tôi', icon: ShoppingCartOutlined },
   { id: 'history', label: 'Đơn của tôi', icon: FileTextOutlined },
 ];

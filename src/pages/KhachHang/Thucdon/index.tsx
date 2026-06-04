@@ -41,7 +41,7 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
 
             <div className="phanDauTrang">
                 <div>
-                    <h1 className="tieuDeTrang">ThucDon hôm nay</h1>
+                    <h1 className="tieuDeTrang">Thực Đơn hôm nay</h1>
                     <p className="tieuDePhuTrang">Chọn món, đặt trước - không cần xếp hàng.</p>
                 </div>
                 <div className="theDatTruoc">

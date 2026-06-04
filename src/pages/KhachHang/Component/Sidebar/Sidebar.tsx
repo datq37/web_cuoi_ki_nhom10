@@ -66,7 +66,7 @@ const Sidebar: React.FC = () => {
     },
     {
       id: 'menu',
-      label: 'ThucDon',
+      label: 'Thực Đơn',
       icon: <Utensils size={17} />,
       active: page === 'menu',
       onClick: () => setPage('menu'),

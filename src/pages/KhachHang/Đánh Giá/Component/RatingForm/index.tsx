@@ -6,6 +6,7 @@ import { RatingFormProps } from '@/services/KhachHang/Đánh giá/typing';
 
 const RatingForm: React.FC<RatingFormProps> = ({
     dishDetails,
+    dishImage,
     dishNames,
     rating,
     setRating,
@@ -23,9 +24,13 @@ const RatingForm: React.FC<RatingFormProps> = ({
     return (
         <div className="noiDungDanhGia">
             <div className="thongTinCuaHang">
-                <div className="anhDaiDienMon" style={{ fontSize: 60, marginBottom: 12 }}>
-                    {dishDetails?.emoji || '🍽️'}
-                </div>
+                {dishImage ? (
+                    <img className="anhDaiDienMon" src={dishImage} alt={dishNames || 'Món ăn'} />
+                ) : (
+                    <div className="anhDaiDienMon anhDaiDienMonMacDinh">
+                        {dishDetails?.emoji || String(dishNames || 'M').charAt(0).toUpperCase()}
+                    </div>
+                )}
                 <div className="tenCuaHang" style={{ color: '#333', fontSize: 15, fontWeight: 600 }}>
                     {dishNames || 'Đơn hàng không tên'}
                 </div>

@@ -41,6 +41,7 @@ export default defineConfig({
 	// https://umijs.org/plugins/plugin-esbuild
 	esbuild: {},
 	title: false,
+	favicon: '/logo.webp',
 	ignoreMomentLocale: true,
 	proxy: proxy[REACT_APP_ENV || 'dev'],
 	manifest: {

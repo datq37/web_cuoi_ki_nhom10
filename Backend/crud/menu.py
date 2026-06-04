@@ -1,8 +1,10 @@
-from datetime import date
+from datetime import date, datetime
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session, joinedload
 
 from model.daily_menu import DailyMenu
+from model.enums import OrderStatus
+from model.orders import Order, OrderDetail
 from model.thucdon import ThucDon as MenuItem
 from schemas.daily_menu import DailyMenuCreate
 from schemas.thucdon import ThucDonCreate as MenuItemCreate, ThucDonUpdate as MenuItemUpdate
@@ -40,6 +42,30 @@ def get_menu_items(
     total = db.execute(count_stmt).scalar_one()
     items = db.execute(stmt.order_by(MenuItem.mamon.asc()).offset(skip).limit(limit)).scalars().all()
     return list(items), total
+
+
+def get_top_selling_today(db: Session, *, limit: int = 3, date_str: str | None = None) -> list[MenuItem]:
+    """Lấy top món bán chạy theo số lượng đã đặt trong ngày."""
+    target_date = date_str or datetime.now().strftime("%Y-%m-%d")
+    sold_qty = func.coalesce(func.sum(OrderDetail.soluong), 0).label("today_sold")
+
+    stmt = (
+        select(MenuItem, sold_qty)
+        .join(OrderDetail, OrderDetail.mamon == MenuItem.mamon)
+        .join(Order, Order.id == OrderDetail.order_id)
+        .options(joinedload(MenuItem.danhmuc))
+        .where(Order.thoigiandat.startswith(target_date))
+        .where(Order.trangthai.notin_([OrderStatus.CART, OrderStatus.CANCELLED]))
+        .group_by(MenuItem.mamon)
+        .order_by(sold_qty.desc(), MenuItem.mamon.asc())
+        .limit(limit)
+    )
+
+    items: list[MenuItem] = []
+    for item, today_sold in db.execute(stmt).unique().all():
+        item.soluongdaban = int(today_sold or 0)
+        items.append(item)
+    return items
 
 
 def create_menu_item(db: Session, data: MenuItemCreate) -> MenuItem:

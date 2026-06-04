@@ -3,6 +3,7 @@ import { useModel } from 'umi';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import type { Dish } from '@/services/KhachHang/ThucDon/typing';
+import { SyncAdapters } from '@/services/api/adapters';
 import comPhan from '@/assets/KhachHang/Trang chủ/com_phan_no_text.png';
 import bunPho from '@/assets/KhachHang/Trang chủ/bun_pho_no_text.png';
 import doUong from '@/assets/KhachHang/Trang chủ/do_uong_no_text.png';
@@ -14,11 +15,28 @@ export default function useTrangChuModel() {
     const { cart, addToCart, incCart, decCart, dishes, categories } = useModel('KhachHang.ThucDon.index') as any;
     const { orders } = useModel('KhachHang.Đơn Hàng.Orders') as any;
     const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
+    const [todayBestSellingDishes, setTodayBestSellingDishes] = useState<Dish[]>([]);
 
-    const bestSellingDishes = useMemo(
+    const fallbackBestSellingDishes = useMemo(
         () => [...(dishes || [])].sort((a, b) => b.sold - a.sold).slice(0, 3),
         [dishes],
     );
+    const bestSellingDishes = todayBestSellingDishes.length > 0 ? todayBestSellingDishes : fallbackBestSellingDishes;
+
+    useEffect(() => {
+        const fetchTodayBestSelling = async () => {
+            try {
+                const res = await axios.get(`${ip3}/menus/top-selling-today?limit=3`);
+                const list = (res.data?.items || []).map(SyncAdapters.mapMenuToUI);
+                setTodayBestSellingDishes(list);
+            } catch (e) {
+                console.error("Failed to load today's best-selling dishes", e);
+                setTodayBestSellingDishes([]);
+            }
+        };
+
+        fetchTodayBestSelling();
+    }, [orders?.length]);
 
     const cartQty = (id: string) => {
         const item = cart.find((c: any) => c.id === id);
@@ -26,6 +44,7 @@ export default function useTrangChuModel() {
     };
 
     const getDishImage = (dish: Dish) => {
+        if (dish.hinhAnh) return dish.hinhAnh;
         if (dish.cat === 'noodle') return bunPho;
         if (dish.cat === 'drink') return doUong;
         if (dish.cat === 'snack') return anNhe;

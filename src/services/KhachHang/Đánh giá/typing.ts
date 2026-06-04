@@ -5,6 +5,7 @@ export interface RatingPageProps {
 
 export interface RatingFormProps {
     dishDetails: any;
+    dishImage?: string;
     dishNames: string;
     rating: number;
     setRating: (rating: number) => void;

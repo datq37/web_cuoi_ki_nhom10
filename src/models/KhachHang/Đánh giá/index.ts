@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { message } from 'antd';
 import { useModel } from 'umi';
 import { SEED_MENU } from '@/services/KhachHang/ThucDon';
 import { showCustomerNotification } from '@/utils/notification';
@@ -31,6 +30,7 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
     // lấy thông tin món
     const firstItem = order?.items?.[0];
     const dishDetails = SEED_MENU.find(d => d.id === firstItem?.id);
+    const dishImage = firstItem?.image || dishDetails?.hinhAnh;
     const dishNames = order?.items?.map((it: any) => it.name).join(' + ');
     // gửi đấnh giá 
     const handleSubmit = () => {
@@ -68,6 +68,7 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
         handleSubmit,
         handleBackdropClick,
         dishDetails,
+        dishImage,
         dishNames
     };
 }

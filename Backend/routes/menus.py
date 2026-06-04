@@ -44,6 +44,20 @@ def list_menu_items(
     return MenuItemListResponse(items=items, total=total)
 
 
+@router.get("/top-selling-today", response_model=MenuItemListResponse)
+def get_top_selling_today(
+    db: Annotated[Session, Depends(get_db)],
+    _: Annotated[KhachHang, Depends(get_current_user)],
+    limit: int = Query(3, ge=1, le=12),
+    date_str: str | None = Query(None, description="Ngày cần xem top món, format YYYY-MM-DD"),
+):
+    """Xem top món bán chạy trong ngày theo số lượng đã đặt."""
+    from crud import menu as menu_crud
+
+    items = menu_crud.get_top_selling_today(db, limit=limit, date_str=date_str)
+    return MenuItemListResponse(items=items, total=len(items))
+
+
 @router.get("/items/{mamon}", response_model=MenuItemResponse)
 def get_menu_item(
     mamon: str,

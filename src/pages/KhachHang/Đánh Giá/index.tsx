@@ -14,7 +14,7 @@ const RatingPage: React.FC<RatingPageProps> = ({ order, onClose }) => {
         images,
         handleImageFiles, handleRemoveImage,
         handleSubmit, handleBackdropClick,
-        dishDetails, dishNames
+        dishDetails, dishImage, dishNames
     } = useDanhGiaModel(order, onClose);
     return (
         <div className="baoBocDanhGia" onClick={handleBackdropClick}>
@@ -33,6 +33,7 @@ const RatingPage: React.FC<RatingPageProps> = ({ order, onClose }) => {
 
                 <RatingForm
                     dishDetails={dishDetails}
+                    dishImage={dishImage}
                     dishNames={dishNames}
                     rating={rating}
                     setRating={setRating}

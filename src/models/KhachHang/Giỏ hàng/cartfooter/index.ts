@@ -55,6 +55,11 @@ export function useCartFooterModel(selectedVoucher: Voucher | undefined) {
 
     // tính combo
     let comboDiscount = 0;
+    const selectedComboIds = new Set(
+        cart
+            .map((item: any) => item.comboId)
+            .filter(Boolean),
+    );
     
     // map số lượng món
     const cartQtyMap: Record<string, number> = {};
@@ -63,6 +68,7 @@ export function useCartFooterModel(selectedVoucher: Voucher | undefined) {
     });
 
     combos.forEach((c: any) => {
+        if (!selectedComboIds.has(c.id)) return;
         if (!c.monAnIds || c.monAnIds.length === 0) return;
         
         // kiểm tra số combo
@@ -105,6 +111,7 @@ export function useCartFooterModel(selectedVoucher: Voucher | undefined) {
     const serviceFee = Math.round(subtotal * SERVICE_FEE_RATE);
 
     const voucherDiscount = (() => {
+        if (comboDiscount > 0) return 0;
         if (!selectedVoucher) return 0;
         if (selectedVoucher.minOrder && subtotal < selectedVoucher.minOrder) return 0;
         // tính giảm phần trăm

@@ -16,11 +16,12 @@ import {
 } from 'lucide-react';
 import { Modal } from 'antd';
 import { useModel } from 'umi';
-import type { CartOptionProps, Voucher } from '@/services/KhachHang/Giỏ hàng/cartoption/typing';
+import type { CartOptionProps } from '@/services/KhachHang/Giỏ hàng/cartoption/typing';
 import { VoucherLoai, VoucherTheme } from '@/services/KhachHang/Giỏ hàng/cartoption/typing';
 import { useCartOptionModel } from '@/models/KhachHang/Giỏ hàng/cartoption';
 import voucherBanner from '@/assets/KhachHang/Vourcher/bannervourcher.png';
 import { formatCurrency } from '@/utils/format';
+import { showCustomerNotification } from '@/utils/notification';
 import './index.less';
 
 const formatCondition = (minOrder?: number) => {
@@ -38,6 +39,20 @@ const CartOption: React.FC<CartOptionProps> = ({
     const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
     const { cart } = useModel('KhachHang.ThucDon.index');
     const { theme } = useModel('KhachHang.GlobalState.index');
+    const hasComboSelected = cart.some((item: any) => item.comboId || item.isComboItem);
+    const selectedVoucherValue = selectedVoucher?.giamGia ?? selectedVoucher?.discount ?? 0;
+
+    const handleOpenVoucherModal = () => {
+        if (hasComboSelected) {
+            showCustomerNotification(
+                'Không thể chọn voucher',
+                'Bạn đã chọn combo nên không thể áp dụng thêm ưu đãi khác.',
+                'error',
+            );
+            return;
+        }
+        setIsVoucherModalOpen(true);
+    };
 
     const {
         pickup,
@@ -84,9 +99,15 @@ const CartOption: React.FC<CartOptionProps> = ({
                 </div>
                 <div
                     className={`boChonPhieuGiamGia ${selectedVoucher ? 'coGiaTri' : ''}`}
-                    onClick={() => setIsVoucherModalOpen(true)}
+                    onClick={handleOpenVoucherModal}
+                    style={hasComboSelected ? { opacity: 0.65, cursor: 'not-allowed' } : undefined}
                 >
-                    {cart.length === 0 ? (
+                    {hasComboSelected ? (
+                        <div className="giuCho">
+                            <TicketPercent size={34} />
+                            <span>Combo đã áp dụng</span>
+                        </div>
+                    ) : cart.length === 0 ? (
                         <div className="giuCho">
                             <TicketPercent size={34} />
                             <span>Chọn Voucher</span>
@@ -98,10 +119,10 @@ const CartOption: React.FC<CartOptionProps> = ({
                                 <strong>{selectedVoucher.code}</strong>
                                 <span>
                                     {selectedVoucher.loai === VoucherLoai.PhanTram
-                                        ? `- Giảm ${selectedVoucher.giamGia}% đơn hàng`
+                                        ? `- Giảm ${selectedVoucherValue}% đơn hàng`
                                         : selectedVoucher.loai === VoucherLoai.MienShip
                                         ? '- Miễn phí phục vụ'
-                                        : `- Đã áp dụng giảm ${formatCurrency(selectedVoucher.giamGia)}`}
+                                        : `- Đã áp dụng giảm ${formatCurrency(selectedVoucherValue)}`}
                                 </span>
                             </div>
                         </div>
@@ -177,7 +198,7 @@ const CartOption: React.FC<CartOptionProps> = ({
                                             ) : (
                                                 <Tag size={22} />
                                             )}
-                                            <strong>{v.valueLabel || formatCurrency(v.giamGia)}</strong>
+                                            <strong>{v.valueLabel || formatCurrency(v.giamGia ?? v.discount)}</strong>
                                             <span>{v.typeLabel || 'GIẢM GIÁ'}</span>
                                         </div>
                                     </div>
@@ -223,7 +244,7 @@ const CartOption: React.FC<CartOptionProps> = ({
                                         <div className="dauTraiVeMoDanPhieu" aria-hidden="true" />
                                         <div className="bieuTuongVeMoDanPhieu">
                                             <Tag size={22} />
-                                            <strong>{v.valueLabel || formatCurrency(v.giamGia)}</strong>
+                                            <strong>{v.valueLabel || formatCurrency(v.giamGia ?? v.discount)}</strong>
                                             <span>{v.typeLabel || 'GIẢM GIÁ'}</span>
                                         </div>
                                     </div>

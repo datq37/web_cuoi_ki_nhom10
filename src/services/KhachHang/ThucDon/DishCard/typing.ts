@@ -12,6 +12,8 @@ export interface Dish {
   prep: number;
   kcal: number;
   ingredients: string[];
+  comboId?: string;
+  isComboItem?: boolean;
 }
 
 export interface DishCardProps {

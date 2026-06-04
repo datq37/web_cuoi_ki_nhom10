@@ -109,9 +109,10 @@ function useCountdown() {
   return { h, m, s };
 }
 
-const ComboItem: React.FC<{ img: string }> = ({ img }) => (
+const ComboItem: React.FC<{ img: string; name: string }> = ({ img, name }) => (
   <div className="combo-item">
-    <img src={img} alt="Combo" />
+    <img src={img} alt={name} />
+    <span>{name}</span>
   </div>
 );
 
@@ -213,6 +214,17 @@ const OffersAndCombos: React.FC<OffersAndCombosProps> = ({ setPage }) => {
 
   const handleAddComboToCart = () => {
     if (!bestCombo) return;
+    const selectedVoucher = typeof window !== 'undefined'
+      ? localStorage.getItem('selected_customer_voucher')
+      : null;
+    if (selectedVoucher) {
+      showCustomerNotification(
+        'Không thể chọn combo',
+        'Bạn đang áp dụng voucher. Hãy bỏ voucher trước khi chọn combo.',
+        'error',
+      );
+      return;
+    }
 
     try {
       let added = 0;
@@ -231,6 +243,8 @@ const OffersAndCombos: React.FC<OffersAndCombosProps> = ({ setPage }) => {
           kcal: dishData.calo || 0,
           ingredients: dishData.nguyenLieu || [],
           hinhAnh: dishData.hinhAnh,
+          comboId: bestCombo.id,
+          isComboItem: true,
         });
         added++;
       });
@@ -310,7 +324,7 @@ const OffersAndCombos: React.FC<OffersAndCombosProps> = ({ setPage }) => {
             <div className="combo-items">
               {bestCombo.dishImages.map((img, idx) => (
                 <React.Fragment key={idx}>
-                  <ComboItem img={img} />
+                  <ComboItem img={img} name={bestCombo.dishes[idx]?.ten || 'Món ăn'} />
                   {idx < bestCombo.dishImages.length - 1 && <span>+</span>}
                 </React.Fragment>
               ))}

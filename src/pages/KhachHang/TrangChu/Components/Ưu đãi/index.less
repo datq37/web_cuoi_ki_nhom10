@@ -237,11 +237,15 @@
 
 .combo-item {
   flex: 1;
-  min-width: 64px;
-  max-width: 130px;
-  height: 64px;
-  display: grid;
-  place-items: center;
+  min-width: 86px;
+  max-width: 140px;
+  min-height: 112px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 8px;
   background: #ffffff;
   border: 1px solid #edf0ed;
   border-radius: 13px;
@@ -251,6 +255,19 @@
     height: 54px;
     object-fit: cover;
     border-radius: 10px;
+  }
+
+  span {
+    width: 100%;
+    color: #2f3b45;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.2;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }
 

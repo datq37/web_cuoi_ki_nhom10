@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useModel } from 'umi';
-import { message } from 'antd';
 import type { Voucher } from '@/services/KhachHang/Giỏ hàng/cartoption/typing';
 import { VoucherLoai } from '@/services/KhachHang/Giỏ hàng/cartoption/typing';
 import { Order, OrderStatus, PaymentMethod } from '@/services/KhachHang/Đơn Hàng';
@@ -24,12 +23,24 @@ export function useGioHangModel() {
 
     // huỷ mã giảm giá khi giỏ trống
     useEffect(() => {
+        const hasComboSelected = cart.some((item: any) => item.comboId || item.isComboItem);
         if (cart.length === 0 && selectedVoucher) {
+            setSelectedVoucher(undefined);
+        } else if (hasComboSelected && selectedVoucher) {
             setSelectedVoucher(undefined);
         } else if (selectedVoucher && selectedVoucher.minOrder && subtotal < selectedVoucher.minOrder) {
             setSelectedVoucher(undefined);
         }
-    }, [cart.length, subtotal, selectedVoucher]);
+    }, [cart, subtotal, selectedVoucher]);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        if (selectedVoucher) {
+            localStorage.setItem('selected_customer_voucher', JSON.stringify(selectedVoucher));
+        } else {
+            localStorage.removeItem('selected_customer_voucher');
+        }
+    }, [selectedVoucher]);
     // kiểm tra khi app mã giảm 
     const claimVoucher = (voucherId: string): boolean => {
         if (typeof window === 'undefined') return true;

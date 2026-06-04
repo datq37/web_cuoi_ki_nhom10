@@ -5,7 +5,7 @@ export type CartItem = Dish & { qty: number };
 export const addDishToCart = (cart: CartItem[], dish: Dish, qty: number = 1): CartItem[] => {
   const existing = cart.find(item => item.id === dish.id);
   if (existing) {
-    return cart.map(item => item.id === dish.id ? { ...item, qty: item.qty + qty } : item);
+    return cart.map(item => item.id === dish.id ? { ...item, ...dish, qty: item.qty + qty } : item);
   }
   return [...cart, { ...dish, qty }];
 };

@@ -27,7 +27,7 @@ const DanhSachMon: React.FC = () => {
                     <div className="monGioHang" key={it.id}>
                         <img
                             className="anhNhoMonGioHang"
-                            src={getDishImage(dish?.cat)}
+                            src={getDishImage(it)}
                             alt={it.name}
                         />
                         <div className="thongTinMonGioHang">

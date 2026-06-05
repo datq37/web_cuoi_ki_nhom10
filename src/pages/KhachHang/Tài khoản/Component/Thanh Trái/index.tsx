@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Avatar, Upload, Progress } from 'antd';
+import { Button, Avatar, Upload, Typography } from 'antd';
 import { CameraOutlined, SafetyOutlined, UploadOutlined, CrownFilled } from '@ant-design/icons';
 import type { ThanhBenProps } from '@/services/KhachHang/Tài khoản/typing';
 import { formatNumberViVN } from '@/utils/format';
@@ -32,15 +32,15 @@ const ThanhBen: React.FC<ThanhBenProps> = ({ nguoiDungHienTai, duongDanAnhDaiDie
                 </span>
             </div>
 
-            <h2>{nguoiDungHienTai.name}</h2>
-            <p className="phong-ban-nguoi-dung">{nguoiDungHienTai.dept}</p>
+            <Typography.Title level={2} style={{ margin: 0, textAlign: 'center' }}>{nguoiDungHienTai.name}</Typography.Title>
+            <Typography.Paragraph className="phong-ban-nguoi-dung" style={{ textAlign: 'center' }}>{nguoiDungHienTai.dept}</Typography.Paragraph>
 
             <div className="thong-tin-hang">
                 <div className="tieu-de-hang" style={{ color: thongTinHang?.color || '#cd7f32' }}>
                     <CrownFilled /> Hạng {thongTinHang?.name || 'Đồng'}
                 </div>
                 <div className="diem-hang">
-                    Điểm thưởng: <strong>{formatNumberViVN(diemThuong)}</strong>
+                    Điểm thưởng: <Typography.Text strong>{formatNumberViVN(diemThuong)}</Typography.Text>
                 </div>
                 <div className="chi-tieu-hang">
                     Đã chi tiêu: {formatNumberViVN(nguoiDungHienTai.totalSpent || 0)}đ
@@ -48,8 +48,8 @@ const ThanhBen: React.FC<ThanhBenProps> = ({ nguoiDungHienTai, duongDanAnhDaiDie
             </div>
 
             <div className="khoi-tai-anh-dai-dien">
-                <strong>Ảnh đại diện</strong>
-                <span>JPG, PNG tối đa 2MB</span>
+                <Typography.Text strong>Ảnh đại diện</Typography.Text>
+                <Typography.Text style={{ fontSize: 11, color: '#666' }}>JPG, PNG tối đa 2MB</Typography.Text>
                 <Upload
                     name="avatar"
                     showUploadList={false}
@@ -64,7 +64,7 @@ const ThanhBen: React.FC<ThanhBenProps> = ({ nguoiDungHienTai, duongDanAnhDaiDie
 
             <div className="ghi-chu-bao-mat">
                 <SafetyOutlined />
-                <span>Thông tin của bạn được bảo mật và chỉ hiển thị nội bộ.</span>
+                <Typography.Text style={{ fontSize: 11, color: 'inherit' }}>Thông tin của bạn được bảo mật và chỉ hiển thị nội bộ.</Typography.Text>
             </div>
         </section>
     );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Typography } from 'antd';
 import deliveryIcon from '@/assets/KhachHang/Tài khoản/nguoigiaohang.png';
 
 const MeoGiaoHang: React.FC = () => {
@@ -6,8 +7,8 @@ const MeoGiaoHang: React.FC = () => {
         <section className="meo-giao-hang">
             <div className="bieu-tuong-meo">💡</div>
             <div>
-                <h3>Giao hàng nội bộ nhanh chóng</h3>
-                <p>Thông tin chính xác giúp chúng tôi giao món ăn đúng nơi, đúng người và đúng thời gian.</p>
+                <Typography.Title level={3} style={{ margin: '0 0 2px' }}>Giao hàng nội bộ nhanh chóng</Typography.Title>
+                <Typography.Paragraph style={{ margin: 0 }}>Thông tin chính xác giúp chúng tôi giao món ăn đúng nơi, đúng người và đúng thời gian.</Typography.Paragraph>
             </div>
             <img src={deliveryIcon} alt="Người giao hàng" />
         </section>

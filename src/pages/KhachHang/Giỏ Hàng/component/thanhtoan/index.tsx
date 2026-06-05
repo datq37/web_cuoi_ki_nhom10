@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Typography } from 'antd';
+import { Typography } from 'antd';
 import { Check, CreditCard } from 'lucide-react';
 import type { ThanhToanProps } from '@/services/KhachHang/Giỏ hàng/thanhtoan/typing';
 import { PAYMENT_METHODS } from '@/services/KhachHang/Giỏ hàng/thanhtoan';

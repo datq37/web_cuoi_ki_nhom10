@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Select, Button } from 'antd';
+import { Form, Input, Select, Button, Typography } from 'antd';
 import {
     HomeOutlined,
     MailOutlined,
@@ -22,7 +22,7 @@ const BieuMau: React.FC<BieuMauProps> = ({ bieuMau, khiHoanThanh, capNhatHoSo })
             >
                 <div className="tieu-de-phan-bieu-mau">
                     <span><UserOutlined /></span>
-                    <h3>Thông tin cơ bản</h3>
+                    <Typography.Title level={3} style={{ margin: 0 }}>Thông tin cơ bản</Typography.Title>
                 </div>
 
                 <Form.Item
@@ -53,7 +53,7 @@ const BieuMau: React.FC<BieuMauProps> = ({ bieuMau, khiHoanThanh, capNhatHoSo })
                 <div className="duong-chia-bieu-mau" />
                 <div className="tieu-de-phan-bieu-mau">
                     <span><HomeOutlined /></span>
-                    <h3>Thông tin giao hàng nội bộ</h3>
+                    <Typography.Title level={3} style={{ margin: 0 }}>Thông tin giao hàng nội bộ</Typography.Title>
                 </div>
 
                 <div className="hang-bieu-mau">

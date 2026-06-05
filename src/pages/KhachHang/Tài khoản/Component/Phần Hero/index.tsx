@@ -1,5 +1,6 @@
 import React from 'react';
 import { SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { Typography } from 'antd';
 
 const PhanHero: React.FC = () => {
     return (
@@ -9,8 +10,8 @@ const PhanHero: React.FC = () => {
                     <SettingOutlined />
                 </span>
                 <div>
-                    <h1>Cài đặt tài khoản</h1>
-                    <p>Quản lý thông tin cá nhân và cấu hình giao hàng nội bộ.</p>
+                    <Typography.Title level={1} style={{ margin: 0 }}>Cài đặt tài khoản</Typography.Title>
+                    <Typography.Paragraph style={{ margin: 0 }}>Quản lý thông tin cá nhân và cấu hình giao hàng nội bộ.</Typography.Paragraph>
                 </div>
             </div>
 

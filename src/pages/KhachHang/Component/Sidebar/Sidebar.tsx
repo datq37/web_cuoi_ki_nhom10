@@ -11,6 +11,8 @@ import {
 } from 'lucide-react';
 import './Sidebar.less';
 import { defaultUser } from '@/services/KhachHang/Component/Sidebar';
+import { SidebarSectionProps, SidebarItemProps } from '@/services/KhachHang/Component/Sidebar/typing';
+import RankCard from '../Hạng khách hàng';
 import { formatNumberViVN } from '@/utils/format';
 import { useModel } from 'umi';
 
@@ -26,36 +28,7 @@ const Sidebar: React.FC = () => {
 
   const closeSidebar = () => setIsSidebarOpen(false);
 
-  // tính điểm và hạng
-  // import động
-  // các mức rank
-  const RANKS = [
-    { name: 'Đồng', min: 0, mult: 1, color: '#cd7f32' },
-    { name: 'Bạc', min: 1000000, mult: 1.2, color: '#c0c0c0' },
-    { name: 'Vàng', min: 3000000, mult: 1.5, color: '#ffd700' },
-    { name: 'Kim Cương', min: 10000000, mult: 2, color: '#b9f2ff' }
-  ];
 
-  const currentSpent = user.totalSpent || 0;
-  const currentPoints = Math.floor(Number(user.points) || 0);
-  let nextRank = RANKS[RANKS.length - 1]; // Giả định là max rank
-  let currentRank = RANKS[0];
-  let isMaxRank = true;
-
-  for (let i = 0; i < RANKS.length; i++) {
-    if (currentSpent < RANKS[i].min) {
-      nextRank = RANKS[i];
-      currentRank = RANKS[i - 1] || RANKS[0];
-      isMaxRank = false;
-      break;
-    }
-  }
-
-  // tính progress
-  // hiển thị điểm lên hạng
-  // quy đổi điểm
-  const spentNeeded = nextRank.min - currentSpent;
-  const progressPercent = isMaxRank ? 100 : ((currentSpent - currentRank.min) / (nextRank.min - currentRank.min)) * 100;
   const orderItems = [
     {
       id: 'home',
@@ -168,32 +141,13 @@ const Sidebar: React.FC = () => {
         </div>
 
         <div className="sidebar-bottom">
-          <div className="reward-card">
-            <div className="reward-icon" style={{ background: currentRank.color, color: '#fff' }}>
-              <Award size={28} />
-            </div>
-            <p>Điểm thưởng ({currentRank.name})</p>
-            <h3>{formatNumberViVN(currentPoints)} điểm</h3>
-            {isMaxRank ? (
-              <span>Bạn đang ở hạng cao nhất!</span>
-            ) : (
-              <span>Cần thêm <strong>{formatNumberViVN(spentNeeded)}đ</strong> chi tiêu để lên hạng {nextRank.name}</span>
-            )}
-            <div className="reward-progress">
-              <div style={{ width: `${Math.min(100, Math.max(0, progressPercent))}%`, background: nextRank.color }} />
-            </div>
-          </div>
+          <RankCard />
 
         </div>
       </aside>
     </>
   );
 };
-
-interface SidebarSectionProps {
-  title?: string;
-  children: React.ReactNode;
-}
 
 function SidebarSection({ title, children }: SidebarSectionProps) {
   return (
@@ -202,15 +156,6 @@ function SidebarSection({ title, children }: SidebarSectionProps) {
       <div className="nav-list">{children}</div>
     </nav>
   );
-}
-
-interface SidebarItemProps {
-  active?: boolean;
-  icon: React.ReactNode;
-  label: string;
-  badge?: number;
-  badgeTone?: 'green' | 'red';
-  onClick: () => void;
 }
 
 function SidebarItem({

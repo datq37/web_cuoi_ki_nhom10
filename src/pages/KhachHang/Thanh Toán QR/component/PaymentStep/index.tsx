@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check, CreditCard, ScanLine, Smartphone } from 'lucide-react';
+import { Typography } from 'antd';
 import type { QRPaymentStep } from '@/services/KhachHang/Thanh toán QR';
 
 interface PaymentStepProps {
@@ -24,8 +25,8 @@ const PaymentStep: React.FC<PaymentStepProps> = ({ step, last }) => (
     </div>
 
     <div className="step-content">
-      <h3>{step.title}</h3>
-      <p>{step.desc}</p>
+      <Typography.Title level={3} style={{ margin: '0 0 4px', fontSize: 16 }}>{step.title}</Typography.Title>
+      <Typography.Paragraph style={{ margin: 0, color: '#666' }}>{step.desc}</Typography.Paragraph>
     </div>
   </div>
 );

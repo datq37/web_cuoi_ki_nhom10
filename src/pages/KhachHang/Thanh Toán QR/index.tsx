@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useModel } from 'umi';
+import { Button, Typography } from 'antd';
 import { ArrowLeft, Clock3, Headphones, ShieldCheck } from 'lucide-react';
 import { OrderStatus, PaymentMethod } from '@/services/KhachHang/Đơn Hàng';
 import { buildVietQrUrl, QR_PAYMENT_STEPS, SUPPORTED_QR_BANKS } from '@/services/KhachHang/Thanh toán QR';
@@ -119,13 +120,11 @@ const QRPaymentPage: React.FC = () => {
   if (!paymentOrder) {
     return (
       <div className="qr-payment-page empty">
-        <button className="qr-back-button" onClick={() => setPage('history')} aria-label="Quay lại đơn hàng">
-          <ArrowLeft size={28} />
-        </button>
+        <Button type="text" className="qr-back-button" onClick={() => setPage('history')} aria-label="Quay lại đơn hàng" icon={<ArrowLeft size={28} />} />
         <div className="qr-empty-state">
-          <h1>Không có giao dịch QR đang chờ</h1>
-          <p>Hãy chọn thanh toán QR khi đặt món để tạo mã thanh toán mới.</p>
-          <button onClick={() => setPage('menu')}>Quay lại thực đơn</button>
+          <Typography.Title level={1} style={{ margin: 0 }}>Không có giao dịch QR đang chờ</Typography.Title>
+          <Typography.Paragraph>Hãy chọn thanh toán QR khi đặt món để tạo mã thanh toán mới.</Typography.Paragraph>
+          <Button onClick={() => setPage('menu')} type="primary">Quay lại thực đơn</Button>
         </div>
       </div>
     );
@@ -134,26 +133,24 @@ const QRPaymentPage: React.FC = () => {
   return (
     <div className="qr-payment-page">
       <div className="qr-payment-header">
-        <button className="qr-back-button" onClick={goBackToOrders} aria-label="Quay lại đơn hàng">
-          <ArrowLeft size={28} />
-        </button>
+        <Button type="text" className="qr-back-button" onClick={goBackToOrders} aria-label="Quay lại đơn hàng" icon={<ArrowLeft size={28} />} />
 
         <div className="qr-title-block">
-          <h1>Thanh toán bằng mã QR</h1>
-          <p>
+          <Typography.Title level={1} style={{ margin: 0, color: 'inherit' }}>Thanh toán bằng mã QR</Typography.Title>
+          <Typography.Paragraph style={{ margin: 0, display: 'flex', alignItems: 'center', gap: 6 }}>
             <ShieldCheck size={18} />
             Thanh toán an toàn & bảo mật
-          </p>
+          </Typography.Paragraph>
         </div>
       </div>
 
       <section className="qr-payment-grid">
         <div className="qr-card qr-code-card">
           <div className="qr-card-heading">
-            <h2>Quét mã QR để thanh toán</h2>
-            <p>
-              Mã đơn hàng: <strong>#{paymentOrder.id}</strong>
-            </p>
+            <Typography.Title level={2} style={{ margin: '0 0 6px', color: 'inherit' }}>Quét mã QR để thanh toán</Typography.Title>
+            <Typography.Paragraph style={{ margin: 0, color: '#666' }}>
+              Mã đơn hàng: <Typography.Text strong>#{paymentOrder.id}</Typography.Text>
+            </Typography.Paragraph>
           </div>
 
           <div className="qr-code-wrap">
@@ -164,32 +161,32 @@ const QRPaymentPage: React.FC = () => {
 
           <div className="qr-bank-detail">
             <div>
-              <span>Ngân hàng</span>
-              <strong>{bankInfo.bankId.toUpperCase()}</strong>
+              <Typography.Text>Ngân hàng</Typography.Text>
+              <Typography.Text strong>{bankInfo.bankId.toUpperCase()}</Typography.Text>
             </div>
             <div>
-              <span>Số tài khoản</span>
-              <strong>{bankInfo.accountNo}</strong>
+              <Typography.Text>Số tài khoản</Typography.Text>
+              <Typography.Text strong>{bankInfo.accountNo}</Typography.Text>
             </div>
             <div>
-              <span>Chủ tài khoản</span>
-              <strong>{bankInfo.accountName}</strong>
+              <Typography.Text>Chủ tài khoản</Typography.Text>
+              <Typography.Text strong>{bankInfo.accountName}</Typography.Text>
             </div>
             <div>
-              <span>Nội dung</span>
-              <strong>{transferDescription}</strong>
+              <Typography.Text>Nội dung</Typography.Text>
+              <Typography.Text strong>{transferDescription}</Typography.Text>
             </div>
           </div>
 
           <div className="qr-amount-block">
-            <p>Số tiền thanh toán</p>
-            <strong>{formattedAmount}</strong>
+            <Typography.Paragraph style={{ margin: 0 }}>Số tiền thanh toán</Typography.Paragraph>
+            <Typography.Text strong style={{ fontSize: 28, color: '#18783e', display: 'block', marginBottom: 12 }}>{formattedAmount}</Typography.Text>
 
-            <span className="qr-timer-label">
+            <Typography.Text className="qr-timer-label">
               <Clock3 size={18} />
               Thời gian còn lại
-            </span>
-            <b className={isExpired ? 'expired' : ''}>{formattedCountdown}</b>
+            </Typography.Text>
+            <Typography.Text strong className={isExpired ? 'expired' : ''} style={{ fontSize: 20 }}>{formattedCountdown}</Typography.Text>
           </div>
 
           {isExpired && (
@@ -200,7 +197,7 @@ const QRPaymentPage: React.FC = () => {
         </div>
 
         <div className="qr-card qr-guide-card">
-          <h2>Hướng dẫn thanh toán</h2>
+          <Typography.Title level={2} style={{ margin: '0 0 16px', fontSize: 18 }}>Hướng dẫn thanh toán</Typography.Title>
 
           <div className="qr-step-list">
             {QR_PAYMENT_STEPS.map((step, index) => (
@@ -213,7 +210,7 @@ const QRPaymentPage: React.FC = () => {
           </div>
 
           <div className="qr-bank-section">
-            <p>Hỗ trợ thanh toán từ các ngân hàng và ví điện tử</p>
+            <Typography.Paragraph style={{ marginBottom: 12, color: '#666' }}>Hỗ trợ thanh toán từ các ngân hàng và ví điện tử</Typography.Paragraph>
             <div className="qr-bank-grid">
               {SUPPORTED_QR_BANKS.map(bank => (
                 <BankLogo key={bank.id} bank={bank} />
@@ -229,14 +226,14 @@ const QRPaymentPage: React.FC = () => {
             <Headphones size={30} />
           </div>
           <div>
-            <h3>Cần hỗ trợ?</h3>
-            <p>Liên hệ hỗ trợ 24/7</p>
+            <Typography.Title level={3} style={{ margin: '0 0 4px', fontSize: 16 }}>Cần hỗ trợ?</Typography.Title>
+            <Typography.Paragraph style={{ margin: 0, color: '#666' }}>Liên hệ hỗ trợ 24/7</Typography.Paragraph>
           </div>
         </div>
 
         <div className="support-actions">
-          <button onClick={cancelPayment}>Hủy thanh toán</button>
-          <p>Giao dịch sẽ hết hạn sau {formattedCountdown}</p>
+          <Button onClick={cancelPayment} danger type="primary">Hủy thanh toán</Button>
+          <Typography.Paragraph style={{ margin: '8px 0 0', color: '#666', fontSize: 13 }}>Giao dịch sẽ hết hạn sau {formattedCountdown}</Typography.Paragraph>
         </div>
       </section>
     </div>

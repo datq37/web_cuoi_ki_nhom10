@@ -72,14 +72,12 @@ export default function useTrangChuModel() {
     useEffect(() => {
         const fetchPromotions = async () => {
             try {
-                const res = await axios.get(`${ip3}/promotions`);
-                if (res.data && Array.isArray(res.data)) {
-                    // Lọc các khuyến mãi đang hoạt động
-                    const active = res.data.filter((p: any) => p.hoatdong === true || p.hoatdong === 1);
-                    setActiveOfferCount(active.length);
-                }
+                const res = await axios.get(`${ip3}/promotions/active`);
+                const total = Number(res.data?.total ?? res.data?.items?.length ?? 0);
+                setActiveOfferCount(total);
             } catch (e) {
                 console.error("Failed to load promotions for stats", e);
+                setActiveOfferCount(0);
             }
         };
         fetchPromotions();

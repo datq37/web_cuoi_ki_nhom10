@@ -1,3 +1,6 @@
+from datetime import date
+
+from sqlalchemy import or_, func
 from sqlalchemy.orm import Session
 from model.khuyenmai import KhuyenMai
 from schemas.khuyenmai import KhuyenMaiCreate, KhuyenMaiUpdate
@@ -6,6 +9,21 @@ def get_items(db: Session, skip: int = 0, limit: int = 100):
     total = db.query(KhuyenMai).count()
     items = db.query(KhuyenMai).offset(skip).limit(limit).all()
     return items, total
+
+def get_active_items(db: Session):
+    today = date.today()
+    query = db.query(KhuyenMai).filter(
+        KhuyenMai.hoatdong == 1,
+        KhuyenMai.trangthai == "dang_chay",
+        or_(KhuyenMai.hansudung.is_(None), KhuyenMai.hansudung >= today),
+        or_(
+            KhuyenMai.gioihan.is_(None),
+            KhuyenMai.gioihan <= 0,
+            func.coalesce(KhuyenMai.dadung, 0) < KhuyenMai.gioihan,
+        ),
+    )
+    items = query.all()
+    return items, len(items)
 
 def get_item(db: Session, promo_id: int):
     return db.query(KhuyenMai).filter(KhuyenMai.id == promo_id).first()

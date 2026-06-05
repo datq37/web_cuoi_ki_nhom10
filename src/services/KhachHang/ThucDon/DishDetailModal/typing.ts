@@ -9,6 +9,8 @@ export interface Review {
   comment: string;
   date: string;
   images?: string[];
+  adminReply?: string;
+  adminReplyAt?: string;
 }
 
 export interface DishDetailModalProps {

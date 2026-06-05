@@ -18,6 +18,8 @@ class Review(Base):
     comment: Mapped[str | None] = mapped_column("comment", Text, nullable=True)
     created_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     images: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
+    admin_reply: Mapped[str | None] = mapped_column(Text, nullable=True)
+    admin_reply_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
     # Quan hệ động sang bảng khách hàng
     khachhang: Mapped["KhachHang"] = relationship(
@@ -25,4 +27,10 @@ class Review(Base):
         primaryjoin="Review.user_id == KhachHang.makh",
         foreign_keys=[user_id],
         lazy="joined"
+    )
+    thucdon: Mapped["ThucDon"] = relationship(
+        "ThucDon",
+        primaryjoin="Review.menu_item_id == ThucDon.mamon",
+        foreign_keys=[menu_item_id],
+        lazy="joined",
     )

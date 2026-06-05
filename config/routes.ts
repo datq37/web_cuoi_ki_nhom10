@@ -71,6 +71,10 @@ export default [
 				component: './QuanTri/KhachHang',
 			},
 			{
+				path: '/quan-tri/danh-gia',
+				component: './QuanTri/Đánh Giá',
+			},
+			{
 				path: '/quan-tri/nhan-vien',
 				component: './QuanTri/Nhân Viên Căng Tin',
 			},

@@ -112,6 +112,28 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
                                                 ))}
                                             </div>
                                         )}
+                                        {r.adminReply && (
+                                            <div
+                                                style={{
+                                                    marginTop: 10,
+                                                    padding: '10px 12px',
+                                                    borderRadius: 10,
+                                                    background: '#f0fdf4',
+                                                    border: '1px solid #bbf7d0',
+                                                    color: '#166534',
+                                                    fontSize: 14,
+                                                    lineHeight: 1.45,
+                                                }}
+                                            >
+                                                <strong>Phản hồi từ căn tin</strong>
+                                                {r.adminReplyAt && (
+                                                    <span style={{ color: '#65a30d', marginLeft: 6, fontSize: 12 }}>
+                                                        {r.adminReplyAt}
+                                                    </span>
+                                                )}
+                                                <div style={{ marginTop: 4 }}>{r.adminReply}</div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))

@@ -1,0 +1,286 @@
+﻿@import '~@/styles/admin-tokens.less';
+
+.pageBody {
+  padding: 16px 20px 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.statCard {
+  background: @surface;
+  border: 1px solid @border;
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
+}
+
+.statLabel {
+  font-size: @fs-xs;
+  font-weight: 700;
+  color: @text-light;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.statValue {
+  font-size: @fs-4xl;
+  line-height: 1;
+  color: @text-dark;
+}
+
+.sectionTitle {
+  font-size: @fs-lg;
+  font-weight: 700;
+  color: @text-dark;
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  border: 1px solid @border;
+  background: @surface;
+  color: @text-muted;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: @fs-base;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+
+  &:hover {
+    border-color: @primary;
+    color: @primary;
+  }
+}
+
+.filterActive {
+  background: @primary !important;
+  border-color: @primary !important;
+  color: #fff !important;
+}
+
+.emptyWrap {
+  background: @surface;
+  border: 1px solid @border;
+  border-radius: 12px;
+  padding: 48px 16px;
+}
+
+.reviewList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reviewRow {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) auto;
+  gap: 16px;
+  background: @surface;
+  border: 1px solid @border;
+  border-radius: 12px;
+  padding: 16px;
+  align-items: flex-start;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+}
+
+.dishThumb {
+  width: 88px;
+  height: 88px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 26px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 860px) {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+.reviewContent {
+  min-width: 0;
+}
+
+.reviewHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.dishName {
+  font-size: @fs-lg;
+  font-weight: 800;
+  color: @text-dark;
+  line-height: 1.25;
+}
+
+.reviewMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  color: @text-light;
+  font-size: @fs-sm;
+  margin-top: 6px;
+}
+
+.authorAvatar {
+  background: @primary !important;
+  color: #fff !important;
+  font-size: @fs-xs !important;
+  font-weight: 700 !important;
+}
+
+.ratingBox {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  color: #f59e0b;
+  font-weight: 800;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 999px;
+  padding: 4px 9px;
+}
+
+.comment {
+  margin: 12px 0 0;
+  color: @text-muted;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.imageList {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.reviewImage {
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.replyBox {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid @primary-200;
+  background: @primary-50;
+
+  p {
+    margin: 8px 0 0;
+    color: @text-dark;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+}
+
+.replyHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: @text-light;
+  font-size: @fs-sm;
+  flex-wrap: wrap;
+}
+
+.noReply {
+  margin-top: 12px;
+  color: @text-light;
+  font-size: @fs-sm;
+}
+
+.actionCol {
+  display: flex;
+  justify-content: flex-end;
+
+  @media (max-width: 860px) {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}
+
+.replyModalReview {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+
+  p {
+    margin: 8px 0 0;
+    color: @text-muted;
+    line-height: 1.5;
+  }
+}
+
+:global([data-theme="dark"]) {
+  .statCard,
+  .filterBtn,
+  .emptyWrap,
+  .reviewRow {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .dishName,
+  .sectionTitle,
+  .statValue {
+    color: #f8fafc;
+  }
+
+  .dishThumb,
+  .replyModalReview {
+    background: #0f172a;
+    border-color: #334155;
+  }
+
+  .replyBox {
+    background: rgba(22, 163, 74, .12);
+    border-color: rgba(34, 197, 94, .28);
+
+    p {
+      color: #e2e8f0;
+    }
+  }
+}

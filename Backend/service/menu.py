@@ -6,6 +6,7 @@ from crud import category as category_crud
 from crud import menu as menu_crud
 from model.danhmucmonan import DanhMucMonAn as Category
 from model.daily_menu import DailyMenu
+from model.khohang import KhoHang
 from model.thucdon import ThucDon as MenuItem
 from schemas.danhmucmonan import DanhMucMonAnCreate as CategoryCreate, DanhMucMonAnUpdate as CategoryUpdate
 from schemas.daily_menu import DailyMenuCreate
@@ -63,10 +64,40 @@ def get_menu_item_or_404(db: Session, mamon: str) -> MenuItem:
     return item
 
 
+def validate_menu_ingredients(db: Session, data: MenuItemCreate | MenuItemUpdate) -> None:
+    """Kiểm tra nguyên liệu trong công thức phải tồn tại trong kho."""
+    if data.nguyen_lieu is None:
+        return
+
+    ingredient_ids = list(dict.fromkeys(item.id for item in data.nguyen_lieu))
+    if not ingredient_ids:
+        return
+
+    existing_ids = {
+        row[0]
+        for row in db.query(KhoHang.mahang)
+        .filter(KhoHang.mahang.in_(ingredient_ids))
+        .all()
+    }
+    missing_ids = [item_id for item_id in ingredient_ids if item_id not in existing_ids]
+    if missing_ids:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=(
+                "Nguyên liệu chưa tồn tại trong kho: "
+                + ", ".join(missing_ids)
+                + ". Hãy thêm nguyên liệu trong Kho nguyên liệu trước."
+            ),
+        )
+
+
 def create_menu_item(db: Session, data: MenuItemCreate) -> MenuItem:
     """Tạo món ăn mới và kiểm tra tính hợp lệ của danh mục."""
+    if menu_crud.get_menu_item_by_id(db, data.mamon):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Mã món đã tồn tại")
     if data.danhmucid:
         get_category_or_404(db, data.danhmucid)
+    validate_menu_ingredients(db, data)
     return menu_crud.create_menu_item(db, data)
 
 
@@ -75,6 +106,7 @@ def update_menu_item(db: Session, mamon: str, data: MenuItemUpdate) -> MenuItem:
     item = get_menu_item_or_404(db, mamon)
     if data.danhmucid:
         get_category_or_404(db, data.danhmucid)
+    validate_menu_ingredients(db, data)
     return menu_crud.update_menu_item(db, item, data)
 
 

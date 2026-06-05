@@ -8,7 +8,6 @@ import {
   FireOutlined,
   PictureOutlined,
   PlusOutlined,
-  SearchOutlined,
   SortAscendingOutlined,
   StarOutlined,
   UnorderedListOutlined,
@@ -28,11 +27,9 @@ import {
   Switch,
   Tag,
   message,
-  notification,
 } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Highlight from '@/components/Highlight';
-import TinyEditor from '@/components/TinyEditor';
 import Topbar from '@/pages/QuanTri/Topbar';
 import ConfirmModal from '@/pages/QuanTri/components/ConfirmModal';
 import PageToolbar from '@/pages/QuanTri/components/PageToolbar';
@@ -138,11 +135,12 @@ interface MonFormProps {
   open: boolean;
   initial: IMonAnLocal | null;
   categories: { id: number, name: string }[];
+  ingredients: Array<{ id: string; ten: string; donVi: string }>;
   onCancel: () => void;
   onSubmit: (values: Partial<IMonAnLocal>) => void;
 }
 
-const MonForm: React.FC<MonFormProps> = ({ open, initial, categories, onCancel, onSubmit }) => {
+const MonForm: React.FC<MonFormProps> = ({ open, initial, categories, ingredients, onCancel, onSubmit }) => {
   const [form] = Form.useForm();
   const [imgPreview, setImgPreview] = useState('');
   const [fileToUpload, setFileToUpload] = useState<File | null>(null);
@@ -337,7 +335,7 @@ const MonForm: React.FC<MonFormProps> = ({ open, initial, categories, onCancel, 
                       style={{ marginBottom: 0 }}
                     >
                       <Select placeholder="Chọn nguyên liệu..." showSearch optionFilterProp="label" style={{ width: '100%' }}>
-                        {DANH_SACH_NGUYEN_LIEU.map((nl) => (
+                        {ingredients.map((nl) => (
                           <Select.Option key={nl.id} value={nl.id} label={nl.ten}>
                             {nl.ten} ({nl.donVi})
                           </Select.Option>
@@ -529,7 +527,7 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit, onDelete, o
 };
 
 const QuanLyMon: React.FC = () => {
-  const { items, categories, addMon, updateMon, deleteMon, toggleCoSan, tabCounts: modelTabCounts } = useQuanLyMonModel();
+  const { items, categories, ingredients, addMon, updateMon, deleteMon, toggleCoSan, tabCounts: modelTabCounts } = useQuanLyMonModel();
 
   const [activeTab,   setActiveTab]   = useState<number | string>('tat_ca');
   const [tuKhoa,      setTuKhoa]      = useState('');
@@ -565,14 +563,6 @@ const QuanLyMon: React.FC = () => {
     }
     return defaultTabs;
   }, [items, categories, modelTabCounts]);
-
-  // ── Stat cards ────────────────────────────────────────────────────
-  const monStats = useMemo(() => ({
-    tong:     items.length,
-    dangBan:  items.filter((m) => m.coSan !== false).length,
-    tamHet:   items.filter((m) => m.coSan === false).length,
-    danhMuc:  new Set(items.map((m) => m.danhMuc)).size,
-  }), [items]);
 
   const danhSachLoc = useMemo(() => {
     let ds = items;
@@ -761,6 +751,7 @@ const QuanLyMon: React.FC = () => {
         open={formOpen}
         initial={editing}
         categories={categories}
+        ingredients={ingredients}
         onCancel={() => { setFormOpen(false); setEditing(null); }}
         onSubmit={handleSubmit}
       />

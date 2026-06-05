@@ -7,6 +7,7 @@ import { IMonAn } from '@/services/QuanTri/Quản Lý Món/typing';
 export default function useQuanLyMonModel() {
   const [items, setItems] = useState<IMonAn[]>([]);
   const [categories, setCategories] = useState<{ id: number, name: string }[]>([]);
+  const [ingredients, setIngredients] = useState<any[]>([]);
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -30,10 +31,22 @@ export default function useQuanLyMonModel() {
     }
   }, []);
 
+  const fetchIngredients = useCallback(async () => {
+    try {
+      const res = await axios.get(`${ip3}/inventory`);
+      if (res.data && res.data.items) {
+        setIngredients(res.data.items.map(SyncAdapters.mapAdminInventoryToUI));
+      }
+    } catch (error) {
+      console.error("Failed to load inventory:", error);
+    }
+  }, []);
+
   useEffect(() => {
     fetchCategories();
     fetchItems();
-  }, [fetchCategories, fetchItems]);
+    fetchIngredients();
+  }, [fetchCategories, fetchItems, fetchIngredients]);
 
   const tabCounts = useMemo(() => {
     const counts: Record<string | number, number> = { tat_ca: items.length };
@@ -43,62 +56,56 @@ export default function useQuanLyMonModel() {
     return counts;
   }, [items, categories]);
 
+  const uploadMenuImage = useCallback(async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await axios.post(`${ip3}/uploads/image?folder=canteen/menu-items`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    return res.data?.url;
+  }, []);
+
   const addMon = useCallback(async (values: any) => {
     try {
+      const imageUrl = values.file ? await uploadMenuImage(values.file) : values.hinhAnh;
       const payload = {
         mamon: values.id || `MON${Math.floor(Math.random() * 1000000)}`,
         ten: values.ten,
         gia: values.giaBan,
         mieuta: values.moTa,
+        hinhanh: imageUrl,
         danhmucid: typeof values.danhMuc === 'number' ? values.danhMuc : undefined,
         hethang: values.coSan === false,
         nguyenLieu: values.nguyenLieu || [],
       };
-      const res = await axios.post(`${ip3}/menus/items`, payload);
-      const mamon = res.data?.mamon || payload.mamon;
-      
-      if (values.file) {
-        const formData = new FormData();
-        formData.append("file", values.file);
-        await axios.post(`${ip3}/menus/items/${mamon}/upload-image`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-      }
-      
+      await axios.post(`${ip3}/menus/items`, payload);
       // Wait for completion and refresh
-      fetchItems();
+      await fetchItems();
       return payload;
     } catch (error) {
       console.error("Failed to add menu item", error);
       throw error;
     }
-  }, [fetchItems]);
+  }, [fetchItems, uploadMenuImage]);
 
   const updateMon = useCallback(async (values: any) => {
     try {
+      const imageUrl = values.file ? await uploadMenuImage(values.file) : values.hinhAnh;
       const payload = {
         ten: values.ten,
         gia: values.giaBan,
         mieuta: values.moTa,
+        hinhanh: imageUrl,
         danhmucid: typeof values.danhMuc === 'number' ? values.danhMuc : undefined,
         nguyenLieu: values.nguyenLieu || [],
       };
       await axios.patch(`${ip3}/menus/items/${values.id}`, payload);
-      
-      if (values.file) {
-        const formData = new FormData();
-        formData.append("file", values.file);
-        await axios.post(`${ip3}/menus/items/${values.id}/upload-image`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-      }
-      
-      fetchItems();
+      await fetchItems();
     } catch (error) {
       console.error("Failed to update menu item", error);
       throw error;
     }
-  }, [fetchItems]);
+  }, [fetchItems, uploadMenuImage]);
 
   const deleteMon = useCallback(async (id: string) => {
     try {
@@ -122,5 +129,5 @@ export default function useQuanLyMonModel() {
     }
   }, [fetchItems]);
 
-  return { items, categories, tabCounts, addMon, updateMon, deleteMon, toggleCoSan, refresh: fetchItems };
+  return { items, categories, ingredients, tabCounts, addMon, updateMon, deleteMon, toggleCoSan, refresh: fetchItems };
 }

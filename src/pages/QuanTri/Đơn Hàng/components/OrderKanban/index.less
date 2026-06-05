@@ -189,13 +189,18 @@
 .actionBtn {
   border: none;
   border-radius: 6px;
+  background: @primary;
   color: #fff;
   font-size: @fs-xs;
   font-weight: 600;
   padding: 4px 10px;
   cursor: pointer;
-  transition: opacity 150ms @ease;
-  &:hover { opacity: 0.85; }
+  transition: background 150ms @ease, transform 150ms @ease;
+
+  &:hover {
+    background: @primary-hover;
+    transform: translateY(-1px);
+  }
 }
 
 .emptyCol {

@@ -220,7 +220,12 @@ const AdminDanhGia: React.FC = () => {
                   </div>
 
                   <div className={styles.actionCol}>
-                    <Button type="primary" icon={<MessageOutlined />} onClick={() => openReply(item)}>
+                    <Button
+                      type="primary"
+                      icon={<MessageOutlined />}
+                      className={styles.primaryAction}
+                      onClick={() => openReply(item)}
+                    >
                       {item.adminReply ? 'Sửa phản hồi' : 'Phản hồi'}
                     </Button>
                   </div>
@@ -233,6 +238,7 @@ const AdminDanhGia: React.FC = () => {
 
       <Modal
         visible={!!replying}
+        className={styles.replyModal}
         title={replying ? `Phản hồi đánh giá: ${replying.dishName || replying.dishId}` : 'Phản hồi đánh giá'}
         okText="Lưu phản hồi"
         cancelText="Huỷ"

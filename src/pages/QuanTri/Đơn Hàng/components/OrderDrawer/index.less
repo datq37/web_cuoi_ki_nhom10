@@ -501,6 +501,14 @@
   flex-shrink: 0;
   border-radius: 8px;
   font-weight: 700;
+  background: @primary !important;
+  border-color: @primary !important;
+
+  &:hover,
+  &:focus {
+    background: @primary-hover !important;
+    border-color: @primary-hover !important;
+  }
 }
 
 :global([data-theme="dark"]) {

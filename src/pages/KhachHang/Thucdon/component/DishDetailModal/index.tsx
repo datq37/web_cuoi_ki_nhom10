@@ -20,6 +20,8 @@ const renderStars = (count: number) =>
         <StarFilled key={s} style={{ color: s <= count ? '#f59e0b' : '#e5e7eb', fontSize: 13 }} />
     ));
 
+const isImageUrl = (value?: string) => /^https?:\/\//i.test(value || '');
+
 const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, onAdd, onInc, onDec, isFuture }) => {
     const { reviews: globalReviews } = useModel('KhachHang.ThucDon.index');
     const reviews = getReviewsByDish(globalReviews, dish.id);
@@ -86,7 +88,13 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
                         ) : (
                             reviews.map((r) => (
                                 <div key={r.id} className="mucDanhGia">
-                                    <div className="anhDaiDienDanhGia">{r.avatar}</div>
+                                    <div className="anhDaiDienDanhGia">
+                                        {isImageUrl(r.avatar) ? (
+                                            <img src={r.avatar} alt={r.author} />
+                                        ) : (
+                                            r.avatar
+                                        )}
+                                    </div>
                                     <div className="noiDungDanhGia">
                                         <div className="phanDauDanhGia">
                                             <span className="tacGiaDanhGia">{r.author}</span>

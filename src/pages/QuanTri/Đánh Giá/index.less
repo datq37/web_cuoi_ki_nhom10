@@ -6,6 +6,17 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  :global(.ant-btn-primary) {
+    background: @primary !important;
+    border-color: @primary !important;
+
+    &:hover,
+    &:focus {
+      background: @primary-hover !important;
+      border-color: @primary-hover !important;
+    }
+  }
 }
 
 .statGrid {
@@ -237,6 +248,35 @@
   @media (max-width: 860px) {
     grid-column: 1 / -1;
     justify-content: flex-start;
+  }
+}
+
+.primaryAction {
+  border-radius: 8px !important;
+  font-weight: 700;
+  box-shadow: none !important;
+}
+
+.replyModal {
+  :global(.ant-modal-content) {
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  :global(.ant-modal-footer .ant-btn) {
+    border-radius: 8px;
+    font-weight: 600;
+  }
+
+  :global(.ant-modal-footer .ant-btn-primary) {
+    background: @primary;
+    border-color: @primary;
+
+    &:hover,
+    &:focus {
+      background: @primary-hover;
+      border-color: @primary-hover;
+    }
   }
 }
 

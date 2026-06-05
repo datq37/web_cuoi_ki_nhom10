@@ -120,7 +120,6 @@ const OrderKanban: React.FC<OrderKanbanProps> = ({
                       ) : waitingBankTransfer ? (
                         <button
                           className={styles.actionBtn}
-                          style={{ background: '#ea580c' }}
                           onClick={(e) => {
                             e.stopPropagation();
                             onCardClick(don);
@@ -131,7 +130,6 @@ const OrderKanban: React.FC<OrderKanbanProps> = ({
                       ) : nextStatus ? (
                         <button
                           className={styles.actionBtn}
-                          style={{ background: cfg?.actionColor || '#16a34a' }}
                           onClick={(e) => {
                             e.stopPropagation();
                             onMoveStatus(don.maDon, nextStatus);

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { Dish, Review, WeekDay } from '@/services/KhachHang/ThucDon/typing';
+import type { Category, Dish, Review, WeekDay } from '@/services/KhachHang/ThucDon/typing';
 import { SEED_REVIEWS } from '@/services/KhachHang/ThucDon';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
@@ -40,7 +40,9 @@ export default function useCartModel() {
 
   const [dishes, setDishes] = useState<Dish[]>([]);
 
-  const [categories, setCategories] = useState<{id: string, label: string}[]>([{ id: 'all', label: 'Tất cả' }]);
+  const [categories, setCategories] = useState<Category[]>([
+    { id: 'all', name: 'Tất cả', label: 'Tất cả', icon: 'AppstoreOutlined' },
+  ]);
 
   useEffect(() => {
     axios.get(`${ip3}/settings`)
@@ -57,9 +59,15 @@ export default function useCartModel() {
         if (res.data && Array.isArray(res.data)) {
           const fetchedCats = res.data.map((c: any) => ({
             id: String(c.id),
-            label: c.name || 'Danh mục'
+            name: c.name || 'Danh mục',
+            label: c.name || 'Danh mục',
+            image: c.image,
+            icon: 'Utensils',
           }));
-          setCategories([{ id: 'all', label: 'Tất cả' }, ...fetchedCats]);
+          setCategories([
+            { id: 'all', name: 'Tất cả', label: 'Tất cả', icon: 'AppstoreOutlined' },
+            ...fetchedCats,
+          ]);
         }
       } catch (e) {
         console.error("Failed to load categories:", e);
@@ -202,8 +210,8 @@ export default function useCartModel() {
   }, [dishesWithRating]);
 
   const categoryCounts = useMemo(
-    () => buildCategoryCounts(dishesWithRating, categories as any),
-    [dishesWithRating]
+    () => buildCategoryCounts(dishesWithRating, categories),
+    [categories, dishesWithRating]
   );
 
   return {

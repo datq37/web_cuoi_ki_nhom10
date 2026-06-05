@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    Beef,
     Coffee,
     Flame,
     Grid2X2,
@@ -11,22 +10,23 @@ import {
     Utensils,
     X,
 } from 'lucide-react';
-import { MENU_CATEGORIES } from '@/services/KhachHang/ThucDon';
 import { useModel } from 'umi';
 const IconMap: Record<string, React.ReactNode> = {
     AppstoreOutlined: <Grid2X2 size={15} />,
-    CoffeeOutlined: <Beef size={15} />,
+    CoffeeOutlined: <Coffee size={15} />,
     ShopOutlined: <Soup size={15} />,
     ContainerOutlined: <Package size={15} />,
     HeartOutlined: <Heart size={15} />,
     FireOutlined: <Flame size={15} />,
     RestOutlined: <Coffee size={15} />,
+    Utensils: <Utensils size={15} />,
 };
 const CategoryBar: React.FC = () => {
     const {
         activeCategory,
         setActiveCategory,
         categoryCounts,
+        categories,
         searchQuery,
         setSearchQuery,
     } = useModel('KhachHang.ThucDon.index');
@@ -52,17 +52,24 @@ const CategoryBar: React.FC = () => {
                 )}
             </div>
             <div className="thanhDanhMuc">
-                {MENU_CATEGORIES.map(cat => (
-                    <button
-                        key={cat.id}
-                        className={`theDanhMuc ${activeCategory === cat.id ? 'dangChon' : ''}`}
-                        onClick={() => setActiveCategory(cat.id)}
-                    >
-                        {IconMap[cat.icon] || <Utensils size={15} />}
-                        {cat.name}
-                        <span className="soLuong">{categoryCounts[cat.id] || 0}</span>
-                    </button>
-                ))}
+                {(categories || []).map((cat: any) => {
+                    const label = cat.label || cat.name || 'Danh mục';
+                    return (
+                        <button
+                            key={cat.id}
+                            className={`theDanhMuc ${activeCategory === cat.id ? 'dangChon' : ''}`}
+                            onClick={() => setActiveCategory(cat.id)}
+                        >
+                            {cat.image ? (
+                                <img className="anhDanhMuc" src={cat.image} alt={label} />
+                            ) : (
+                                IconMap[cat.icon] || <Utensils size={15} />
+                            )}
+                            {label}
+                            <span className="soLuong">{categoryCounts[cat.id] || 0}</span>
+                        </button>
+                    );
+                })}
             </div>
         </div>
     );

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from . import report, admin_orders, auth, categories, menus, khachhang, orders, payments, notification, inventory, khuyenmai, nhanvien, cosovatchat, combo, reviews
+from . import report, admin_orders, auth, categories, menus, khachhang, orders, payments, notification, inventory, khuyenmai, nhanvien, cosovatchat, combo, reviews, settings, uploads
 
 api_router = APIRouter()
 api_router.include_router(auth.router)
@@ -18,3 +18,5 @@ api_router.include_router(nhanvien.router)
 api_router.include_router(cosovatchat.router)
 api_router.include_router(combo.router)
 api_router.include_router(reviews.router)
+api_router.include_router(settings.router)
+api_router.include_router(uploads.router)

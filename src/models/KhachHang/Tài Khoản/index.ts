@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import type { UserProfile } from '@/services/KhachHang/Tài khoản/typing';
 import { showCustomerNotification } from '@/utils/notification';
+import axios from '@/utils/axios';
+import { ip3 } from '@/utils/ip';
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_SIZE_MB = 2;
 const LIST_IGNORE = 'LIST_IGNORE' as const;
@@ -22,12 +24,17 @@ export default function useTaiKhoanModel() {
       return LIST_IGNORE;
     }
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      datDuongDanAnhDaiDien(reader.result as string);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    axios.post(`${ip3}/uploads/image?folder=canteen/avatars`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).then((res) => {
+      datDuongDanAnhDaiDien(res.data?.url || '');
       showCustomerNotification('Đã tải ảnh lên thành công!', undefined, 'success');
-    };
+    }).catch(() => {
+      showCustomerNotification('Không thể tải ảnh lên Cloudinary!', undefined, 'error');
+    });
 
     return false;
   };

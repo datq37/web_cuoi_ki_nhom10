@@ -8,18 +8,19 @@ import {
 } from '@ant-design/icons';
 import { Button, Input, Switch, message } from 'antd';
 import dayjs from 'dayjs';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Topbar from '@/pages/QuanTri/Topbar';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { KEYS, store } from '@/utils/storage';
+import axios from '@/utils/axios';
+import { ip3 } from '@/utils/ip';
+import { cacheCanteenSettings } from '@/utils/businessHours';
 import styles from './index.less';
 
 // ── Types ────────────────────────────────────────────────────────
 type TTab = 'thong-tin' | 'gio-hoat-dong' | 'thanh-toan' | 'thong-bao' | 'bao-mat';
 
 interface IDayConfig { label: string; on: boolean; mo: string; close: string; }
-interface IPayMethod  { id: string; icon: string; ten: string; moTa: string; on: boolean; }
-interface INotifItem  { id: string; ten: string; moTa: string; on: boolean; }
 
 interface ISettings {
   thongTin: { ten: string; tenHienThi: string; ma: string; diaChi: string; sdt: string; email: string; };
@@ -194,12 +195,30 @@ const ThongTinChung: React.FC = () => {
 const GioHoatDong: React.FC = () => {
   const [days, setDays] = useState<IDayConfig[]>(loadSettings().gioHD);
 
+  useEffect(() => {
+    axios.get(`${ip3}/settings`)
+      .then((res) => {
+        if (res.data?.gioHD?.length) {
+          cacheCanteenSettings(res.data);
+          setDays(res.data.gioHD);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const update = (i: number, patch: Partial<IDayConfig>) =>
     setDays((prev) => prev.map((d, idx) => idx === i ? { ...d, ...patch } : d));
 
-  const handleSave = () => {
-    store.set(KEYS.settings, { ...loadSettings(), gioHD: days });
-    savedMsg();
+  const handleSave = async () => {
+    const nextSettings = { ...loadSettings(), gioHD: days };
+    store.set(KEYS.settings, nextSettings);
+    try {
+      const res = await axios.put(`${ip3}/settings`, nextSettings);
+      cacheCanteenSettings(res.data || nextSettings);
+      savedMsg();
+    } catch (error) {
+      message.warning('Đã lưu trên trình duyệt, nhưng chưa đồng bộ được lên máy chủ.');
+    }
   };
 
   return (

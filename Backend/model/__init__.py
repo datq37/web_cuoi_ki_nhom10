@@ -1,4 +1,5 @@
 from .cosovatchat import CoSoVatChat
+from .canteen_settings import CanteenSetting
 from .combo import Combo, ComboMonAn
 from .daily_menu import DailyMenu
 from .danhmucmonan import DanhMucMonAn
@@ -14,6 +15,7 @@ from .congthuc import CongThuc
 
 __all__ = [
     "CoSoVatChat",
+    "CanteenSetting",
     "Combo",
     "ComboMonAn",
     "KhachHang",

@@ -1,6 +1,8 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+import cloudinary
+import cloudinary.uploader  # noqa: F401
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -9,6 +11,7 @@ import config
 from database import Base, engine
 from model import (  # noqa: F401 — đăng ký metadata theo schema.sql
     CoSoVatChat,
+    CanteenSetting,
     Combo,
     ComboMonAn,
     DailyMenu,
@@ -23,6 +26,13 @@ from model import (  # noqa: F401 — đăng ký metadata theo schema.sql
 )
 from routes import admin_orders, auth, categories, khachhang, menus, notification, orders, payments, report
 from routes import api_router
+
+cloudinary.config(
+    cloud_name=config.CLOUDINARY_CLOUD_NAME,
+    api_key=config.CLOUDINARY_API_KEY,
+    api_secret=config.CLOUDINARY_API_SECRET,
+    secure=True,
+)
 
 
 @asynccontextmanager

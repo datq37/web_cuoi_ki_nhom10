@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useModel } from 'umi';
 import { SEED_MENU } from '@/services/KhachHang/ThucDon';
 import { showCustomerNotification } from '@/utils/notification';
+import axios from '@/utils/axios';
+import { ip3 } from '@/utils/ip';
 
 export default function useDanhGiaModel(order: any, onClose: () => void) {
     const { currentUser } = useModel('KhachHang.Tài Khoản.thanghang');
@@ -19,13 +21,17 @@ export default function useDanhGiaModel(order: any, onClose: () => void) {
     // tải ảnh đánh giá
     const handleImageFiles = (files: File[]) => {
         files.forEach((file) => {
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                if (ev.target?.result) {
-                    setImages((prev) => [...prev, ev.target!.result as string]);
+            const formData = new FormData();
+            formData.append('file', file);
+            axios.post(`${ip3}/uploads/image?folder=canteen/reviews`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            }).then((res) => {
+                if (res.data?.url) {
+                    setImages((prev) => [...prev, res.data.url]);
                 }
-            };
-            reader.readAsDataURL(file);
+            }).catch(() => {
+                showCustomerNotification('Không thể tải ảnh đánh giá lên Cloudinary!', undefined, 'error');
+            });
         });
     };
 

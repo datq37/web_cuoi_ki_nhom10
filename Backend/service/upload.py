@@ -1,13 +1,12 @@
 import uuid
+from io import BytesIO
 from pathlib import Path
 
+import cloudinary
+import cloudinary.uploader
 from fastapi import HTTPException, UploadFile, status
 
 import config
-
-# Đảm bảo thư mục uploads tồn tại khi import module
-UPLOAD_PATH = Path(config.UPLOAD_DIR)
-UPLOAD_PATH.mkdir(parents=True, exist_ok=True)
 
 
 def _validate_image(file: UploadFile) -> str:
@@ -24,12 +23,12 @@ def _validate_image(file: UploadFile) -> str:
     return ext
 
 
-async def save_menu_item_image(file: UploadFile) -> str:
+async def upload_image_to_cloudinary(file: UploadFile, folder: str | None = None) -> str:
     """
-    Lưu file ảnh vào thư mục uploads với tên unique (uuid).
-    Trả về đường dẫn public: /uploads/<filename>
+    Upload ảnh món ăn lên Cloudinary.
+    Trả về secure_url để lưu vào database.
     """
-    ext = _validate_image(file)
+    _validate_image(file)
     content = await file.read()
     max_bytes = config.MAX_UPLOAD_SIZE_MB * 1024 * 1024
     if len(content) > max_bytes:
@@ -38,8 +37,42 @@ async def save_menu_item_image(file: UploadFile) -> str:
             detail=f"Kích thước file tối đa {config.MAX_UPLOAD_SIZE_MB}MB",
         )
 
-    filename = f"{uuid.uuid4().hex}{ext}"
-    file_path = UPLOAD_PATH / filename
-    file_path.write_bytes(content)
+    if not all([config.CLOUDINARY_CLOUD_NAME, config.CLOUDINARY_API_KEY, config.CLOUDINARY_API_SECRET]):
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Cloudinary chưa được cấu hình.",
+        )
 
-    return f"/{config.UPLOAD_DIR}/{filename}"
+    cloudinary.config(
+        cloud_name=config.CLOUDINARY_CLOUD_NAME,
+        api_key=config.CLOUDINARY_API_KEY,
+        api_secret=config.CLOUDINARY_API_SECRET,
+        secure=True,
+    )
+
+    try:
+        result = cloudinary.uploader.upload(
+            BytesIO(content),
+            folder=folder or config.CLOUDINARY_FOLDER,
+            public_id=uuid.uuid4().hex,
+            resource_type="image",
+            overwrite=True,
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Không upload được ảnh lên Cloudinary.",
+        ) from exc
+
+    image_url = result.get("secure_url")
+    if not image_url:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Cloudinary không trả về link ảnh.",
+        )
+    return image_url
+
+
+async def save_menu_item_image(file: UploadFile) -> str:
+    """Upload ảnh món ăn lên Cloudinary và trả về URL."""
+    return await upload_image_to_cloudinary(file, config.CLOUDINARY_FOLDER)

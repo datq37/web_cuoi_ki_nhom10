@@ -7,6 +7,7 @@ import { formatDateTimeViVN, formatTimeHHMM } from '@/utils/format';
 import { showCustomerNotification } from '@/utils/notification';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
+import { getOrderingStatusFromCache } from '@/utils/businessHours';
 export function useGioHangModel() {
     const { cart, cartOpen, setCartOpen, clearCart } = useModel('KhachHang.ThucDon.index');
     const { addOrder } = useModel('KhachHang.Đơn Hàng.Orders');
@@ -70,9 +71,9 @@ export function useGioHangModel() {
 
     // Xác nhận đặt 
     const handleConfirm = async () => {
-        const today = new Date();
-        if (today.getDay() === 0) {
-            showCustomerNotification('Căng tin nghỉ Chủ Nhật', 'Rất xin lỗi, căng tin không hoạt động vào ngày Chủ Nhật. Vui lòng đặt hàng vào các ngày trong tuần!', 'error');
+        const orderingStatus = getOrderingStatusFromCache();
+        if (!orderingStatus.open) {
+            showCustomerNotification('Chưa đến giờ mở bán', orderingStatus.message, 'error');
             return;
         }
 
@@ -176,10 +177,14 @@ export function useGioHangModel() {
             );
 
             setPage(isQRPayment ? 'qr-payment' : 'history');
-        } catch (error) {
+        } catch (error: any) {
             console.error("Lỗi đặt hàng", error);
             setIsLoading(false);
-            showCustomerNotification('Lỗi đặt hàng', 'Không thể kết nối đến máy chủ. Vui lòng thử lại sau.', 'error');
+            const serverMessage =
+                error?.response?.data?.detail?.message ||
+                error?.response?.data?.message ||
+                'Không thể kết nối đến máy chủ. Vui lòng thử lại sau.';
+            showCustomerNotification('Lỗi đặt hàng', serverMessage, 'error');
         }
     };
 

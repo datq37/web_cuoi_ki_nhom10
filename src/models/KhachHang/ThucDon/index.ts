@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Dish, Review, WeekDay } from '@/services/KhachHang/ThucDon/typing';
-import { MENU_CATEGORIES, SEED_REVIEWS } from '@/services/KhachHang/ThucDon';
-import { DANH_SACH_MON } from '@/services/QuanTri/Quản Lý Món';
+import { SEED_REVIEWS } from '@/services/KhachHang/ThucDon';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { SyncAdapters } from '@/services/api/adapters';
@@ -26,6 +25,7 @@ import {
 import type { CartItem } from './DishCard';
 import { createReview } from './DishDetailModal';
 import { showCustomerNotification } from '@/utils/notification';
+import { cacheCanteenSettings, getOrderingStatusFromCache } from '@/utils/businessHours';
 
 
 
@@ -41,6 +41,14 @@ export default function useCartModel() {
   const [dishes, setDishes] = useState<Dish[]>([]);
 
   const [categories, setCategories] = useState<{id: string, label: string}[]>([{ id: 'all', label: 'Tất cả' }]);
+
+  useEffect(() => {
+    axios.get(`${ip3}/settings`)
+      .then((res) => {
+        if (res.data) cacheCanteenSettings(res.data);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -99,18 +107,24 @@ export default function useCartModel() {
     loadDishes();
   }, []);
 
-  const addToCart = useCallback((dish: Dish, qty?: number) => {
-    const today = new Date();
-    if (today.getDay() === 0) {
-      showCustomerNotification('Căng tin nghỉ Chủ Nhật', 'Rất xin lỗi, căng tin không hoạt động vào ngày Chủ Nhật. Vui lòng đặt hàng vào các ngày trong tuần!', 'error');
-      return;
+  const canOrderNow = useCallback(() => {
+    const status = getOrderingStatusFromCache();
+    if (!status.open) {
+      showCustomerNotification('Chưa đến giờ mở bán', status.message, 'error');
+      return false;
     }
-    setCart(prev => addDishToCart(prev, dish, qty));
+    return true;
   }, []);
 
+  const addToCart = useCallback((dish: Dish, qty?: number) => {
+    if (!canOrderNow()) return;
+    setCart(prev => addDishToCart(prev, dish, qty));
+  }, [canOrderNow]);
+
   const incCart = useCallback((id: string) => {
+    if (!canOrderNow()) return;
     setCart(prev => increaseDishQty(prev, id));
-  }, []);
+  }, [canOrderNow]);
 
   const decCart = useCallback((id: string) => {
     setCart(prev => decreaseDishQty(prev, id));

@@ -7,6 +7,7 @@ from crud import menu as menu_crud
 from crud import orders as orders_crud
 from model.orders import Order
 from schemas.orders import OrderCreate, OrderUpdate
+from service import settings as settings_service
 
 
 def get_order_or_404(db: Session, order_id: str) -> Order:
@@ -94,6 +95,13 @@ def confirm_user_order(db: Session, order_id: str, makh: str) -> Order:
     """Chốt đặt hàng (chuyển trạng thái từ Giỏ hàng sang Chờ xác nhận)."""
     order = get_order_or_404(db, order_id)
     verify_order_ownership(order, makh)
+
+    ordering_status = settings_service.get_ordering_status(db)
+    if not ordering_status.open:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"message": ordering_status.message},
+        )
 
     if order.trangthai != OrderStatus.CART:
         raise HTTPException(

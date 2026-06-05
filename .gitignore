@@ -50,5 +50,6 @@ node_modules
 .dist
 .vercel
 .env
+Backend/.env
 .env.local
 .env.*.local

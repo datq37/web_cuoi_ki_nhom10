@@ -1,28 +1,16 @@
 import React, { useState } from 'react';
-import { GoogleOutlined, LoadingOutlined } from '@ant-design/icons';
-import { message } from 'antd';
+import { GoogleOutlined } from '@ant-design/icons';
+import { message, Form, Input, Button, ConfigProvider } from 'antd';
 import { history } from 'umi';
 import { showCustomerNotification } from '@/utils/notification';
 
-interface RegisterFormProps {
-    onToggle?: () => void;
-}
+import type { RegisterFormProps } from '@/services/KhachHang/Login/typing';
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ onToggle }) => {
-    const [ten, setTen] = useState('');
-    const [taikhoan, setTaikhoan] = useState('');
-    const [matkhau, setMatkhau] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [form] = Form.useForm();
 
-    const handleRegister = async () => {
-        if (!taikhoan || !matkhau) {
-            message.warning('Vui lòng nhập đầy đủ thông tin');
-            return;
-        }
-        if (matkhau.length < 6) {
-            message.warning('Mật khẩu phải có ít nhất 6 ký tự');
-            return;
-        }
+    const handleRegister = async (values: any) => {
+        const { ten, taikhoan, matkhau } = values;
 
         setLoading(true);
         try {
@@ -61,51 +49,100 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onToggle }) => {
     };
 
     return (
-        <form action="#" onSubmit={(e) => e.preventDefault()}>
-            <h1>Tạo tài khoản</h1>
-            <input
-                type="text"
-                placeholder="Họ và tên (không bắt buộc)"
-                value={ten}
-                onChange={(e) => setTen(e.target.value)}
-                disabled={loading}
-            />
-            <input
-                type="text"
-                placeholder="Tên tài khoản"
-                value={taikhoan}
-                onChange={(e) => setTaikhoan(e.target.value)}
-                disabled={loading}
-            />
-            <input
-                type="password"
-                placeholder="Mật khẩu (ít nhất 6 ký tự)"
-                value={matkhau}
-                onChange={(e) => setMatkhau(e.target.value)}
-                disabled={loading}
-            />
-            <button
-                className="nutXacNhan"
-                type="button"
-                onClick={handleRegister}
-                disabled={loading}
-                style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+        <ConfigProvider
+            theme={{
+                components: {
+                    Input: {
+                        colorBgContainer: '#f5f5f5',
+                        colorBorder: '#eee',
+                        borderRadius: 10,
+                        controlHeight: 46,
+                        hoverBorderColor: '#2D6A4F',
+                        activeBorderColor: '#2D6A4F',
+                    },
+                    Button: {
+                        colorPrimary: '#2D6A4F',
+                        colorPrimaryHover: '#1b4332',
+                        colorPrimaryActive: '#1b4332',
+                        borderRadius: 30,
+                        controlHeight: 46,
+                        fontWeight: 600,
+                    }
+                }
+            }}
+        >
+            <Form 
+                form={form}
+                onFinish={handleRegister} 
+                className="ant-form-auth"
+                style={{
+                    backgroundColor: '#FFFFFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    padding: '0 50px',
+                    height: '100%',
+                    textAlign: 'center',
+                }}
             >
-                {loading ? <><LoadingOutlined spin /> Đang đăng ký...</> : 'Đăng ký'}
-            </button>
-            <div className="dangNhapMangXaHoi">
-                <span>Hoặc đăng ký bằng</span>
-                <div className="khungMangXaHoi">
-                    <a href="#" className="nutMangXaHoi google" onClick={(e) => e.preventDefault()}>
-                        <GoogleOutlined className="bieuTuong" />
-                        <span className="vanBan">Google</span>
-                    </a>
+                <h1 style={{ fontWeight: 700, marginBottom: '30px', color: '#2D6A4F' }}>Tạo tài khoản</h1>
+                
+                <Form.Item 
+                    name="ten" 
+                    style={{ width: '100%', marginBottom: '16px' }}
+                >
+                    <Input placeholder="Họ và tên (không bắt buộc)" disabled={loading} />
+                </Form.Item>
+
+                <Form.Item 
+                    name="taikhoan" 
+                    rules={[{ required: true, message: 'Vui lòng nhập tài khoản!' }]}
+                    style={{ width: '100%', marginBottom: '16px' }}
+                >
+                    <Input placeholder="Tên tài khoản" disabled={loading} />
+                </Form.Item>
+
+                <Form.Item 
+                    name="matkhau" 
+                    rules={[{ required: true, min: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự!' }]}
+                    style={{ width: '100%', marginBottom: '16px' }}
+                >
+                    <Input.Password placeholder="Mật khẩu (ít nhất 6 ký tự)" disabled={loading} />
+                </Form.Item>
+
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="nutXacNhan"
+                    loading={loading}
+                    style={{ 
+                        width: '100%', 
+                        marginTop: '20px', 
+                        marginBottom: '30px',
+                        boxShadow: '0 4px 10px rgba(45, 106, 79, 0.3)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '1px'
+                    }}
+                >
+                    Đăng ký
+                </Button>
+
+                <div className="dangNhapMangXaHoi">
+                    <span>Hoặc đăng ký bằng</span>
+                    <div className="khungMangXaHoi">
+                        <a href="#" className="nutMangXaHoi google" onClick={(e) => e.preventDefault()}>
+                            <GoogleOutlined className="bieuTuong" />
+                            <span className="vanBan">Google</span>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div className="chuyenDoi">
-                Đã có tài khoản? <span onClick={onToggle}>Đăng nhập ngay</span>
-            </div>
-        </form>
+                
+                <div className="chuyenDoi" style={{ marginTop: '20px' }}>
+                    Đã có tài khoản? <span onClick={onToggle} style={{ color: '#2D6A4F', cursor: 'pointer', fontWeight: 600 }}>Đăng nhập ngay</span>
+                </div>
+            </Form>
+        </ConfigProvider>
     );
 };
 

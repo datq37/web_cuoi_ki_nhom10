@@ -3,7 +3,8 @@ import { history } from 'umi';
 import { supabase } from '@/utils/supabase';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
-import { message } from 'antd';
+import { showCustomerNotification } from '@/utils/notification';
+import GlobalNotificationModal from '../Component/GlobalNotificationModal';
 
 export default function AuthCallback() {
   useEffect(() => {
@@ -12,7 +13,7 @@ export default function AuthCallback() {
       const { data, error } = await supabase.auth.getSession();
       
       if (error || !data?.session) {
-        message.error('Đăng nhập Google thất bại hoặc đã hết hạn');
+        showCustomerNotification('Đăng nhập Google thất bại', 'Vui lòng thử lại.', 'error');
         history.push('/dang-nhap');
         return;
       }
@@ -32,15 +33,20 @@ export default function AuthCallback() {
 
         if (res.data && res.data.accessToken) {
           localStorage.setItem('loginToken', res.data.accessToken);
-          message.success('Đăng nhập thành công!');
-          history.push('/trang-chinh');
+          // Hiển thị thông báo kiểu giống đăng nhập thường, rồi chuyển trang
+          showCustomerNotification('Đăng nhập thành công!', undefined, 'success');
+          setTimeout(() => {
+            history.push('/trang-chinh');
+          }, 1500);
         } else {
           throw new Error('Lỗi đồng bộ token');
         }
       } catch (err) {
         console.error("Social login error", err);
-        message.error('Hệ thống từ chối đăng nhập. Vui lòng thử lại.');
-        history.push('/dang-nhap');
+        showCustomerNotification('Đăng nhập thất bại', 'Hệ thống từ chối xác thực. Vui lòng thử lại.', 'error');
+        setTimeout(() => {
+          history.push('/dang-nhap');
+        }, 2000);
       }
     };
 
@@ -48,15 +54,18 @@ export default function AuthCallback() {
   }, []);
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#f8fafc', flexDirection: 'column', gap: 16 }}>
-      <div style={{ width: 40, height: 40, border: '4px solid #dff2e4', borderTopColor: '#2f8f4e', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-      <style>{`
-        @keyframes spin { 
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
-      <h3 style={{ color: '#1f6b39', fontWeight: 600 }}>Đang xử lý đăng nhập...</h3>
-    </div>
+    <>
+      <GlobalNotificationModal />
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#f8fafc', flexDirection: 'column', gap: 16 }}>
+        <div style={{ width: 40, height: 40, border: '4px solid #dff2e4', borderTopColor: '#2f8f4e', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+        <style>{`
+          @keyframes spin { 
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+        <h3 style={{ color: '#1f6b39', fontWeight: 600 }}>Đang xử lý đăng nhập...</h3>
+      </div>
+    </>
   );
 }

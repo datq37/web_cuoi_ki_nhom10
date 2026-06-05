@@ -2,10 +2,12 @@ import { useModel } from 'umi';
 import { RANKS } from '@/services/KhachHang/Component/Sidebar';
 
 export default function useRankModel() {
-  const { currentUser } = useModel('KhachHang.Tài Khoản.thanghang');
+  const { currentUser } = useModel('KhachHang.Tài Khoản.thanghang') as { 
+    currentUser?: { totalSpent?: number; points?: number | string; [key: string]: any } 
+  };
 
-  const currentSpent = currentUser?.totalSpent || 0;
-  const currentPoints = Math.floor(Number(currentUser?.points) || 0);
+  const currentSpent: number = currentUser?.totalSpent || 0;
+  const currentPoints: number = Math.floor(Number(currentUser?.points) || 0);
 
   let nextRank = RANKS[RANKS.length - 1]; // Giả định là max rank
   let currentRank = RANKS[0];

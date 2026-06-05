@@ -6,6 +6,7 @@ class DanhMucMonAnBase(BaseModel):
 
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
     name: str | None = Field(default=None, max_length=100)
+    image: str | None = Field(default=None)
 
 
 class DanhMucMonAnCreate(DanhMucMonAnBase):
@@ -18,6 +19,7 @@ class DanhMucMonAnUpdate(BaseModel):
 
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
     name: str | None = Field(default=None, max_length=100)
+    image: str | None = Field(default=None)
 
 
 class DanhMucMonAnResponse(DanhMucMonAnBase):

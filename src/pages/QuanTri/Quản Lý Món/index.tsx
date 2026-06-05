@@ -73,6 +73,12 @@ interface TabDanhMuc {
   soLuong: number;
 }
 
+interface DanhMucMon {
+  id: number;
+  name: string;
+  image?: string;
+}
+
 interface MonCardProps {
   mon: IMonAnLocal;
   onClick: () => void;
@@ -526,13 +532,236 @@ const MonDetail: React.FC<MonDetailProps> = ({ mon, onClose, onEdit, onDelete, o
   );
 };
 
+interface CategoryManagerModalProps {
+  open: boolean;
+  categories: DanhMucMon[];
+  onClose: () => void;
+  onCreate: (values: { name: string; image?: string }) => Promise<any>;
+  onUpdate: (id: number, values: { name?: string; image?: string }) => Promise<any>;
+  onDelete: (id: number) => Promise<void>;
+  onUploadImage: (file: File) => Promise<string>;
+}
+
+const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
+  open,
+  categories,
+  onClose,
+  onCreate,
+  onUpdate,
+  onDelete,
+  onUploadImage,
+}) => {
+  const [form] = Form.useForm();
+  const [editing, setEditing] = useState<DanhMucMon | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [imagePreview, setImagePreview] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!open) {
+      form.resetFields();
+      setEditing(null);
+      setImagePreview('');
+    }
+  }, [form, open]);
+
+  const handleSubmit = async () => {
+    const values = await form.validateFields();
+    setSaving(true);
+    try {
+      if (editing) {
+        await onUpdate(editing.id, values);
+        message.success('Đã cập nhật danh mục');
+      } else {
+        await onCreate(values);
+        message.success('Đã thêm danh mục');
+      }
+      form.resetFields();
+      setEditing(null);
+      setImagePreview('');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleEdit = (category: DanhMucMon) => {
+    setEditing(category);
+    form.setFieldsValue({ name: category.name, image: category.image });
+    setImagePreview(category.image || '');
+  };
+
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+
+    setUploadingImage(true);
+    try {
+      const imageUrl = await onUploadImage(file);
+      form.setFieldsValue({ image: imageUrl });
+      setImagePreview(imageUrl);
+      message.success('Đã tải ảnh danh mục lên Cloudinary');
+    } catch (error) {
+      console.error('Failed to upload category image:', error);
+      message.error('Không tải được ảnh danh mục');
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleDelete = (category: DanhMucMon) => {
+    Modal.confirm({
+      title: 'Xoá danh mục?',
+      content: `Xoá "${category.name}" khỏi danh sách danh mục món ăn?`,
+      okText: 'Xoá',
+      cancelText: 'Huỷ',
+      okType: 'danger',
+      onOk: async () => {
+        await onDelete(category.id);
+        message.success('Đã xoá danh mục');
+        if (editing?.id === category.id) {
+          form.resetFields();
+          setEditing(null);
+        }
+      },
+    });
+  };
+
+  return (
+    <Modal
+      visible={open}
+      title="Quản lý danh mục"
+      onCancel={onClose}
+      footer={null}
+      width={620}
+      destroyOnClose
+    >
+      <Form form={form} layout="vertical" className={styles.categoryForm}>
+        <Form.Item
+          name="name"
+          label={editing ? 'Tên danh mục đang sửa' : 'Tên danh mục mới'}
+          rules={[
+            { required: true, message: 'Nhập tên danh mục' },
+            { max: 100, message: 'Tên tối đa 100 ký tự' },
+          ]}
+        >
+          <Input placeholder="VD: Món sáng, Cơm trưa, Đồ healthy..." />
+        </Form.Item>
+        <Form.Item name="image" hidden>
+          <Input />
+        </Form.Item>
+        <div className={styles.categoryImageUpload}>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={handleImageChange}
+          />
+          <button
+            type="button"
+            className={styles.categoryImagePicker}
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploadingImage}
+          >
+            {imagePreview ? (
+              <img src={imagePreview} alt="Ảnh danh mục" />
+            ) : (
+              <PictureOutlined />
+            )}
+          </button>
+          <div className={styles.categoryImageUploadMeta}>
+            <div className={styles.categoryImageUploadTitle}>
+              {imagePreview ? 'Ảnh danh mục đã tải lên' : 'Ảnh đại diện danh mục'}
+            </div>
+            {uploadingImage && (
+              <div className={styles.categoryImageUploadHint}>Đang upload lên Cloudinary...</div>
+            )}
+            <div className={styles.categoryImageUploadActions}>
+              <Button size="small" loading={uploadingImage} onClick={() => fileInputRef.current?.click()}>
+                {imagePreview ? 'Đổi ảnh' : 'Chọn ảnh'}
+              </Button>
+              {imagePreview && (
+                <Button
+                  size="small"
+                  onClick={() => {
+                    form.setFieldsValue({ image: undefined });
+                    setImagePreview('');
+                  }}
+                >
+                  Xoá ảnh
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className={styles.categoryFormActions}>
+          {editing && (
+            <Button onClick={() => { form.resetFields(); setEditing(null); setImagePreview(''); }}>
+              Huỷ sửa
+            </Button>
+          )}
+          <Button type="primary" loading={saving} onClick={handleSubmit}>
+            {editing ? 'Cập nhật danh mục' : 'Thêm danh mục'}
+          </Button>
+        </div>
+      </Form>
+
+      <div className={styles.categoryList}>
+        {categories.length === 0 ? (
+          <div className={styles.categoryEmpty}>Chưa có danh mục nào</div>
+        ) : (
+          categories.map((category) => (
+            <div key={category.id} className={styles.categoryRow}>
+              <div className={styles.categoryInfo}>
+                {category.image ? (
+                  <img src={category.image} alt={category.name} className={styles.categoryImage} />
+                ) : (
+                  <span className={styles.categoryDot} />
+                )}
+                <div>
+                  <div className={styles.categoryName}>{category.name}</div>
+                  <div className={styles.categoryId}>ID: {category.id}</div>
+                </div>
+              </div>
+              <div className={styles.categoryActions}>
+                <Button size="small" icon={<EditOutlined />} onClick={() => handleEdit(category)}>
+                  Sửa
+                </Button>
+                <Button size="small" danger icon={<DeleteOutlined />} onClick={() => handleDelete(category)}>
+                  Xoá
+                </Button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </Modal>
+  );
+};
+
 const QuanLyMon: React.FC = () => {
-  const { items, categories, ingredients, addMon, updateMon, deleteMon, toggleCoSan, tabCounts: modelTabCounts } = useQuanLyMonModel();
+  const {
+    items,
+    categories,
+    ingredients,
+    addMon,
+    updateMon,
+    deleteMon,
+    toggleCoSan,
+    addCategory,
+    updateCategory,
+    deleteCategory,
+    uploadCategoryImage,
+    tabCounts: modelTabCounts,
+  } = useQuanLyMonModel();
 
   const [activeTab,   setActiveTab]   = useState<number | string>('tat_ca');
   const [tuKhoa,      setTuKhoa]      = useState('');
   const [isGrid,      setIsGrid]      = useState(false);
   const [formOpen,    setFormOpen]    = useState(false);
+  const [categoryOpen, setCategoryOpen] = useState(false);
   const [editing,     setEditing]     = useState<IMonAnLocal | null>(null);
   const [viewing,     setViewing]     = useState<IMonAnLocal | null>(null);
   const [filterCoSan, setFilterCoSan] = useState<'all' | 'dang_ban' | 'tam_het'>('all');
@@ -563,6 +792,13 @@ const QuanLyMon: React.FC = () => {
     }
     return defaultTabs;
   }, [items, categories, modelTabCounts]);
+
+  useEffect(() => {
+    if (activeTab === 'tat_ca') return;
+    if (!categories.some((category) => category.id === activeTab)) {
+      setActiveTab('tat_ca');
+    }
+  }, [activeTab, categories]);
 
   const danhSachLoc = useMemo(() => {
     let ds = items;
@@ -698,14 +934,23 @@ const QuanLyMon: React.FC = () => {
               </>
             }
             actions={
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                className={styles.addBtn}
-                onClick={() => { setEditing(null); setFormOpen(true); }}
-              >
-                Thêm món mới
-              </Button>
+              <div className={styles.toolbarActions}>
+                <Button
+                  icon={<AppstoreOutlined />}
+                  className={styles.btnOutline}
+                  onClick={() => setCategoryOpen(true)}
+                >
+                  Quản lý danh mục
+                </Button>
+                <Button
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  className={styles.addBtn}
+                  onClick={() => { setEditing(null); setFormOpen(true); }}
+                >
+                  Thêm món mới
+                </Button>
+              </div>
             }
           />
 
@@ -754,6 +999,15 @@ const QuanLyMon: React.FC = () => {
         ingredients={ingredients}
         onCancel={() => { setFormOpen(false); setEditing(null); }}
         onSubmit={handleSubmit}
+      />
+      <CategoryManagerModal
+        open={categoryOpen}
+        categories={categories}
+        onClose={() => setCategoryOpen(false)}
+        onCreate={addCategory}
+        onUpdate={updateCategory}
+        onDelete={deleteCategory}
+        onUploadImage={uploadCategoryImage}
       />
       <MonDetail
         mon={viewing}

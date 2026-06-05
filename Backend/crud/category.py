@@ -26,7 +26,7 @@ def get_categories(db: Session, *, skip: int = 0, limit: int = 100) -> tuple[lis
 
 def create_category(db: Session, data: CategoryCreate) -> Category:
     """Tạo danh mục món ăn mới."""
-    category = Category(name=data.name)
+    category = Category(name=data.name, image=data.image)
     db.add(category)
     db.commit()
     db.refresh(category)

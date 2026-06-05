@@ -32,7 +32,8 @@
 -- -------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.danhmucmonan (
     id      SERIAL PRIMARY KEY,
-    name    VARCHAR(100) NULL
+    name    VARCHAR(100) NULL,
+    image   VARCHAR NULL
 );
 
 -- -------------------------------------------------------

@@ -56,10 +56,38 @@ export default function useQuanLyMonModel() {
     return counts;
   }, [items, categories]);
 
+  const addCategory = useCallback(async (values: { name: string; image?: string }) => {
+    const res = await axios.post(`${ip3}/categories`, values);
+    await fetchCategories();
+    return res.data;
+  }, [fetchCategories]);
+
+  const updateCategory = useCallback(async (id: number, values: { name?: string; image?: string }) => {
+    const res = await axios.patch(`${ip3}/categories/${id}`, values);
+    await fetchCategories();
+    await fetchItems();
+    return res.data;
+  }, [fetchCategories, fetchItems]);
+
+  const deleteCategory = useCallback(async (id: number) => {
+    await axios.delete(`${ip3}/categories/${id}`);
+    await fetchCategories();
+    await fetchItems();
+  }, [fetchCategories, fetchItems]);
+
   const uploadMenuImage = useCallback(async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
     const res = await axios.post(`${ip3}/uploads/image?folder=canteen/menu-items`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    return res.data?.url;
+  }, []);
+
+  const uploadCategoryImage = useCallback(async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await axios.post(`${ip3}/uploads/image?folder=canteen/categories`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
     return res.data?.url;
@@ -129,5 +157,19 @@ export default function useQuanLyMonModel() {
     }
   }, [fetchItems]);
 
-  return { items, categories, ingredients, tabCounts, addMon, updateMon, deleteMon, toggleCoSan, refresh: fetchItems };
+  return {
+    items,
+    categories,
+    ingredients,
+    tabCounts,
+    addMon,
+    updateMon,
+    deleteMon,
+    toggleCoSan,
+    addCategory,
+    updateCategory,
+    deleteCategory,
+    uploadCategoryImage,
+    refresh: fetchItems,
+  };
 }

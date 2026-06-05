@@ -3,7 +3,6 @@ import {
   CommentOutlined,
   HomeOutlined,
   InboxOutlined,
-  LeftOutlined,
   RightOutlined,
   SettingOutlined,
   ShoppingCartOutlined,
@@ -12,7 +11,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { Badge } from 'antd';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { history, useLocation } from 'umi';
 import { useNotif } from '@/context/NotifContext';
 import { useCanteenInfo } from '@/hooks/useCanteenInfo';
@@ -40,10 +39,7 @@ const MENU_KHAC = [
   { key: '/quan-tri/cai-dat', icon: <SettingOutlined />, label: 'Cài đặt' },
 ];
 
-const COLLAPSED_W = '64px';
-const EXPANDED_W  = '248px';
-
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<{ expanded: boolean; setExpanded: (val: boolean) => void }> = ({ expanded, setExpanded }) => {
   const location    = useLocation();
   const currentPath = location.pathname;
   const { notifs }  = useNotif();
@@ -53,23 +49,16 @@ const Sidebar: React.FC = () => {
     '/quan-tri/don-hang': notifs.filter((n) => n.type === 'order_pending' && !n.read).length,
   }), [notifs]);
 
-  const [collapsed, setCollapsed] = useState<boolean>(() => {
-    try { return localStorage.getItem('sidebar-collapsed') === 'true'; } catch { return false; }
-  });
+  const collapsed = !expanded;
 
   const handleNav = (path: string) => history.push(path);
 
-  const handleCollapse = () => {
-    const next = !collapsed;
-    setCollapsed(next);
-    try { localStorage.setItem('sidebar-collapsed', String(next)); } catch {}
-    document.querySelectorAll<HTMLElement>('[class*="mainContent"]').forEach((el) => {
-      el.style.marginLeft = next ? COLLAPSED_W : EXPANDED_W;
-    });
-  };
-
   return (
-    <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}>
+    <aside
+      className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}
+      onMouseEnter={() => setExpanded(true)}
+      onMouseLeave={() => setExpanded(false)}
+    >
 
       <div className={styles.logoSection}>
         <div className={styles.logoWrapper}>
@@ -122,13 +111,6 @@ const Sidebar: React.FC = () => {
           ))}
         </ul>
       </nav>
-
-      <div className={styles.collapseSection}>
-        <button className={styles.collapseBtn} onClick={handleCollapse}>
-          {collapsed ? <RightOutlined /> : <LeftOutlined />}
-          {!collapsed && <span>Thu gọn</span>}
-        </button>
-      </div>
 
     </aside>
   );

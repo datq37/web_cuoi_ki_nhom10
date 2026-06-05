@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NotifProvider } from '@/context/NotifContext';
 import Sidebar from '@/pages/QuanTri/Sidebar';
 import { mockData } from '@/services/QuanTri/Tổng Quan';
@@ -30,11 +30,12 @@ function useDocumentTitle() {
 
 const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useDocumentTitle();
+  const [expanded, setExpanded] = useState(false);
   return (
     <NotifProvider>
       <div className={styles.layout}>
-        <Sidebar />
-        <div className={styles.mainContent}>
+        <Sidebar expanded={expanded} setExpanded={setExpanded} />
+        <div className={`${styles.mainContent} ${expanded ? styles.mainExpanded : ''}`}>
           {children}
         </div>
       </div>

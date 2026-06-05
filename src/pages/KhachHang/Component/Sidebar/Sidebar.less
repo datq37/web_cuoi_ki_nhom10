@@ -1,8 +1,9 @@
 .sidebar {
   position: sticky;
   top: 0;
-  width: 248px;
-  min-width: 248px;
+  z-index: 30;
+  width: 92px;
+  min-width: 92px;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -13,7 +14,13 @@
   background: var(--bg-elev);
   border-right: 1px solid var(--line);
   color: var(--ink);
-  transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.32s;
+  transition: width 0.26s ease, min-width 0.26s ease, left 0.32s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.32s;
+}
+
+.sidebar.expanded {
+  width: 248px;
+  min-width: 248px;
+  box-shadow: var(--sidebar-shadow);
 }
 
 .sidebar-top,
@@ -53,6 +60,7 @@
   align-items: center;
   gap: 10px;
   padding: 0 9px;
+  transition: padding 0.22s ease, justify-content 0.22s ease;
 }
 
 .brand-logo {
@@ -66,6 +74,8 @@
 
 .brand-text {
   min-width: 0;
+  overflow: hidden;
+  transition: opacity 0.18s ease, transform 0.22s ease, width 0.22s ease;
 }
 
 .brand-name {
@@ -163,6 +173,7 @@
   line-height: 1;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  transition: opacity 0.18s ease, height 0.22s ease, padding 0.22s ease;
 }
 
 .nav-list {
@@ -224,6 +235,7 @@
   align-items: center;
   gap: 11px;
   min-width: 0;
+  transition: gap 0.22s ease;
 }
 
 .nav-icon {
@@ -237,6 +249,8 @@
   color: currentColor;
   font-size: 13px;
   font-weight: 700;
+  overflow: hidden;
+  transition: opacity 0.18s ease, transform 0.22s ease, width 0.22s ease;
   white-space: nowrap;
 }
 
@@ -253,6 +267,7 @@
   line-height: 1;
   border-radius: 999px;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  transition: opacity 0.18s ease, transform 0.22s ease;
 }
 
 .badge-green {
@@ -280,6 +295,7 @@
   border: 1px solid #dff1bb;
   border-radius: 14px;
   box-shadow: 0 18px 36px rgba(93, 147, 38, 0.1);
+  transition: min-height 0.22s ease, padding 0.22s ease, border-radius 0.22s ease;
 }
 
 .reward-icon {
@@ -413,6 +429,120 @@
   white-space: nowrap;
 }
 
+.sidebar:not(.expanded) {
+  align-items: center;
+  padding-right: 10px;
+  padding-left: 10px;
+  box-shadow: none;
+
+  .sidebar-top,
+  .sidebar-bottom {
+    width: 100%;
+    align-items: center;
+  }
+
+  .brand {
+    width: 100%;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .brand-text {
+    width: 0;
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  .role-card {
+    width: 56px;
+    height: 56px;
+    justify-content: center;
+    padding: 0;
+    border-radius: 18px;
+  }
+
+  .role-left {
+    justify-content: center;
+    gap: 0;
+  }
+
+  .role-left > div:last-child,
+  .role-card > svg {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+
+  .nav-section,
+  .nav-list {
+    width: 100%;
+    align-items: center;
+  }
+
+  .nav-label {
+    height: 0;
+    padding: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+
+  .nav-item {
+    width: 56px;
+    min-height: 56px;
+    justify-content: center;
+    padding: 0;
+    border-radius: 18px;
+  }
+
+  .nav-item:hover {
+    transform: translateX(0);
+  }
+
+  .nav-item-main {
+    justify-content: center;
+    gap: 0;
+  }
+
+  .nav-text {
+    width: 0;
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  .badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+  }
+
+  .sidebar-divider {
+    width: 56px;
+  }
+
+  .reward-card {
+    width: 56px;
+    min-height: 56px;
+    display: grid;
+    padding: 0;
+    place-items: center;
+    border-radius: 18px;
+  }
+
+  .reward-icon {
+    position: static;
+  }
+
+  .reward-card p,
+  .reward-card h3,
+  .reward-card span,
+  .reward-progress {
+    display: none;
+  }
+}
+
 .logout-btn {
   width: 30px;
   height: 30px;
@@ -489,6 +619,8 @@
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;
+    width: 248px;
+    min-width: 248px;
     left: -248px;
     z-index: 1000;
     box-shadow: none;

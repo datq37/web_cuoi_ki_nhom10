@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  Bell,
   ChevronDown,
   ClipboardList,
   Award,
@@ -13,16 +12,17 @@ import {
 import './Sidebar.less';
 import { defaultUser } from '@/services/KhachHang/Component/Sidebar';
 import { formatNumberViVN } from '@/utils/format';
-import { useModel, history } from 'umi';
+import { useModel } from 'umi';
 
 const Sidebar: React.FC = () => {
   const { page, setPage, isSidebarOpen, setIsSidebarOpen } = useModel('KhachHang.GlobalState.index');
+  const [isHoverOpen, setIsHoverOpen] = useState(false);
   const { currentUser } = useModel('KhachHang.Tài Khoản.thanghang');
   const { cart, setCartOpen } = useModel('KhachHang.ThucDon.index');
-  const { unreadCount, setIsNotificationOpen } = useModel('KhachHang.Thông Báo.index');
 
   const user = currentUser || defaultUser;
   const cartQty = cart.reduce((sum: number, item: any) => sum + item.qty, 0);
+  const isExpanded = isSidebarOpen || isHoverOpen;
 
   const closeSidebar = () => setIsSidebarOpen(false);
 
@@ -103,7 +103,11 @@ const Sidebar: React.FC = () => {
       {isSidebarOpen && (
         <div className="sidebar-backdrop" onClick={() => setIsSidebarOpen(false)} />
       )}
-      <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
+      <aside
+        className={`sidebar ${isSidebarOpen ? 'open' : ''} ${isExpanded ? 'expanded' : ''}`}
+        onMouseEnter={() => setIsHoverOpen(true)}
+        onMouseLeave={() => setIsHoverOpen(false)}
+      >
         <div className="sidebar-top">
           <div className="brand">
             <img src="/logo.webp" alt="Logo" className="brand-logo" />

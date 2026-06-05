@@ -2,6 +2,24 @@ import type { QRPaymentStep, SupportedBank } from './typing';
 
 export const QR_PAYMENT_EXPIRE_SECONDS = 10 * 60;
 
+export const VIETQR_CONFIG = {
+  bankId: 'bidv',
+  accountNo: '8832859169',
+  accountName: 'NGUYEN QUANG DAT',
+  template: 'compact2',
+};
+
+export function buildVietQrUrl(amount: number, orderId: string | number): string {
+  const safeAmount = Math.max(0, Math.round(Number(amount) || 0));
+  const addInfo = `DH${orderId}`;
+  const { bankId, accountNo, accountName, template } = VIETQR_CONFIG;
+
+  return `https://img.vietqr.io/image/${bankId}-${accountNo}-${template}.png`
+    + `?amount=${safeAmount}`
+    + `&addInfo=${encodeURIComponent(addInfo)}`
+    + `&accountName=${encodeURIComponent(accountName)}`;
+}
+
 export const QR_PAYMENT_STEPS: QRPaymentStep[] = [
   {
     id: 'bank-app',
@@ -22,14 +40,14 @@ export const QR_PAYMENT_STEPS: QRPaymentStep[] = [
     stepNumber: 3,
     icon: 'card',
     title: 'Xác nhận thanh toán',
-    desc: 'Kiểm tra thông tin và xác nhận thanh toán.',
+    desc: 'Kiểm tra đúng số tiền, số tài khoản và nội dung chuyển khoản.',
   },
   {
     id: 'success',
     stepNumber: 4,
     icon: 'success',
     title: 'Thanh toán thành công',
-    desc: 'Đơn hàng sẽ được xác nhận ngay sau khi thanh toán.',
+    desc: 'Admin sẽ kiểm tra giao dịch và xác nhận đơn hàng.',
   },
 ];
 

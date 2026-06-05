@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Order } from '@/services/KhachHang/Đơn Hàng';
-import { QR_PAYMENT_EXPIRE_SECONDS } from '@/services/KhachHang/Thanh toán QR';
+import { buildVietQrUrl, QR_PAYMENT_EXPIRE_SECONDS, VIETQR_CONFIG } from '@/services/KhachHang/Thanh toán QR';
 import { formatCountdownMMSS, formatCurrency } from '@/utils/format';
 
 const buildQRPayload = (order: Order | null) => {
   if (!order) return '';
 
-  return `CANTEEN_PAYMENT_ORDER_${order.id}_AMOUNT_${order.total}`;
+  return buildVietQrUrl(order.total, order.id);
 };
 
 export default function useQRPaymentModel() {
@@ -55,6 +55,11 @@ export default function useQRPaymentModel() {
     [pendingOrder],
   );
 
+  const paymentDescription = useMemo(
+    () => (pendingOrder ? `DH${pendingOrder.id}` : ''),
+    [pendingOrder],
+  );
+
   return {
     pendingOrder,
     setPendingOrder,
@@ -63,6 +68,8 @@ export default function useQRPaymentModel() {
     formattedAmount,
     formattedCountdown,
     paymentPayload,
+    paymentDescription,
+    bankInfo: VIETQR_CONFIG,
     isExpired: secondsLeft <= 0,
   };
 }

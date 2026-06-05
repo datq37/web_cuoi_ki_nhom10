@@ -1,14 +1,11 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useModel } from 'umi';
-import { QRCodeCanvas } from 'qrcode.react';
 import { ArrowLeft, Clock3, Headphones, ShieldCheck } from 'lucide-react';
 import { OrderStatus, PaymentMethod } from '@/services/KhachHang/Đơn Hàng';
-import { QR_PAYMENT_STEPS, SUPPORTED_QR_BANKS } from '@/services/KhachHang/Thanh toán QR';
+import { buildVietQrUrl, QR_PAYMENT_STEPS, SUPPORTED_QR_BANKS } from '@/services/KhachHang/Thanh toán QR';
 import PaymentStep from './component/PaymentStep';
 import BankLogo from './component/BankLogo';
 import './index.less';
-
-const LOGO_SRC = '/logo.webp';
 
 const QRPaymentPage: React.FC = () => {
   const { setPage } = useModel('KhachHang.GlobalState.index');
@@ -21,6 +18,8 @@ const QRPaymentPage: React.FC = () => {
     formattedAmount,
     formattedCountdown,
     paymentPayload,
+    paymentDescription,
+    bankInfo,
     isExpired,
   } = useModel('KhachHang.Thanh toán QR.index');
 
@@ -38,7 +37,8 @@ const QRPaymentPage: React.FC = () => {
   }, [fallbackOrder, pendingOrder, setPendingOrder]);
 
   const paymentOrder = pendingOrder || fallbackOrder || null;
-  const qrValue = paymentPayload || (paymentOrder ? `CANTEEN_PAYMENT_ORDER_${paymentOrder.id}_AMOUNT_${paymentOrder.total}` : '');
+  const vietQrImageUrl = paymentPayload || (paymentOrder ? buildVietQrUrl(paymentOrder.total, paymentOrder.id) : '');
+  const transferDescription = paymentDescription || (paymentOrder ? `DH${paymentOrder.id}` : '');
 
   useEffect(() => {
     if (!paymentOrder || !isExpired || expiredOrderIdRef.current === paymentOrder.id) return;
@@ -103,18 +103,26 @@ const QRPaymentPage: React.FC = () => {
 
           <div className="qr-code-wrap">
             <div className="qr-code-frame">
-              <QRCodeCanvas
-                value={qrValue}
-                size={180}
-                bgColor="#ffffff"
-                fgColor="#111111"
-                level="H"
-                includeMargin={false}
-              />
+              <img src={vietQrImageUrl} alt={`VietQR thanh toán đơn ${paymentOrder.id}`} className="vietqr-image" />
+            </div>
+          </div>
 
-              <div className="qr-logo-mark" aria-hidden="true">
-                <img src={LOGO_SRC} alt="" />
-              </div>
+          <div className="qr-bank-detail">
+            <div>
+              <span>Ngân hàng</span>
+              <strong>{bankInfo.bankId.toUpperCase()}</strong>
+            </div>
+            <div>
+              <span>Số tài khoản</span>
+              <strong>{bankInfo.accountNo}</strong>
+            </div>
+            <div>
+              <span>Chủ tài khoản</span>
+              <strong>{bankInfo.accountName}</strong>
+            </div>
+            <div>
+              <span>Nội dung</span>
+              <strong>{transferDescription}</strong>
             </div>
           </div>
 
@@ -129,11 +137,11 @@ const QRPaymentPage: React.FC = () => {
             <b className={isExpired ? 'expired' : ''}>{formattedCountdown}</b>
           </div>
 
-          <div className={`qr-alert ${isExpired ? 'expired' : ''}`}>
-            {isExpired
-              ? 'Giao dịch đã hết hạn. Vui lòng hủy và đặt lại thanh toán.'
-              : 'Đơn hàng sẽ được xác nhận ngay sau khi thanh toán thành công.'}
-          </div>
+          {isExpired && (
+            <div className="qr-alert expired">
+              Giao dịch đã hết hạn. Vui lòng hủy và đặt lại thanh toán.
+            </div>
+          )}
         </div>
 
         <div className="qr-card qr-guide-card">

@@ -14,6 +14,7 @@ export function useGioHangModel() {
     const { setPage } = useModel('KhachHang.GlobalState.index');
     const { addNotification } = useModel('KhachHang.Thông Báo.index');
     const { setPendingOrder } = useModel('KhachHang.Thanh toán QR.index');
+    const { currentUser } = useModel('KhachHang.Tài Khoản.thanghang');
     const [note, setNote] = useState('');
     const [selectedVoucher, setSelectedVoucher] = useState<Voucher | undefined>(undefined);
     const [payment, setPayment] = useState<PaymentMethod>(PaymentMethod.Cash);
@@ -74,6 +75,14 @@ export function useGioHangModel() {
         const orderingStatus = getOrderingStatusFromCache();
         if (!orderingStatus.open) {
             showCustomerNotification('Chưa đến giờ mở bán', orderingStatus.message, 'error');
+            return;
+        }
+
+        const isNameEmptyOrPhone = !currentUser?.name || currentUser.name === currentUser.phone;
+        if (isNameEmptyOrPhone || !currentUser?.phone) {
+            showCustomerNotification('Thông tin chưa đầy đủ', 'Vui lòng cập nhật Họ tên và Số điện thoại trước khi đặt hàng.', 'warning');
+            setCartOpen(false);
+            setPage('profile');
             return;
         }
 

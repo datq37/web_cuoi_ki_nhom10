@@ -8,15 +8,15 @@ import { ip3 } from '@/utils/ip';
 const lamTronDiemThuong = (points: number) => Math.floor(Number(points) || 0);
 
 const defaultUser: UserProfile = {
-  id: 'U1',
-  avatar: 'MA',
-  name: 'Nguyễn Minh Anh',
-  phone: '0987654321',
-  email: 'minhanh.nguyen@company.com',
-  dept: 'IT / Engineering',
-  building: 'Tòa nhà A',
-  floor: 'Tầng 5',
-  desk: 'Bàn 502',
+  id: '',
+  avatar: '',
+  name: '',
+  phone: '',
+  email: '',
+  dept: '',
+  building: '',
+  floor: '',
+  desk: '',
   points: 0,
   totalSpent: 0
 };
@@ -34,14 +34,14 @@ const docTuCache = (): UserProfile => {
 const chuyenApiSangHoSo = (data: any, fallback: UserProfile): UserProfile => ({
   ...fallback,
   id: data?.makh ?? data?.id ?? fallback.id,
-  avatar: data?.avatar ?? fallback.avatar,
-  name: data?.ten ?? data?.name ?? data?.taikhoan ?? fallback.name,
-  phone: data?.phone ?? fallback.phone,
-  email: data?.email ?? fallback.email,
-  dept: data?.dept ?? fallback.dept,
-  building: data?.building ?? fallback.building,
-  floor: data?.floor ?? fallback.floor,
-  desk: data?.desk ?? fallback.desk,
+  avatar: data?.avatar || '',
+  name: data?.ten ?? data?.name ?? data?.taikhoan ?? '',
+  phone: data?.phone ?? '',
+  email: data?.email ?? '',
+  dept: data?.dept ?? '',
+  building: data?.building ?? '',
+  floor: data?.floor ?? '',
+  desk: data?.desk ?? '',
   points: lamTronDiemThuong(data?.points ?? fallback.points ?? 0),
   totalSpent: Number(data?.totalSpent ?? data?.total_spent ?? fallback.totalSpent ?? 0)
 });

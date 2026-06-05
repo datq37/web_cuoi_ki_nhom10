@@ -13,6 +13,7 @@ import type { DishDetailModalProps } from '@/services/KhachHang/ThucDon/DishDeta
 import { getReviewsByDish } from '@/models/KhachHang/ThucDon/DishDetailModal';
 import { formatNumberViVN } from '@/utils/format';
 import { useModel } from 'umi';
+import { Button, Typography } from 'antd';
 import './index.less';
 
 const renderStars = (count: number) =>
@@ -47,44 +48,49 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
                     )}
                     <div className="theNhanAnhBia">
                         {dish.tags.map((t) => (
-                            <span key={t} className={`nhanChiTiet ${t}`}>{t.toUpperCase()}</span>
+                            <Typography.Text key={t} className={`nhanChiTiet ${t}`} style={{ color: 'inherit' }}>{t.toUpperCase()}</Typography.Text>
                         ))}
                     </div>
-                    <button className="nutDongChiTiet" onClick={onClose} style={{ zIndex: 10 }}>
-                        <CloseOutlined />
-                    </button>
+                    <Button 
+                        type="text" 
+                        shape="circle" 
+                        className="nutDongChiTiet" 
+                        onClick={onClose} 
+                        style={{ zIndex: 10 }}
+                        icon={<CloseOutlined />}
+                    />
                 </div>
                 <div className="phanThanChiTiet">
                     <div className="hangTieuDe">
-                        <h2 className="tenMonChiTiet">{dish.name}</h2>
-                        <span className="nhanDanhGia">
+                        <Typography.Title level={2} className="tenMonChiTiet" style={{ margin: 0, color: 'inherit' }}>{dish.name}</Typography.Title>
+                        <Typography.Text className="nhanDanhGia" style={{ color: 'inherit' }}>
                             <StarFilled /> {calculatedRating.toFixed(1)}
-                        </span>
+                        </Typography.Text>
                     </div>
 
                     <div className="thongTinChiTiet">
-                        <span><ClockCircleOutlined /> {dish.prep} phút</span>
-                        <span><ThunderboltOutlined /> {dish.kcal} kcal</span>
-                        <span><FireOutlined /> {dish.sold} đã bán</span>
+                        <Typography.Text style={{ color: 'inherit' }}><ClockCircleOutlined /> {dish.prep} phút</Typography.Text>
+                        <Typography.Text style={{ color: 'inherit' }}><ThunderboltOutlined /> {dish.kcal} kcal</Typography.Text>
+                        <Typography.Text style={{ color: 'inherit' }}><FireOutlined /> {dish.sold} đã bán</Typography.Text>
                     </div>
-                    <p className="moTaChiTiet">{dish.desc}</p>
+                    <Typography.Paragraph className="moTaChiTiet" style={{ margin: 0 }}>{dish.desc}</Typography.Paragraph>
                     <div className="thanhPhan">
-                        <span className="nhanPhanChiTiet">Nguyên liệu</span>
+                        <Typography.Text className="nhanPhanChiTiet" style={{ display: 'block', color: 'inherit' }}>Nguyên liệu</Typography.Text>
                         <div className="cacNhanThanhPhan">
                             {dish.ingredients.map((ing) => (
-                                <span key={ing} className="nhanThanhPhan">{ing}</span>
+                                <Typography.Text key={ing} className="nhanThanhPhan" style={{ color: 'inherit' }}>{ing}</Typography.Text>
                             ))}
                         </div>
                     </div>
                     <div className="duongChiaChiTiet" />
                     <div className="phanDanhGia">
-                        <span className="nhanPhanChiTiet">
+                        <Typography.Text className="nhanPhanChiTiet" style={{ display: 'block', color: 'inherit' }}>
                             Bình luận
-                            <span className="soLuongDanhGia">({reviews.length})</span>
-                        </span>
+                            <Typography.Text className="soLuongDanhGia" style={{ color: 'inherit' }}>({reviews.length})</Typography.Text>
+                        </Typography.Text>
 
                         {reviews.length === 0 ? (
-                            <p className="khongCoDanhGia">Chưa có đánh giá nào. Hãy là người đầu tiên!</p>
+                            <Typography.Paragraph className="khongCoDanhGia" style={{ margin: 0 }}>Chưa có đánh giá nào. Hãy là người đầu tiên!</Typography.Paragraph>
                         ) : (
                             reviews.map((r) => (
                                 <div key={r.id} className="mucDanhGia">
@@ -97,11 +103,11 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
                                     </div>
                                     <div className="noiDungDanhGia">
                                         <div className="phanDauDanhGia">
-                                            <span className="tacGiaDanhGia">{r.author}</span>
-                                            <span className="ngayDanhGia">{r.date}</span>
+                                            <Typography.Text className="tacGiaDanhGia" style={{ color: 'inherit' }}>{r.author}</Typography.Text>
+                                            <Typography.Text className="ngayDanhGia" style={{ color: 'inherit' }}>{r.date}</Typography.Text>
                                         </div>
                                         <div className="saoDanhGia">{renderStars(r.rating)}</div>
-                                        <p className="binhLuanDanhGia">{r.comment}</p>
+                                        <Typography.Paragraph className="binhLuanDanhGia" style={{ margin: 0 }}>{r.comment}</Typography.Paragraph>
                                         {r.images && r.images.length > 0 && (
                                             <div className="danhSachAnhDanhGia" style={{ display: 'flex', gap: '8px', marginTop: '8px', flexWrap: 'wrap' }}>
                                                 {r.images.map((img, idx) => (
@@ -122,13 +128,13 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
                                         )}
                                         {r.adminReply && (
                                             <div className="phanHoiCanteen">
-                                                <strong>Phản hồi từ căn tin</strong>
+                                                <Typography.Text strong style={{ color: 'inherit', display: 'block', marginBottom: 2 }}>Phản hồi từ căn tin</Typography.Text>
                                                 {r.adminReplyAt && (
-                                                    <span className="thoiGianPhanHoiCanteen">
+                                                    <Typography.Text className="thoiGianPhanHoiCanteen" style={{ color: 'inherit', display: 'block', marginBottom: 6 }}>
                                                         {r.adminReplyAt}
-                                                    </span>
+                                                    </Typography.Text>
                                                 )}
-                                                <div className="noiDungPhanHoiCanteen">{r.adminReply}</div>
+                                                <div className="noiDungPhanHoiCanteen"><Typography.Text style={{ color: 'inherit' }}>{r.adminReply}</Typography.Text></div>
                                             </div>
                                         )}
                                     </div>
@@ -139,24 +145,23 @@ const DishDetailModal: React.FC<DishDetailModalProps> = ({ dish, qty, onClose, o
                 </div>
                 <div className="phanChanChiTiet">
                     <div className="khoiGia">
-                        <span className="giaChiTiet">{formatNumberViVN(dish.price)}</span>
-                        <span className="donViChiTiet">đ</span>
+                        <Typography.Text className="giaChiTiet" style={{ color: 'inherit' }}>{formatNumberViVN(dish.price)}</Typography.Text>
+                        <Typography.Text className="donViChiTiet" style={{ color: 'inherit' }}>đ</Typography.Text>
                     </div>
 
                     {isFuture ? (
-                        <button className="nutThemChiTiet disabled" disabled>
+                        <Button disabled className="nutThemChiTiet disabled">
                             Chưa mở bán
-                        </button>
+                        </Button>
                     ) : qty === 0 ? (
-                        <button className="nutThemChiTiet" onClick={onAdd}>
-                            <ShoppingCartOutlined />
+                        <Button type="primary" className="nutThemChiTiet" onClick={onAdd} icon={<ShoppingCartOutlined />}>
                             Thêm vào giỏ
-                        </button>
+                        </Button>
                     ) : (
                         <div className="dieuKhienSoLuong">
-                            <button onClick={onDec}><MinusOutlined /></button>
-                            <span>{qty}</span>
-                            <button onClick={onInc}><PlusOutlined /></button>
+                            <Button type="text" shape="circle" onClick={onDec} icon={<MinusOutlined />} />
+                            <Typography.Text strong style={{ color: 'inherit' }}>{qty}</Typography.Text>
+                            <Button type="text" shape="circle" onClick={onInc} icon={<PlusOutlined />} />
                         </div>
                     )}
                 </div>

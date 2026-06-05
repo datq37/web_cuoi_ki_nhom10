@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useModel } from 'umi';
+import { Typography } from 'antd';
 import { CheckCircle2 } from 'lucide-react';
 import MenuHero from './component/Hero';
 import DayTabs from './component/DateTabs';
@@ -41,16 +42,16 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
 
             <div className="phanDauTrang">
                 <div>
-                    <h1 className="tieuDeTrang">Thực Đơn hôm nay</h1>
-                    <p className="tieuDePhuTrang">Chọn món, đặt trước - không cần xếp hàng.</p>
+                    <Typography.Title level={1} className="tieuDeTrang" style={{ margin: 0, color: 'inherit' }}>Thực Đơn hôm nay</Typography.Title>
+                    <Typography.Paragraph className="tieuDePhuTrang" style={{ margin: 0 }}>Chọn món, đặt trước - không cần xếp hàng.</Typography.Paragraph>
                 </div>
                 <div className="theDatTruoc">
                     <div className="bieuTuongDatTruoc">
                         <CheckCircle2 size={24} />
                     </div>
                     <div>
-                        <strong>Đặt trước dễ dàng</strong>
-                        <span>Tiết kiệm thời gian chờ đợi</span>
+                        <Typography.Text strong style={{ display: 'block' }}>Đặt trước dễ dàng</Typography.Text>
+                        <Typography.Text style={{ fontSize: 13, color: '#4e5968' }}>Tiết kiệm thời gian chờ đợi</Typography.Text>
                     </div>
                 </div>
             </div>

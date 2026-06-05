@@ -11,6 +11,7 @@ import {
     X,
 } from 'lucide-react';
 import { useModel } from 'umi';
+import { Input, Typography } from 'antd';
 const IconMap: Record<string, React.ReactNode> = {
     AppstoreOutlined: <Grid2X2 size={15} />,
     CoffeeOutlined: <Coffee size={15} />,
@@ -35,28 +36,32 @@ const CategoryBar: React.FC = () => {
         <div className="phanBoLoc">
             <div className="hopTimKiem">
                 <Search className="bieuTuongTimKiem" size={18} />
-                <input
-                    type="text"
+                <Input
                     className="oNhapTimKiem"
                     placeholder="Tìm kiếm món ăn..."
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
+                    bordered={false}
                 />
                 {searchQuery && (
-                    <button
+                    <div
+                        role="button"
+                        tabIndex={0}
                         className="nutXoaTimKiem"
                         onClick={() => setSearchQuery('')}
                     >
                         <X size={14} />
-                    </button>
+                    </div>
                 )}
             </div>
             <div className="thanhDanhMuc">
                 {(categories || []).map((cat: any) => {
                     const label = cat.label || cat.name || 'Danh mục';
                     return (
-                        <button
+                        <div
                             key={cat.id}
+                            role="button"
+                            tabIndex={0}
                             className={`theDanhMuc ${activeCategory === cat.id ? 'dangChon' : ''}`}
                             onClick={() => setActiveCategory(cat.id)}
                         >
@@ -65,9 +70,9 @@ const CategoryBar: React.FC = () => {
                             ) : (
                                 IconMap[cat.icon] || <Utensils size={15} />
                             )}
-                            {label}
+                            <Typography.Text style={{ color: 'inherit', fontWeight: 'inherit', fontSize: 'inherit' }}>{label}</Typography.Text>
                             <span className="soLuong">{categoryCounts[cat.id] || 0}</span>
-                        </button>
+                        </div>
                     );
                 })}
             </div>

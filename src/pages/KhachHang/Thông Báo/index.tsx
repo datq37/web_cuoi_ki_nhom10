@@ -1,5 +1,5 @@
 import React from 'react';
-import { Drawer } from 'antd';
+import { Drawer, Button, Typography } from 'antd';
 import { BellOutlined, CheckCircleOutlined, ClockCircleOutlined, CloseOutlined } from '@ant-design/icons';
 import { useModel } from 'umi';
 import './index.less';
@@ -82,27 +82,26 @@ const ThongBao: React.FC = () => {
         >
             <div className="custom-drawer-header">
                 <div className="title-left">
-                    <span>Thông báo</span>
+                    <Typography.Title level={4} style={{ margin: 0, color: 'inherit' }}>Thông báo</Typography.Title>
                 </div>
                 <div className="title-right-group">
                     {unreadCount > 0 && (
-                        <button
-                            type="button"
+                        <Button
+                            type="text"
                             className="read-all-btn" 
                             onClick={markAllAsRead}
+                            icon={<CheckCircleOutlined />}
                         >
-                            <CheckCircleOutlined />
                             Đọc tất cả ({unreadCount})
-                        </button>
+                        </Button>
                     )}
-                    <button
-                        type="button"
+                    <Button
+                        type="text"
                         className="close-btn"
                         onClick={() => setIsNotificationOpen(false)}
                         aria-label="Đóng thông báo"
-                    >
-                        <CloseOutlined />
-                    </button>
+                        icon={<CloseOutlined />}
+                    />
                 </div>
             </div>
 
@@ -110,7 +109,7 @@ const ThongBao: React.FC = () => {
             {notifications.length === 0 ? (
                 <div className="empty-notification">
                     <BellOutlined />
-                    <p>Chưa có thông báo nào</p>
+                    <Typography.Paragraph style={{ margin: 0, color: '#666' }}>Chưa có thông báo nào</Typography.Paragraph>
                 </div>
             ) : (
                 <div className="notification-list">
@@ -119,14 +118,16 @@ const ThongBao: React.FC = () => {
                             key={item.id} 
                             className={`notification-item ${!item.isRead ? 'unread' : ''}`}
                             onClick={() => markAsRead(item.id)}
+                            role="button"
+                            tabIndex={0}
                         >
                             {getNotificationIcon(item.id)}
                             <div className="noti-content">
-                                <div className="noti-title">{item.title}</div>
-                                <div className="noti-message">{item.message}</div>
+                                <Typography.Text strong className="noti-title" style={{ display: 'block', fontSize: 14 }}>{item.title}</Typography.Text>
+                                <Typography.Paragraph className="noti-message" style={{ margin: '4px 0', fontSize: 13, color: '#666' }}>{item.message}</Typography.Paragraph>
                                 <div className="noti-time">
                                     <ClockCircleOutlined />
-                                    {item.time}
+                                    <Typography.Text style={{ fontSize: 12, color: 'inherit' }}>{item.time}</Typography.Text>
                                 </div>
                             </div>
                         </div>

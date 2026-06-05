@@ -6,6 +6,7 @@ import {
     Star,
     Zap,
 } from 'lucide-react';
+import { Button, Typography } from 'antd';
 import type { DishCardProps } from '@/services/KhachHang/ThucDon/DishCard/typing';
 import riceImg from '@/assets/KhachHang/Trang chủ/com_phan_no_text.png';
 import noodleImg from '@/assets/KhachHang/Trang chủ/bun_pho_no_text.png';
@@ -52,8 +53,8 @@ const DishCard: React.FC<DishCardProps> = ({ dish, qty, onAdd, onInc, onDec, onC
             </div>
         </div>
         <div className="thanTheMon">
-            <h3 className="tenMon">{dish.name}</h3>
-            <p className="moTaMon">{dish.desc}</p>
+            <Typography.Title level={3} className="tenMon" style={{ margin: 0, color: 'inherit' }}>{dish.name}</Typography.Title>
+            <Typography.Paragraph className="moTaMon" style={{ margin: 0 }}>{dish.desc}</Typography.Paragraph>
             <div className="thongTinMon">
                 <span><Clock3 size={14} /> {dish.prep}m</span>
                 <span><Zap size={14} /> {dish.kcal} kcal</span>
@@ -61,19 +62,23 @@ const DishCard: React.FC<DishCardProps> = ({ dish, qty, onAdd, onInc, onDec, onC
             </div>
             <div className="phanChanThe">
                 <div className="giaMon">
-                    {formatNumberViVN(dish.price)} <span className="donViTien">đ</span>
+                    {formatNumberViVN(dish.price)} <Typography.Text className="donViTien" style={{ color: 'inherit' }}>đ</Typography.Text>
                 </div>
                 {isFuture ? (
-                    <span className="nhanChuaBan" onClick={(e) => e.stopPropagation()}>Chưa mở bán</span>
+                    <Typography.Text className="nhanChuaBan" onClick={(e) => e?.stopPropagation()}>Chưa mở bán</Typography.Text>
                 ) : qty === 0 ? (
-                    <button className="nutThemMon" onClick={(e) => { e.stopPropagation(); onAdd(); }}>
-                        <Plus size={20} />
-                    </button>
+                    <Button 
+                        type="primary" 
+                        shape="circle" 
+                        className="nutThemMon" 
+                        onClick={(e) => { e.stopPropagation(); onAdd(); }}
+                        icon={<Plus size={20} />}
+                    />
                 ) : (
                     <div className="soLuongMon" onClick={(e) => e.stopPropagation()}>
-                        <button onClick={onDec}><Minus size={15} /></button>
-                        <span>{qty}</span>
-                        <button onClick={onInc}><Plus size={15} /></button>
+                        <Button type="text" shape="circle" onClick={onDec} icon={<Minus size={15} />} />
+                        <Typography.Text strong style={{ color: 'inherit' }}>{qty}</Typography.Text>
+                        <Button type="text" shape="circle" onClick={onInc} icon={<Plus size={15} />} />
                     </div>
                 )}
             </div>

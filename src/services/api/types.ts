@@ -4,6 +4,12 @@ export enum PaymentMethod {
   BANKING = 'banking',
 }
 
+export enum PaymentStatus {
+  PENDING = 'pending',
+  PAID = 'paid',
+  CANCELLED = 'cancelled',
+}
+
 export enum OrderStatus {
   CART = 'cart',
   PENDING_CONFIRMATION = 'pending_confirmation',
@@ -61,6 +67,7 @@ export interface ThucDonResponse {
   hethang?: boolean;
   tags?: string[];
   danhmucid?: number;
+  nguyenLieu?: unknown[];
 }
 
 export interface ThucDonListResponse {
@@ -78,6 +85,15 @@ export interface OrderDetailResponse {
   thucdon?: ThucDonResponse;
 }
 
+export interface PaymentResponse {
+  id: string;
+  orderId: string;
+  method?: PaymentMethod;
+  status: PaymentStatus;
+  createdAt?: string;
+  tongtien?: number;
+}
+
 export interface OrderResponse {
   maDon: string;
   maKh: string;
@@ -86,4 +102,7 @@ export interface OrderResponse {
   hinhthucthanhtoan?: PaymentMethod;
   thoiGianDat?: string;
   chitiet?: OrderDetailResponse[];
+  payments?: PaymentResponse[];
+  khachhang?: KhachHangResponse;
+  ghiChu?: string;
 }

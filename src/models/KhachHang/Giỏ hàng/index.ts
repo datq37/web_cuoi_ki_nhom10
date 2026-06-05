@@ -143,6 +143,7 @@ export function useGioHangModel() {
                 total: total,
                 status: OrderStatus.Pending,
                 payment: payment,
+                paymentStatus: payment === PaymentMethod.QR ? 'pending' : 'paid',
                 created: formatTimeHHMM(),
                 pickup: '15 phút nữa',
                 note: note

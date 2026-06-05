@@ -1,13 +1,23 @@
-from model.enums import OrderStatus, PaymentMethod
+from model.enums import OrderStatus, PaymentMethod, PaymentStatus
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from crud import khachhang as khachhang_crud
 from crud import menu as menu_crud
 from crud import orders as orders_crud
+from crud import payment as payment_crud
 from model.orders import Order
 from schemas.orders import OrderCreate, OrderUpdate
 from service import settings as settings_service
+
+
+def is_banking_order(order: Order) -> bool:
+    method = (order.hinhthucthanhtoan or "").lower()
+    return method in {PaymentMethod.BANKING.value, "qr"}
+
+
+def has_paid_payment(order: Order) -> bool:
+    return any(payment.status == PaymentStatus.PAID for payment in (order.payments or []))
 
 
 def get_order_or_404(db: Session, order_id: str) -> Order:
@@ -193,6 +203,17 @@ def update_order_status_admin(db: Session, order_id: str, new_status: str) -> Or
     order = orders_crud.get_order_by_id(db, order_id)
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Đơn hàng không tồn tại")
+
+    next_status = new_status.value if hasattr(new_status, "value") else str(new_status)
+    if (
+        is_banking_order(order)
+        and next_status not in {OrderStatus.PENDING_CONFIRMATION.value, OrderStatus.CANCELLED.value}
+        and not has_paid_payment(order)
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Đơn chuyển khoản chưa được xác nhận thanh toán",
+        )
     
     old_status = order.trangthai
     updated_order = orders_crud.update_order_status(db, order, new_status)
@@ -202,6 +223,37 @@ def update_order_status_admin(db: Session, order_id: str, new_status: str) -> Or
         deduct_order_ingredients_stock(db, updated_order)
         
     return updated_order
+
+
+def confirm_order_payment_admin(db: Session, order_id: str) -> Order:
+    """Admin xác nhận đã nhận tiền chuyển khoản cho một đơn hàng."""
+    order = orders_crud.get_order_by_id(db, order_id)
+    if not order:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Đơn hàng không tồn tại")
+
+    if not is_banking_order(order):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Chỉ xác nhận chuyển khoản cho đơn thanh toán QR/chuyển khoản",
+        )
+
+    if order.trangthai == OrderStatus.CANCELLED:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Không thể xác nhận thanh toán cho đơn đã huỷ",
+        )
+
+    payments = list(order.payments or [])
+    paid_payment = next((p for p in payments if p.status == PaymentStatus.PAID), None)
+    if paid_payment:
+        return get_order_detail_admin(db, order_id)
+
+    payment = next((p for p in payments if p.status == PaymentStatus.PENDING), None)
+    if not payment:
+        payment = payment_crud.create_payment(db, order.id, PaymentMethod.BANKING.value)
+
+    payment_crud.update_payment_status(db, payment, PaymentStatus.PAID)
+    return get_order_detail_admin(db, order_id)
 
 
 def get_orders_by_date_admin(db: Session, date_str: str) -> list[Order]:

@@ -14,7 +14,8 @@ def get_order_by_id(db: Session, order_id: str) -> Order | None:
         select(Order)
         .options(
             joinedload(Order.khachhang),
-            joinedload(Order.chitiet).joinedload(OrderDetail.thucdon)
+            joinedload(Order.chitiet).joinedload(OrderDetail.thucdon),
+            joinedload(Order.payments)
         )
         .where(Order.id == order_id)
     )

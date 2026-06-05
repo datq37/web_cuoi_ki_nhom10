@@ -1,5 +1,7 @@
 import { OrderStatus, PaymentMethod } from './index';
 
+export type PaymentStatus = 'pending' | 'paid' | 'cancelled';
+
 export interface OrderItem {
     id: string;
     name: string;
@@ -17,6 +19,7 @@ export interface Order {
     total: number;
     status: OrderStatus;
     payment: PaymentMethod;
+    paymentStatus?: PaymentStatus;
     created: string;
     pickup: string;
     note?: string;

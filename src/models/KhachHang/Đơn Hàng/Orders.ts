@@ -99,6 +99,7 @@ export default function useOrderModel() {
         advanceOrder,
         markAsReviewed,
         cancelOrder,
+        fetchOrders,
         loading
     };
 }

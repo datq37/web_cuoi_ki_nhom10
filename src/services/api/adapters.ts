@@ -1,4 +1,4 @@
-import { OrderResponse, KhachHangResponse, ThucDonResponse } from './types';
+import { OrderResponse, KhachHangResponse, ThucDonResponse, PaymentStatus } from './types';
 import { Order, OrderItem } from '@/services/KhachHang/Đơn Hàng/typing';
 import { OrderStatus as UIOrderStatus, PaymentMethod as UIPaymentMethod } from '@/services/KhachHang/Đơn Hàng/index';
 import { Dish } from '@/services/KhachHang/ThucDon/typing';
@@ -19,6 +19,9 @@ export const SyncAdapters = {
    * Chuyển đổi dữ liệu Đơn Hàng (Backend) -> Đơn Hàng (Frontend UI)
    */
   mapOrderResponseToUI(apiOrder: OrderResponse): Order {
+    const payments = apiOrder.payments || [];
+    const hasPaidPayment = payments.some((payment) => payment.status === PaymentStatus.PAID);
+    const hasCancelledPayment = payments.some((payment) => payment.status === PaymentStatus.CANCELLED);
     // Chuyển đổi trạng thái từ Backend sang Frontend
     let mappedStatus = UIOrderStatus.Pending;
     switch (apiOrder.trangThai as string) {
@@ -58,6 +61,7 @@ export const SyncAdapters = {
       total: apiOrder.tongTien,
       status: mappedStatus,
       payment: mappedPayment,
+      paymentStatus: hasPaidPayment ? PaymentStatus.PAID : hasCancelledPayment ? PaymentStatus.CANCELLED : PaymentStatus.PENDING,
       created: apiOrder.thoiGianDat || '',
       pickup: '',
       items: (apiOrder.chitiet || []).map((ct): OrderItem => ({
@@ -131,6 +135,19 @@ export const SyncAdapters = {
    * Chuyển đổi dữ liệu Đơn Hàng (Backend) -> Đơn Hàng Quản Trị (Frontend UI)
    */
   mapAdminOrderToUI(apiOrder: OrderResponse): any {
+    const payments = apiOrder.payments || [];
+    const paymentStr = apiOrder.hinhthucthanhtoan as string;
+    const isBanking = paymentStr === 'banking' || paymentStr === 'qr';
+    const paidPayment = payments.find((payment) => payment.status === PaymentStatus.PAID);
+    const pendingPayment = payments.find((payment) => payment.status === PaymentStatus.PENDING);
+    const cancelledPayment = payments.find((payment) => payment.status === PaymentStatus.CANCELLED);
+    const currentPayment = paidPayment || pendingPayment || cancelledPayment;
+    const paymentStatus = paidPayment
+      ? PaymentStatus.PAID
+      : cancelledPayment
+      ? PaymentStatus.CANCELLED
+      : PaymentStatus.PENDING;
+
     return {
       maDon: apiOrder.maDon,
       thoiGian: apiOrder.thoiGianDat ? apiOrder.thoiGianDat.split('T')[0] : 'Vừa xong',
@@ -161,7 +178,12 @@ export const SyncAdapters = {
       })),
       ghiChu: apiOrder.ghiChu || '',
       tongTien: apiOrder.tongTien,
-      trangThai: apiOrder.trangThai
+      trangThai: apiOrder.trangThai,
+      thanhToan: {
+        method: isBanking ? 'banking' : 'cash',
+        status: paymentStatus,
+        paymentId: currentPayment?.id,
+      },
     };
   },
 

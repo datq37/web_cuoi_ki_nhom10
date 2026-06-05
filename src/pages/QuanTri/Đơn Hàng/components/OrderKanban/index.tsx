@@ -25,6 +25,9 @@ const COLS: ETrangThaiTrucTiep[] = [
   ETrangThaiTrucTiep.HOAN_THANH,
 ];
 
+const isUnpaidBankingOrder = (order: DonTrucTiep) =>
+  order.thanhToan?.method === 'banking' && order.thanhToan?.status !== 'paid';
+
 const OrderKanban: React.FC<OrderKanbanProps> = ({
   orders,
   cancelledIds,
@@ -55,6 +58,7 @@ const OrderKanban: React.FC<OrderKanbanProps> = ({
             <div className={styles.colBody}>
               {colOrders.map((don) => {
                 const nextStatus = NEXT_STATUS[don.trangThai];
+                const waitingBankTransfer = isUnpaidBankingOrder(don);
 
                 return (
                   <div
@@ -113,6 +117,17 @@ const OrderKanban: React.FC<OrderKanbanProps> = ({
                         <CheckCircleOutlined
                           style={{ color: '#16a34a', fontSize: 18 }}
                         />
+                      ) : waitingBankTransfer ? (
+                        <button
+                          className={styles.actionBtn}
+                          style={{ background: '#ea580c' }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onCardClick(don);
+                          }}
+                        >
+                          Xác nhận CK
+                        </button>
                       ) : nextStatus ? (
                         <button
                           className={styles.actionBtn}

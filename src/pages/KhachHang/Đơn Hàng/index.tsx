@@ -7,7 +7,7 @@ import {
     CheckOutlined,
     ReloadOutlined
 } from '@ant-design/icons';
-import { ORDER_STATUSES, PAYMENT_METHODS, OrderStatus, Order } from '@/services/KhachHang/Đơn Hàng';
+import { ORDER_STATUSES, PAYMENT_METHODS, OrderStatus, PaymentMethod, Order } from '@/services/KhachHang/Đơn Hàng';
 
 import { formatNumberViVN } from '@/utils/format';
 import OrderTracker from './component/OrderTracker';
@@ -66,6 +66,9 @@ const HistoryPage: React.FC = () => {
                     {visibleOrders.map((o: Order) => {
                         const st = ORDER_STATUSES[o.status];
                         const pay = PAYMENT_METHODS[o.payment];
+                        const statusLabel = o.status === OrderStatus.Pending && o.payment === PaymentMethod.QR
+                            ? o.paymentStatus === 'paid' ? 'Đã đặt' : 'Chờ thanh toán'
+                            : st.label;
 
                         return (
                             <div key={o.id} className={`theDonHang trangThai-${o.status}`}>
@@ -75,7 +78,7 @@ const HistoryPage: React.FC = () => {
                                             <span className="maDon">{o.id}</span>
                                             <span className={`nhanTrangThai ${st.color}`}>
                                                 <span className={`chamTrangThai ${st.color}`}></span>
-                                                {st.label}
+                                                {statusLabel}
                                             </span>
                                             <span className="thoiGianNhan">
                                                 · nhận lúc <strong>{o.pickup}</strong>

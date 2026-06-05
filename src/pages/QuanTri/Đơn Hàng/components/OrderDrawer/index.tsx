@@ -18,7 +18,9 @@ interface OrderDrawerProps {
   onClose: () => void;
   onMoveStatus: (maDon: string, newStatus: ETrangThaiTrucTiep | 'da_huy') => void;
   onCancel: (maDon: string) => void;
+  onConfirmPayment: (maDon: string) => void;
   onPrint: (order: DonTrucTiep) => void;
+  paymentConfirming?: boolean;
 }
 
 const STEP_MAP: Record<ETrangThaiTrucTiep, number> = {
@@ -55,7 +57,9 @@ interface ContentProps {
   onClose: () => void;
   onMoveStatus: (maDon: string, newStatus: ETrangThaiTrucTiep | 'da_huy') => void;
   onCancel: (maDon: string) => void;
+  onConfirmPayment: (maDon: string) => void;
   onPrint: (order: DonTrucTiep) => void;
+  paymentConfirming?: boolean;
 }
 
 const DrawerContent: React.FC<ContentProps> = ({
@@ -64,13 +68,20 @@ const DrawerContent: React.FC<ContentProps> = ({
   onClose,
   onMoveStatus,
   onCancel,
+  onConfirmPayment,
   onPrint,
+  paymentConfirming = false,
 }) => {
   const isCancelled = cancelledIds.has(order.maDon);
   const cfg = isCancelled ? HUY_CFG : (COT_CONFIG[order.trangThai as ETrangThaiTrucTiep] || COT_CONFIG['cho_xac_nhan']);
+  const isBankingPayment = order.thanhToan?.method === 'banking';
+  const paymentStatus = order.thanhToan?.status || 'pending';
+  const isPaid = paymentStatus === 'paid';
+  const statusLabel = !isCancelled && isBankingPayment && !isPaid ? 'Chờ CK' : cfg?.tieuDe || 'Không xác định';
   const currentStep = STEP_MAP[order.trangThai as ETrangThaiTrucTiep] || 0;
   const phiPhucVu = Math.round((order.tongTien || 0) * 0.05);
   const tongCong = (order.tongTien || 0) + phiPhucVu;
+  const paymentLabel = isBankingPayment ? 'Chuyển khoản VietQR' : 'Thanh toán khi nhận hàng';
 
   return (
     <>
@@ -81,7 +92,7 @@ const DrawerContent: React.FC<ContentProps> = ({
           style={{ color: cfg?.mau || '#000' }}
         >
           <span className={styles.statusDot} style={{ background: cfg?.mau || '#000' }} />
-          {cfg?.tieuDe || 'Không xác định'}
+          {statusLabel}
         </span>
         <span className={styles.thoiGianDon}>
           <ClockCircleOutlined style={{ marginRight: 4, fontSize: 12 }} />
@@ -257,8 +268,28 @@ const DrawerContent: React.FC<ContentProps> = ({
           <span className={styles.totalValue}>{fmt(tongCong)}</span>
         </div>
         <div className={styles.paymentRow}>
-          <span className={styles.payIcon}>💳</span>
-          <span className={styles.payLabel}>Thanh toán khi nhận hàng</span>
+          <span className={styles.payIcon}>{isBankingPayment ? '🏦' : '💳'}</span>
+          <div className={styles.payInfo}>
+            <span className={styles.payLabel}>{paymentLabel}</span>
+            <span
+              className={styles.payStatus}
+              data-status={isPaid ? 'paid' : paymentStatus === 'cancelled' ? 'cancelled' : 'pending'}
+            >
+              {isPaid ? 'Đã thanh toán' : paymentStatus === 'cancelled' ? 'Đã huỷ thanh toán' : 'Chưa xác nhận'}
+            </span>
+          </div>
+          {isBankingPayment && !isPaid && !isCancelled && (
+            <Button
+              type="primary"
+              size="small"
+              icon={<CheckCircleOutlined />}
+              loading={paymentConfirming}
+              className={styles.confirmPaymentBtn}
+              onClick={() => onConfirmPayment(order.maDon)}
+            >
+              Xác nhận đã chuyển khoản
+            </Button>
+          )}
         </div>
       </div>
 
@@ -272,7 +303,9 @@ const OrderDrawer: React.FC<OrderDrawerProps> = ({
   onClose,
   onMoveStatus,
   onCancel,
+  onConfirmPayment,
   onPrint,
+  paymentConfirming = false,
 }) => {
   // giữ đơn hàng khi đóng
   const lastOrderRef = useRef<DonTrucTiep | null>(null);
@@ -281,6 +314,11 @@ const OrderDrawer: React.FC<OrderDrawerProps> = ({
 
   const isCancelled = displayOrder ? cancelledIds.has(displayOrder.maDon) : false;
   const isDone = displayOrder?.trangThai === ETrangThaiTrucTiep.HOAN_THANH;
+  const isUnpaidBanking = Boolean(
+    displayOrder?.thanhToan?.method === 'banking'
+    && displayOrder?.thanhToan?.status !== 'paid'
+    && !isCancelled
+  );
   const nextAction = displayOrder && !isCancelled
     ? NEXT_ACTION[displayOrder.trangThai]
     : null;
@@ -322,6 +360,16 @@ const OrderDrawer: React.FC<OrderDrawerProps> = ({
               <Button type="primary" style={{ borderRadius: 8 }} onClick={onClose}>
                 Đóng
               </Button>
+            ) : isUnpaidBanking && displayOrder ? (
+              <Button
+                type="primary"
+                icon={<CheckCircleOutlined />}
+                loading={paymentConfirming}
+                style={{ borderRadius: 8 }}
+                onClick={() => onConfirmPayment(displayOrder.maDon)}
+              >
+                Xác nhận đã chuyển khoản
+              </Button>
             ) : nextAction && displayOrder ? (
               <Button
                 type="primary"
@@ -344,7 +392,9 @@ const OrderDrawer: React.FC<OrderDrawerProps> = ({
             onClose={onClose}
             onMoveStatus={onMoveStatus}
             onCancel={onCancel}
+            onConfirmPayment={onConfirmPayment}
             onPrint={onPrint}
+            paymentConfirming={paymentConfirming}
           />
         )}
       </div>

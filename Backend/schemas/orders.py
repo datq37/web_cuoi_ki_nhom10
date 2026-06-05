@@ -2,6 +2,7 @@ from pydantic.alias_generators import to_camel
 from pydantic import BaseModel, ConfigDict, Field
 from schemas.thucdon import ThucDonResponse
 from schemas.khachhang import KhachHangResponse
+from schemas.payment import PaymentResponse
 from model.enums import OrderStatus, PaymentMethod
 
 
@@ -73,3 +74,4 @@ class OrderResponse(OrderBase):
     thoigiandat: str | None = Field(None, alias="thoiGianDat")
     chitiet: list[OrderDetailResponse] = []
     khachhang: KhachHangResponse | None = None
+    payments: list[PaymentResponse] = []

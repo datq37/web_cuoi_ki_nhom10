@@ -35,6 +35,9 @@ function calcWaitMinutes(thoiGian: string): number {
 const getStatusCfg = (trangThai: ETrangThaiTrucTiep, cancelled: boolean) =>
   cancelled ? HUY_CFG : COT_CONFIG[trangThai];
 
+const isUnpaidBankingOrder = (order: DonTrucTiep) =>
+  order.thanhToan?.method === 'banking' && order.thanhToan?.status !== 'paid';
+
 const OrderTable: React.FC<OrderTableProps> = ({
   orders,
   onRowClick,
@@ -114,6 +117,7 @@ const OrderTable: React.FC<OrderTableProps> = ({
         const isCancelled = cancelledIds.has(r.maDon);
         const cfg = getStatusCfg(r.trangThai, isCancelled);
         const statusKey = isCancelled ? 'huy' : r.trangThai;
+        const label = !isCancelled && isUnpaidBankingOrder(r) ? 'Chờ CK' : cfg?.tieuDe || 'Không xác định';
         return (
           <span
             className={styles.statusTag}
@@ -121,7 +125,7 @@ const OrderTable: React.FC<OrderTableProps> = ({
             style={{ color: cfg?.mau || '#000' }}
           >
             <span className={styles.statusDot} style={{ background: cfg?.mau || '#000' }} />
-            {cfg?.tieuDe || 'Không xác định'}
+            {label}
           </span>
         );
       },
@@ -132,10 +136,11 @@ const OrderTable: React.FC<OrderTableProps> = ({
       width: 80,
       render: (_: any, r: DonTrucTiep) => {
         const isCho = r.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN && !cancelledIds.has(r.maDon);
+        const isUnpaidBanking = isUnpaidBankingOrder(r);
         return (
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }} onClick={(e) => e.stopPropagation()}>
-            {isCho && onQuickConfirm && (
-              <Tooltip title="Xác nhận — chuyển sang Đang chế biến">
+            {isCho && onQuickConfirm && !isUnpaidBanking && (
+              <Tooltip title="Xác nhận - chuyển sang Đang chế biến">
                 <Button
                   size="small"
                   type="primary"

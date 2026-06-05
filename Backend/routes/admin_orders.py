@@ -57,3 +57,15 @@ def update_order_status(
     [Chức năng 3] Cập nhật trạng thái đơn hàng (sử dụng OrderStatus enum).
     """
     return orders_service.update_order_status_admin(db, order_id, data.trangthai)
+
+
+@router.put("/{order_id}/payment/confirm", response_model=OrderResponse)
+def confirm_order_payment(
+    order_id: str,
+    db: Annotated[Session, Depends(get_db)],
+    current_admin: Annotated[KhachHang, Depends(get_current_active_admin)],
+):
+    """
+    Admin xác nhận đã nhận tiền chuyển khoản cho đơn hàng.
+    """
+    return orders_service.confirm_order_payment_admin(db, order_id)

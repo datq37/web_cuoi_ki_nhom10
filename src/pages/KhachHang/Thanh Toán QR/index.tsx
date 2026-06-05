@@ -3,14 +3,20 @@ import { useModel } from 'umi';
 import { ArrowLeft, Clock3, Headphones, ShieldCheck } from 'lucide-react';
 import { OrderStatus, PaymentMethod } from '@/services/KhachHang/Đơn Hàng';
 import { buildVietQrUrl, QR_PAYMENT_STEPS, SUPPORTED_QR_BANKS } from '@/services/KhachHang/Thanh toán QR';
+import axios from '@/utils/axios';
+import { ip3 } from '@/utils/ip';
+import { formatDateTimeViVN } from '@/utils/format';
+import { showCustomerNotification } from '@/utils/notification';
 import PaymentStep from './component/PaymentStep';
 import BankLogo from './component/BankLogo';
 import './index.less';
 
 const QRPaymentPage: React.FC = () => {
   const { setPage } = useModel('KhachHang.GlobalState.index');
-  const { orders, cancelOrder } = useModel('KhachHang.Đơn Hàng.Orders');
+  const { orders, cancelOrder, fetchOrders } = useModel('KhachHang.Đơn Hàng.Orders');
+  const { addNotification } = useModel('KhachHang.Thông Báo.index');
   const expiredOrderIdRef = useRef<string | null>(null);
+  const paidOrderIdRef = useRef<string | null>(null);
   const {
     pendingOrder,
     setPendingOrder,
@@ -25,7 +31,9 @@ const QRPaymentPage: React.FC = () => {
 
   const fallbackOrder = useMemo(
     () => orders.find((order: any) => (
-      order.payment === PaymentMethod.QR && order.status === OrderStatus.Pending
+      order.payment === PaymentMethod.QR
+      && order.status === OrderStatus.Pending
+      && order.paymentStatus !== 'paid'
     )),
     [orders],
   );
@@ -48,6 +56,53 @@ const QRPaymentPage: React.FC = () => {
     clearPendingOrder();
     setPage('history');
   }, [cancelOrder, clearPendingOrder, isExpired, paymentOrder, setPage]);
+
+  useEffect(() => {
+    if (!paymentOrder || isExpired) return undefined;
+
+    let stopped = false;
+
+    const checkPaymentStatus = async () => {
+      try {
+        const res = await axios.get(`${ip3}/orders/${paymentOrder.id}`);
+        const payments = Array.isArray(res.data?.payments) ? res.data.payments : [];
+        const isPaid = payments.some((payment: any) => payment.status === 'paid');
+
+        if (!isPaid || stopped || paidOrderIdRef.current === paymentOrder.id) return;
+
+        paidOrderIdRef.current = paymentOrder.id;
+        clearPendingOrder();
+        await fetchOrders?.(true);
+
+        addNotification({
+          id: `payment-${paymentOrder.id}-${Date.now()}`,
+          title: 'Thanh toán thành công',
+          message: `Đơn hàng ${paymentOrder.id} đã được xác nhận chuyển khoản.`,
+          time: formatDateTimeViVN(),
+          isRead: false,
+          image: 'https://cdn-icons-png.flaticon.com/512/190/190411.png',
+        });
+
+        showCustomerNotification(
+          'Thanh toán thành công',
+          `Đơn hàng ${paymentOrder.id} đã được xác nhận và chuyển sang trạng thái đã đặt.`,
+          'success'
+        );
+
+        setPage('history');
+      } catch (error) {
+        console.error('Không thể kiểm tra trạng thái thanh toán QR:', error);
+      }
+    };
+
+    checkPaymentStatus();
+    const intervalId = window.setInterval(checkPaymentStatus, 3000);
+
+    return () => {
+      stopped = true;
+      window.clearInterval(intervalId);
+    };
+  }, [addNotification, clearPendingOrder, fetchOrders, isExpired, paymentOrder, setPage]);
 
   const goBackToOrders = () => {
     setPage('history');

@@ -58,13 +58,18 @@ export interface KhachHangTT {
   vietTat: string;
   mauNen: string;
   mauChu: string;
+  phone?: string;
   phong?: string;
 }
 
 export interface MonDat {
   ten: string;
   soLuong: number;
+  hinhAnh?: string;
 }
+
+export type TrangThaiThanhToan = 'pending' | 'paid' | 'cancelled';
+export type HinhThucThanhToan = 'cash' | 'banking';
 
 export interface DonTrucTiep {
   maDon: string;
@@ -75,6 +80,11 @@ export interface DonTrucTiep {
   loaiGhiChu?: ELoaiGhiChu;
   tongTien: number;
   trangThai: ETrangThaiTrucTiep;
+  thanhToan?: {
+    method: HinhThucThanhToan;
+    status: TrangThaiThanhToan;
+    paymentId?: string;
+  };
 }
 
 export interface ThongKeTrucTiep {

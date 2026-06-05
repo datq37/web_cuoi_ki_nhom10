@@ -8,18 +8,16 @@ import {
   SearchOutlined,
   UnorderedListOutlined,
 } from '@ant-design/icons';
-import { Button, DatePicker, Input, Modal, Table, message } from 'antd';
+import { DatePicker, Input, Modal, Table, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import dayjs from 'dayjs';
 import moment from 'moment';
 import 'moment/locale/vi';
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNotif } from '@/context/NotifContext';
 import Topbar from '@/pages/QuanTri/Topbar';
 import PageToolbar from '@/pages/QuanTri/components/PageToolbar';
 import EmptyState from '@/pages/QuanTri/components/EmptyState';
 import { fmt } from '@/models/QuanTri/Tổng Quan';
-import { mockData } from '@/services/QuanTri/Tổng Quan';
 import type { DonTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
 import { ETrangThaiTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
 import { useModel } from 'umi';
@@ -127,9 +125,9 @@ const DonHang: React.FC = () => {
   const {
     orders = [],
     cancelledIds = new Set<string>(),
-    stats = { tong: 0, choXacNhan: 0, dangCheBien: 0, doanhThu: 0 },
     tabCounts = { tat_ca: 0, [ETrangThaiTrucTiep.CHO_XAC_NHAN]: 0, [ETrangThaiTrucTiep.DANG_CHE_BIEN]: 0, [ETrangThaiTrucTiep.SAN_SANG]: 0, [ETrangThaiTrucTiep.HOAN_THANH]: 0, da_huy: 0 },
     moveStatus = () => { },
+    confirmBankingPayment = async () => null,
     fetchOrders = () => { }
   } = useModel('QuanTri.Đơn Hàng.index') || {};
 
@@ -139,6 +137,7 @@ const DonHang: React.FC = () => {
   const [view, setView] = useState<'table' | 'kanban'>('table');
   const [searchKw, setSearchKw] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<DonTrucTiep | null>(null);
+  const [paymentConfirming, setPaymentConfirming] = useState(false);
 
   // ── Lịch sử state ────────────────────────────────────────────────
   const [lichSuDate, setLichSuDate] = useState<any>(moment());
@@ -186,13 +185,16 @@ const DonHang: React.FC = () => {
   }, [orders, activeTab, searchKw, cancelledIds]);
 
   // ── Handlers ─────────────────────────────────────────────────────
-  const handleMoveStatus = (
+  const handleMoveStatus = async (
     maDon: string,
     newStatus: ETrangThaiTrucTiep | 'da_huy',
     silent = false,
   ) => {
-    // Gọi hàm moveStatus để cập nhật DB
-    moveStatus(maDon, newStatus);
+    try {
+      await moveStatus(maDon, newStatus);
+    } catch (error) {
+      return;
+    }
 
     // Cập nhật selectedOrder nếu cần
     if (newStatus === 'da_huy') {
@@ -227,6 +229,21 @@ const DonHang: React.FC = () => {
       cancelButtonProps: { style: { borderRadius: 8 } },
       onOk: () => handleMoveStatus(maDon, 'da_huy'),
     });
+  };
+
+  const handleConfirmPayment = async (maDon: string) => {
+    try {
+      setPaymentConfirming(true);
+      const updatedOrder = await confirmBankingPayment(maDon);
+      if (updatedOrder) {
+        setSelectedOrder((prev) => (prev?.maDon === maDon ? updatedOrder : prev));
+      } else {
+        await fetchOrders();
+      }
+      message.success(`Đã xác nhận chuyển khoản cho đơn ${maDon}`);
+    } finally {
+      setPaymentConfirming(false);
+    }
   };
 
 
@@ -393,7 +410,9 @@ const DonHang: React.FC = () => {
         onClose={() => setSelectedOrder(null)}
         onMoveStatus={handleMoveStatus}
         onCancel={handleCancelOrder}
+        onConfirmPayment={handleConfirmPayment}
         onPrint={handlePrint}
+        paymentConfirming={paymentConfirming}
       />
     </>
   );

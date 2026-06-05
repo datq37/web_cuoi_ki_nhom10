@@ -15,6 +15,15 @@ const PENDING = 'pending_confirmation';
 const PROCESSING = 'processing';
 const DELIVERED = 'delivered';
 
+const localizeOrderStatus = (order: any) => {
+  let tt = order.trangThai;
+  if (tt === CANCELLED) tt = DA_HUY;
+  else if (tt === PENDING) tt = CHO_XAC_NHAN;
+  else if (tt === PROCESSING) tt = DANG_CHE_BIEN;
+  else if (tt === DELIVERED) tt = HOAN_THANH;
+  return { ...order, trangThai: tt };
+};
+
 export default function useDonHangModel() {
   const [orders, setOrders] = useState<DonTrucTiep[]>([]);
 
@@ -25,15 +34,7 @@ export default function useDonHangModel() {
       const res = await axios.get(`${ip3}/admin/orders`);
       if (res.data) {
         const mappedList = res.data.map(SyncAdapters.mapAdminOrderToUI);
-        // Chuyển đổi trạng thái tiếng Anh -> UI Tiếng Việt
-        const localizedList = mappedList.map((o: any) => {
-           let tt = o.trangThai;
-           if (tt === CANCELLED) tt = DA_HUY;
-           else if (tt === PENDING) tt = CHO_XAC_NHAN;
-           else if (tt === PROCESSING) tt = DANG_CHE_BIEN;
-           else if (tt === DELIVERED) tt = HOAN_THANH;
-           return { ...o, trangThai: tt };
-        });
+        const localizedList = mappedList.map(localizeOrderStatus);
         
         setOrders(localizedList);
         
@@ -93,7 +94,7 @@ export default function useDonHangModel() {
          await axios.put(`${ip3}/admin/orders/${maDon}/status`, { trangThai: backendStatus });
        } catch (error) {
          console.error("Failed to update order status", error);
-         return;
+         throw error;
        }
     }
 
@@ -117,7 +118,7 @@ export default function useDonHangModel() {
          ));
        } catch (error) {
          console.error("Failed to update bulk orders status", error);
-         return;
+         throw error;
        }
     }
 
@@ -125,6 +126,18 @@ export default function useDonHangModel() {
     setOrders((p) =>
       p.map((o) => (maDons.includes(o.maDon) ? { ...o, trangThai: newStatus as any } : o)),
     );
+  }, []);
+
+  const confirmBankingPayment = useCallback(async (maDon: string) => {
+    try {
+      const res = await axios.put(`${ip3}/admin/orders/${maDon}/payment/confirm`);
+      const updatedOrder = localizeOrderStatus(SyncAdapters.mapAdminOrderToUI(res.data));
+      setOrders((prev) => prev.map((order) => (order.maDon === maDon ? updatedOrder : order)));
+      return updatedOrder;
+    } catch (error) {
+      console.error("Failed to confirm order payment", error);
+      throw error;
+    }
   }, []);
 
   return {
@@ -135,6 +148,7 @@ export default function useDonHangModel() {
     tabCounts,
     moveStatus,
     bulkMoveStatus,
+    confirmBankingPayment,
     fetchOrders,
   };
 }

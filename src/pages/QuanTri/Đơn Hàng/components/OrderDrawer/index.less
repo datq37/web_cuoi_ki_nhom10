@@ -457,11 +457,50 @@
 
 .payIcon {
   font-size: @fs-xl;
+  flex-shrink: 0;
+}
+
+.payInfo {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .payLabel {
   font-size: @fs-base;
   color: @text-muted;
+}
+
+.payStatus {
+  width: max-content;
+  max-width: 100%;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: @fs-xs;
+  font-weight: 700;
+
+  &[data-status="paid"] {
+    background: #dcfce7;
+    color: #15803d;
+  }
+
+  &[data-status="pending"] {
+    background: #ffedd5;
+    color: #c2410c;
+  }
+
+  &[data-status="cancelled"] {
+    background: #f3f4f6;
+    color: #6b7280;
+  }
+}
+
+.confirmPaymentBtn {
+  flex-shrink: 0;
+  border-radius: 8px;
+  font-weight: 700;
 }
 
 :global([data-theme="dark"]) {
@@ -496,6 +535,22 @@
   .totalValue { color: #4ade80; }
   .paymentRow { background: #0f172a; }
   .payLabel { color: #64748b; }
+  .payStatus {
+    &[data-status="paid"] {
+      background: rgba(34, 197, 94, 0.16);
+      color: #86efac;
+    }
+
+    &[data-status="pending"] {
+      background: rgba(249, 115, 22, 0.16);
+      color: #fdba74;
+    }
+
+    &[data-status="cancelled"] {
+      background: rgba(107, 114, 128, 0.16);
+      color: #9ca3af;
+    }
+  }
   .priceDivider { background: #334155; }
   .statusBadge {
     &[data-status="cho_xac_nhan"]  { background: rgba(249,115,22,0.15); }

@@ -72,7 +72,6 @@ def build_review_response(review: Review, *, current_user: KhachHang | None = No
 @router.get("", response_model=list[ReviewResponse])
 def get_all_reviews(
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[KhachHang, Depends(get_current_user)],
 ):
     """Lấy danh sách tất cả các đánh giá."""
     reviews = db.query(Review).order_by(Review.created_at.desc()).all()

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from crud import category as category_crud
 from database import get_db
-from dependencies import get_current_active_admin, get_current_user
+from dependencies import get_current_active_admin
 from model.khachhang import KhachHang
 from schemas.danhmucmonan import (
     DanhMucMonAnCreate as CategoryCreate,
@@ -19,11 +19,10 @@ router = APIRouter(prefix="/categories", tags=["Danh mục món ăn"])
 @router.get("", response_model=list[CategoryResponse])
 def list_categories(
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[KhachHang, Depends(get_current_user)],
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=200),
 ):
-    """Xem danh sách danh mục món ăn — yêu cầu đã đăng nhập."""
+    """Xem danh sách danh mục món ăn."""
     items, _ = category_crud.get_categories(db, skip=skip, limit=limit)
     return items
 
@@ -32,9 +31,8 @@ def list_categories(
 def get_category(
     category_id: int,
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[KhachHang, Depends(get_current_user)],
 ):
-    """Xem thông tin chi tiết một danh mục món ăn — yêu cầu đã đăng nhập."""
+    """Xem thông tin chi tiết một danh mục món ăn."""
     return menu_service.get_category_or_404(db, category_id)
 
 

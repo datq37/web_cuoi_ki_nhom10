@@ -29,13 +29,12 @@ router = APIRouter(prefix="/menus", tags=["Thực đơn"])
 @router.get("/items", response_model=MenuItemListResponse)
 def list_menu_items(
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[KhachHang, Depends(get_current_user)],
     category_id: int | None = Query(None, description="Lọc theo ID danh mục (integer)"),
     hethang: bool | None = Query(None, description="Lọc theo trạng thái hết hàng (true/false)"),
     skip: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=200),
 ):
-    """Xem danh sách món ăn — yêu cầu đã đăng nhập."""
+    """Xem danh sách món ăn."""
     from crud import menu as menu_crud
 
     items, total = menu_crud.get_menu_items(
@@ -47,7 +46,6 @@ def list_menu_items(
 @router.get("/top-selling-today", response_model=MenuItemListResponse)
 def get_top_selling_today(
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[KhachHang, Depends(get_current_user)],
     limit: int = Query(3, ge=1, le=12),
     date_str: str | None = Query(None, description="Ngày cần xem top món, format YYYY-MM-DD"),
 ):
@@ -62,9 +60,8 @@ def get_top_selling_today(
 def get_menu_item(
     mamon: str,
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[KhachHang, Depends(get_current_user)],
 ):
-    """Xem thông tin chi tiết một món ăn — yêu cầu đã đăng nhập."""
+    """Xem thông tin chi tiết một món ăn."""
     return menu_service.get_menu_item_or_404(db, mamon)
 
 
@@ -126,10 +123,9 @@ def toggle_menu_item_status(
 @router.get("/daily", response_model=DailyMenuListResponse)
 def get_daily_menu(
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[KhachHang, Depends(get_current_user)],
     menu_date: date = Query(..., description="Ngày cần xem thực đơn (YYYY-MM-DD)"),
 ):
-    """Xem thực đơn phục vụ của một ngày — yêu cầu đã đăng nhập."""
+    """Xem thực đơn phục vụ của một ngày."""
     entries = menu_service.get_daily_menu_for_date(db, menu_date)
     return DailyMenuListResponse(date=menu_date, items=entries)
 

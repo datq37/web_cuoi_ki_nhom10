@@ -28,10 +28,10 @@ function useAdminAuth() {
 
   const isLoggedIn = !!token;
 
-  /** Đăng xuất: xoá session + redirect về login */
+  /** Đăng xuất: xoá session + redirect về trang chủ */
   const logout = useCallback(() => {
     clearAdminSession();
-    history.replace('/admin-login');
+    history.replace('/');
   }, []);
 
   /** Cập nhật thông tin user (dùng khi lưu từ Cài Đặt) */

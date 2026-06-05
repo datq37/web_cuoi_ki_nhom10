@@ -197,7 +197,6 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
           onVisibleChange={setNotifOpen}
           trigger="click"
           placement="bottomRight"
-          arrow={false}
           overlayClassName={styles.notifOverlay}
           overlayInnerStyle={{ padding: 0, borderRadius: 12, overflow: 'hidden', border: 'none', boxShadow: 'none' }}
           content={

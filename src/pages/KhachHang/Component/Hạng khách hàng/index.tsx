@@ -7,7 +7,11 @@ import { useModel } from 'umi';
 import { formatNumberViVN } from '@/utils/format';
 import './index.less';
 
-const RankCard: React.FC = () => {
+interface RankCardProps {
+  isExpanded?: boolean;
+}
+
+const RankCard: React.FC<RankCardProps> = ({ isExpanded = true }) => {
   const {
     currentPoints,
     nextRank,
@@ -18,38 +22,43 @@ const RankCard: React.FC = () => {
   } = useModel('KhachHang.Hạng khách hàng.index');
   return (
     <Card 
-      className="reward-card" 
+      className={`reward-card ${!isExpanded ? 'collapsed' : ''}`} 
       bordered={false}
-      bodyStyle={{ padding: 12 }}
+      bodyStyle={{ padding: isExpanded ? 12 : 8 }}
     >
       <div className="reward-icon" style={{ background: currentRank.color, color: '#fff' }}>
         <Award size={28} />
       </div>
-      <Text strong style={{ color: 'var(--accent-strong)', fontSize: 11 }}>
-        Điểm thưởng ({currentRank.name})
-      </Text>
-      <Title level={5} style={{ margin: '4px 0 0', color: '#197037', fontSize: 17, fontWeight: 850 }}>
-        {formatNumberViVN(currentPoints)} điểm
-      </Title>
       
-      {isMaxRank ? (
-        <Text type="secondary" style={{ display: 'block', fontSize: 11, marginTop: 7, maxWidth: 132 }}>
-          Bạn đang ở hạng cao nhất!
-        </Text>
-      ) : (
-        <Text type="secondary" style={{ display: 'block', fontSize: 11, marginTop: 7, maxWidth: 132 }}>
-          Cần thêm <Text strong style={{ color: '#273328' }}>{formatNumberViVN(spentNeeded)}đ</Text> chi tiêu để lên hạng {nextRank.name}
-        </Text>
-      )}
+      {isExpanded && (
+        <>
+          <Text strong style={{ color: 'var(--accent-strong)', fontSize: 11 }}>
+            Điểm thưởng ({currentRank.name})
+          </Text>
+          <Title level={5} style={{ margin: '4px 0 0', color: '#197037', fontSize: 17, fontWeight: 850 }}>
+            {formatNumberViVN(currentPoints)} điểm
+          </Title>
+          
+          {isMaxRank ? (
+            <Text type="secondary" style={{ display: 'block', fontSize: 11, marginTop: 7, maxWidth: 132 }}>
+              Bạn đang ở hạng cao nhất!
+            </Text>
+          ) : (
+            <Text type="secondary" style={{ display: 'block', fontSize: 11, marginTop: 7, maxWidth: 132 }}>
+              Cần thêm <Text strong style={{ color: '#273328' }}>{formatNumberViVN(spentNeeded)}đ</Text> chi tiêu để lên hạng {nextRank.name}
+            </Text>
+          )}
 
-      <Progress 
-        percent={Math.min(100, Math.max(0, progressPercent))} 
-        showInfo={false} 
-        strokeColor={nextRank.color}
-        trailColor="rgba(67, 138, 42, 0.18)"
-        size="small"
-        style={{ marginBottom: 0, marginTop: 8 }}
-      />
+          <Progress 
+            percent={Math.min(100, Math.max(0, progressPercent))} 
+            showInfo={false} 
+            strokeColor={nextRank.color}
+            trailColor="rgba(67, 138, 42, 0.18)"
+            size="small"
+            style={{ marginBottom: 0, marginTop: 8 }}
+          />
+        </>
+      )}
     </Card>
   );
 };

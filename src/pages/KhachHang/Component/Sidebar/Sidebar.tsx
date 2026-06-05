@@ -10,7 +10,7 @@ import {
   Utensils,
 } from 'lucide-react';
 import './Sidebar.less';
-import { defaultUser } from '@/services/KhachHang/Component/Sidebar';
+import { defaultUser, BadgeTone } from '@/services/KhachHang/Component/Sidebar';
 import { SidebarSectionProps, SidebarItemProps } from '@/services/KhachHang/Component/Sidebar/typing';
 import RankCard from '../Hạng khách hàng';
 import { formatNumberViVN } from '@/utils/format';
@@ -29,7 +29,7 @@ const Sidebar: React.FC = () => {
   const closeSidebar = () => setIsSidebarOpen(false);
 
 
-  const orderItems = [
+  const orderItems: Array<SidebarItemProps & { id: string }> = [
     {
       id: 'home',
       label: 'Trang chủ',
@@ -49,7 +49,7 @@ const Sidebar: React.FC = () => {
       label: 'Giỏ hàng',
       icon: <ShoppingCart size={17} />,
       badge: cartQty > 0 ? cartQty : undefined,
-      badgeTone: 'green' as const,
+      badgeTone: BadgeTone.Green,
       onClick: () => setCartOpen(true),
     },
     {
@@ -61,7 +61,7 @@ const Sidebar: React.FC = () => {
     },
   ];
 
-  const otherItems = [
+  const otherItems: Array<SidebarItemProps & { id: string }> = [
     {
       id: 'settings',
       label: 'Cài đặt',
@@ -141,7 +141,7 @@ const Sidebar: React.FC = () => {
         </div>
 
         <div className="sidebar-bottom">
-          <RankCard />
+          <RankCard isExpanded={isExpanded} />
 
         </div>
       </aside>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button } from 'antd';
 import LoginForm from '../đăng nhập/fromdangnhap';
 import RegisterForm from './fromdangki';
 import './index.less';
@@ -24,16 +25,30 @@ const SignUpPage: React.FC = () => {
             <div className="Trai">
               <h1 className="ChaoMung">Chào mừng trở lại!</h1>
               <p>Để tiếp tục kết nối với chúng tôi, vui lòng đăng nhập bằng thông tin cá nhân của bạn</p>
-              <button className="nutdangnhap" onClick={() => setIsSignUp(false)}>
+              <Button 
+                ghost 
+                shape="round" 
+                className="nutTrongSuot" 
+                size="large" 
+                style={{ marginTop: '20px', padding: '0 60px', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase' }} 
+                onClick={() => setIsSignUp(false)}
+              >
                 Đăng nhập
-              </button>
+              </Button>
             </div>
             <div className="Phai">
               <h1 className="ChaoMung">Xin chào, Bạn!</h1>
               <p>Nhập thông tin cá nhân của bạn và bắt đầu hành trình với chúng tôi</p>
-              <button className="nutdangki" onClick={() => setIsSignUp(true)}>
+              <Button 
+                ghost 
+                shape="round" 
+                className="nutTrongSuot" 
+                size="large" 
+                style={{ marginTop: '20px', padding: '0 60px', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase' }} 
+                onClick={() => setIsSignUp(true)}
+              >
                 Đăng ký
-              </button>
+              </Button>
             </div>
           </div>
         </div>

@@ -189,11 +189,11 @@
         line-height: 1.45;
         transition: border-color 0.2s, box-shadow 0.2s;
 
-        &::giuCho {
+        &::placeholder {
             color: #8a919b;
         }
 
-        &:focus {
+        &:focus, &.ant-input-focused {
             border-color: #21743b;
             box-shadow: 0 0 0 4px rgba(33, 116, 59, 0.12);
         }
@@ -288,6 +288,7 @@
             place-items: center;
             width: 31px;
             height: 31px;
+            padding: 0;
             border: none;
             background: transparent;
             cursor: pointer;
@@ -708,7 +709,7 @@
                 filter: brightness(1.04);
             }
 
-            &:hoatDong {
+            &:active {
                 transform: scale(0.98);
             }
         }

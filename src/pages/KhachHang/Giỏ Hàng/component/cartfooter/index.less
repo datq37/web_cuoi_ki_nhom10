@@ -114,7 +114,11 @@
     letter-spacing: 0;
     transition: transform 0.18s, filter 0.18s, box-shadow 0.18s;
 
-    &:hover:not(:voHieuHoa) {
+    &:hover, &:focus {
+        color: #fff;
+    }
+
+    &:hover:not(:disabled):not(.voHieuHoa) {
         filter: brightness(0.98);
         box-shadow: 0 12px 22px rgba(23, 111, 50, 0.26);
     }
@@ -125,12 +129,12 @@
         stroke-width: 2.2;
     }
 
-    &:hoatDong:not(:voHieuHoa) {
+    &:active:not(:disabled):not(.voHieuHoa) {
         transform: scale(0.98);
     }
 
     &.voHieuHoa,
-    &:voHieuHoa {
+    &:disabled {
         color: #8b938f;
         background: #dfe5df;
         box-shadow: none;
@@ -224,7 +228,7 @@
 
     .nutXacNhan {
         &.voHieuHoa,
-        &:voHieuHoa {
+        &:disabled {
             color: var(--ink-4);
             background: var(--bg-mute);
         }

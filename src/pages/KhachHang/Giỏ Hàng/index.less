@@ -86,16 +86,21 @@
 }
 
 .huyHieuGioHang {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 23px;
-    height: 23px;
-    border-radius: 50%;
-    background: #21743b;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 750;
+    .ant-badge-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 23px;
+        height: 23px;
+        border-radius: 50%;
+        background: #21743b;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 750;
+        box-shadow: none;
+        border: none;
+        padding: 0;
+    }
 }
 
 .nutQuayLaiGioHang,
@@ -109,6 +114,7 @@
     place-items: center;
     cursor: pointer;
     color: #111827;
+    padding: 0;
     transition: background 0.2s, border-color 0.2s;
 
     svg {

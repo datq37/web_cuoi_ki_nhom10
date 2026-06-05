@@ -14,7 +14,7 @@ import {
     X,
     Zap,
 } from 'lucide-react';
-import { Modal } from 'antd';
+import { Modal, Input, Button, Typography } from 'antd';
 import { useModel } from 'umi';
 import type { CartOptionProps } from '@/services/KhachHang/Giỏ hàng/cartoption/typing';
 import { VoucherLoai, VoucherTheme } from '@/services/KhachHang/Giỏ hàng/cartoption/typing';
@@ -141,7 +141,7 @@ const CartOption: React.FC<CartOptionProps> = ({
                     <span>Ghi chú cho bếp</span>
                 </div>
                 <div className="bocGhiChu">
-                    <textarea
+                    <Input.TextArea
                         className="vungVanBanGhiChu"
                         placeholder="Ví dụ: Ít cay, không hành, thêm cơm..."
                         value={note}
@@ -163,13 +163,9 @@ const CartOption: React.FC<CartOptionProps> = ({
                 closable={false}
             >
                 <div className="phanDauMoDanPhieu">
-                    <button className="quayLaiMoDanPhieu" onClick={() => setIsVoucherModalOpen(false)}>
-                        <ArrowLeft size={21} />
-                    </button>
-                    <h2>Chọn Voucher</h2>
-                    <button className="dongMoDanPhieu" onClick={() => setIsVoucherModalOpen(false)}>
-                        <X size={21} />
-                    </button>
+                    <Button type="text" className="quayLaiMoDanPhieu" onClick={() => setIsVoucherModalOpen(false)} icon={<ArrowLeft size={21} />} />
+                    <Typography.Title level={2} style={{ margin: 0, fontSize: 18 }}>Chọn Voucher</Typography.Title>
+                    <Button type="text" className="dongMoDanPhieu" onClick={() => setIsVoucherModalOpen(false)} icon={<X size={21} />} />
                 </div>
 
                 <div className="phanThanMoDanPhieu">
@@ -184,11 +180,12 @@ const CartOption: React.FC<CartOptionProps> = ({
                                 <span>{availableVouchers.length} khả dụng</span>
                             </div>
                             {availableVouchers.map(v => (
-                                <button
+                                <div
                                     key={v.id}
-                                    type="button"
                                     className={`veMoDanPhieu ${v.theme === VoucherTheme.Orange ? 'veMoDanPhieuCam' : v.theme === VoucherTheme.Lime ? 'veMoDanPhieuChanh' : ''} ${tempSelectedId === v.id ? 'daChon' : ''}`}
                                     onClick={() => setTempSelectedId(v.id)}
+                                    role="button"
+                                    tabIndex={0}
                                 >
                                     <div className="traiVeMoDanPhieu">
                                         <div className="dauTraiVeMoDanPhieu" aria-hidden="true" />
@@ -198,14 +195,14 @@ const CartOption: React.FC<CartOptionProps> = ({
                                             ) : (
                                                 <Tag size={22} />
                                             )}
-                                            <strong>{v.valueLabel || formatCurrency(v.giamGia ?? v.discount)}</strong>
+                                            <Typography.Text strong style={{ color: 'inherit' }}>{v.valueLabel || formatCurrency(v.giamGia ?? v.discount)}</Typography.Text>
                                             <span>{v.typeLabel || 'GIẢM GIÁ'}</span>
                                         </div>
                                     </div>
                                     <div className="phaiVeMoDanPhieu">
                                         <div className="thongTinVeMoDanPhieu">
                                             <h4>{v.desc}</h4>
-                                            <p>{formatCondition(v.minOrder)}</p>
+                                            <Typography.Text>{formatCondition(v.minOrder)}</Typography.Text>
                                             <div className="theVeMoDanPhieu">
                                                 <span className="huyHieu">
                                                     <Timer size={11} />
@@ -230,7 +227,7 @@ const CartOption: React.FC<CartOptionProps> = ({
                                             )}
                                         </div>
                                     </div>
-                                </button>
+                                </div>
                             ))}
                         </div>
                     )}
@@ -282,14 +279,13 @@ const CartOption: React.FC<CartOptionProps> = ({
                 </div>
 
                 <div className="phanChanMoDanPhieu">
-                    <button className="nutDongYMoDanPhieu" onClick={confirmSelection}>
-                        <TicketPercent size={18} />
+                    <Button className="nutDongYMoDanPhieu" onClick={confirmSelection} icon={<TicketPercent size={18} />}>
                         Áp dụng Voucher
-                    </button>
-                    <p>
+                    </Button>
+                    <Typography.Text style={{ display: 'flex', alignItems: 'center', gap: 4, justifyContent: 'center' }}>
                         <CheckCircle2 size={12} />
                         Voucher chỉ áp dụng 1 lần cho mỗi đơn hàng
-                    </p>
+                    </Typography.Text>
                 </div>
             </Modal>
         </div>

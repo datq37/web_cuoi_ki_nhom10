@@ -1,6 +1,6 @@
 import React from 'react';
 import { useModel } from 'umi';
-import { Button, Space } from 'antd';
+import { Button, Space, Typography, Segmented, Empty, Card, Tag, Alert, Avatar } from 'antd';
 import {
     FileTextOutlined,
     InfoCircleOutlined,
@@ -38,29 +38,29 @@ const HistoryPage: React.FC = () => {
         >
             <div className="phanDauTrang">
                 <div>
-                    <h1 className="tieuDeTrang">Đơn của tôi</h1>
-                    <p className="tieuDePhuTrang">Theo dõi trạng thái đơn ăn theo thời gian thực.</p>
+                    <Typography.Title level={1} className="tieuDeTrang" style={{ margin: 0 }}>Đơn của tôi</Typography.Title>
+                    <Typography.Text className="tieuDePhuTrang">Theo dõi trạng thái đơn ăn theo thời gian thực.</Typography.Text>
                 </div>
 
-                <div className="boLocPhanDoan">
-                    {filters.map((f: any) => (
-                        <button
-                            key={f.id}
-                            className={filter === f.id ? 'dangChon' : ''}
-                            onClick={() => setFilter(f.id)}
-                        >
-                            {f.label}
-                        </button>
-                    ))}
-                </div>
+                <Segmented
+                    className="boLocPhanDoan"
+                    options={filters.map((f: any) => ({ label: f.label, value: f.id }))}
+                    value={filter}
+                    onChange={(val) => setFilter(val as string)}
+                />
             </div>
 
             {visibleOrders.length === 0 ? (
-                <div className="trangThaiTrong">
-                    <div className="khungBieuTuong"><FileTextOutlined /></div>
-                    <h4>Chưa có đơn nào</h4>
-                    <span>Đặt món từ thực đơn để bắt đầu</span>
-                </div>
+                <Empty 
+                    className="trangThaiTrong"
+                    image={<FileTextOutlined className="khungBieuTuong" />}
+                    description={
+                        <>
+                            <h4>Chưa có đơn nào</h4>
+                            <span>Đặt món từ thực đơn để bắt đầu</span>
+                        </>
+                    }
+                />
             ) : (
                 <div className="luoiDonHang">
                     {visibleOrders.map((o: Order) => {
@@ -71,30 +71,35 @@ const HistoryPage: React.FC = () => {
                             : st.label;
 
                         return (
-                            <div key={o.id} className={`theDonHang trangThai-${o.status}`}>
+                            <Card 
+                                key={o.id} 
+                                className={`theDonHang trangThai-${o.status}`}
+                                bordered={false}
+                                bodyStyle={{ padding: 0 }}
+                            >
                                 <div className="phanChinhThe">
                                     <div className="phanTraiThe">
                                         <div className="thongTinDon">
                                             <span className="maDon">{o.id}</span>
-                                            <span className={`nhanTrangThai ${st.color}`}>
+                                            <Tag className={`nhanTrangThai ${st.color}`}>
                                                 <span className={`chamTrangThai ${st.color}`}></span>
                                                 {statusLabel}
-                                            </span>
-                                            <span className="thoiGianNhan">
+                                            </Tag>
+                                            <Typography.Text className="thoiGianNhan">
                                                 · nhận lúc <strong>{o.pickup}</strong>
-                                            </span>
+                                            </Typography.Text>
                                         </div>
 
                                         <div className="danhSachMonAn">
                                             {o.items.map((it: any) => (
                                                 <div key={it.id} className="monAnThuGon">
                                                     {it.image ? (
-                                                        <img className="anhMonLichSu" src={it.image} alt={it.name} />
+                                                        <Avatar shape="square" size={36} src={it.image} className="anhMonLichSu" />
                                                     ) : (
-                                                        <span className="anhMonMacDinh">{String(it.name || 'M').charAt(0).toUpperCase()}</span>
+                                                        <Avatar shape="square" size={36} className="anhMonMacDinh">{String(it.name || 'M').charAt(0).toUpperCase()}</Avatar>
                                                     )}
-                                                    <span className="tenMon">{it.name}</span>
-                                                    <span className="soLuong">×{it.qty}</span>
+                                                    <Typography.Text className="tenMon">{it.name}</Typography.Text>
+                                                    <Typography.Text className="soLuong">×{it.qty}</Typography.Text>
                                                 </div>
                                             ))}
                                         </div>
@@ -115,11 +120,14 @@ const HistoryPage: React.FC = () => {
                                 </div>
 
                                 {o.note && (
-                                    <div className="ghiChuDon">
-                                        <InfoCircleOutlined />
-                                        <span>Ghi chú: {o.note}</span>
-                                    </div>
-                                ) || <div style={{ height: 12 }}></div>}
+                                                    <Alert
+                                                        className="ghiChuDon"
+                                                        message={`Ghi chú: ${o.note}`}
+                                                        type="warning"
+                                                        showIcon
+                                                        icon={<InfoCircleOutlined />}
+                                                    />
+                                                ) || <div style={{ height: 12 }}></div>}
 
                                 <div className="hanhDongThe">
                                     <Space size="middle">
@@ -154,7 +162,7 @@ const HistoryPage: React.FC = () => {
                                         )}
                                     </Space>
                                 </div>
-                            </div>
+                            </Card>
                         );
                     })}
                 </div>

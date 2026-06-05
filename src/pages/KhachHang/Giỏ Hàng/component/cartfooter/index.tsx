@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button, Tag, Typography } from 'antd';
 import { Check, CircleAlert, LoaderCircle } from 'lucide-react';
 import type { CartFooterProps } from '@/services/KhachHang/Giỏ hàng/cartfooter/typing';
 import { SERVICE_FEE_LABEL } from '@/services/KhachHang/Giỏ hàng/cartfooter';
@@ -14,7 +15,6 @@ const CartFooter: React.FC<CartFooterProps> = ({
     const {
         subtotal,
         serviceFee,
-        giamGia,
         voucherDiscount,
         comboDiscount,
         total,
@@ -35,17 +35,17 @@ const CartFooter: React.FC<CartFooterProps> = ({
                 </div>
                 {comboDiscount > 0 && (
                     <div className="hangGia hangPhieuGiamGia">
-                        <span className="nhanGia">
+                        <Typography.Text className="nhanGia">
                             Combo Nổi Bật
-                        </span>
-                        <span className="giaTriGia giamGia">-{formatCurrency(comboDiscount)}</span>
+                        </Typography.Text>
+                        <Typography.Text className="giaTriGia giamGia">-{formatCurrency(comboDiscount)}</Typography.Text>
                     </div>
                 )}
                 {selectedVoucher && (
                     <div className={`hangGia hangPhieuGiamGia ${voucherNotMet ? 'voHieuHoa' : ''}`}>
                         <span className="nhanGia">
                             Mã Giảm Giá
-                            <span className="huyHieuPhieuGiamGia">{selectedVoucher.code}</span>
+                            <Tag className="huyHieuPhieuGiamGia" style={{ border: 'none', margin: '0 0 0 6px' }}>{selectedVoucher.code}</Tag>
                         </span>
                         {voucherNotMet ? (
                             <span className="giaTriGia canhBao">
@@ -59,11 +59,11 @@ const CartFooter: React.FC<CartFooterProps> = ({
                 )}
                 <div className="duongChiaGia" />
                 <div className="hangGia hangTongCong">
-                    <span className="nhanTongCong">Tổng thanh toán</span>
-                    <span className="giaTriTongCong">{formatCurrency(total)}</span>
+                    <Typography.Text className="nhanTongCong">Tổng thanh toán</Typography.Text>
+                    <Typography.Text className="giaTriTongCong">{formatCurrency(total)}</Typography.Text>
                 </div>
             </div>
-            <button
+            <Button
                 id="btn-confirm-order"
                 className={`nutXacNhan ${isEmpty ? 'voHieuHoa' : ''}`}
                 onClick={onConfirm}
@@ -81,7 +81,7 @@ const CartFooter: React.FC<CartFooterProps> = ({
                         <span>{isEmpty ? 'Giỏ hàng trống' : `Xác nhận · ${formatCurrency(total)}`}</span>
                     </>
                 )}
-            </button>
+            </Button>
         </div>
     );
 };

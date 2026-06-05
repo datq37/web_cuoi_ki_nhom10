@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button, Typography, Badge } from 'antd';
 import { ArrowLeft, ShoppingCart, X } from 'lucide-react';
 import DanhSachMon from './component/danhsachmon';
 import CartOption from './component/cartoption';
@@ -33,32 +34,30 @@ const GioHang: React.FC = () => {
             />
             <aside className={`nganKeoGioHang ${cartOpen ? 'mo' : ''}`} aria-label="Giỏ hàng">
                 <div className="phanDauNganKeoGioHang">
-                    <button
+                    <Button
                         className="nutQuayLaiGioHang"
                         onClick={() => {
                             setCartOpen(false);
                             setPage('menu');
                         }}
                         aria-label="Quay lại thực đơn"
-                    >
-                        <ArrowLeft size={28} />
-                    </button>
+                        icon={<ArrowLeft size={28} />}
+                    />
 
                     <div className="tieuDeNganKeoGioHang">
                         <ShoppingCart size={34} strokeWidth={2.4} />
-                        <span>Giỏ hàng</span>
+                        <Typography.Text style={{ fontSize: 18, fontWeight: 750, lineHeight: 1 }}>Giỏ hàng</Typography.Text>
                         {cartQty > 0 && (
-                            <span className="huyHieuGioHang">{cartQty}</span>
+                            <Badge count={cartQty} className="huyHieuGioHang" />
                         )}
                     </div>
-                    <button
+                    <Button
                         id="btn-close-cart"
                         className="nutDongGioHang"
                         onClick={() => setCartOpen(false)}
                         aria-label="Đóng giỏ hàng"
-                    >
-                        <X size={30} />
-                    </button>
+                        icon={<X size={30} />}
+                    />
                 </div>
                 <div className="phanThanNganKeoGioHang">
                     <section className="phanGioHang">

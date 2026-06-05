@@ -12,6 +12,7 @@ import {
 import { BulbOutlined, BulbFilled } from '@ant-design/icons';
 import './topbar.less';
 import bannerImage from '@/assets/trangchu/banner.png';
+import { useCanteenInfo } from '@/hooks/useCanteenInfo';
 
 // phần đầu trang
 const Topbar: React.FC = () => {
@@ -19,6 +20,7 @@ const Topbar: React.FC = () => {
   const { theme, toggleTheme } = useModel('KhachHang.GlobalState.index');
   const darkMode = theme === 'dark';
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const canteen = useCanteenInfo();
 
   // phần chuyển tới đăng nhập
   const goToLogin = () => {
@@ -44,9 +46,9 @@ const Topbar: React.FC = () => {
       <header className={`landing-topbar ${darkMode ? 'dark' : ''}`}>
         <div className="lt-inner">
           <div className="lt-logo" onClick={() => history.push('/')} style={{ cursor: 'pointer' }}>
-            <img src="/logo.webp" alt="Căng tin doanh nghiệp" className="lt-logo-img" />
+            <img src={canteen.logo} alt={canteen.ten} className="lt-logo-img" />
             <div className="lt-brand-text">
-              <span className="lt-brand-name">Căng tin</span>
+              <span className="lt-brand-name">{canteen.ten}</span>
               <span className="lt-brand-slogan">DOANH NGHIỆP</span>
             </div>
           </div>

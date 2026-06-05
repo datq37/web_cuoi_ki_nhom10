@@ -16,12 +16,11 @@ BUSINESS_HOURS_KEY = "business_hours"
 
 DEFAULT_SETTINGS: dict[str, Any] = {
     "thongTin": {
-        "ten": "Căng tin Doanh nghiệp ABC",
-        "tenHienThi": "Căng tin · Toà nhà A",
-        "ma": "CT-HQ-01",
-        "diaChi": "Tầng 1, Toà nhà A",
+        "ten": "Căng tin Doanh nghiệp",
+        "diaChi": "Tầng 1, Toà nhà A, KCN Tân Thuận, Q.7, TP.HCM",
         "sdt": "0283 555 1234",
         "email": "canteen@abc.com.vn",
+        "logo": "/logo.webp",
     },
     "gioHD": [
         {"label": "Thứ Hai", "on": True, "mo": "07:00", "close": "18:00"},

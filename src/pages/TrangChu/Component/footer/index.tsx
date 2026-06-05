@@ -1,27 +1,25 @@
-import React from 'react';
 import type { ReactNode } from 'react';
 import { history } from 'umi';
 import {
   ShieldCheck,
   FileText,
   Headphones,
-  CircleHelp,
   Building2,
   Mail,
   Phone,
   MapPin,
   Leaf,
   Heart,
-  Send,
-  LockKeyhole,
   ChevronRight,
 } from 'lucide-react';
 import { FacebookOutlined, InstagramOutlined } from '@ant-design/icons';
 import './index.less';
-const logo = '/logo.webp';
+import { useCanteenInfo } from '@/hooks/useCanteenInfo';
 
 // phần chân trang
 export default function HomeFooter() {
+  const canteen = useCanteenInfo();
+
   return (
     <footer className="home-footer-wrapper">
       <div className="home-footer-leaf left-leaf">
@@ -39,14 +37,14 @@ export default function HomeFooter() {
               <div className="brand-header">
                 <div className="brand-logo-wrap">
                   <img
-                    src={logo}
-                    alt="Căng tin doanh nghiệp"
+                    src={canteen.logo}
+                    alt={canteen.ten}
                   />
                 </div>
 
                 <div className="brand-text-wrap">
                   <h2>
-                    Căng tin
+                    {canteen.ten}
                   </h2>
                   <p>
                     DOANH NGHIỆP
@@ -84,22 +82,10 @@ export default function HomeFooter() {
               />
             </FooterColumn>
             <FooterColumn title="LIÊN HỆ">
-              <InfoItem
-                icon={<Building2 size={22} />}
-                text="Công ty doanh nghiệp"
-              />
-              <InfoItem
-                icon={<Mail size={22} />}
-                text="contact@cantinhiendai.com"
-              />
-              <InfoItem
-                icon={<Phone size={22} />}
-                text="+84 123 456 789"
-              />
-              <InfoItem
-                icon={<MapPin size={22} />}
-                text="123 Đường ABC, Quận 1, TP. Hồ Chí Minh"
-              />
+              <InfoItem icon={<Building2 size={22} />} text={canteen.ten} />
+              <InfoItem icon={<Mail size={22} />} text={canteen.email} />
+              <InfoItem icon={<Phone size={22} />} text={canteen.sdt} />
+              <InfoItem icon={<MapPin size={22} />} text={canteen.diaChi} />
             </FooterColumn>
             <div className="home-footer-newsletter-section">
               <FooterTitle title="THEO DÕI CHÚNG TÔI" />

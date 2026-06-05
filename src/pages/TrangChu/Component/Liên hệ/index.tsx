@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { history, useModel } from 'umi';
 import {
   ArrowLeft,
@@ -10,40 +10,42 @@ import {
 } from 'lucide-react';
 
 import './index.less';
-
-// phần dữ liệu liên hệ
-const contactItems = [
-  {
-    icon: <Phone size={24} />,
-    title: 'Đường dây nóng nội bộ',
-    value: '+84 123 456 789',
-    desc: 'Hỗ trợ khẩn cấp từ 07:00 - 19:30 hằng ngày',
-  },
-  {
-    icon: <Mail size={24} />,
-    title: 'Hòm thư điện tử',
-    value: 'contact@cantinhiendai.com',
-    desc: 'Giải đáp thắc mắc và tiếp nhận phản hồi dịch vụ',
-  },
-  {
-    icon: <MapPin size={24} />,
-    title: 'Địa điểm căng tin',
-    value: 'Tầng 1, Tòa nhà Alpha Complex',
-    desc: 'Khu công nghệ cao, Quận 9, TP. Hồ Chí Minh',
-    active: true,
-  },
-  {
-    icon: <Clock3 size={24} />,
-    title: 'Giờ mở cửa phục vụ',
-    value: 'Thứ 2 - Thứ 7 | 06:30 - 20:00',
-    desc: 'Bữa sáng: 06:30 - 09:00 | Bữa trưa: 11:00 - 13:30 | Bữa tối: 17:00 - 19:30',
-  },
-];
+import { useCanteenInfo } from '@/hooks/useCanteenInfo';
 
 // phần trang liên hệ
 export default function ContactPage() {
   // phần lấy giao diện sáng tối
   const { theme } = useModel('KhachHang.GlobalState.index');
+  const canteen = useCanteenInfo();
+
+  // phần dữ liệu liên hệ — đọc động từ settings
+  const contactItems = [
+    {
+      icon: <Phone size={24} />,
+      title: 'Đường dây nóng nội bộ',
+      value: canteen.sdt,
+      desc: 'Hỗ trợ khẩn cấp từ 07:00 - 19:30 hằng ngày',
+    },
+    {
+      icon: <Mail size={24} />,
+      title: 'Hòm thư điện tử',
+      value: canteen.email,
+      desc: 'Giải đáp thắc mắc và tiếp nhận phản hồi dịch vụ',
+    },
+    {
+      icon: <MapPin size={24} />,
+      title: 'Địa điểm căng tin',
+      value: canteen.diaChi,
+      desc: canteen.ten,
+      active: true,
+    },
+    {
+      icon: <Clock3 size={24} />,
+      title: 'Giờ mở cửa phục vụ',
+      value: 'Thứ 2 - Thứ 7 | 06:30 - 20:00',
+      desc: 'Bữa sáng: 06:30 - 09:00 | Bữa trưa: 11:00 - 13:30 | Bữa tối: 17:00 - 19:30',
+    },
+  ];
 
   // phần cuộn lên đầu trang
   useEffect(() => {
@@ -61,13 +63,13 @@ export default function ContactPage() {
 
         <div className="cp-brand">
           <img
-            src="/logo.webp"
-            alt="Căng tin"
+            src={canteen.logo}
+            alt={canteen.ten}
             className="cp-logo"
           />
 
           <div className="cp-brand-text">
-            <h1 className="cp-brand-name">Căng tin</h1>
+            <h1 className="cp-brand-name">{canteen.ten}</h1>
             <p className="cp-brand-slogan">DOANH NGHIỆP</p>
           </div>
         </div>
@@ -115,7 +117,7 @@ export default function ContactPage() {
       </main>
 
       <footer className="cp-footer">
-        © 2026 Căng tin Doanh nghiệp. Bảo lưu mọi quyền.
+        © 2026 {canteen.ten}. Bảo lưu mọi quyền.
       </footer>
     </div>
   );

@@ -16,6 +16,7 @@ import { history } from 'umi';
 import { INotif, NotifType, timeAgo, useNotif } from '@/context/NotifContext';
 import { useTheme } from '@/hooks/useTheme';
 import useAdminAuth from '@/hooks/useAdminAuth';
+import { useCanteenInfo } from '@/hooks/useCanteenInfo';
 import styles from './index.less';
 
 function getNotifRoute(type: NotifType): string {
@@ -82,6 +83,7 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
   const { notifs, markRead, markAll } = useNotif();
   const [notifOpen, setNotifOpen] = useState(false);
   const [userOpen,  setUserOpen]  = useState(false);
+  const canteen = useCanteenInfo();
 
   const unreadCount = notifs.filter((n) => !n.read).length;
 
@@ -119,7 +121,8 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
       icon: <QuestionCircleOutlined style={{ color: '#16a34a' }} />,
       content: (
         <div style={{ paddingTop: 8, lineHeight: 1.8, color: '#374151' }}>
-          <div>📧 <a href="mailto:it@canteen.vn" style={{ color: '#16a34a' }}>it@canteen.vn</a></div>
+          {canteen.sdt && <div>📞 <a href={`tel:${canteen.sdt}`} style={{ color: '#16a34a' }}>{canteen.sdt}</a></div>}
+          <div>📧 <a href={`mailto:${canteen.email}`} style={{ color: '#16a34a' }}>{canteen.email}</a></div>
           <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 6 }}>
             Thời gian hỗ trợ: 7:00 – 18:00, thứ Hai đến thứ Sáu
           </div>

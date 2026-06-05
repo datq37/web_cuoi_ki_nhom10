@@ -1,9 +1,4 @@
-/**
- * Gọi hàm này khi admin đăng nhập thành công.
- * Ví dụ dùng trong trang đăng nhập:
- *   import { setAdminSession, clearAdminSession } from '@/utils/storage';
- *   setAdminSession({ ten: 'Minh Tâm', email: 'tam@canteen.vn' });
- */
+
 export function setAdminSession(user: { ten: string; email: string; avatar?: string }) {
   localStorage.setItem('admin_token', JSON.stringify('authenticated'));
   localStorage.setItem('admin_user', JSON.stringify(user));
@@ -15,16 +10,16 @@ export function clearAdminSession() {
 }
 
 export const KEYS = {
-  orders:        'admin_orders',
-  inventory:     'kho_nguyen_lieu',
+  orders: 'admin_orders',
+  inventory: 'kho_nguyen_lieu',
   importHistory: 'lich_su_nhap',
-  settings:      'canteen_settings',
-  user:          'admin_user',
-  token:         'admin_token',
-  dishes:        'admin_dishes',
-  customers:     'admin_customers',
-  staff:         'admin_staff',
-  tables:        'admin_tables',
+  settings: 'canteen_settings',
+  user: 'admin_user',
+  token: 'admin_token',
+  dishes: 'admin_dishes',
+  customers: 'admin_customers',
+  staff: 'admin_staff',
+  tables: 'admin_tables',
 } as const;
 
 export const store = {

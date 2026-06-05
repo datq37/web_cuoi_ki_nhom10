@@ -15,6 +15,7 @@ import { Badge } from 'antd';
 import React, { useMemo, useState } from 'react';
 import { history, useLocation } from 'umi';
 import { useNotif } from '@/context/NotifContext';
+import { useCanteenInfo } from '@/hooks/useCanteenInfo';
 import styles from './index.less';
 
 const ForkKnifeIcon = () => (
@@ -46,6 +47,7 @@ const Sidebar: React.FC = () => {
   const location    = useLocation();
   const currentPath = location.pathname;
   const { notifs }  = useNotif();
+  const canteen     = useCanteenInfo();
 
   const badgeMap = useMemo<Record<string, number>>(() => ({
     '/quan-tri/don-hang': notifs.filter((n) => n.type === 'order_pending' && !n.read).length,
@@ -71,10 +73,10 @@ const Sidebar: React.FC = () => {
 
       <div className={styles.logoSection}>
         <div className={styles.logoWrapper}>
-          <img src="/logo.webp" alt="Logo Căng tin" className={styles.logoIcon} />
+          <img src={canteen.logo} alt={canteen.ten} className={styles.logoIcon} />
           {!collapsed && (
             <div className={styles.logoText}>
-              <span className={styles.brandName}>Căng tin</span>
+              <span className={styles.brandName}>{canteen.ten}</span>
               <span className={styles.brandSub}>Doanh nghiệp</span>
             </div>
           )}

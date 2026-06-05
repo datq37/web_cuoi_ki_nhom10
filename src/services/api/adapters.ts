@@ -284,5 +284,23 @@ export const SyncAdapters = {
       trangThai: apiItem.trangthai || 'dang_chay',
       hoatDong: Boolean(apiItem.hoatdong ?? true),
     };
+  },
+
+  /**
+   * Chuyển đổi dữ liệu Nhân viên (Backend) -> UI (Frontend)
+   */
+  mapAdminNhanVienToUI(apiItem: any): any {
+    return {
+      id: apiItem.manv || '',
+      hoTen: apiItem.ten || '',
+      email: apiItem.email || '',
+      vaiTro: apiItem.chucvu || 'nhan_vien_bep',
+      vietTat: apiItem.viettat || 'NV',
+      mauNen: apiItem.maunen || '#94a3b8',
+      hoatDongGanNhat: apiItem.hoatdonggannhat || 'Chưa rõ',
+      soDienThoai: apiItem.sodienthoai || '',
+      ngayBatDau: apiItem.ngaybatdau || '',
+      mucLuong: apiItem.luong || 0,
+    };
   }
 };

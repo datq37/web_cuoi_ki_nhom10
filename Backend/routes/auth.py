@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from database import get_db
-from schemas.auth import LoginRequest, LogoutRequest, RefreshRequest, Token
+from schemas.auth import LoginRequest, LogoutRequest, RefreshRequest, Token, SocialLoginRequest
 from schemas.khachhang import KhachHangRegister, KhachHangResponse
 from service import auth as auth_service
 from service import khachhang as khachhang_service
@@ -30,6 +30,19 @@ def login(
     khachhang = auth_service.authenticate_user(db, data.taikhoan, data.matkhau)
     if not khachhang:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Tài khoản hoặc mật khẩu không đúng")
+    
+    return auth_service.issue_token_pair(db, khachhang)
+
+
+@router.post("/social-login", response_model=Token)
+def social_login(
+    data: SocialLoginRequest,
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Đăng nhập bằng Google/Supabase, trả về access & refresh token chuẩn của FastAPI."""
+    khachhang = auth_service.authenticate_social_user(db, data.email, data.name, data.avatar)
+    if not khachhang:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Xác thực thất bại")
     
     return auth_service.issue_token_pair(db, khachhang)
 

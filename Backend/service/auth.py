@@ -99,6 +99,32 @@ def authenticate_user(db: Session, taikhoan: str, matkhau: str) -> KhachHang | N
         return None
     return khachhang
 
+def authenticate_social_user(db: Session, email: str, name: str, avatar: str | None = None) -> KhachHang:
+    """Xác thực hoặc tạo mới khách hàng qua Social Login."""
+    from sqlalchemy import select
+    stmt = select(KhachHang).where(KhachHang.email == email)
+    khachhang = db.execute(stmt).scalar_one_or_none()
+
+    if not khachhang:
+        taikhoan = email.split("@")[0] + "_" + uuid.uuid4().hex[:4]
+        khachhang = khachhang_crud.create_khachhang(
+            db,
+            taikhoan=taikhoan,
+            matkhau="", # Đăng nhập social không dùng password
+            ten=name,
+            email=email,
+            avatar=avatar,
+            vaitro="Khách hàng"
+        )
+    else:
+        if avatar and not khachhang.avatar:
+            khachhang.avatar = avatar
+            db.add(khachhang)
+            db.commit()
+            db.refresh(khachhang)
+
+    return khachhang
+
 
 def issue_token_pair(db: Session, khachhang: KhachHang) -> Token:
     """Cấp cặp token (Access và Refresh token)."""

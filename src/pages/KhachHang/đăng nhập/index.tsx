@@ -22,6 +22,7 @@ import './index.less';
 import bgImage from "@/assets/dangki/dangnhap.png";
 import { showCustomerNotification } from '@/utils/notification';
 import GlobalNotificationModal from '../Component/GlobalNotificationModal';
+import { supabase } from '@/utils/supabase';
 
 export default function LoginPage() {
   const isRegisterRoute = history.location.pathname === '/dang-ky';
@@ -75,6 +76,21 @@ export default function LoginPage() {
       } catch (err: any) {
         showCustomerNotification('Đăng nhập thất bại. Vui lòng kiểm tra lại tài khoản.', undefined, 'error');
       }
+    }
+  };
+
+  const loginWithGoogle = async () => {
+    const redirectTo = `${window.location.origin}/auth/callback`;
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo,
+      },
+    });
+
+    if (error) {
+      showCustomerNotification('Lỗi kết nối Google', error.message, 'error');
     }
   };
 
@@ -188,7 +204,7 @@ export default function LoginPage() {
               <div className="duongKe"></div>
             </div>
 
-            <button className="nutGoogle">
+            <button type="button" className="nutGoogle" onClick={loginWithGoogle}>
               <span className="bieuTuongG">G</span>
               Tiếp tục với Google
             </button>

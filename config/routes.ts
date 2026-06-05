@@ -30,6 +30,11 @@ export default [
 		layout: false,
 	},
 	{
+		path: '/auth/callback',
+		component: './KhachHang/đăng nhập/Callback',
+		layout: false,
+	},
+	{
 		path: '/trang-chinh',
 		component: './KhachHang/Trang chính',
 		layout: false,
@@ -93,18 +98,8 @@ export default [
 		],
 	},
 
-	// ── Exception ─────────────────────────────────
 	{
-		path: '/403',
-		component: './exception/403/403Page',
-		layout: false,
-	},
-	{
-		path: '/hold-on',
-		component: './exception/DangCapNhat',
-		layout: false,
-	},
-	{
-		component: './exception/404',
+		path: '*',
+		redirect: '/',
 	},
 ];

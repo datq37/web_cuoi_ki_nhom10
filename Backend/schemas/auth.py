@@ -50,3 +50,11 @@ class LogoutRequest(BaseModel):
 
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
     refresh_token: str
+
+class SocialLoginRequest(BaseModel):
+    """Yêu cầu đăng nhập thông qua Google/Supabase."""
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, from_attributes=True)
+    email: str = Field(..., min_length=1)
+    name: str = Field(..., min_length=1)
+    avatar: str | None = None

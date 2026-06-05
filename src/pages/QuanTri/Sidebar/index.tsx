@@ -71,15 +71,11 @@ const Sidebar: React.FC = () => {
 
       <div className={styles.logoSection}>
         <div className={styles.logoWrapper}>
-          <div className={styles.logoIcon}>
-            <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
-              <path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 008 20C19 20 22 3 22 3c-1 2-8 2-8 8z" fill="white" />
-            </svg>
-          </div>
+          <img src="/logo.webp" alt="Logo Căng tin" className={styles.logoIcon} />
           {!collapsed && (
             <div className={styles.logoText}>
               <span className={styles.brandName}>Căng tin</span>
-              <span className={styles.brandSub}>Admin · Toà nhà A</span>
+              <span className={styles.brandSub}>Doanh nghiệp</span>
             </div>
           )}
         </div>

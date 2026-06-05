@@ -3,6 +3,7 @@ import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { SyncAdapters } from '@/services/api/adapters';
 import { ICombo, IKhuyenMai, IStatKhuyenMai } from '@/services/QuanTri/Khuyến Mãi/typing';
+import { hasLoginToken } from '@/utils/auth';
 
 const formatDateForApi = (value?: string) => {
   if (!value) return undefined;
@@ -18,6 +19,10 @@ export default function useKhuyenMaiModel() {
   const [comboItems, setComboItems] = useState<ICombo[]>([]);
 
   const fetchItems = useCallback(async () => {
+    if (!hasLoginToken()) {
+      setItems([]);
+      return;
+    }
     try {
       const res = await axios.get(`${ip3}/promotions`);
       if (res.data && res.data.items) {

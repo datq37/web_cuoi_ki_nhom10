@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
+import { hasLoginToken } from '@/utils/auth';
 
 // Dựa vào IVatDung trong index.tsx
 // type EDanhMucVD    = 'ban_ghe' | 'bat_dua' | 'noi_nieu' | 'khac';
@@ -11,6 +12,11 @@ export default function useCoSoVatChatModel() {
   const [loading, setLoading] = useState(false);
 
   const fetchItems = useCallback(async () => {
+    if (!hasLoginToken()) {
+      setItems([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const res = await axios.get(`${ip3}/facilities/equipments`);

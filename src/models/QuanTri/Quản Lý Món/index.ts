@@ -3,6 +3,7 @@ import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { SyncAdapters } from '@/services/api/adapters';
 import { IMonAn } from '@/services/QuanTri/Quản Lý Món/typing';
+import { hasLoginToken } from '@/utils/auth';
 
 export default function useQuanLyMonModel() {
   const [items, setItems] = useState<IMonAn[]>([]);
@@ -32,6 +33,10 @@ export default function useQuanLyMonModel() {
   }, []);
 
   const fetchIngredients = useCallback(async () => {
+    if (!hasLoginToken()) {
+      setIngredients([]);
+      return;
+    }
     try {
       const res = await axios.get(`${ip3}/inventory`);
       if (res.data && res.data.items) {

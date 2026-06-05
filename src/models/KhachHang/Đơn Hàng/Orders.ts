@@ -4,12 +4,18 @@ import { Order, OrderStatus } from '@/services/KhachHang/Đơn Hàng';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { SyncAdapters } from '@/services/api/adapters';
+import { hasLoginToken } from '@/utils/auth';
 
 export default function useOrderModel() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(false);
 
     const fetchOrders = useCallback(async (silent = false) => {
+        if (!hasLoginToken()) {
+            setOrders([]);
+            if (!silent) setLoading(false);
+            return;
+        }
         try {
             if (!silent) setLoading(true);
             const res = await axios.get(`${ip3}/orders/history`);
@@ -24,15 +30,13 @@ export default function useOrderModel() {
             }
         } catch (error: any) {
             console.error("Lỗi khi tải lịch sử đơn hàng:", error);
-            if (error?.response?.status === 401) {
-                throw error; // Ném lỗi để báo cho polling biết mà dừng lại
-            }
         } finally {
             if (!silent) setLoading(false);
         }
     }, []);
 
     useEffect(() => {
+        if (!hasLoginToken()) return undefined;
         fetchOrders();
         
         let intervalId: any;

@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from database import get_db
-from dependencies import get_current_active_admin, get_current_user
+from dependencies import get_current_active_admin
 from model.khachhang import KhachHang
 from schemas.settings import AppSettings, OrderingStatus
 from service import settings as settings_service
@@ -15,7 +15,6 @@ router = APIRouter(prefix="/settings", tags=["Cài đặt"])
 @router.get("", response_model=AppSettings)
 def get_settings(
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[KhachHang, Depends(get_current_user)],
 ):
     """Khách hàng/Admin: xem cấu hình căng tin."""
     return settings_service.read_settings(db)
@@ -34,7 +33,6 @@ def update_settings(
 @router.get("/ordering-status", response_model=OrderingStatus)
 def get_ordering_status(
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[KhachHang, Depends(get_current_user)],
 ):
     """Khách hàng/Admin: kiểm tra hiện tại có được đặt món không."""
     return settings_service.get_ordering_status(db)

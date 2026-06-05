@@ -4,6 +4,7 @@ import { getRankBySpent } from '@/services/KhachHang/Tài khoản/Thanghang';
 import type { UserProfile } from '@/services/KhachHang/Tài khoản/typing';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
+import { hasLoginToken } from '@/utils/auth';
 
 const lamTronDiemThuong = (points: number) => Math.floor(Number(points) || 0);
 
@@ -57,6 +58,7 @@ export default function useUserModel() {
   }, [currentUser]);
 
   const refreshProfile = async () => {
+    if (!hasLoginToken()) return currentUser;
     const res = await axios.get(`${ip3}/khachhang/me`);
     const next = chuyenApiSangHoSo(res.data, currentUser);
     setCurrentUser(next);

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from crud import nhanvien as nhanvien_crud
 from database import get_db
-from dependencies import get_current_active_admin, get_current_user
+from dependencies import get_current_active_admin
 from model.khachhang import KhachHang
 from schemas.nhanvien import NhanVienCreate, NhanVienResponse, NhanVienUpdate, NhanVienListResponse
 

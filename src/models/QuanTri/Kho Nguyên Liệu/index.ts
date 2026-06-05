@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState, useEffect } from 'react';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { SyncAdapters } from '@/services/api/adapters';
+import { hasLoginToken } from '@/utils/auth';
 
 const KEY_HISTORY = 'lich_su_nhap';
 
@@ -24,6 +25,10 @@ export default function useKhoNguyenLieuModel() {
   const [items, setItems] = useState<any[]>([]);
 
   const fetchItems = useCallback(async () => {
+    if (!hasLoginToken()) {
+      setItems([]);
+      return;
+    }
     try {
       const res = await axios.get(`${ip3}/inventory`);
       if (res.data && res.data.items) {

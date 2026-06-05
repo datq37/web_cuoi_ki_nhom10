@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
+import { hasLoginToken } from '@/utils/auth';
 import { SyncAdapters } from '@/services/api/adapters';
 import type { DonTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
 
@@ -30,6 +31,11 @@ export default function useDonHangModel() {
   const [cancelledIds, setCancelledIds] = useState<Set<string>>(new Set());
 
   const fetchOrders = useCallback(async () => {
+    if (!hasLoginToken()) {
+      setOrders([]);
+      setCancelledIds(new Set());
+      return;
+    }
     try {
       const res = await axios.get(`${ip3}/admin/orders`);
       if (res.data) {
@@ -50,6 +56,7 @@ export default function useDonHangModel() {
   }, []);
 
   useEffect(() => {
+    if (!hasLoginToken()) return undefined;
     fetchOrders();
     // Khởi tạo interval polling 10s một lần (tuỳ chọn)
     const interval = setInterval(fetchOrders, 10000);

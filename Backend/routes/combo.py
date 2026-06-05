@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from crud import combo as combo_crud
 from database import get_db
-from dependencies import get_current_active_admin, get_current_user
+from dependencies import get_current_active_admin
 from model.khachhang import KhachHang
 from schemas.combo import ComboCreate, ComboListResponse, ComboResponse, ComboUpdate
 
@@ -15,7 +15,6 @@ router = APIRouter(prefix="/combos", tags=["Combo"])
 @router.get("", response_model=ComboListResponse)
 def list_combos(
     db: Annotated[Session, Depends(get_db)],
-    _: Annotated[KhachHang, Depends(get_current_user)],
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=500),
 ):

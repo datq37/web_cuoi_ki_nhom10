@@ -5,6 +5,7 @@ import { formatCurrency } from '@/utils/format';
 import { useState, useCallback, useEffect } from 'react';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
+import { hasLoginToken } from '@/utils/auth';
 
 // formatter
 export const fmt = formatCurrency;
@@ -170,6 +171,12 @@ export function useTongQuanModel() {
   const [loading, setLoading] = useState(false);
 
   const fetchData = useCallback(async () => {
+    if (!hasLoginToken()) {
+      setOrders([]);
+      setInventory([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const [resOrders, resInventory] = await Promise.all([

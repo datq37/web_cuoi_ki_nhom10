@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from crud import khohang as khohang_crud
 from database import get_db
-from dependencies import get_current_active_admin, get_current_user
+from dependencies import get_current_active_admin
 from model.khachhang import KhachHang
 from schemas.khohang import KhoHangCreate, KhoHangResponse, KhoHangUpdate, KhoHangListResponse
 

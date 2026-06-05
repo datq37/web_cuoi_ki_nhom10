@@ -3,12 +3,18 @@ import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { SyncAdapters } from '@/services/api/adapters';
 import { INhanVien } from '@/services/QuanTri/Nhân Viên Căng Tin/typing';
+import { hasLoginToken } from '@/utils/auth';
 
 export default function useNhanVienModel() {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   const fetchItems = useCallback(async () => {
+    if (!hasLoginToken()) {
+      setItems([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const res = await axios.get(`${ip3}/employees`);

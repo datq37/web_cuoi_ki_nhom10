@@ -1,6 +1,11 @@
 import { useState, useCallback, useEffect } from 'react';
 
-import { NotificationItem, SEED_NOTIFICATIONS } from '@/services/KhachHang/Thông báo';
+import { NotificationItem } from '@/services/KhachHang/Thông báo';
+
+const DEFAULT_NOTIFICATION_IDS = new Set(['n2', 'n3']);
+
+const removeDefaultNotifications = (list: NotificationItem[]) =>
+  list.filter(item => !DEFAULT_NOTIFICATION_IDS.has(item.id));
 
 export default function useNotificationModel() {
   const [notifications, setNotifications] = useState<NotificationItem[]>(() => {
@@ -8,11 +13,14 @@ export default function useNotificationModel() {
       const saved = localStorage.getItem('app_notifications');
       if (saved) {
         try {
-          return JSON.parse(saved);
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) {
+            return removeDefaultNotifications(parsed);
+          }
         } catch { }
       }
     }
-    return SEED_NOTIFICATIONS;
+    return [];
   });
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -49,7 +57,9 @@ export default function useNotificationModel() {
       if (e.key === 'app_notifications' && e.newValue) {
         try {
           const list = JSON.parse(e.newValue);
-          setNotifications(list);
+          if (Array.isArray(list)) {
+            setNotifications(removeDefaultNotifications(list));
+          }
         } catch { }
       }
     };

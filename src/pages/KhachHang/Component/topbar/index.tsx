@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
     RightOutlined,
     BulbOutlined,
@@ -78,6 +78,12 @@ const Topbar: React.FC = () => {
 
     const user = currentUser || defaultUser;
     const avatarText = user.avatar && user.avatar.length <= 2 ? user.avatar : 'U';
+    const handleNotifVisibleChange = useCallback((visible: boolean) => {
+        setIsNotifOpen(visible);
+        if (visible) {
+            markAllAsRead();
+        }
+    }, [markAllAsRead]);
 
     return (
         <header className="topbar">
@@ -106,7 +112,7 @@ const Topbar: React.FC = () => {
 
                 <Popover
                     visible={isNotifOpen}
-                    onVisibleChange={setIsNotifOpen}
+                    onVisibleChange={handleNotifVisibleChange}
                     trigger="click"
                     placement="bottomRight"
                     overlayClassName={theme === ThemeType.DARK ? 'notif-popover-dark' : ''}

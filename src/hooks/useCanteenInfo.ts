@@ -57,9 +57,9 @@ export function useCanteenInfo(): ICanteenInfo {
     window.addEventListener('storage', refreshFromCache);
 
     // Fetch từ API để lấy dữ liệu mới nhất từ database
-    const token = localStorage.getItem('admin_token') || localStorage.getItem('kh_token');
+    const token = localStorage.getItem('loginToken');
     fetch(`${ip3}/settings`, {
-      headers: token ? { Authorization: `Bearer ${JSON.parse(token)}` } : {},
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
     })
       .then((r) => r.ok ? r.json() : null)
       .then((data) => {

@@ -1,7 +1,6 @@
 import {
   AppstoreOutlined,
   ClockCircleOutlined,
-  CreditCardOutlined,
   UploadOutlined,
 } from '@ant-design/icons';
 import { Button, Input, Switch, message } from 'antd';
@@ -17,7 +16,7 @@ import { cacheCanteenSettings } from '@/utils/businessHours';
 import styles from './index.less';
 
 // ── Types ────────────────────────────────────────────────────────
-type TTab = 'thong-tin' | 'gio-hoat-dong' | 'thanh-toan';
+type TTab = 'thong-tin' | 'gio-hoat-dong';
 
 interface IDayConfig { label: string; on: boolean; mo: string; close: string; }
 
@@ -62,15 +61,9 @@ const DEFAULT_SETTINGS: ISettings = {
   baoMat: { twoFA: true, autoLogout: true },
 };
 
-const PAYMENT_META: Record<string, { icon: string; ten: string; moTa: string }> = {
-  'tien-mat':     { icon: '💵', ten: 'Tiền mặt',    moTa: 'Trả trực tiếp tại quầy' },
-  'chuyen-khoan': { icon: '🏦', ten: 'Chuyển khoản', moTa: 'VietQR / Chuyển khoản · Vietcombank · 0123456789' },
-};
-
 const TABS: { key: TTab; label: string; Icon: React.FC<any> }[] = [
   { key: 'thong-tin',     label: 'Thông tin chung', Icon: AppstoreOutlined    },
   { key: 'gio-hoat-dong', label: 'Giờ hoạt động',  Icon: ClockCircleOutlined },
-  { key: 'thanh-toan',    label: 'Thanh toán',      Icon: CreditCardOutlined  },
 ];
 
 // ── Helper ───────────────────────────────────────────────────────
@@ -277,40 +270,6 @@ const GioHoatDong: React.FC = () => {
   );
 };
 
-// ── Tab: Thanh toán ──────────────────────────────────────────────
-const ThanhToan: React.FC = () => {
-  const [methods, setMethods] = useState(() => loadSettings().thanhToan);
-
-  const toggle = (id: string) => {
-    const next = methods.map((m) => m.id === id ? { ...m, on: !m.on } : m);
-    setMethods(next);
-    store.set(KEYS.settings, { ...loadSettings(), thanhToan: next });
-    savedMsg();
-  };
-
-  return (
-    <div className={styles.tabContent}>
-      <div className={styles.contentTitle}>Phương thức thanh toán</div>
-      <div className={styles.contentSub}>Quản lý các phương thức thanh toán nhân viên có thể dùng</div>
-
-      <div className={styles.payList}>
-        {methods.map((m) => {
-          const meta = PAYMENT_META[m.id];
-          return (
-            <div key={m.id} className={styles.payRow}>
-              <div className={styles.payIconWrap}>{meta?.icon}</div>
-              <div className={styles.payInfo}>
-                <div className={styles.payName}>{meta?.ten}</div>
-                <div className={styles.payMoTa}>{meta?.moTa}</div>
-              </div>
-              <Switch checked={m.on} onChange={() => toggle(m.id)} />
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
 
 // ── Trang chính ──────────────────────────────────────────────────
 const CaiDat: React.FC = () => {
@@ -319,7 +278,6 @@ const CaiDat: React.FC = () => {
   const CONTENT_MAP: Record<TTab, React.FC> = {
     'thong-tin':     ThongTinChung,
     'gio-hoat-dong': GioHoatDong,
-    'thanh-toan':    ThanhToan,
   };
   const ContentComponent = CONTENT_MAP[activeTab];
 

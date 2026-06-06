@@ -239,7 +239,7 @@ const GioHoatDong: React.FC = () => {
   return (
     <div className={styles.tabContent}>
       <div className={styles.contentTitle}>Giờ hoạt động</div>
-      <div className={styles.contentSub}>KhachHang sẽ thấy giờ này khi đặt món</div>
+      <div className={styles.contentSub}>Khách hàng sẽ thấy giờ này khi đặt món</div>
 
       <div className={styles.dayList}>
         {days.map((day, i) => (

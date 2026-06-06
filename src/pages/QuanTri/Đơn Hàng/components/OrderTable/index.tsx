@@ -54,7 +54,7 @@ const OrderTable: React.FC<OrderTableProps> = ({
       render: (text: string) => <span className={styles.maDonCell}>{text}</span>,
     },
     {
-      title: 'KhachHang',
+      title: 'Khách hàng',
       key: 'khachHang',
       render: (_: any, r: DonTrucTiep) => {
         const isCho = r.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN && !cancelledIds.has(r.maDon);

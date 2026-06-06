@@ -5,7 +5,6 @@ import {
   CalendarOutlined,
   DownOutlined,
   LogoutOutlined,
-  QuestionCircleOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
 import { Avatar, Badge, Button, Dropdown, Modal, Popover } from 'antd';
@@ -17,7 +16,6 @@ import type { INotif, NotifType } from '@/context/NotifContext';
 import { timeAgo, useNotif } from '@/context/NotifContext';
 import { useTheme } from '@/hooks/useTheme';
 import useAdminAuth from '@/hooks/useAdminAuth';
-import { useCanteenInfo } from '@/hooks/useCanteenInfo';
 import styles from './index.less';
 
 function getNotifRoute(type: NotifType): string {
@@ -84,7 +82,6 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
   const { notifs, markRead, markAll } = useNotif();
   const [notifOpen, setNotifOpen] = useState(false);
   const [userOpen,  setUserOpen]  = useState(false);
-  const canteen = useCanteenInfo();
 
   const unreadCount = notifs.filter((n) => !n.read).length;
 
@@ -119,26 +116,6 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
     if (open) markAll();
   };
 
-  const handleHoTro = () => {
-    setUserOpen(false);
-    Modal.info({
-      title: 'Liên hệ hỗ trợ',
-      centered: true,
-      icon: <QuestionCircleOutlined style={{ color: '#16a34a' }} />,
-      content: (
-        <div style={{ paddingTop: 8, lineHeight: 1.8, color: '#374151' }}>
-          {canteen.sdt && <div>📞 <a href={`tel:${canteen.sdt}`} style={{ color: '#16a34a' }}>{canteen.sdt}</a></div>}
-          <div>📧 <a href={`mailto:${canteen.email}`} style={{ color: '#16a34a' }}>{canteen.email}</a></div>
-          <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 6 }}>
-            Thời gian hỗ trợ: 7:00 – 18:00, thứ Hai đến thứ Sáu
-          </div>
-        </div>
-      ),
-      okText: 'Đóng',
-      okButtonProps: { style: { background: '#16a34a', borderColor: '#16a34a', borderRadius: 8 } },
-    });
-  };
-
   const userMenuOverlay = (
     <div className={styles.userDropdown}>
       <div className={styles.dropdownHeader}>
@@ -161,13 +138,6 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
         >
           <SettingOutlined className={styles.dropdownItemIcon} />
           Cài đặt & hồ sơ
-        </button>
-        <button
-          className={styles.dropdownItem}
-          onClick={handleHoTro}
-        >
-          <QuestionCircleOutlined className={styles.dropdownItemIcon} />
-          Trợ giúp
         </button>
       </div>
 

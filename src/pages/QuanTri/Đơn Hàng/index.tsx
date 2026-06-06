@@ -60,7 +60,7 @@ const LichSuTable: React.FC<{
       render: (v: string) => <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: 12 }}>{v}</span>,
     },
     {
-      title: 'KhachHang',
+      title: 'Khách hàng',
       key: 'kh',
       render: (_: any, r: DonTrucTiep) => (
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -266,7 +266,7 @@ const DonHang: React.FC = () => {
         <div class="dash"></div>
         <div class="row"><span>Mã đơn:</span><span class="b">${order.maDon}</span></div>
         <div class="row"><span>Thời gian:</span><span>${order.thoiGian}</span></div>
-        <div class="row"><span>KhachHang:</span><span>${order.khachHang.ten}</span></div>
+        <div class="row"><span>Khách hàng:</span><span>${order.khachHang.ten}</span></div>
         <div class="dash"></div>
         <div class="b">MÓN ĂN:</div>
         ${order.monAn.map((m) => `<div class="row"><span>${m.ten}</span><span>×${m.soLuong}</span></div>`).join('')}

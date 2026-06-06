@@ -197,8 +197,9 @@ const Topbar: React.FC = () => {
                                     className="topbar-user-menu-item topbar-user-menu-logout"
                                     onClick={() => {
                                         setIsUserMenuOpen(false);
+                                        localStorage.removeItem('loginToken');
                                         sessionStorage.removeItem('current_page');
-                                        history.push('/');
+                                        history.replace('/');
                                     }}
                                 >
                                     <LogoutOutlined />

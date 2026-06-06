@@ -1,18 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useModel } from 'umi';
+import { history, useModel } from 'umi';
 import { NotifProvider, useNotif } from '@/context/NotifContext';
 import Sidebar from '@/pages/QuanTri/Sidebar';
 import type { DonTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
 import { ETrangThaiTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
 import { KEYS, store } from '@/utils/storage';
+import { hasLoginToken } from '@/utils/auth';
 import styles from './index.less';
-
-// Đặt token mặc định nếu chưa có (để không bị chặn trong dev)
-// Khi tích hợp auth thật: xoá dòng này và bật guard bên dưới
-if (!store.get<string | null>(KEYS.token, null)) {
-  store.set(KEYS.token, 'authenticated');
-  store.set(KEYS.user, { ten: 'Quản trị viên', email: 'admin@canteen.vn' });
-}
 
 function useDocumentTitle() {
   useEffect(() => {
@@ -68,6 +62,26 @@ const AdminOrderNotifier: React.FC = () => {
 const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useDocumentTitle();
   const [expanded, setExpanded] = useState(false);
+  const [isAuthed, setIsAuthed] = useState(() => hasLoginToken());
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const ok = hasLoginToken();
+      setIsAuthed(ok);
+      if (!ok) history.replace('/');
+    };
+
+    checkAuth();
+    window.addEventListener('focus', checkAuth);
+    window.addEventListener('pageshow', checkAuth);
+    return () => {
+      window.removeEventListener('focus', checkAuth);
+      window.removeEventListener('pageshow', checkAuth);
+    };
+  }, []);
+
+  if (!isAuthed) return null;
+
   return (
     <NotifProvider>
       <AdminOrderNotifier />

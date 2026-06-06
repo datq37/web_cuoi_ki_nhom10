@@ -1,5 +1,5 @@
-import React from 'react';
-import { useModel } from 'umi';
+import React, { useEffect, useState } from 'react';
+import { history, useModel } from 'umi';
 import Sidebar from '../Component/Sidebar/Sidebar';
 import Topbar from '../Component/topbar';
 import CustomerHome from '../TrangChu';
@@ -10,14 +10,34 @@ import TaiKhoan from '../Tài khoản';
 import QRPaymentPage from '../Thanh Toán QR';
 import CustomerChatBox from '../ChatBox';
 import GlobalNotificationModal from '../Component/GlobalNotificationModal';
+import { hasLoginToken } from '@/utils/auth';
 import './index.less';
 
 const MainPage: React.FC = () => {
   const { page, theme, isSidebarOpen } = useModel('KhachHang.GlobalState.index');
   const { cartOpen, setCartOpen } = useModel('KhachHang.ThucDon.index');
   const { isNotificationOpen } = useModel('KhachHang.Thông Báo.index');
+  const [isAuthed, setIsAuthed] = useState(() => hasLoginToken());
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const ok = hasLoginToken();
+      setIsAuthed(ok);
+      if (!ok) history.replace('/');
+    };
+
+    checkAuth();
+    window.addEventListener('focus', checkAuth);
+    window.addEventListener('pageshow', checkAuth);
+    return () => {
+      window.removeEventListener('focus', checkAuth);
+      window.removeEventListener('pageshow', checkAuth);
+    };
+  }, []);
 
   const isLockScroll = isNotificationOpen || cartOpen || isSidebarOpen;
+
+  if (!isAuthed) return null;
 
   const renderContent = () => {
     switch (page) {

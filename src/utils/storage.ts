@@ -7,6 +7,7 @@ export function setAdminSession(user: { ten: string; email: string; avatar?: str
 export function clearAdminSession() {
   localStorage.removeItem('admin_token');
   localStorage.removeItem('admin_user');
+  localStorage.removeItem('loginToken');
 }
 
 export const KEYS = {

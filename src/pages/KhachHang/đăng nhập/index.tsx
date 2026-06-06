@@ -23,6 +23,7 @@ import bgImage from "@/assets/dangki/dangnhap.png";
 import { showCustomerNotification } from '@/utils/notification';
 import GlobalNotificationModal from '../Component/GlobalNotificationModal';
 import { supabase } from '@/utils/supabase';
+import { setAdminSession } from '@/utils/storage';
 
 export default function LoginPage() {
   const isRegisterRoute = history.location.pathname === '/dang-ky';
@@ -70,8 +71,10 @@ export default function LoginPage() {
         if (res.data && res.data.accessToken) {
            localStorage.setItem('loginToken', res.data.accessToken);
            showCustomerNotification('Đăng nhập thành công!', undefined, 'success');
-           if (phone === 'admin') history.push('/quan-tri/tong-quan');
-           else history.push('/trang-chinh');
+           if (phone === 'admin') {
+             setAdminSession({ ten: 'Căng tin', email: 'canteen@abc.com.vn' });
+             history.replace('/quan-tri/tong-quan');
+           } else history.replace('/trang-chinh');
         }
       } catch (err: any) {
         showCustomerNotification('Đăng nhập thất bại. Vui lòng kiểm tra lại tài khoản.', undefined, 'error');

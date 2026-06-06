@@ -1,8 +1,13 @@
-import { OrderResponse, KhachHangResponse, ThucDonResponse, PaymentStatus } from './types';
-import { Order, OrderItem } from '@/services/KhachHang/Đơn Hàng/typing';
+import type { OrderResponse, KhachHangResponse, ThucDonResponse } from './types';
+import { PaymentStatus } from './types';
+import type { Order, OrderItem } from '@/services/KhachHang/Đơn Hàng/typing';
 import { OrderStatus as UIOrderStatus, PaymentMethod as UIPaymentMethod } from '@/services/KhachHang/Đơn Hàng/index';
-import { Dish } from '@/services/KhachHang/ThucDon/typing';
-import { EVaiTro, ETrangThaiKhach, IKhachHang } from '@/services/QuanTri/KhachHang/typing';
+import type { Dish } from '@/services/KhachHang/ThucDon/typing';
+import type { IKhachHang } from '@/services/QuanTri/KhachHang/typing';
+import { EVaiTro, ETrangThaiKhach } from '@/services/QuanTri/KhachHang/typing';
+import { SEED_MENU } from '@/services/KhachHang/ThucDon';
+import { BUFFER_MIN } from '@/services/KhachHang/Giỏ hàng/cartoption';
+import { formatTimeHHMM } from '@/utils/format';
 
 const formatApiDateToDisplay = (value?: string) => {
   if (!value) return '';
@@ -12,6 +17,31 @@ const formatApiDateToDisplay = (value?: string) => {
 
   const [year, month, day] = parts;
   return `${Number(day)}/${Number(month)}/${year}`;
+};
+
+const parseApiDate = (value?: string) => {
+  if (!value) return undefined;
+  const normalized = String(value).replace(' ', 'T');
+  const parsed = new Date(normalized);
+  return Number.isNaN(parsed.getTime()) ? undefined : parsed;
+};
+
+const getOrderPrepMinutes = (items: OrderItem[] = []) => {
+  if (!items.length) return 0;
+
+  return items.reduce((total, item) => {
+    const dish = SEED_MENU.find(d => d.id === item.id);
+    const prepPerItem = dish?.prep ?? BUFFER_MIN;
+    const qty = Math.max(1, Number(item.qty || 1));
+    return total + prepPerItem * qty;
+  }, 0);
+};
+
+const getPickupTime = (createdAt: Date | undefined, items: OrderItem[] = []) => {
+  const prepMin = getOrderPrepMinutes(items);
+  if (!createdAt || prepMin <= 0) return '';
+
+  return formatTimeHHMM(new Date(createdAt.getTime() + prepMin * 60 * 1000));
 };
 
 export const SyncAdapters = {
@@ -53,6 +83,15 @@ export const SyncAdapters = {
       mappedPayment = UIPaymentMethod.Cash;
     }
 
+    const items = (apiOrder.chitiet || []).map((ct): OrderItem => ({
+      id: ct.mamon,
+      name: ct.thucdon?.ten || 'Món ăn',
+      qty: ct.soluong,
+      price: ct.gia || 0,
+      image: ct.thucdon?.hinhanh,
+    }));
+    const pickup = getPickupTime(parseApiDate(apiOrder.thoiGianDat), items);
+
     return {
       id: apiOrder.maDon,
       user: apiOrder.maKh,
@@ -63,14 +102,8 @@ export const SyncAdapters = {
       payment: mappedPayment,
       paymentStatus: hasPaidPayment ? PaymentStatus.PAID : hasCancelledPayment ? PaymentStatus.CANCELLED : PaymentStatus.PENDING,
       created: apiOrder.thoiGianDat || '',
-      pickup: '',
-      items: (apiOrder.chitiet || []).map((ct): OrderItem => ({
-        id: ct.mamon,
-        name: ct.thucdon?.ten || 'Món ăn',
-        qty: ct.soluong,
-        price: ct.gia || 0,
-        image: ct.thucdon?.hinhanh,
-      })),
+      pickup,
+      items,
     };
   },
 

@@ -73,18 +73,29 @@ function mapAdminVouchersToCustomer(adminList: any[]): Voucher[] {
 }
 
 // tính giờ nhận tự động
-export function calcPickupTime(cart: any[]): { timeStr: string; prepMin: number } {
-    if (cart.length === 0) return { timeStr: '--:--', prepMin: 0 };
+export function getCartPrepMinutes(cart: any[]): number {
+    if (cart.length === 0) return 0;
 
-    const maxPrep = cart.reduce((max: number, item: any) => {
+    return cart.reduce((total: number, item: any) => {
         const dish = SEED_MENU.find(d => d.id === item.id);
-        return Math.max(max, dish?.prep ?? 0);
+        const prepPerItem = dish?.prep ?? BUFFER_MIN;
+        const qty = Math.max(1, Number(item.qty || 1));
+        return total + prepPerItem * qty;
     }, 0);
+}
 
-    const totalMin = maxPrep + BUFFER_MIN;
-    const ready = new Date(Date.now() + totalMin * 60 * 1000);
+export function formatPickupTimeFrom(baseDate: Date, prepMin: number): string {
+    if (prepMin <= 0) return '--:--';
 
-    const timeStr = formatTimeHHMM(ready);
+    const ready = new Date(baseDate.getTime() + prepMin * 60 * 1000);
+    return formatTimeHHMM(ready);
+}
+
+export function calcPickupTime(cart: any[]): { timeStr: string; prepMin: number } {
+    const totalMin = getCartPrepMinutes(cart);
+    if (totalMin <= 0) return { timeStr: '--:--', prepMin: 0 };
+
+    const timeStr = formatPickupTimeFrom(new Date(), totalMin);
 
     return { timeStr, prepMin: totalMin };
 }
@@ -122,7 +133,7 @@ export function useCartOptionModel(
                     setAllVouchers(converted.length > 0 ? converted : SEED_VOUCHERS);
                 }
             } catch (error) {
-                console.error("Lỗi khi tải voucher:", error);
+                console.error('Lỗi khi tải voucher:', error);
             }
         };
 

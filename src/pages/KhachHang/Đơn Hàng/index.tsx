@@ -5,9 +5,11 @@ import {
     FileTextOutlined,
     InfoCircleOutlined,
     CheckOutlined,
-    ReloadOutlined
+    ReloadOutlined,
+    ClockCircleOutlined
 } from '@ant-design/icons';
-import { ORDER_STATUSES, PAYMENT_METHODS, OrderStatus, PaymentMethod, Order } from '@/services/KhachHang/Đơn Hàng';
+import { ORDER_STATUSES, PAYMENT_METHODS, OrderStatus, PaymentMethod } from '@/services/KhachHang/Đơn Hàng';
+import type { Order } from '@/services/KhachHang/Đơn Hàng';
 
 import { formatNumberViVN } from '@/utils/format';
 import OrderTracker from './component/OrderTracker';
@@ -82,11 +84,13 @@ const HistoryPage: React.FC = () => {
                                         <div className="thongTinDon">
                                             <span className="maDon">{o.id}</span>
                                             <Tag className={`nhanTrangThai ${st.color}`}>
-                                                <span className={`chamTrangThai ${st.color}`}></span>
+                                                <span className={`chamTrangThai ${st.color}`} />
                                                 {statusLabel}
                                             </Tag>
                                             <Typography.Text className="thoiGianNhan">
-                                                · nhận lúc <strong>{o.pickup}</strong>
+                                                <ClockCircleOutlined />
+                                                <span>Nhận lúc</span>
+                                                <strong>{o.pickup || 'Đang cập nhật'}</strong>
                                             </Typography.Text>
                                         </div>
 
@@ -127,7 +131,7 @@ const HistoryPage: React.FC = () => {
                                                         showIcon
                                                         icon={<InfoCircleOutlined />}
                                                     />
-                                                ) || <div style={{ height: 12 }}></div>}
+                                                ) || <div style={{ height: 12 }} />}
 
                                 <div className="hanhDongThe">
                                     <Space size="middle">

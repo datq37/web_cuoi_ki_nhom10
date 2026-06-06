@@ -9,6 +9,7 @@ import { showCustomerNotification } from '@/utils/notification';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { getOrderingStatusFromCache } from '@/utils/businessHours';
+import { calcPickupTime } from './cartoption';
 
 const isBlank = (value?: string) => !value || value.trim().length === 0;
 
@@ -126,6 +127,7 @@ export function useGioHangModel() {
 
             // 2. Chốt đơn hàng (Chuyển sang chờ xác nhận)
             await axios.post(`${ip3}/orders/${orderId}/confirm`);
+            const pickup = calcPickupTime(cart);
 
             // Tính toán tổng tiền ở frontend (để show UI nhanh)
             const SERVICE_FEE_RATE = 0.05;
@@ -157,7 +159,7 @@ export function useGioHangModel() {
                 payment: payment,
                 paymentStatus: payment === PaymentMethod.QR ? 'pending' : 'paid',
                 created: formatTimeHHMM(),
-                pickup: '15 phút nữa',
+                pickup: pickup.timeStr,
                 note: note
             };
 

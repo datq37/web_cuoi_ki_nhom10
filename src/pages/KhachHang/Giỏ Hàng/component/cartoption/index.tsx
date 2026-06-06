@@ -75,7 +75,7 @@ const CartOption: React.FC<CartOptionProps> = ({
             <div className="phanTuyChon">
                 <div className="tieuDePhan">
                     <Clock3 size={25} />
-                    <span>Giờ nhận món (dự kiến)</span>
+                    <span>Giờ nhận món</span>
                 </div>
                 <div className="hienThiThoiGianLay">
                     <div className="giaTriThoiGianLay">

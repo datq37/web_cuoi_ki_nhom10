@@ -13,6 +13,7 @@ const SAN_SANG = 'san_sang';
 const DA_HUY = 'da_huy';
 const CANCELLED = 'cancelled';
 const PENDING = 'pending_confirmation';
+const CONFIRMED = 'confirmed';
 const PROCESSING = 'processing';
 const DELIVERED = 'delivered';
 
@@ -20,6 +21,7 @@ const localizeOrderStatus = (order: any) => {
   let tt = order.trangThai;
   if (tt === CANCELLED) tt = DA_HUY;
   else if (tt === PENDING) tt = CHO_XAC_NHAN;
+  else if (tt === CONFIRMED) tt = SAN_SANG;
   else if (tt === PROCESSING) tt = DANG_CHE_BIEN;
   else if (tt === DELIVERED) tt = HOAN_THANH;
   return { ...order, trangThai: tt };
@@ -93,6 +95,7 @@ export default function useDonHangModel() {
     let backendStatus = '';
     if (newStatus === DA_HUY) backendStatus = CANCELLED;
     else if (newStatus === CHO_XAC_NHAN) backendStatus = PENDING;
+    else if (newStatus === SAN_SANG) backendStatus = CONFIRMED;
     else if (newStatus === DANG_CHE_BIEN) backendStatus = PROCESSING;
     else if (newStatus === HOAN_THANH) backendStatus = DELIVERED;
     
@@ -115,6 +118,7 @@ export default function useDonHangModel() {
     let backendStatus = '';
     if (newStatus === DA_HUY) backendStatus = CANCELLED;
     else if (newStatus === CHO_XAC_NHAN) backendStatus = PENDING;
+    else if (newStatus === SAN_SANG) backendStatus = CONFIRMED;
     else if (newStatus === DANG_CHE_BIEN) backendStatus = PROCESSING;
     else if (newStatus === HOAN_THANH) backendStatus = DELIVERED;
     

@@ -31,9 +31,10 @@ def get_order_ready_status(db: Session, order_id: str) -> BaseNotificationRespon
             detail=f"Không tìm thấy đơn hàng {order_id}."
         )
     
-    # Đối chiếu trạng thái đã hoàn tất theo quy ước hệ thống
+    if order.trangthai == OrderStatus.CONFIRMED:
+        return BaseNotificationResponse(message=f"Đơn hàng {order_id} sắp được giao tới bạn.")
     if order.trangthai == OrderStatus.DELIVERED:
-        return BaseNotificationResponse(message=f"Đơn hàng {order_id} đã sẵn sàng.")
+        return BaseNotificationResponse(message=f"Đơn hàng {order_id} đã được giao.")
     else:
         return BaseNotificationResponse(message=f"Đơn hàng {order_id} chưa sẵn sàng (trạng thái: {order.trangthai}).")
 

@@ -50,7 +50,7 @@ const DeliveryIcon: React.FC = () => (
 );
 
 const getNotificationIcon = (id: string) => {
-    if (id === 'n3') {
+    if (id === 'n3' || id.startsWith('order_ready_')) {
         return <DeliveryIcon />;
     }
 

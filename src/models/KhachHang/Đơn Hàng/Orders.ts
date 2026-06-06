@@ -1,10 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 import { message } from 'antd';
-import { Order, OrderStatus } from '@/services/KhachHang/Đơn Hàng';
+import type { Order } from '@/services/KhachHang/Đơn Hàng';
+import { OrderStatus } from '@/services/KhachHang/Đơn Hàng';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { SyncAdapters } from '@/services/api/adapters';
 import { hasLoginToken } from '@/utils/auth';
+import { notifyCustomerOrderReady } from '@/utils/customerNotifications';
 
 export default function useOrderModel() {
     const [orders, setOrders] = useState<Order[]>([]);
@@ -26,6 +28,11 @@ export default function useOrderModel() {
                     ...o,
                     isReviewed: reviewedOrderIds.includes(o.id)
                 }));
+                updatedOrders.forEach((order) => {
+                    if (order.status === OrderStatus.Ready) {
+                        notifyCustomerOrderReady(order.id);
+                    }
+                });
                 setOrders(updatedOrders);
             }
         } catch (error: any) {
@@ -38,22 +45,24 @@ export default function useOrderModel() {
     useEffect(() => {
         if (!hasLoginToken()) return undefined;
         fetchOrders();
-        
-        let intervalId: any;
+        const intervalRef: { current?: ReturnType<typeof setInterval> } = {};
+
         const doPoll = async () => {
             try {
                 await fetchOrders(true);
             } catch (err: any) {
                 if (err?.response?.status === 401) {
-                    clearInterval(intervalId); // Dừng polling nếu token hết hạn
+                    if (intervalRef.current) clearInterval(intervalRef.current); // Dừng polling nếu token hết hạn
                 }
             }
         };
 
         // Polling để cập nhật trạng thái đơn hàng thời gian thực
-        intervalId = setInterval(doPoll, 5000); // 5 giây cập nhật 1 lần
+        intervalRef.current = setInterval(doPoll, 5000); // 5 giây cập nhật 1 lần
         
-        return () => clearInterval(intervalId);
+        return () => {
+            if (intervalRef.current) clearInterval(intervalRef.current);
+        };
     }, [fetchOrders]);
 
     const addOrder = useCallback(async (newOrder: Order) => {

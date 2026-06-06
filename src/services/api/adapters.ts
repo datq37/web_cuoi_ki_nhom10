@@ -60,6 +60,8 @@ export const SyncAdapters = {
         mappedStatus = UIOrderStatus.Pending;
         break;
       case 'confirmed':
+        mappedStatus = UIOrderStatus.Ready;
+        break;
       case 'processing':
         mappedStatus = UIOrderStatus.Preparing;
         break;

@@ -21,6 +21,7 @@ import { fmt } from '@/models/QuanTri/Tổng Quan';
 import type { DonTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
 import { ETrangThaiTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
 import { useModel } from 'umi';
+import { notifyCustomerOrderReady } from '@/utils/customerNotifications';
 import OrderDrawer from './components/OrderDrawer';
 import OrderKanban from './components/OrderKanban';
 import OrderTable from './components/OrderTable';
@@ -216,6 +217,7 @@ const DonHang: React.FC = () => {
           [ETrangThaiTrucTiep.CHO_XAC_NHAN]: { icon: '🛒', title: `Đơn ${maDon} chờ xác nhận`, desc: 'Đang chờ', type: 'order_pending' },
         };
         if (notifMap[newStatus as ETrangThaiTrucTiep]) addNotif(notifMap[newStatus as ETrangThaiTrucTiep]);
+        if (newStatus === ETrangThaiTrucTiep.SAN_SANG) notifyCustomerOrderReady(maDon);
       }
     }
   };

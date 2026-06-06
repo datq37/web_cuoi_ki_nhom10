@@ -180,7 +180,8 @@ const localizeOrderStatus = (order: any) => {
   let trangThai = order.trangThai;
   if (trangThai === CANCELLED) trangThai = DA_HUY;
   else if (trangThai === PENDING) trangThai = CHO_XAC_NHAN;
-  else if (trangThai === CONFIRMED || trangThai === PROCESSING) trangThai = DANG_CHE_BIEN;
+  else if (trangThai === CONFIRMED) trangThai = 'san_sang';
+  else if (trangThai === PROCESSING) trangThai = DANG_CHE_BIEN;
   else if (trangThai === DELIVERED) trangThai = HOAN_THANH;
   return { ...order, trangThai };
 };

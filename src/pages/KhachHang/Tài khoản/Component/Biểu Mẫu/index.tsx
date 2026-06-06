@@ -8,6 +8,7 @@ import {
     UserOutlined,
 } from '@ant-design/icons';
 import type { BieuMauProps } from '@/services/KhachHang/Tài khoản/typing';
+import { PHONG_BAN_OPTIONS, TANG_OPTIONS, TOA_NHA_OPTIONS } from '@/models/KhachHang/Tài Khoản/Biểu Mẫu';
 
 const { Option } = Select;
 
@@ -62,11 +63,10 @@ const BieuMau: React.FC<BieuMauProps> = ({ bieuMau, khiHoanThanh, capNhatHoSo })
                         label="Phòng ban"
                         rules={[{ required: true, message: 'Vui lòng chọn phòng ban!' }]}
                     >
-                        <Select size="large" placeholder="Chọn phòng ban">
-                            <Option value="IT / Engineering">IT / Engineering</Option>
-                            <Option value="Marketing">Marketing</Option>
-                            <Option value="Nhân sự">Nhân sự</Option>
-                            <Option value="Kế toán">Kế toán</Option>
+                        <Select size="large" placeholder="Chọn phòng ban" showSearch optionFilterProp="children">
+                            {PHONG_BAN_OPTIONS.map((option) => (
+                                <Option key={option} value={option}>{option}</Option>
+                            ))}
                         </Select>
                     </Form.Item>
                     <Form.Item
@@ -74,10 +74,10 @@ const BieuMau: React.FC<BieuMauProps> = ({ bieuMau, khiHoanThanh, capNhatHoSo })
                         label="Tòa nhà"
                         rules={[{ required: true, message: 'Vui lòng chọn tòa nhà!' }]}
                     >
-                        <Select size="large" placeholder="Chọn tòa nhà">
-                            <Option value="Tòa nhà A">Tòa nhà A</Option>
-                            <Option value="Tòa nhà B">Tòa nhà B</Option>
-                            <Option value="Tòa nhà C">Tòa nhà C</Option>
+                        <Select size="large" placeholder="Chọn tòa nhà" showSearch optionFilterProp="children">
+                            {TOA_NHA_OPTIONS.map((option) => (
+                                <Option key={option} value={option}>{option}</Option>
+                            ))}
                         </Select>
                     </Form.Item>
                 </div>
@@ -88,11 +88,10 @@ const BieuMau: React.FC<BieuMauProps> = ({ bieuMau, khiHoanThanh, capNhatHoSo })
                         label="Tầng"
                         rules={[{ required: true, message: 'Vui lòng chọn tầng!' }]}
                     >
-                        <Select size="large" placeholder="Chọn tầng">
-                            <Option value="Tầng 1">Tầng 1</Option>
-                            <Option value="Tầng 3">Tầng 3</Option>
-                            <Option value="Tầng 5">Tầng 5</Option>
-                            <Option value="Tầng 7">Tầng 7</Option>
+                        <Select size="large" placeholder="Chọn tầng" showSearch optionFilterProp="children">
+                            {TANG_OPTIONS.map((option) => (
+                                <Option key={option} value={option}>{option}</Option>
+                            ))}
                         </Select>
                     </Form.Item>
                     <Form.Item

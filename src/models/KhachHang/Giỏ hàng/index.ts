@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react';
 import { useModel } from 'umi';
 import type { Voucher } from '@/services/KhachHang/Giỏ hàng/cartoption/typing';
 import { VoucherLoai } from '@/services/KhachHang/Giỏ hàng/cartoption/typing';
-import { Order, OrderStatus, PaymentMethod } from '@/services/KhachHang/Đơn Hàng';
+import type { Order } from '@/services/KhachHang/Đơn Hàng';
+import { OrderStatus, PaymentMethod } from '@/services/KhachHang/Đơn Hàng';
 import { formatDateTimeViVN, formatTimeHHMM } from '@/utils/format';
 import { showCustomerNotification } from '@/utils/notification';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { getOrderingStatusFromCache } from '@/utils/businessHours';
+
+const isBlank = (value?: string) => !value || value.trim().length === 0;
+
 export function useGioHangModel() {
     const { cart, cartOpen, setCartOpen, clearCart } = useModel('KhachHang.ThucDon.index');
     const { addOrder } = useModel('KhachHang.Đơn Hàng.Orders');
@@ -78,11 +82,19 @@ export function useGioHangModel() {
             return;
         }
 
-        const isNameEmptyOrPhone = !currentUser?.name || currentUser.name === currentUser.phone;
-        if (isNameEmptyOrPhone || !currentUser?.phone) {
+        const isNameEmptyOrPhone = isBlank(currentUser?.name) || currentUser.name === currentUser.phone;
+        if (isNameEmptyOrPhone || isBlank(currentUser?.phone)) {
             showCustomerNotification('Thông tin chưa đầy đủ', 'Vui lòng cập nhật Họ tên và Số điện thoại trước khi đặt hàng.', 'warning');
             setCartOpen(false);
-            setPage('profile');
+            setPage('settings');
+            return;
+        }
+
+        const isDeliveryInfoMissing = [currentUser?.dept, currentUser?.building, currentUser?.floor, currentUser?.desk].some(isBlank);
+        if (isDeliveryInfoMissing) {
+            showCustomerNotification('Thông tin chưa đầy đủ', 'Vui lòng cập nhật địa chỉ giao hàng trước khi đặt hàng.', 'warning');
+            setCartOpen(false);
+            setPage('settings');
             return;
         }
 
@@ -188,7 +200,7 @@ export function useGioHangModel() {
 
             setPage(isQRPayment ? 'qr-payment' : 'history');
         } catch (error: any) {
-            console.error("Lỗi đặt hàng", error);
+            console.error('Lỗi đặt hàng', error);
             setIsLoading(false);
             const serverMessage =
                 error?.response?.data?.detail?.message ||

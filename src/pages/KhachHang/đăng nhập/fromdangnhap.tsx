@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { GoogleOutlined } from '@ant-design/icons';
 import { message, Form, Input, Button } from 'antd';
 import { history } from 'umi';
-import { LoginFormProps } from '@/services/KhachHang/Login/typing';
+import type { LoginFormProps } from '@/services/KhachHang/Login/typing';
 import { showCustomerNotification } from '@/utils/notification';
 
 const LoginForm: React.FC<LoginFormProps> = ({ onToggle }) => {
@@ -17,7 +17,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggle }) => {
       showCustomerNotification('Đăng nhập thành công! Chào mừng bạn.', undefined, 'success');
       history.push('/KhachHang/TrangChu');
     } else {
-      showCustomerNotification('Số điện thoại hoặc mật khẩu không chính xác. Thử: 0987654321 / password123', undefined, 'error');
+      showCustomerNotification('Số điện thoại hoặc mật khẩu không chính xác.', undefined, 'error');
     }
   };
 
@@ -33,14 +33,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggle }) => {
           name="phone" 
           rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
         >
-          <Input placeholder="Số điện thoại (Test: 0987654321)" />
+          <Input placeholder="Số điện thoại" />
         </Form.Item>
 
         <Form.Item 
           name="password" 
           rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
         >
-          <Input.Password placeholder="Mật khẩu (Test: password123)" />
+          <Input.Password placeholder="Mật khẩu" />
         </Form.Item>
 
         <a href="#" className="quenMatKhau">Quên mật khẩu?</a>

@@ -4,13 +4,10 @@ import {
   Lock,
   Eye,
   EyeOff,
-  LogIn,
   ShieldCheck,
   Zap,
   Heart,
   Leaf,
-  ArrowRight,
-  UserPlus,
   Headphones
 } from "lucide-react";
 import { message } from "antd";
@@ -147,7 +144,7 @@ export default function LoginPage() {
                 </div>
                 <input
                   type="text"
-                  placeholder="Tài khoản (VD: admin hoặc dang.nh20)"
+                  placeholder="Tài khoản"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
@@ -159,7 +156,7 @@ export default function LoginPage() {
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Mật khẩu (VD: 123456 hoặc pass123)"
+                  placeholder="Mật khẩu"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -185,19 +182,7 @@ export default function LoginPage() {
               )}
 
               <button type="submit" className="nutXacNhan">
-                {isSignUp ? (
-                  <>
-                    <UserPlus size={26} />
-                    ĐĂNG KÝ NGAY
-                    <ArrowRight size={26} />
-                  </>
-                ) : (
-                  <>
-                    <LogIn size={26} />
-                    ĐĂNG NHẬP
-                    <ArrowRight size={26} />
-                  </>
-                )}
+                {isSignUp ? "ĐĂNG KÝ NGAY" : "ĐĂNG NHẬP"}
               </button>
             </form>
 

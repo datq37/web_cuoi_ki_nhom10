@@ -1,8 +1,4 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
-import { DANH_SACH_NGUYEN_LIEU } from '@/services/QuanTri/Kho Nguyên Liệu';
-import { ETrangThaiNguyenLieu } from '@/services/QuanTri/Kho Nguyên Liệu/typing';
-import { mockData } from '@/services/QuanTri/Tổng Quan';
-import { ETrangThaiTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
 
 export type NotifType =
   | 'order_pending'
@@ -33,61 +29,9 @@ export function timeAgo(ts: number): string {
   return `${Math.floor(diff / 86400)} ngày trước`;
 }
 
-function buildInitialNotifs(): INotif[] {
-  const now = Date.now();
-  const notifs: INotif[] = [];
-
-  mockData.trucTiep.donHang
-    .filter((d) => d.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN)
-    .forEach((d, i) => {
-      notifs.push({
-        id: `init_order_${d.maDon}`,
-        icon: '🛒',
-        title: `Đơn hàng mới ${d.maDon}`,
-        desc: `${d.khachHang.ten} đặt ${d.monAn.length} món · ${d.monAn
-          .slice(0, 2)
-          .map((m) => m.ten)
-          .join(', ')}`,
-        createdAt: now - (i + 1) * 2 * 60 * 1000,
-        read: false,
-        type: 'order_pending',
-      });
-    });
-
-  DANH_SACH_NGUYEN_LIEU.filter(
-    (n) => n.trangThai === ETrangThaiNguyenLieu.SAP_HET,
-  ).forEach((n, i) => {
-    notifs.push({
-      id: `init_low_${n.id}`,
-      icon: '⚠️',
-      title: `Kho sắp hết — ${n.ten}`,
-      desc: `Còn ${n.tonKho} ${n.donVi}, dưới mức tối thiểu (${n.mucToiThieu} ${n.donVi})`,
-      createdAt: now - (i + 1) * 15 * 60 * 1000,
-      read: false,
-      type: 'stock_low',
-    });
-  });
-
-  DANH_SACH_NGUYEN_LIEU.filter(
-    (n) => n.trangThai === ETrangThaiNguyenLieu.HET_HANG,
-  ).forEach((n, i) => {
-    notifs.push({
-      id: `init_empty_${n.id}`,
-      icon: '🚫',
-      title: `Hết hàng — ${n.ten}`,
-      desc: `${n.ten} đã hết trong kho, cần nhập ngay`,
-      createdAt: now - (i + 1) * 60 * 60 * 1000,
-      read: true,
-      type: 'stock_empty',
-    });
-  });
-
-  return notifs;
-}
-
 interface NotifContextValue {
   notifs: INotif[];
-  addNotif: (partial: Omit<INotif, 'createdAt' | 'read'> & { id?: string }) => void;
+  addNotif: (partial: Omit<INotif, 'id' | 'createdAt' | 'read'> & { id?: string }) => void;
   markRead: (id: string) => void;
   markAll: () => void;
 }
@@ -95,9 +39,9 @@ interface NotifContextValue {
 const NotifContext = createContext<NotifContextValue | null>(null);
 
 export const NotifProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [notifs, setNotifs] = useState<INotif[]>(buildInitialNotifs);
+  const [notifs, setNotifs] = useState<INotif[]>([]);
 
-  const addNotif = useCallback((partial: Omit<INotif, 'createdAt' | 'read'> & { id?: string }) => {
+  const addNotif = useCallback((partial: Omit<INotif, 'id' | 'createdAt' | 'read'> & { id?: string }) => {
     setNotifs((prev) => {
       const id = partial.id || `notif_${Date.now()}`;
       if (prev.some((n) => n.id === id)) return prev;

@@ -6,6 +6,7 @@ import { useState, useCallback, useEffect } from 'react';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { hasLoginToken } from '@/utils/auth';
+import { SyncAdapters } from '@/services/api/adapters';
 
 // formatter
 export const fmt = formatCurrency;
@@ -136,7 +137,7 @@ export const buildAreaOptions = (categories: string[]) => ({
 export const tinhTongDoanhThu = (data: DoanhThuNgay[]) =>
   data.reduce((s, d) => s + d.doanhThu, 0);
 
-export const buildDonutOptions = (labels: string[], colors: string[], total: number) => ({
+export const buildDonutOptions = (labels: string[], colors: string[], total: number, totalLabel = 'Danh mục') => ({
   chart: { type: 'donut' as const, fontFamily: 'inherit' },
   colors,
   labels,
@@ -151,7 +152,7 @@ export const buildDonutOptions = (labels: string[], colors: string[], total: num
           total: {
             show: true,
             showAlways: true,
-            label: 'Danh mục',
+            label: totalLabel,
             fontSize: '12px',
             color: '#6b7280',
             formatter: () => String(total),
@@ -164,6 +165,32 @@ export const buildDonutOptions = (labels: string[], colors: string[], total: num
   stroke: { width: 2, colors: ['#fff'] },
   tooltip: { y: { formatter: (v: number) => `${v}%` } },
 });
+
+const HOAN_THANH = 'hoan_thanh';
+const CHO_XAC_NHAN = 'cho_xac_nhan';
+const DANG_CHE_BIEN = 'dang_che_bien';
+const DA_HUY = 'da_huy';
+const CANCELLED = 'cancelled';
+const PENDING = 'pending_confirmation';
+const CONFIRMED = 'confirmed';
+const PROCESSING = 'processing';
+const DELIVERED = 'delivered';
+
+const localizeOrderStatus = (order: any) => {
+  let trangThai = order.trangThai;
+  if (trangThai === CANCELLED) trangThai = DA_HUY;
+  else if (trangThai === PENDING) trangThai = CHO_XAC_NHAN;
+  else if (trangThai === CONFIRMED || trangThai === PROCESSING) trangThai = DANG_CHE_BIEN;
+  else if (trangThai === DELIVERED) trangThai = HOAN_THANH;
+  return { ...order, trangThai };
+};
+
+const pickArrayPayload = (payload: any): any[] => {
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payload?.items)) return payload.items;
+  if (Array.isArray(payload?.data)) return payload.data;
+  return [];
+};
 
 export function useTongQuanModel() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -183,8 +210,12 @@ export function useTongQuanModel() {
         axios.get(`${ip3}/admin/orders`),
         axios.get(`${ip3}/inventory`),
       ]);
-      setOrders(resOrders.data || []);
-      setInventory(resInventory.data?.data || []);
+      const mappedOrders = pickArrayPayload(resOrders.data)
+        .map(SyncAdapters.mapAdminOrderToUI)
+        .map(localizeOrderStatus);
+      const mappedInventory = pickArrayPayload(resInventory.data).map(SyncAdapters.mapAdminInventoryToUI);
+      setOrders(mappedOrders);
+      setInventory(mappedInventory);
     } catch (err) {
       console.error('Error fetching tong quan data', err);
     } finally {

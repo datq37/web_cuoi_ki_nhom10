@@ -184,6 +184,7 @@ export const SyncAdapters = {
     return {
       maDon: apiOrder.maDon,
       thoiGian: apiOrder.thoiGianDat ? apiOrder.thoiGianDat.split('T')[0] : 'Vừa xong',
+      thoiGianDat: apiOrder.thoiGianDat || '',
       khachHang: apiOrder.khachhang ? {
         ten: apiOrder.khachhang.ten || apiOrder.maKh,
         phone: apiOrder.khachhang.phone || '',

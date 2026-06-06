@@ -1,15 +1,13 @@
 import { ArrowUpOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 import React, { useMemo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import {
   buildBarLineOptions,
   buildDonutOptions,
   fmt,
-  fmtShort,
 } from '@/models/QuanTri/Tổng Quan';
-import { mockData } from '@/services/QuanTri/Tổng Quan';
 import { ETrangThaiTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
-import { KEYS, store } from '@/utils/storage';
 import styles from './index.less';
 
 const BannerIcon: React.FC<{ type: string }> = ({ type }) => {
@@ -47,24 +45,6 @@ const BannerIcon: React.FC<{ type: string }> = ({ type }) => {
 
 type Range = 'week' | 'month' | 'quarter';
 
-const RANGE_DATA: Record<Range, { labels: string[]; tuanNay: number[]; trungBinh: number[] }> = {
-  week: {
-    labels:    ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
-    tuanNay:   [1800000, 2200000, 1950000, 2800000, 3200000, 2600000, 1400000],
-    trungBinh: [2000000, 2100000, 2000000, 2100000, 2000000, 2100000, 1600000],
-  },
-  month: {
-    labels:    ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'],
-    tuanNay:   [14500000, 16800000, 13200000, 17400000],
-    trungBinh: [15000000, 15000000, 15000000, 15000000],
-  },
-  quarter: {
-    labels:    ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'],
-    tuanNay:   [42000000,38000000,55000000,61000000,49000000,52000000,68000000,71000000,58000000,63000000,74000000,82000000],
-    trungBinh: [50000000,50000000,55000000,55000000,55000000,55000000,60000000,60000000,60000000,65000000,65000000,70000000],
-  },
-};
-
 const RANGE_CFG: Record<Range, { label: string; title: string }> = {
   week:    { label: '1 tuần',  title: 'Doanh thu 7 ngày gần nhất' },
   month:   { label: '1 tháng', title: 'Doanh thu 4 tuần gần nhất' },
@@ -73,22 +53,98 @@ const RANGE_CFG: Record<Range, { label: string; title: string }> = {
 
 const HEAT_HOURS = ['7h','8h','9h','10h','11h','12h','13h','14h','15h','16h','17h','18h'];
 const HEAT_DAYS  = ['T2','T3','T4','T5','T6','T7','CN'];
-const HEAT_VALS  = [
-  [12, 28, 45, 62, 78, 85, 72, 38, 25, 18, 10,  5],
-  [10, 25, 42, 58, 75, 82, 68, 35, 22, 15,  8,  3],
-  [15, 30, 48, 65, 80, 85, 74, 40, 28, 20, 12,  6],
-  [ 8, 22, 40, 55, 72, 78, 65, 32, 20, 14,  7,  2],
-  [18, 35, 52, 70, 82, 85, 76, 45, 32, 24, 15,  8],
-  [25, 45, 60, 70, 72, 68, 55, 42, 35, 28, 20, 12],
-  [ 5, 12, 20, 28, 35, 40, 38, 25, 15,  8,  4,  2],
-];
-const HEAT_MAX = 85;
 
-const CssHeatmap: React.FC = () => {
+const COLORS = ['#16a34a', '#2563eb', '#ea580c', '#7c3aed', '#0891b2', '#d97706'];
+
+const getStatus = (order: any) => order.trangThai || order.trangthai;
+const getOrderId = (order: any) => order.maDon || order._id || order.id;
+const getAmount = (order: any) => Number(order.tongTien ?? order.tongtien ?? 0);
+const getItems = (order: any) => order.monAn || order.monan || [];
+const getQty = (item: any) => Number(item.soLuong ?? item.soluong ?? 0);
+const getItemName = (item: any) => item.ten || item.tenmon || item.name || 'Món chưa tên';
+const getOrderDate = (order: any) => {
+  const value = order.thoiGianDat || order.thoigiandat || order.createdAt || order.thoiGian;
+  const parsed = dayjs(value);
+  return parsed.isValid() ? parsed : undefined;
+};
+
+const buildRangeRevenue = (orders: any[], range: Range) => {
+  const now = dayjs();
+  const labels: string[] = [];
+  const keys: string[] = [];
+  const revenueByKey: Record<string, number> = {};
+
+  if (range === 'week') {
+    for (let i = 6; i >= 0; i -= 1) {
+      const d = now.subtract(i, 'day');
+      labels.push(['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'][d.day()]);
+      keys.push(d.format('YYYY-MM-DD'));
+    }
+    orders.forEach((o) => {
+      const d = getOrderDate(o);
+      if (!d) return;
+      const key = d.format('YYYY-MM-DD');
+      if (keys.includes(key)) revenueByKey[key] = (revenueByKey[key] ?? 0) + getAmount(o);
+    });
+  } else if (range === 'month') {
+    for (let i = 3; i >= 0; i -= 1) {
+      const end = now.subtract(i * 7, 'day').endOf('day');
+      const start = end.subtract(6, 'day').startOf('day');
+      const key = `${start.format('YYYY-MM-DD')}_${end.format('YYYY-MM-DD')}`;
+      labels.push(`Tuần ${4 - i}`);
+      keys.push(key);
+    }
+    orders.forEach((o) => {
+      const d = getOrderDate(o);
+      if (!d) return;
+      keys.forEach((key) => {
+        const [start, end] = key.split('_');
+        if (d.isAfter(dayjs(start).subtract(1, 'millisecond')) && d.isBefore(dayjs(end).add(1, 'day'))) {
+          revenueByKey[key] = (revenueByKey[key] ?? 0) + getAmount(o);
+        }
+      });
+    });
+  } else {
+    for (let i = 11; i >= 0; i -= 1) {
+      const d = now.subtract(i, 'month');
+      labels.push(`T${d.month() + 1}`);
+      keys.push(d.format('YYYY-MM'));
+    }
+    orders.forEach((o) => {
+      const d = getOrderDate(o);
+      if (!d) return;
+      const key = d.format('YYYY-MM');
+      if (keys.includes(key)) revenueByKey[key] = (revenueByKey[key] ?? 0) + getAmount(o);
+    });
+  }
+
+  const tuanNay = keys.map((key) => revenueByKey[key] ?? 0);
+  const average = tuanNay.length > 0 ? Math.round(tuanNay.reduce((sum, value) => sum + value, 0) / tuanNay.length) : 0;
+  return { labels, tuanNay, trungBinh: tuanNay.map(() => average) };
+};
+
+const buildHeatValues = (orders: any[]) => {
+  const values = HEAT_DAYS.map(() => HEAT_HOURS.map(() => 0));
+  const start = dayjs().subtract(6, 'day').startOf('day');
+  const end = dayjs().endOf('day');
+
+  orders.forEach((o) => {
+    const d = getOrderDate(o);
+    if (!d || d.isBefore(start) || d.isAfter(end)) return;
+    const dayIdx = d.day() === 0 ? 6 : d.day() - 1;
+    const hourIdx = HEAT_HOURS.indexOf(`${d.hour()}h`);
+    if (dayIdx >= 0 && hourIdx >= 0) values[dayIdx][hourIdx] += 1;
+  });
+
+  return values;
+};
+
+const CssHeatmap: React.FC<{ values: number[][] }> = ({ values }) => {
   const wrapRef = React.useRef<HTMLDivElement>(null);
   const [tooltip, setTooltip] = React.useState<{
     day: string; hour: string; val: number; top: number; left: number;
   } | null>(null);
+  const heatMax = Math.max(1, ...values.flat());
 
   const handleEnter = (
     e: React.MouseEvent<HTMLDivElement>,
@@ -122,11 +178,11 @@ const CssHeatmap: React.FC = () => {
         {HEAT_DAYS.map((day, di) => (
           <React.Fragment key={day}>
             <div className={styles.heatDayLabel}>{day}</div>
-            {HEAT_VALS[di].map((val, hi) => {
-              const pct = Math.round((val / HEAT_MAX) * 100);
+            {values[di].map((val, hi) => {
+              const pct = Math.round((val / heatMax) * 100);
               return (
                 <div
-                  key={hi}
+                  key={`${day}-${HEAT_HOURS[hi]}`}
                   className={styles.heatCell}
                   style={{ background: `color-mix(in oklab, var(--accent-primary, #16a34a) ${pct}%, var(--surface-sunken, #f3f4f6))` } as React.CSSProperties}
                   onMouseEnter={(e) => handleEnter(e, day, HEAT_HOURS[hi], val)}
@@ -147,21 +203,23 @@ interface PhanTichProps {
 
 const PhanTichView: React.FC<PhanTichProps> = ({ orders }) => {
   const [range, setRange] = useState<Range>('week');
-  const { danhMuc, tongDanhMuc } = mockData.phanTich;
 
   // ── Banner dùng data thật ─────────────────────────
   const realBanners = useMemo(() => {
     const cancelledSet = new Set<string>();
-    orders.forEach((o) => { if (o.trangthai === 'da_huy' || o.trangThai === 'da_huy') cancelledSet.add(o.maDon || o._id); });
-    const active  = orders.filter((o) => !cancelledSet.has(o.maDon || o._id));
-    const done    = active.filter((o) => o.trangthai === ETrangThaiTrucTiep.HOAN_THANH || o.trangThai === ETrangThaiTrucTiep.HOAN_THANH);
-    const revenue = done.reduce((s, o) => s + (o.tongtien || o.tongTien), 0);
-    const uniqueKH = new Set(active.map((o) => o.khachhang?.tenkhachhang || o.khachHang?.ten || 'Vãng lai')).size;
+    orders.forEach((o) => { if (getStatus(o) === 'da_huy') cancelledSet.add(getOrderId(o)); });
+    const today = dayjs();
+    const active  = orders.filter((o) => !cancelledSet.has(getOrderId(o)));
+    const todayOrders = active.filter((o) => getOrderDate(o)?.isSame(today, 'day'));
+    const cancelledToday = orders.filter((o) => getStatus(o) === 'da_huy' && getOrderDate(o)?.isSame(today, 'day')).length;
+    const done    = todayOrders.filter((o) => getStatus(o) === ETrangThaiTrucTiep.HOAN_THANH);
+    const revenue = done.reduce((s, o) => s + getAmount(o), 0);
+    const uniqueKH = new Set(todayOrders.map((o) => o.khachhang?.tenkhachhang || o.khachHang?.ten || 'Vãng lai')).size;
     const avgPerOrder = done.length > 0 ? Math.round(revenue / done.length) : 0;
 
     return [
       { id: 'revenue',  label: 'DOANH THU HÔM NAY', value: fmt(revenue),       change: `${done.length} đơn hoàn thành`,  icon: 'revenue'  },
-      { id: 'order',    label: 'TỔNG ĐƠN HÔM NAY',  value: String(active.length), change: `${cancelledSet.size} đơn đã huỷ`, icon: 'order'    },
+      { id: 'order',    label: 'TỔNG ĐƠN HÔM NAY',  value: String(todayOrders.length), change: `${cancelledToday} đơn đã huỷ`, icon: 'order'    },
       { id: 'customer', label: 'KHÁCH ĐÃ ĐẶT',       value: String(uniqueKH),      change: 'Khách duy nhất hôm nay',          icon: 'customer' },
       { id: 'average',  label: 'TRUNG BÌNH / ĐƠN',   value: fmt(avgPerOrder),      change: 'Tính từ đơn hoàn thành',          icon: 'average'  },
     ];
@@ -172,32 +230,36 @@ const PhanTichView: React.FC<PhanTichProps> = ({ orders }) => {
 
   const realCancelledIds = useMemo(() => {
     const s = new Set<string>();
-    realOrders.forEach((o) => { if (o.trangthai === 'da_huy' || o.trangThai === 'da_huy') s.add(o.maDon || o._id); });
+    realOrders.forEach((o) => { if (getStatus(o) === 'da_huy') s.add(getOrderId(o)); });
     return s;
   }, [realOrders]);
 
-  const realActive   = realOrders.filter((o) => !realCancelledIds.has(o.maDon || o._id));
-  const realDone     = realActive.filter((o) => o.trangthai === ETrangThaiTrucTiep.HOAN_THANH || o.trangThai === ETrangThaiTrucTiep.HOAN_THANH);
-  const realWaiting  = realActive.filter((o) => o.trangthai === ETrangThaiTrucTiep.CHO_XAC_NHAN || o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN);
-  const realCooking  = realActive.filter((o) => o.trangthai === ETrangThaiTrucTiep.DANG_CHE_BIEN || o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN);
-  const realReady    = realActive.filter((o) => o.trangthai === ETrangThaiTrucTiep.SAN_SANG || o.trangThai === ETrangThaiTrucTiep.SAN_SANG);
+  const realActive   = realOrders.filter((o) => !realCancelledIds.has(getOrderId(o)));
+  const realDone     = realActive.filter((o) => getStatus(o) === ETrangThaiTrucTiep.HOAN_THANH);
+  const realWaiting  = realActive.filter((o) => getStatus(o) === ETrangThaiTrucTiep.CHO_XAC_NHAN);
+  const realCooking  = realActive.filter((o) => getStatus(o) === ETrangThaiTrucTiep.DANG_CHE_BIEN);
+  const realReady    = realActive.filter((o) => getStatus(o) === ETrangThaiTrucTiep.SAN_SANG);
   const total        = realOrders.length;
+  const realTodayDone = useMemo(
+    () => realDone.filter((o) => getOrderDate(o)?.isSame(dayjs(), 'day')),
+    [realDone],
+  );
 
   // Top món bán chạy từ data thật
   const realTopMon = useMemo(() => {
     const counter: Record<string, number> = {};
-    realDone.forEach((o) => {
-      const dsMon = o.monan || o.monAn || [];
+    realTodayDone.forEach((o) => {
+      const dsMon = getItems(o);
       dsMon.forEach((m: any) => { 
-        const tenMon = m.ten || m.tenmon;
-        counter[tenMon] = (counter[tenMon] ?? 0) + (m.soLuong || m.soluong); 
+        const tenMon = getItemName(m);
+        counter[tenMon] = (counter[tenMon] ?? 0) + getQty(m); 
       });
     });
     return Object.entries(counter)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
       .map(([ten, soLuong], idx) => ({ rank: idx + 1, ten, soLuong }));
-  }, [realDone]);
+  }, [realTodayDone]);
 
   // Đơn theo trạng thái từ data thật
   const realDonTheoTrangThai = useMemo(() => {
@@ -219,17 +281,40 @@ const PhanTichView: React.FC<PhanTichProps> = ({ orders }) => {
     [...realDone].reverse().slice(0, 5),
   [realDone]);
 
-  const rd = RANGE_DATA[range];
+  const rd = useMemo(() => buildRangeRevenue(realDone, range), [realDone, range]);
   const barOptions = useMemo(() => buildBarLineOptions(rd.labels), [rd]);
   const barSeries = useMemo(() => [
     { name: 'Doanh thu', type: 'bar',  data: rd.tuanNay },
     { name: 'Trung bình', type: 'line', data: rd.trungBinh },
   ], [rd]);
+  const danhMuc = useMemo(() => {
+    const counter: Record<string, number> = {};
+    realTodayDone.forEach((o) => {
+      const dsMon = getItems(o);
+      const tongSoLuong = dsMon.reduce((sum: number, item: any) => sum + getQty(item), 0) || 1;
+      dsMon.forEach((m: any) => {
+        const ten = getItemName(m);
+        counter[ten] = (counter[ten] ?? 0) + Math.round((getAmount(o) * getQty(m)) / tongSoLuong);
+      });
+    });
+    const totalRevenue = Object.values(counter).reduce((sum, value) => sum + value, 0);
+    if (totalRevenue <= 0) return [{ ten: 'Chưa có dữ liệu', tyLe: 100, mau: '#d1d5db' }];
+    return Object.entries(counter)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 6)
+      .map(([ten, value], index) => ({
+        ten,
+        tyLe: Math.round((value / totalRevenue) * 100),
+        mau: COLORS[index % COLORS.length],
+      }));
+  }, [realTodayDone]);
+  const tongDanhMuc = danhMuc.filter((d) => d.ten !== 'Chưa có dữ liệu').length;
   const donutOptions = useMemo(
-    () => buildDonutOptions(danhMuc.map((d) => d.ten), danhMuc.map((d) => d.mau), tongDanhMuc),
+    () => buildDonutOptions(danhMuc.map((d) => d.ten), danhMuc.map((d) => d.mau), tongDanhMuc, 'Món'),
     [danhMuc, tongDanhMuc],
   );
   const donutSeries = danhMuc.map((d) => d.tyLe);
+  const heatValues = useMemo(() => buildHeatValues(realActive), [realActive]);
 
   return (
     <div className={styles.phanTichWrap}>
@@ -255,13 +340,12 @@ const PhanTichView: React.FC<PhanTichProps> = ({ orders }) => {
         ))}
       </div>
 
-      {/* ── Biểu đồ — dữ liệu mô phỏng ── */}
+      {/* ── Biểu đồ — data thật ── */}
       <div className={styles.chartRow2}>
         <div className={styles.barChartCard}>
           <div className={styles.chartHeader2}>
             <div>
               <span className={styles.chartTitle2}>{RANGE_CFG[range].title}</span>
-              <span className={styles.mockNote}>· Dữ liệu mô phỏng</span>
             </div>
             <div className={styles.rangeToggle}>
               {(['week', 'month', 'quarter'] as Range[]).map((r) => (
@@ -284,7 +368,7 @@ const PhanTichView: React.FC<PhanTichProps> = ({ orders }) => {
           <ReactApexChart options={barOptions} series={barSeries} type="bar" height={220} />
         </div>
         <div className={styles.donutCard}>
-          <div className={styles.chartTitle2}>Theo danh mục</div>
+          <div className={styles.chartTitle2}>Theo món</div>
           <div className={styles.donutSubtitle}>Tỷ lệ doanh thu hôm nay</div>
           <div className={styles.donutWrap2}>
             <ReactApexChart options={donutOptions} series={donutSeries} type="donut" height={180} />
@@ -308,7 +392,6 @@ const PhanTichView: React.FC<PhanTichProps> = ({ orders }) => {
         <div className={styles.bottomCard}>
           <div className={styles.cardHead}>
             <span className={styles.cardTitle}>Top món hôm nay</span>
-            <span className={styles.realDataBadge}>Data thật</span>
           </div>
           {realTopMon.length === 0 ? (
             <div style={{ fontSize: 13, color: '#9ca3af', padding: '12px 0' }}>
@@ -345,7 +428,6 @@ const PhanTichView: React.FC<PhanTichProps> = ({ orders }) => {
         <div className={styles.bottomCard}>
           <div className={styles.cardHead}>
             <span className={styles.cardTitle}>Phân bổ đơn hàng</span>
-            <span className={styles.realDataBadge}>Data thật</span>
           </div>
           <div className={styles.trangThaiList}>
             {realDonTheoTrangThai.map((t) => (
@@ -368,7 +450,6 @@ const PhanTichView: React.FC<PhanTichProps> = ({ orders }) => {
         <div className={styles.bottomCard}>
           <div className={styles.cardHead}>
             <span className={styles.cardTitle}>Giờ cao điểm trong tuần</span>
-            <span className={styles.mockNote}>Mô phỏng</span>
           </div>
           <div className={styles.heatLegend}>
             <span className={styles.heatLegendLabel}>Ít đơn</span>
@@ -381,7 +462,7 @@ const PhanTichView: React.FC<PhanTichProps> = ({ orders }) => {
             </div>
             <span className={styles.heatLegendLabel}>Nhiều đơn</span>
           </div>
-          <CssHeatmap />
+          <CssHeatmap values={heatValues} />
         </div>
       </div>
 
@@ -389,7 +470,6 @@ const PhanTichView: React.FC<PhanTichProps> = ({ orders }) => {
       <div className={styles.bottomCard} style={{ marginTop: 0 }}>
         <div className={styles.cardHead}>
           <span className={styles.cardTitle}>Đơn hoàn thành gần nhất</span>
-          <span className={styles.realDataBadge}>Data thật</span>
         </div>
         {recentDone.length === 0 ? (
           <div style={{ fontSize: 13, color: '#9ca3af', padding: '12px 0' }}>

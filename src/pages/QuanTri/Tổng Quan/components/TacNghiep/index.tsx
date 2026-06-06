@@ -17,10 +17,7 @@ import dayjs from 'dayjs';
 import React, { useMemo } from 'react';
 import { history } from 'umi';
 import { fmt } from '@/models/QuanTri/Tổng Quan';
-import { mockData } from '@/services/QuanTri/Tổng Quan';
 import { ETrangThaiTrucTiep } from '@/services/QuanTri/Tổng Quan/typing';
-import { DANH_SACH_NGUYEN_LIEU } from '@/services/QuanTri/Kho Nguyên Liệu';
-import { ETrangThaiNguyenLieu } from '@/services/QuanTri/Kho Nguyên Liệu/typing';
 import { useNotif } from '@/context/NotifContext';
 import { KEYS, store } from '@/utils/storage';
 import styles from './index.less';
@@ -58,6 +55,18 @@ const NOTIF_ICON: Record<string, string> = {
   stock_refilled:  '📦',
 };
 
+const getStatus = (order: any) => order.trangThai || order.trangthai;
+const getOrderId = (order: any) => order.maDon || order._id || order.id;
+const getAmount = (order: any) => Number(order.tongTien ?? order.tongtien ?? 0);
+const getItems = (order: any) => order.monAn || order.monan || [];
+const getQty = (item: any) => Number(item.soLuong ?? item.soluong ?? 0);
+const getItemName = (item: any) => item.ten || item.tenmon || item.name || 'Món chưa tên';
+const getOrderDate = (order: any) => {
+  const value = order.thoiGianDat || order.thoigiandat || order.createdAt || order.thoiGian;
+  const parsed = dayjs(value);
+  return parsed.isValid() ? parsed : undefined;
+};
+
 interface TacNghiepProps {
   orders: any[];
   inventory: any[];
@@ -71,36 +80,39 @@ const TacNghiepView: React.FC<TacNghiepProps> = ({ orders, inventory }) => {
   // ── Đơn hàng live ───────────────────────────────────────────────
   const cancelledIds = useMemo(() => {
     const s = new Set<string>();
-    orders.forEach((o) => { if (o.trangthai === 'da_huy' || o.trangThai === 'da_huy') s.add(o.maDon || o._id); });
+    orders.forEach((o) => { if (getStatus(o) === 'da_huy') s.add(getOrderId(o)); });
     return s;
   }, [orders]);
 
-  const activeOrders = orders.filter((o) => !cancelledIds.has(o.maDon || o._id));
-  const choXacNhan   = activeOrders.filter((o) => o.trangthai === ETrangThaiTrucTiep.CHO_XAC_NHAN || o.trangThai === ETrangThaiTrucTiep.CHO_XAC_NHAN);
-  const dangCheBien  = activeOrders.filter((o) => o.trangthai === ETrangThaiTrucTiep.DANG_CHE_BIEN || o.trangThai === ETrangThaiTrucTiep.DANG_CHE_BIEN);
-  const sanSang      = activeOrders.filter((o) => o.trangthai === ETrangThaiTrucTiep.SAN_SANG || o.trangThai === ETrangThaiTrucTiep.SAN_SANG);
-  const hoanThanh    = activeOrders.filter((o) => o.trangthai === ETrangThaiTrucTiep.HOAN_THANH || o.trangThai === ETrangThaiTrucTiep.HOAN_THANH);
-  const doanhThu     = hoanThanh.reduce((s, o) => s + (o.tongtien || o.tongTien), 0);
+  const activeOrders = orders.filter((o) => !cancelledIds.has(getOrderId(o)));
+  const todayOrders  = activeOrders.filter((o) => getOrderDate(o)?.isSame(dayjs(), 'day'));
+  const choXacNhan   = activeOrders.filter((o) => getStatus(o) === ETrangThaiTrucTiep.CHO_XAC_NHAN);
+  const dangCheBien  = activeOrders.filter((o) => getStatus(o) === ETrangThaiTrucTiep.DANG_CHE_BIEN);
+  const sanSang      = activeOrders.filter((o) => getStatus(o) === ETrangThaiTrucTiep.SAN_SANG);
+  const hoanThanh    = todayOrders.filter((o) => getStatus(o) === ETrangThaiTrucTiep.HOAN_THANH);
+  const cancelledToday = orders.filter((o) => getStatus(o) === 'da_huy' && getOrderDate(o)?.isSame(dayjs(), 'day')).length;
+  const doanhThu     = hoanThanh.reduce((s, o) => s + getAmount(o), 0);
 
   // ── Quick KPIs ───────────────────────────────────────────────────
-  const tyLeHoanThanh = activeOrders.length > 0
-    ? Math.round((hoanThanh.length / activeOrders.length) * 100)
+  const tyLeHoanThanh = todayOrders.length > 0
+    ? Math.round((hoanThanh.length / todayOrders.length) * 100)
     : 0;
 
   const tongMonBan = useMemo(() =>
-    hoanThanh.reduce((sum, o) => sum + (o.monan || o.monAn || []).reduce((s: any, m: any) => s + (m.soLuong || m.soluong), 0), 0),
+    hoanThanh.reduce((sum, o) => sum + getItems(o).reduce((s: any, m: any) => s + getQty(m), 0), 0),
   [hoanThanh]);
 
   // ── Top món bán chạy hôm nay ─────────────────────────────────────
   const topMon = useMemo(() => {
     const counter: Record<string, { ten: string; soLuong: number; tongTien: number }> = {};
     hoanThanh.forEach((o) => {
-      const dsMon = o.monan || o.monAn || [];
+      const dsMon = getItems(o);
+      const tongSoLuong = dsMon.reduce((s: any, x: any) => s + getQty(x), 0) || 1;
       dsMon.forEach((m: any) => {
-        const tenMon = m.ten || m.tenmon;
+        const tenMon = getItemName(m);
         if (!counter[tenMon]) counter[tenMon] = { ten: tenMon, soLuong: 0, tongTien: 0 };
-        counter[tenMon].soLuong  += (m.soLuong || m.soluong);
-        counter[tenMon].tongTien += (m.soLuong || m.soluong) * ((o.tongtien || o.tongTien) / dsMon.reduce((s: any, x: any) => s + (x.soLuong || x.soluong), 0));
+        counter[tenMon].soLuong  += getQty(m);
+        counter[tenMon].tongTien += getQty(m) * (getAmount(o) / tongSoLuong);
       });
     });
     return Object.values(counter)
@@ -155,13 +167,13 @@ const TacNghiepView: React.FC<TacNghiepProps> = ({ orders, inventory }) => {
         <div className={styles.kpiItem}>
           <div className={styles.kpiLabel}>Đơn hoàn thành</div>
           <div className={styles.kpiValue} style={{ color: '#16a34a' }}>{hoanThanh.length}</div>
-          <div className={styles.kpiSub}>trên {activeOrders.length} đơn</div>
+          <div className={styles.kpiSub}>trên {todayOrders.length} đơn hôm nay</div>
         </div>
         <div className={styles.kpiDivider} />
         <div className={styles.kpiItem}>
           <div className={styles.kpiLabel}>Đã huỷ hôm nay</div>
-          <div className={styles.kpiValue} style={{ color: cancelledIds.size > 0 ? '#dc2626' : '#9ca3af' }}>
-            {cancelledIds.size}
+          <div className={styles.kpiValue} style={{ color: cancelledToday > 0 ? '#dc2626' : '#9ca3af' }}>
+            {cancelledToday}
           </div>
           <div className={styles.kpiSub}>đơn</div>
         </div>

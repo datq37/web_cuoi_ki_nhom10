@@ -138,6 +138,7 @@ const HistoryPage: React.FC = () => {
                                         {o.status === OrderStatus.Ready && (
                                             <Button
                                                 type="primary"
+                                                className="nutDaNhanMon"
                                                 icon={<CheckOutlined />}
                                                 onClick={() => advanceOrder(o.id)}
                                             >

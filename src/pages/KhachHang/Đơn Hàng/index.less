@@ -265,6 +265,26 @@
       background: #fafafa;
       border-top: 1px solid #f0f0f0;
 
+      .nutDaNhanMon {
+        height: 36px;
+        padding: 0 18px;
+        border-color: #2f8f4e;
+        border-radius: 8px;
+        background: #2f8f4e;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        box-shadow: 0 8px 18px rgba(47, 143, 78, 0.22);
+
+        &:hover,
+        &:focus {
+          border-color: #247a41;
+          background: #247a41;
+          color: #fff;
+          box-shadow: 0 10px 22px rgba(47, 143, 78, 0.28);
+        }
+      }
+
       .nutDanhGiaDon {
         border-color: #2f8f4e;
         color: #2f8f4e;
@@ -685,6 +705,21 @@
           &:hover {
             background: var(--bg-mute);
             color: var(--ink);
+          }
+        }
+
+        .nutDaNhanMon {
+          border-color: var(--accent);
+          background: var(--accent);
+          color: var(--accent-ink, #fff);
+          box-shadow: none;
+
+          &:hover,
+          &:focus {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: var(--accent-ink, #fff);
+            filter: brightness(1.08);
           }
         }
 

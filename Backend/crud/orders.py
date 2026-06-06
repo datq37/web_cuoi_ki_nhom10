@@ -1,11 +1,18 @@
 from model.enums import OrderStatus, PaymentMethod
 import uuid
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
 from model.orders import Order, OrderDetail
 from model.thucdon import ThucDon
+
+VN_TZ = ZoneInfo("Asia/Ho_Chi_Minh")
+
+
+def now_vn_str() -> str:
+    return datetime.now(VN_TZ).strftime("%Y-%m-%d %H:%M:%S")
 
 
 def get_order_by_id(db: Session, order_id: str) -> Order | None:
@@ -41,7 +48,7 @@ def create_order(
 ) -> Order:
     """Khởi tạo một đơn hàng mới (ở trạng thái Giỏ hàng)."""
     order_id = f"OD-{uuid.uuid4().hex[:8].upper()}"
-    thoigian = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    thoigian = now_vn_str()
 
     order = Order(
         id=order_id,
@@ -116,10 +123,11 @@ def recalculate_order_total(db: Session, order: Order) -> float:
 
 def update_order_status(db: Session, order: Order, trangthai: str) -> Order:
     """Cập nhật trạng thái của đơn hàng."""
+    old_status = order.trangthai
     order.trangthai = trangthai
-    if trangthai != OrderStatus.CART:
-        # Cập nhật lại thời gian chốt đặt hàng thực tế
-        order.thoigiandat = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    if old_status == OrderStatus.CART and trangthai != OrderStatus.CART:
+        # Chỉ ghi thời gian chốt đặt hàng một lần, không đổi khi admin cập nhật trạng thái.
+        order.thoigiandat = now_vn_str()
     db.add(order)
     db.commit()
     db.refresh(order)

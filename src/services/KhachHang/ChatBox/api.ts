@@ -60,6 +60,17 @@ const buildDishText = (dish: ChatContextDish) => {
   return `${dish.name}${price ? ` - ${price}` : ''}`;
 };
 
+const isPaymentQuestion = (message: string) => [
+  'thanh toan',
+  'tra tien',
+  'tien mat',
+  'chuyen khoan',
+  'qr',
+  'bank',
+  'ngan hang',
+  'phuong thuc',
+].some(keyword => message.includes(keyword));
+
 const buildLocalResponse = (payload: CustomerChatRequest): CustomerChatResponse => {
   const message = normalizeText(payload.message);
   const dishes = getAvailableDishes(payload.dishes);
@@ -69,6 +80,13 @@ const buildLocalResponse = (payload: CustomerChatRequest): CustomerChatResponse 
     return {
       provider: EChatProvider.LOCAL,
       reply: 'Mimi đã ghi nhận tin nhắn của bạn. Admin sẽ kiểm tra và phản hồi sớm nhé.',
+    };
+  }
+
+  if (isPaymentQuestion(message)) {
+    return {
+      provider: EChatProvider.LOCAL,
+      reply: 'Bạn có thể thanh toán bằng 2 phương thức: Tiền mặt khi nhận món hoặc QR/Bank bằng mã QR ngân hàng. Nếu chọn QR/Bank, bạn quét mã sau khi đặt đơn và admin sẽ xác nhận thanh toán. Bạn muốn Mimi hỗ trợ chọn thêm món trước khi thanh toán không?',
     };
   }
 

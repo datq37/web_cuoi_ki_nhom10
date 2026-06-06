@@ -27,9 +27,25 @@ const DRINK_KEYWORDS = [
   'drink',
 ];
 
+const PAYMENT_KEYWORDS = [
+  'thanh toan',
+  'tra tien',
+  'tien mat',
+  'chuyen khoan',
+  'qr',
+  'bank',
+  'ngan hang',
+  'phuong thuc',
+];
+
 const isDrinkQuestion = (message: string) => {
   const normalized = normalizeText(message);
   return DRINK_KEYWORDS.some(keyword => normalized.includes(keyword));
+};
+
+const isPaymentQuestion = (message: string) => {
+  const normalized = normalizeText(message);
+  return PAYMENT_KEYWORDS.some(keyword => normalized.includes(keyword));
 };
 
 const isShortAffirmation = (message: string) => {
@@ -166,6 +182,14 @@ const buildDrinkReply = (dishes: any[] = [], categories: any[] = []) => {
   };
 };
 
+const buildPaymentReply = () => (
+  'Bạn có thể thanh toán bằng 2 phương thức: Tiền mặt khi nhận món hoặc QR/Bank bằng mã QR ngân hàng. Nếu chọn QR/Bank, bạn quét mã sau khi đặt đơn và admin sẽ xác nhận thanh toán. Bạn muốn Mimi hỗ trợ chọn thêm món trước khi thanh toán không?'
+);
+
+const buildAddedDishReply = (dish: any) => (
+  `Cảm ơn bạn đã chọn ${getDishName(dish)}. Mimi đã thêm món vào giỏ rồi nha. Bạn muốn Mimi gợi ý thêm đồ uống hoặc món ăn kèm cho trọn bữa không?`
+);
+
 const createMessage = (
   role: ChatMessage['role'],
   content: string,
@@ -207,7 +231,7 @@ export default function useCustomerChatBoxModel() {
           localContextRef.current.recommendedDishId = dish.id;
           const responseMessage = createMessage(
             EChatRole.BOT,
-            `Okie, Mimi đã thêm ${getDishName(dish)} vào giỏ cho bạn rồi nha 😊`
+            buildAddedDishReply(dish)
           );
           setMessages(prev => [...prev, responseMessage]);
           return;
@@ -231,7 +255,7 @@ export default function useCustomerChatBoxModel() {
           addToCart(dish, 1);
           const responseMessage = createMessage(
             EChatRole.BOT,
-            `Okie, Mimi đã thêm ${getDishName(dish)} vào giỏ cho bạn rồi nha 😊`
+            buildAddedDishReply(dish)
           );
           setMessages(prev => [...prev, responseMessage]);
           return;
@@ -254,11 +278,18 @@ export default function useCustomerChatBoxModel() {
         return;
       }
 
+      if (isPaymentQuestion(cleanContent)) {
+        const responseMessage = createMessage(EChatRole.BOT, buildPaymentReply());
+        setMessages(prev => [...prev, responseMessage]);
+        return;
+      }
+
       const response = await sendCustomerChatMessage(cleanContent, EChatMode.AI, messages, dishes || []);
       if (response.action?.type === 'ADD_TO_CART') {
         const dish = (dishes || []).find((d: any) => d.id === response.action!.dishId);
         if (dish) {
           addToCart(dish, response.action!.qty);
+          response.reply = buildAddedDishReply(dish);
         }
       }
       // hiện thi câu trả lời c

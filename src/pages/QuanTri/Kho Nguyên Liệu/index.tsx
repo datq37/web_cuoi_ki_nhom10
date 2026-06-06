@@ -35,15 +35,14 @@ import Highlight from '@/components/Highlight';
 import TableStaticData from '@/components/TableStaticData';
 import EmptyState from '@/pages/QuanTri/components/EmptyState';
 import PageToolbar from '@/pages/QuanTri/components/PageToolbar';
-import { KEYS, store } from '@/utils/storage';
 import { useNotif } from '@/context/NotifContext';
 import Topbar from '@/pages/QuanTri/Topbar';
 import { TRANG_THAI_CONFIG } from '@/services/QuanTri/Kho Nguyên Liệu';
 import useKhoNguyenLieuModel from '@/models/QuanTri/Kho Nguyên Liệu';
 import {
   ETrangThaiNguyenLieu,
-  INguyenLieu,
 } from '@/services/QuanTri/Kho Nguyên Liệu/typing';
+import type { INguyenLieu } from '@/services/QuanTri/Kho Nguyên Liệu/typing';
 import styles from './index.less';
 
 const DON_VI_OPTIONS = ['kg', 'g', 'L', 'lít', 'ml', 'thùng', 'gói', 'hộp', 'chai', 'quả', 'cái'];
@@ -65,18 +64,6 @@ function tinhTrangThai(tonKho: number, mucToiThieu: number): ETrangThaiNguyenLie
 
 type TrangThaiFilter = 'all' | ETrangThaiNguyenLieu;
 type NguyenLieuFormValues = Omit<INguyenLieu, 'id' | 'trangThai'>;
-type ViewTab = 'danh_sach' | 'lich_su';
-
-interface ILichSuNhap {
-  id:       string;
-  tenNL:    string;
-  donVi:    string;
-  soLuong:  number;
-  giaNhap:  number;
-  ngay:     string;  // 'HH:mm DD/MM/YYYY'
-  ghiChu?:  string;
-}
-
 const NguyenLieuForm: React.FC<{
   open: boolean;
   initial: INguyenLieu | null;
@@ -377,7 +364,7 @@ const BulkRestockModal: React.FC<{
       dataIndex: 'tonKho',
       width: 105,
       render: (val, r) => {
-        const config = TTRANG_THAI_NL_CONFIG[r.trangThai as ETrangThaiNguyenLieu] || { color: '#000', label: r.trangThai };
+        const config = TRANG_THAI_CONFIG[r.trangThai as ETrangThaiNguyenLieu] || { color: '#000', label: r.trangThai };
         return (
           <span style={{ fontWeight: 600, color: config.color }}>
             {val} {r.donVi}
@@ -582,14 +569,13 @@ const NguyenLieuDetail: React.FC<{
 
 const KhoNguyenLieu: React.FC = () => {
   const { addNotif } = useNotif();
-  const { items, stats, nhaCungCapOptions, canNhapThemItems, lichSuNhap, clearLichSu, addNguyenLieu, updateNguyenLieu, deleteNguyenLieu, restock, bulkRestock } = useKhoNguyenLieuModel();
+  const { items, nhaCungCapOptions, canNhapThemItems, addNguyenLieu, updateNguyenLieu, deleteNguyenLieu, restock, bulkRestock } = useKhoNguyenLieuModel();
   
   const [tuKhoa,          setTuKhoa]          = useState('');
   const [filterTrangThai, setFilterTrangThai] = useState<TrangThaiFilter>('all');
   const [filterNCC,       setFilterNCC]       = useState<string>('');
   const [sortBy,          setSortBy]          = useState<'mac_dinh' | 'ton_thap' | 'ton_cao' | 'gia_cao'>('mac_dinh');
   const [isGrid,          setIsGrid]          = useState(false);
-  const [activeTab,       setActiveTab]       = useState<ViewTab>('danh_sach');
   const [editing, setEditing] = useState<INguyenLieu | null>(null);
   const [viewing, setViewing] = useState<INguyenLieu | null>(null);
   const [formOpen, setFormOpen] = useState(false);
@@ -751,92 +737,12 @@ const KhoNguyenLieu: React.FC = () => {
     },
   ];
 
-  const lichSuColumns: ColumnsType<ILichSuNhap> = [
-    { title: 'NGUYÊN LIỆU', dataIndex: 'tenNL', key: 'tenNL', render: (v) => <strong>{v}</strong> },
-    {
-      title: 'SỐ LƯỢNG', dataIndex: 'soLuong', key: 'soLuong', width: 130,
-      render: (v, r) => <span style={{ color: '#16a34a', fontWeight: 600 }}>+{v} {r.donVi}</span>,
-    },
-    {
-      title: 'GIÁ NHẬP', dataIndex: 'giaNhap', key: 'giaNhap', width: 130,
-      render: (v) => formatGia(v),
-    },
-    {
-      title: 'THÀNH TIỀN', key: 'thanhTien', width: 140,
-      render: (_, r) => <span style={{ fontWeight: 600 }}>{formatGia(r.soLuong * r.giaNhap)}</span>,
-    },
-    { title: 'THỜI GIAN', dataIndex: 'ngay', key: 'ngay', width: 160, render: (v) => <span style={{ color: '#9ca3af' }}>{v}</span> },
-  ];
-
   return (
     <>
       <Topbar title="Kho nguyên liệu" />
 
       <div className={styles.pageBody}>
-
-          {/* Tabs — sau stat cards */}
-          <div className={styles.khoTabs}>
-            <button
-              className={`${styles.khoTabBtn} ${activeTab === 'danh_sach' ? styles.khoTabActive : ''}`}
-              onClick={() => setActiveTab('danh_sach')}
-            >
-              Danh sách nguyên liệu
-            </button>
-            <button
-              className={`${styles.khoTabBtn} ${activeTab === 'lich_su' ? styles.khoTabActive : ''}`}
-              onClick={() => setActiveTab('lich_su')}
-            >
-              Lịch sử nhập kho
-              {lichSuNhap.length > 0 && (
-                <span className={styles.khoTabCount}>{lichSuNhap.length}</span>
-              )}
-            </button>
-          </div>
-
-          {activeTab === 'lich_su' && (
-            <div className={styles.tableSection}>
-              <div className={styles.tableToolbar}>
-                <span style={{ fontSize: 13, color: '#6b7280' }}>
-                  {lichSuNhap.length} lần nhập kho
-                </span>
-                {lichSuNhap.length > 0 && (
-                  <Button
-                    danger size="small"
-                    style={{ marginLeft: 'auto' }}
-                    onClick={() => {
-                      Modal.confirm({
-                        title: 'Xoá toàn bộ lịch sử?',
-                        okType: 'danger', okText: 'Xoá', cancelText: 'Huỷ', centered: true,
-                        okButtonProps: { style: { borderRadius: 8 } },
-                        cancelButtonProps: { style: { borderRadius: 8 } },
-                        onOk: () => { setLichSuNhap([]); store.set(KEYS.importHistory, []); },
-                      });
-                    }}
-                  >
-                    Xoá lịch sử
-                  </Button>
-                )}
-              </div>
-              {lichSuNhap.length === 0 ? (
-                <EmptyState
-                  kind="inventory"
-                  title="Chưa có lịch sử nhập kho"
-                  desc="Mỗi lần nhập kho sẽ được ghi lại tại đây."
-                />
-              ) : (
-                <TableStaticData<ILichSuNhap>
-                  dataSource={lichSuNhap}
-                  columns={lichSuColumns}
-                  rowKey="id"
-                  pageSize={15}
-                  showTotal
-                  className={styles.table}
-                />
-              )}
-            </div>
-          )}
-
-          {activeTab === 'danh_sach' && canNhapThemItems.length > 0 && (
+          {canNhapThemItems.length > 0 && (
             <div className={styles.warnBanner}>
               <div className={styles.warnLeft}>
                 <ExclamationCircleOutlined className={styles.warnIcon} />
@@ -858,8 +764,7 @@ const KhoNguyenLieu: React.FC = () => {
             </div>
           )}
 
-          {activeTab === 'danh_sach' && <>
-            <PageToolbar
+          <PageToolbar
               searchPlaceholder="Tìm nguyên liệu, nhà cung cấp..."
               searchValue={tuKhoa}
               onSearch={setTuKhoa}
@@ -926,13 +831,6 @@ const KhoNguyenLieu: React.FC = () => {
               actions={
                 <>
                   <Button
-                    icon={<ImportOutlined />}
-                    className={styles.btnOutline}
-                    onClick={() => { setBulkPreSelectIds([]); setBulkRestockOpen(true); }}
-                  >
-                    Nhập kho
-                  </Button>
-                  <Button
                     type="primary"
                     icon={<PlusOutlined />}
                     className={styles.addBtn}
@@ -951,7 +849,7 @@ const KhoNguyenLieu: React.FC = () => {
                     <EmptyState kind="search" desc="Không tìm thấy nguyên liệu nào" />
                   </div>
                 ) : danhSachLoc.map((record) => {
-                  const config = TTRANG_THAI_NL_CONFIG[record.trangThai as ETrangThaiNguyenLieu];
+                  const cfg = TRANG_THAI_CONFIG[record.trangThai as ETrangThaiNguyenLieu];
                   const pct = record.mucToiThieu > 0
                     ? Math.min(100, Math.round((record.tonKho / (record.mucToiThieu * 2)) * 100))
                     : 100;
@@ -1008,7 +906,6 @@ const KhoNguyenLieu: React.FC = () => {
               />
               </div>
             )}
-          </> }
       </div>
 
       <NguyenLieuForm

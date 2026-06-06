@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useState } from 'react';
 import { DANH_SACH_NGUYEN_LIEU } from '@/services/QuanTri/Kho Nguyên Liệu';
 import { ETrangThaiNguyenLieu } from '@/services/QuanTri/Kho Nguyên Liệu/typing';
 import { mockData } from '@/services/QuanTri/Tổng Quan';
@@ -87,7 +87,7 @@ function buildInitialNotifs(): INotif[] {
 
 interface NotifContextValue {
   notifs: INotif[];
-  addNotif: (partial: Omit<INotif, 'id' | 'createdAt' | 'read'>) => void;
+  addNotif: (partial: Omit<INotif, 'createdAt' | 'read'> & { id?: string }) => void;
   markRead: (id: string) => void;
   markAll: () => void;
 }
@@ -97,17 +97,23 @@ const NotifContext = createContext<NotifContextValue | null>(null);
 export const NotifProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [notifs, setNotifs] = useState<INotif[]>(buildInitialNotifs);
 
-  const addNotif = (partial: Omit<INotif, 'id' | 'createdAt' | 'read'>) => {
-    setNotifs((prev) => [
-      { ...partial, id: `notif_${Date.now()}`, createdAt: Date.now(), read: false },
-      ...prev,
-    ]);
-  };
+  const addNotif = useCallback((partial: Omit<INotif, 'createdAt' | 'read'> & { id?: string }) => {
+    setNotifs((prev) => {
+      const id = partial.id || `notif_${Date.now()}`;
+      if (prev.some((n) => n.id === id)) return prev;
 
-  const markRead = (id: string) =>
+      return [
+        { ...partial, id, createdAt: Date.now(), read: false },
+        ...prev,
+      ];
+    });
+  }, []);
+
+  const markRead = useCallback((id: string) => {
     setNotifs((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
+  }, []);
 
-  const markAll = () => setNotifs((prev) => prev.map((n) => ({ ...n, read: true })));
+  const markAll = useCallback(() => setNotifs((prev) => prev.map((n) => ({ ...n, read: true }))), []);
 
   return (
     <NotifContext.Provider value={{ notifs, addNotif, markRead, markAll }}>

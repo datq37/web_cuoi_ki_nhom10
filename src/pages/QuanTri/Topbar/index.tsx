@@ -13,7 +13,8 @@ import moment from 'moment';
 import 'moment/locale/vi';
 import React, { useState } from 'react';
 import { history } from 'umi';
-import { INotif, NotifType, timeAgo, useNotif } from '@/context/NotifContext';
+import type { INotif, NotifType } from '@/context/NotifContext';
+import { timeAgo, useNotif } from '@/context/NotifContext';
 import { useTheme } from '@/hooks/useTheme';
 import useAdminAuth from '@/hooks/useAdminAuth';
 import { useCanteenInfo } from '@/hooks/useCanteenInfo';
@@ -113,6 +114,11 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
     });
   };
 
+  const handleNotifOpenChange = (open: boolean) => {
+    setNotifOpen(open);
+    if (open) markAll();
+  };
+
   const handleHoTro = () => {
     setUserOpen(false);
     Modal.info({
@@ -197,7 +203,7 @@ const Topbar: React.FC<TopbarProps> = ({ title = 'Tổng quan' }) => {
         />
         <Popover
           visible={notifOpen}
-          onVisibleChange={setNotifOpen}
+          onVisibleChange={handleNotifOpenChange}
           trigger="click"
           placement="bottomRight"
           overlayClassName={styles.notifOverlay}

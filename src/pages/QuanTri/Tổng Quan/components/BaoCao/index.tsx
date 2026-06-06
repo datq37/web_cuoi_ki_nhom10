@@ -10,6 +10,9 @@ interface Props {
   open: boolean;
   onClose: () => void;
   orders: any[];
+  rangeLabel: string;
+  rangeStart: moment.Moment;
+  rangeEnd: moment.Moment;
 }
 
 const PRINT_STYLES = `
@@ -43,7 +46,7 @@ table.rpt-table tbody tr:nth-child(even) td { background: #f8fafc; }
 .rpt-sign-name { font-size: 11px; color: #374151; }
 `;
 
-const BaoCaoModal: React.FC<Props> = ({ open, onClose, orders }) => {
+const BaoCaoModal: React.FC<Props> = ({ open, onClose, orders, rangeLabel, rangeStart, rangeEnd }) => {
   const printRef = useRef<HTMLDivElement>(null);
   
   const banners = React.useMemo(() => {
@@ -127,7 +130,7 @@ const BaoCaoModal: React.FC<Props> = ({ open, onClose, orders }) => {
       <div className={styles.actionBar}>
         <div className={styles.barLeft}>
           <span className={styles.modalTitle}>Xem trước báo cáo</span>
-          <span className={styles.modalSub}>· {moment().format('DD/MM/YYYY HH:mm')}</span>
+          <span className={styles.modalSub}>· {rangeLabel}</span>
         </div>
         <div className={styles.barRight}>
           <Button
@@ -156,7 +159,9 @@ const BaoCaoModal: React.FC<Props> = ({ open, onClose, orders }) => {
               </div>
               <div className="rpt-header-right">
                 <div className="rpt-title">Báo cáo tổng quan kinh doanh</div>
-                <div className="rpt-sub">Ngày: {moment().format('DD/MM/YYYY')}</div>
+                <div className="rpt-sub">
+                  Kỳ báo cáo: {rangeStart.format('DD/MM/YYYY')} - {rangeEnd.format('DD/MM/YYYY')}
+                </div>
                 <div className="rpt-sub">Giờ tạo: {moment().format('HH:mm')}</div>
               </div>
             </div>

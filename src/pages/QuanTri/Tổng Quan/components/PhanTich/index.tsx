@@ -1,6 +1,6 @@
 import { ArrowUpOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import {
   buildBarLineOptions,
@@ -43,12 +43,12 @@ const BannerIcon: React.FC<{ type: string }> = ({ type }) => {
 };
 
 
-type Range = 'week' | 'month' | 'quarter';
+export type AnalysisRange = 'week' | 'month' | 'year';
 
-const RANGE_CFG: Record<Range, { label: string; title: string }> = {
+const RANGE_CFG: Record<AnalysisRange, { label: string; title: string }> = {
   week:    { label: '1 tuần',  title: 'Doanh thu 7 ngày gần nhất' },
   month:   { label: '1 tháng', title: 'Doanh thu 4 tuần gần nhất' },
-  quarter: { label: '1 quý',   title: 'Doanh thu 12 tháng gần nhất' },
+  year:    { label: '1 năm',   title: 'Doanh thu 12 tháng gần nhất' },
 };
 
 const HEAT_HOURS = ['7h','8h','9h','10h','11h','12h','13h','14h','15h','16h','17h','18h'];
@@ -68,7 +68,7 @@ const getOrderDate = (order: any) => {
   return parsed.isValid() ? parsed : undefined;
 };
 
-const buildRangeRevenue = (orders: any[], range: Range) => {
+const buildRangeRevenue = (orders: any[], range: AnalysisRange) => {
   const now = dayjs();
   const labels: string[] = [];
   const keys: string[] = [];
@@ -199,11 +199,11 @@ const CssHeatmap: React.FC<{ values: number[][] }> = ({ values }) => {
 
 interface PhanTichProps {
   orders: any[];
+  range: AnalysisRange;
+  onRangeChange: (range: AnalysisRange) => void;
 }
 
-const PhanTichView: React.FC<PhanTichProps> = ({ orders }) => {
-  const [range, setRange] = useState<Range>('week');
-
+const PhanTichView: React.FC<PhanTichProps> = ({ orders, range, onRangeChange }) => {
   // ── Banner dùng data thật ─────────────────────────
   const realBanners = useMemo(() => {
     const cancelledSet = new Set<string>();
@@ -348,11 +348,11 @@ const PhanTichView: React.FC<PhanTichProps> = ({ orders }) => {
               <span className={styles.chartTitle2}>{RANGE_CFG[range].title}</span>
             </div>
             <div className={styles.rangeToggle}>
-              {(['week', 'month', 'quarter'] as Range[]).map((r) => (
+              {(['week', 'month', 'year'] as AnalysisRange[]).map((r) => (
                 <button
                   key={r}
                   className={`${styles.rangeBtn} ${range === r ? styles.rangeBtnActive : ''}`}
-                  onClick={() => setRange(r)}
+                  onClick={() => onRangeChange(r)}
                 >
                   {RANGE_CFG[r].label}
                 </button>

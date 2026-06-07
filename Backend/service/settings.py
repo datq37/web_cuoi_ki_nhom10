@@ -3,6 +3,7 @@ from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 from sqlalchemy.orm import Session
 
@@ -13,6 +14,7 @@ from schemas.settings import OrderingStatus
 SETTINGS_PATH = Path(__file__).resolve().parents[1] / "canteen_settings.json"
 APP_SETTINGS_KEY = "app_settings"
 BUSINESS_HOURS_KEY = "business_hours"
+VN_TZ = ZoneInfo("Asia/Ho_Chi_Minh")
 
 DEFAULT_SETTINGS: dict[str, Any] = {
     "thongTin": {
@@ -115,7 +117,7 @@ def _parse_minutes(value: str | None) -> int | None:
 
 
 def get_ordering_status(db: Session | None = None, now: datetime | None = None) -> OrderingStatus:
-    current = now or datetime.now()
+    current = now.astimezone(VN_TZ) if now and now.tzinfo else (now or datetime.now(VN_TZ))
     settings = read_settings(db)
     days = settings.get("gioHD") or DEFAULT_SETTINGS["gioHD"]
     day_index = current.weekday()

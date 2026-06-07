@@ -51,6 +51,15 @@ export const getCachedCanteenSettings = (): CanteenSettings => {
   return store.get<CanteenSettings>(KEYS.settings, { gioHD: DEFAULT_GIO_HD });
 };
 
+export const getBusinessDayConfig = (date: Date, days?: DayBusinessConfig[]) => {
+  const resolvedDays = days?.length ? days : (getCachedCanteenSettings().gioHD || DEFAULT_GIO_HD);
+  return getTodayConfig(date, resolvedDays);
+};
+
+export const isBusinessDayOpen = (date: Date, days?: DayBusinessConfig[]) => {
+  return Boolean(getBusinessDayConfig(date, days)?.on);
+};
+
 export const getOrderingStatusFromCache = (now = new Date()): OrderingStatus => {
   const settings = getCachedCanteenSettings();
   const days = settings.gioHD?.length ? settings.gioHD : DEFAULT_GIO_HD;

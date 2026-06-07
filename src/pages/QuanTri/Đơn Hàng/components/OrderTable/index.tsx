@@ -21,6 +21,15 @@ interface OrderTableProps {
 
 const HUY_CFG = { tieuDe: 'Đã huỷ', mau: '#6b7280', bgLight: '#f3f4f6' };
 
+const normalizeStatus = (status: string): ETrangThaiTrucTiep | 'da_huy' => {
+  if (status === 'pending_confirmation') return ETrangThaiTrucTiep.CHO_XAC_NHAN;
+  if (status === 'processing') return ETrangThaiTrucTiep.DANG_CHE_BIEN;
+  if (status === 'confirmed') return ETrangThaiTrucTiep.SAN_SANG;
+  if (status === 'delivered') return ETrangThaiTrucTiep.HOAN_THANH;
+  if (status === 'cancelled') return 'da_huy';
+  return status as ETrangThaiTrucTiep;
+};
+
 /** Tính số phút chờ từ thoiGian "HH:mm" đến hiện tại */
 function calcWaitMinutes(thoiGian: string): number {
   try {
@@ -32,8 +41,12 @@ function calcWaitMinutes(thoiGian: string): number {
   } catch { return 0; }
 }
 
-const getStatusCfg = (trangThai: ETrangThaiTrucTiep, cancelled: boolean) =>
-  cancelled ? HUY_CFG : COT_CONFIG[trangThai];
+const getStatusCfg = (trangThai: ETrangThaiTrucTiep, cancelled: boolean) => {
+  if (cancelled) return HUY_CFG;
+  const normalized = normalizeStatus(trangThai);
+  if (normalized === 'da_huy') return HUY_CFG;
+  return COT_CONFIG[normalized] || COT_CONFIG[ETrangThaiTrucTiep.CHO_XAC_NHAN];
+};
 
 const isUnpaidBankingOrder = (order: DonTrucTiep) =>
   order.thanhToan?.method === 'banking' && order.thanhToan?.status !== 'paid';
@@ -116,7 +129,8 @@ const OrderTable: React.FC<OrderTableProps> = ({
       render: (_: any, r: DonTrucTiep) => {
         const isCancelled = cancelledIds.has(r.maDon);
         const cfg = getStatusCfg(r.trangThai, isCancelled);
-        const statusKey = isCancelled ? 'huy' : r.trangThai;
+        const normalizedStatus = normalizeStatus(r.trangThai);
+        const statusKey = isCancelled || normalizedStatus === 'da_huy' ? 'huy' : normalizedStatus;
         const label = !isCancelled && isUnpaidBankingOrder(r) ? 'Chờ CK' : cfg?.tieuDe || 'Không xác định';
         return (
           <span

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import { Typography } from 'antd';
 import { CheckCircle2 } from 'lucide-react';
@@ -11,7 +11,7 @@ import menuBackground from '@/assets/KhachHang/ThucDon/Backgroud.png';
 import { getPageBackground } from '../Chế độ sáng tôi/themeBackground';
 import './index.less';
 
-import { EmployeeMenuProps } from '@/services/KhachHang/ThucDon';
+import type { EmployeeMenuProps } from '@/services/KhachHang/ThucDon';
 
 const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) => {
     const {
@@ -22,12 +22,20 @@ const EmployeeMenu: React.FC<EmployeeMenuProps> = ({ onOpenCart, ordersToday }) 
         filteredMenu,
         bestSeller,
         todayTabIndex,
+        days,
     } = useModel('KhachHang.ThucDon.index');
     const { theme } = useModel('KhachHang.GlobalState.index');
     const [day, setDay] = useState(todayTabIndex);
     const [selectedDish, setSelectedDish] = useState<any>(null);
 
-    const isFutureDay = day > todayTabIndex;
+    useEffect(() => {
+        const selectedDay = days[day];
+        if (day >= days.length || selectedDay?.isPast) {
+            setDay(Math.max(0, Math.min(todayTabIndex, days.length - 1)));
+        }
+    }, [day, days, todayTabIndex]);
+
+    const isFutureDay = Boolean(days[day]?.isFuture);
 
     const cartQty = (id: string) => {
         const item = cart.find((c: any) => c.id === id);

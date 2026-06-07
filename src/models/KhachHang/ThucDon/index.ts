@@ -45,14 +45,6 @@ export default function useCartModel() {
   ]);
 
   useEffect(() => {
-    axios.get(`${ip3}/settings`)
-      .then((res) => {
-        if (res.data) cacheCanteenSettings(res.data);
-      })
-      .catch(() => {});
-  }, []);
-
-  useEffect(() => {
     const loadCategories = async () => {
       try {
         const res = await axios.get(`${ip3}/categories`);
@@ -92,13 +84,24 @@ export default function useCartModel() {
   const [days, setDays] = useState<WeekDay[]>(getWeekDays());
 
   useEffect(() => {
+    axios.get(`${ip3}/settings`)
+      .then((res) => {
+        if (res.data) {
+          cacheCanteenSettings(res.data);
+          setDays(getWeekDays());
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
     const timer = setInterval(() => {
       setDays(getWeekDays());
     }, 60000);
     return () => clearInterval(timer);
   }, []);
 
-  const todayTabIndex = getTodayTabIndex();
+  const todayTabIndex = useMemo(() => getTodayTabIndex(currentTime), [days, currentTime]);
 
   useEffect(() => {
     const loadDishes = async () => {

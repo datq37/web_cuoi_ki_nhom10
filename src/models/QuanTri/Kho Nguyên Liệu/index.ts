@@ -5,6 +5,7 @@ import { SyncAdapters } from '@/services/api/adapters';
 import { hasLoginToken } from '@/utils/auth';
 
 const KEY_HISTORY = 'lich_su_nhap';
+const KEY_MIN_STOCK = 'kho_muc_toi_thieu';
 
 const DU_HANG  = 'du_hang';
 const SAP_HET  = 'sap_het';
@@ -14,6 +15,35 @@ function calcTrangThai(tonKho: number, mucToiThieu: number): string {
   if (tonKho === 0) return HET_HANG;
   if (tonKho < mucToiThieu) return SAP_HET;
   return DU_HANG;
+}
+
+function readMinStockMap(): Record<string, number> {
+  try {
+    const raw = localStorage.getItem(KEY_MIN_STOCK);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveMinStock(id: string, mucToiThieu: number) {
+  const next = { ...readMinStockMap(), [id]: Number(mucToiThieu) || 0 };
+  try { localStorage.setItem(KEY_MIN_STOCK, JSON.stringify(next)); } catch { /* */ }
+}
+
+function removeMinStock(id: string) {
+  const next = readMinStockMap();
+  delete next[id];
+  try { localStorage.setItem(KEY_MIN_STOCK, JSON.stringify(next)); } catch { /* */ }
+}
+
+function applyMinStock(item: any, minStockMap: Record<string, number>) {
+  const mucToiThieu = Number(minStockMap[item.id] ?? item.mucToiThieu ?? 10);
+  return {
+    ...item,
+    mucToiThieu,
+    trangThai: calcTrangThai(Number(item.tonKho) || 0, mucToiThieu),
+  };
 }
 
 function nowStr() {
@@ -32,7 +62,10 @@ export default function useKhoNguyenLieuModel() {
     try {
       const res = await axios.get(`${ip3}/inventory`);
       if (res.data && res.data.items) {
-        setItems(res.data.items.map(SyncAdapters.mapAdminInventoryToUI));
+        const minStockMap = readMinStockMap();
+        setItems(res.data.items
+          .map(SyncAdapters.mapAdminInventoryToUI)
+          .map((item: any) => applyMinStock(item, minStockMap)));
       }
     } catch (error) {
       console.error("Failed to load inventory:", error);
@@ -80,16 +113,19 @@ export default function useKhoNguyenLieuModel() {
 
   const addNguyenLieu = useCallback(async (values: any) => {
     try {
+      const mahang = values.id || `NL${Math.floor(Math.random() * 10000)}`;
       const payload = {
-        mahang: values.id || `NL${Math.floor(Math.random() * 10000)}`,
+        mahang,
         ten: values.ten,
         donvi: values.donVi,
         nhacungcap: values.nhaCungCap,
         soluong: values.tonKho,
         gianhap: values.giaNhap,
+        muctoithieu: values.mucToiThieu,
         trangthai: calcTrangThai(values.tonKho, values.mucToiThieu)
       };
       await axios.post(`${ip3}/inventory`, payload);
+      saveMinStock(mahang, values.mucToiThieu);
       await fetchItems();
       return payload;
     } catch (error) {
@@ -106,9 +142,11 @@ export default function useKhoNguyenLieuModel() {
         nhacungcap: values.nhaCungCap,
         soluong: values.tonKho,
         gianhap: values.giaNhap,
+        muctoithieu: values.mucToiThieu,
         trangthai: calcTrangThai(values.tonKho, values.mucToiThieu)
       };
       await axios.patch(`${ip3}/inventory/${id}`, payload);
+      saveMinStock(id, values.mucToiThieu);
       await fetchItems();
     } catch (error) {
       console.error("Failed to update inventory", error);
@@ -119,6 +157,7 @@ export default function useKhoNguyenLieuModel() {
   const deleteNguyenLieu = useCallback(async (id: string) => {
     try {
       await axios.delete(`${ip3}/inventory/${id}`);
+      removeMinStock(id);
       await fetchItems();
     } catch (error) {
       console.error("Failed to delete inventory", error);

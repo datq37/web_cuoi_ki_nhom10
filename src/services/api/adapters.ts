@@ -263,23 +263,23 @@ export const SyncAdapters = {
    * Chuyển đổi dữ liệu Kho Hàng (Backend) -> Nguyên Liệu Quản Trị (Frontend UI)
    */
   mapAdminInventoryToUI(apiItem: any): any {
-    let mappedTrangThai = 'du_hang';
-    if (apiItem.trangthai) {
-      const t = apiItem.trangthai.toLowerCase();
-      if (t.includes('hết') || t.includes('het')) mappedTrangThai = 'het_hang';
-      else if (t.includes('sắp') || t.includes('sap')) mappedTrangThai = 'sap_het';
-    } else {
-      if (apiItem.soluong === 0) mappedTrangThai = 'het_hang';
-      else if (apiItem.soluong < 10) mappedTrangThai = 'sap_het';
-    }
+    const tonKho = Number(apiItem.soluong ?? 0);
+    const mucToiThieu = Number(
+      apiItem.muctoithieu ?? apiItem.mucToiThieu ?? apiItem.muc_toi_thieu ?? 10,
+    );
+    const mappedTrangThai = tonKho <= 0
+      ? 'het_hang'
+      : tonKho < mucToiThieu
+      ? 'sap_het'
+      : 'du_hang';
 
     return {
       id: apiItem.mahang,
       ten: apiItem.ten || 'Không tên',
       donVi: apiItem.donvi || 'kg',
       nhaCungCap: apiItem.nhacungcap || 'Nhà cung cấp',
-      tonKho: apiItem.soluong || 0,
-      mucToiThieu: 10, // Mock (not in DB yet)
+      tonKho,
+      mucToiThieu,
       giaNhap: apiItem.gianhap || 0,
       trangThai: mappedTrangThai
     };
